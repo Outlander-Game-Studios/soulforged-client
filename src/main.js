@@ -5,7 +5,7 @@ import "rxjs";
 import VueRx from "vue-rx";
 
 import "./utils.js";
-import "@/../../common/utils/index.js";
+import "@/../common/utils/index.js";
 import "@/services/game.js";
 import "@/services/sound.js";
 import "@/services/chat.js";
