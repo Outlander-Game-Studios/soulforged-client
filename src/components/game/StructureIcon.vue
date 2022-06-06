@@ -1,0 +1,58 @@
+<template>
+  <ItemIcon
+    v-if="structure"
+    @click="mouseClick($event)"
+    :icon="structure.icon"
+    :size="size"
+    :condition="structure.condition"
+    :isEquipped="structure.own"
+    :amount="structure.number"
+    class="structure-icon"
+  >
+    <IndicatorPresence class="presence" v-if="!!structure.presence" />
+    <IndicatorConstruction
+      class="under-construction"
+      v-if="!structure.operational"
+    />
+  </ItemIcon>
+</template>
+
+<script>
+import iconClickSound from "../../assets/sounds/icon-click.ogg";
+
+export default {
+  props: {
+    structure: {},
+    size: {
+      default: 5,
+    },
+  },
+
+  data: () => ({}),
+
+  methods: {
+    mouseClick($event) {
+      if (!!this.$listeners.click) {
+        this.$emit("click", $event);
+      }
+    },
+  },
+};
+</script>
+
+<style scoped lang="scss">
+@import "../../utils.scss";
+
+.presence {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  font-size: 140%;
+}
+
+.under-construction {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+}
+</style>

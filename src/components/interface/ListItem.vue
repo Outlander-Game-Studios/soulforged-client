@@ -1,0 +1,138 @@
+<template>
+  <div
+    class="main-container"
+    :class="{ flexible: flexible, 'lazy-load': lazyLoad }"
+  >
+    <div
+      v-if="lazyLoad && !loadedData"
+      v-observe-visibility="onVisibilityChange"
+    >
+      <LoadingPlaceholder :size="6" v-if="visible" />
+    </div>
+    <div
+      v-else
+      class="info"
+      :class="{ interactive: hasClick }"
+      @click="$emit('click', $event)"
+    >
+      <div class="icon">
+        <slot
+          v-if="!!$slots.icon || !!$scopedSlots.icon"
+          name="icon"
+          :lazyData="loadedData"
+        />
+        <Icon v-else :src="iconSrc" :size="iconSize" :text="text" />
+      </div>
+      <div class="details">
+        <div class="title" :class="titleClass">
+          <slot name="title" :lazyData="loadedData" />
+        </div>
+        <div class="subtitle" :class="subtitleClass">
+          <slot name="subtitle" :lazyData="loadedData" />
+        </div>
+      </div>
+    </div>
+    <div class="buttons">
+      <slot name="buttons" :lazyData="loadedData" />
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    subtitleClass: {},
+    titleClass: {},
+    iconSrc: {},
+    text: {},
+    lazyLoad: {},
+    flexible: {
+      type: Boolean,
+      default: false,
+    },
+    iconSize: {
+      default: 6,
+    },
+  },
+
+  data: () => ({
+    visible: false,
+  }),
+
+  subscriptions() {
+    return {
+      loadedData: this.$stream("visible")
+        .filter((visible) => !!visible)
+        .distinctUntilChanged()
+        .switchMap(() => this.$stream("lazyLoad"))
+        .filter((visible) => !!visible)
+        .switchMap((fn) => fn()),
+    };
+  },
+
+  computed: {
+    hasClick() {
+      return !!this.$listeners.click;
+    },
+  },
+
+  methods: {
+    onVisibilityChange(isVisible) {
+      this.visible = isVisible;
+    },
+  },
+};
+</script>
+
+<style scoped lang="scss">
+.main-container {
+  display: flex;
+  max-width: 100%;
+
+  &.lazy-load {
+    height: 6rem;
+  }
+
+  .info {
+    display: flex;
+    flex-grow: 1;
+  }
+
+  .details {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    flex-grow: 1;
+    overflow: hidden;
+
+    .title {
+      font-size: 2rem;
+      font-style: italic;
+    }
+
+    .subtitle {
+      font-size: 1.5rem;
+    }
+  }
+
+  &.flexible {
+    flex-grow: 1;
+
+    .title,
+    .subtitle {
+      &:not(.wrap) {
+        white-space: nowrap;
+      }
+    }
+  }
+
+  &:not(.flexible) {
+    .title,
+    .subtitle {
+      &:not(.wrap) {
+        width: 0;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+</style>

@@ -1,0 +1,164 @@
+@use "sass:map";
+
+$disabled-color: #ccc;
+
+@mixin SafariOnly() {
+  @media not all and (min-resolution: .001dpcm) {
+    @content;
+  }
+}
+
+@mixin iOSOnly() {
+  @supports (-webkit-overflow-scrolling: touch) {
+    @content;
+  }
+}
+
+@mixin FirefoxOnly() {
+  @-moz-document url-prefix() {
+    @content;
+  }
+}
+
+@mixin filter-fix() {
+  @include SafariOnly() {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+  @include iOSOnly() {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+}
+
+@mixin filter($values) {
+  @include filter-fix();
+  filter: $values;
+}
+
+@mixin fill($space: 0) {
+  position: absolute;
+  top: $space;
+  left: $space;
+  right: $space;
+  bottom: $space;
+}
+
+@mixin interactive() {
+  cursor: pointer;
+  position: relative;
+
+  &:hover {
+    &::before {
+      pointer-events: none;
+      $color: beige;
+      $shadow-size: 0.3rem;
+      content: "";
+      position: absolute;
+      background: $color;
+      @include fill();
+      opacity: 0.15;
+      z-index: 10;
+      margin: $shadow-size;
+      box-shadow: 0 0 $shadow-size $color;
+    }
+  }
+}
+
+@mixin disabled() {
+  @include filter(saturate(0) brightness(0.8));
+}
+
+@mixin text-outline($outline-color: black, $text-color: white) {
+  color: $text-color;
+  $spacing: 1px;
+  text-shadow: #{$spacing} #{-$spacing} 0 $outline-color,
+  #{-$spacing} #{$spacing} 0 $outline-color,
+  #{$spacing} #{$spacing} 0 $outline-color,
+  #{-$spacing} #{-$spacing} 0 $outline-color,
+  0 #{$spacing} 0 $outline-color,
+  0 #{-$spacing} 0 $outline-color,
+  #{$spacing} 0 $outline-color,
+  #{-$spacing} 0 $outline-color;
+}
+
+@mixin text-outline-safe($outline-color: black, $text-color: white) {
+  @include text-outline($outline-color, $text-color);
+
+  @include iOSOnly() {
+    text-shadow: none;
+    -webkit-text-stroke: 0.4px $outline-color;
+    font-weight: bold;
+  }
+}
+
+@mixin text-good() {
+  letter-spacing: 0.06em;
+  @include text-outline(#093209, #6bd26b);
+  @include text-outline(#093209, limegreen);
+}
+
+@mixin text-bad() {
+  letter-spacing: 0.06em;
+  @include text-outline(#4f0808, #c37a7a);
+  @include text-outline(#541111, red);
+}
+
+@mixin touch-device() {
+  @media (hover: none) {
+    @content;
+  }
+}
+
+@mixin touch-scroll-space() {
+  @include touch-device() {
+    padding-right: 4rem;
+  }
+}
+
+@function ui-asset($path, $relative: "") {
+  @return $relative + "../../assets/ui/" + $theme + $path;
+}
+
+@mixin border-background($size) {
+  $sizePx: $size * 1px;
+  border-image-slice: $size;
+  //background-position: #{-$sizePx} #{-$sizePx};
+  //background-size: calc(100% + #{2 * $sizePx}) calc(100% + #{2 * $sizePx});
+  background-position: center center;
+  background-size: 150% 150%;
+}
+
+@mixin shine-animation() {
+  &::after {
+    content: "";
+    position: absolute;
+    $space: 15%;
+    top: $space;
+    left: $space;
+    width: 100% - 2 * $space;
+    height: 100% - 2 * $space;
+    opacity: 1;
+    transform: rotate(45deg);
+
+    background-image: linear-gradient(
+        60deg,
+        rgba(255, 255, 255, 0) 40%,
+        rgba(255, 255, 255, 0.23) 45%,
+        rgba(255, 255, 255, 0.6) 50%,
+        rgba(255, 255, 255, 0.23) 55%,
+        rgba(255, 255, 255, 0) 60%
+    );
+    background-repeat: no-repeat;
+    background-clip: unset;
+    background-position: -10rem;
+    animation: shine 5s ease-in-out infinite;
+  }
+}
+
+$theme: "cartoon";
+@import "./themes/cartoon.scss";
+
+
+//@import "./themes/grim.scss";
+//$theme: "grim";
