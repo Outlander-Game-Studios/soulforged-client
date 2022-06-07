@@ -66,14 +66,14 @@
             </Vertical>
             <Vertical class="flex-grow">
               <Vertical v-if="selectedResult.durabilityNames">
-                <Header alt2>Durability</Header>
+                <Header alt2>Minimum Durability</Header>
                 <div>
                   {{ selectedResult.durabilityNames[durabilityStage] }}
                 </div>
                 <Slider v-model="wornStage" :min="0" max="3" :step="1"></Slider>
               </Vertical>
               <Vertical v-if="selectedResult.qualityNames">
-                <Header alt2>Quality</Header>
+                <Header alt2>Minimum Quality</Header>
                 <div>
                   {{ selectedResult.qualityNames[quality] }}
                 </div>
