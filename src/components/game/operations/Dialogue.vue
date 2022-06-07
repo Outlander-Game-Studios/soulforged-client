@@ -10,7 +10,7 @@
         noPadding
         @click="openQuestion = true"
       >
-        <span class="ama-button">More...</span>
+        <span class="header-button">More...</span>
       </Button>
     </Horizontal>
     <div class="entries" ref="entries">
@@ -208,13 +208,5 @@ export default window.OperationDialogue = {
   &:hover {
     background: #edcfb3;
   }
-}
-
-.ama-button {
-  font-size: 1.5rem;
-  line-height: 2rem;
-  height: 2rem;
-  padding: 0 0.5rem;
-  display: block;
 }
 </style>

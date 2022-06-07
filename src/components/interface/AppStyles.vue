@@ -265,4 +265,12 @@ label {
   float: left;
   margin-right: 1rem;
 }
+
+.header-button {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  height: 2rem;
+  padding: 0 0.5rem;
+  display: block;
+}
 </style>
