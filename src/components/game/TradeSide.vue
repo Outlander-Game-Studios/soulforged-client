@@ -54,11 +54,7 @@
         class="currency-container"
         backgroundType="alt"
       >
-        <CurrencyDisplay
-          :value="tradeSideData.essence"
-          short
-          :flipped="mySide"
-        />
+        <CurrencyDisplay :value="tradeSideData.essence" :flipped="mySide" />
       </Container>
     </HorizontalFill>
     <div class="items">
