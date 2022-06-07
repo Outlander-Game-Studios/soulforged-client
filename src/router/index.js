@@ -5,7 +5,6 @@ import Queue from "../views/Queue.vue";
 import Stats from "../views/Stats.vue";
 import Login from "../views/Login.vue";
 import CharacterCreator from "../views/CharacterCreator.vue";
-import DeathView from "../views/DeathView.vue";
 import BannedView from "../views/BannedView.vue";
 
 Vue.use(VueRouter);
@@ -30,11 +29,6 @@ const routes = [
     path: "/character-creator",
     name: "CharacterCreator",
     component: CharacterCreator,
-  },
-  {
-    path: "/dead",
-    name: "DeathView",
-    component: DeathView,
   },
   {
     path: "/banned",

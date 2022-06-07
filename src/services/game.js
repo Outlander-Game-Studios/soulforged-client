@@ -294,10 +294,6 @@ export const GameService = (window.GameService = {
               ControlsService.goToCharacterCreator();
               return false;
             }
-            if (entity?.dead) {
-              window.location.hash = "/dead";
-              return true;
-            }
             return true;
           });
         }

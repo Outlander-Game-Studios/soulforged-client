@@ -1,7 +1,8 @@
 <template>
-  <div class="main-component">
+  <div class="main-component" :class="{ dead: dead }">
     <AutoSizer />
     <DisconnectIndicator />
+    <DeadIndicator />
     <MilestoneTracker />
     <PageLayout>
       <template v-slot:overlay> </template>
@@ -39,6 +40,9 @@ export default {
     return {
       location,
       fullscreenOperation: ControlsService.getFullscreenOperationStream(),
+      dead: GameService.getRootEntityStream().map(
+        (mainEntity) => mainEntity.dead
+      ),
     };
   },
 };
@@ -49,6 +53,10 @@ export default {
 
 .main-component {
   height: 100%;
+
+  &.dead > :not(.dead-container) {
+    @include filter(saturate(0.45) brightness(0.95));
+  }
 }
 .actions {
   display: flex;
