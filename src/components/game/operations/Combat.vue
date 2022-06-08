@@ -111,7 +111,7 @@
                       .effects"
                     :key="idx"
                   >
-                    <EffectIcon :effect="effect" :size="3" />
+                    <EffectIcon :effect="effect" :size="2.4" />
                   </div>
                 </HorizontalCenter>
                 <HorizontalCenter tight>
@@ -120,7 +120,7 @@
                       .effectsCombat"
                     :key="idx"
                   >
-                    <EffectIcon :effect="effect" :size="4" />
+                    <EffectIcon :effect="effect" :size="2.8" />
                   </div>
                 </HorizontalCenter>
                 <!--              </Container>-->
@@ -939,16 +939,31 @@ $effects-size: 6rem;
 
 @keyframes floating-text {
   0% {
-    margin-top: 0;
-    margin-left: 0;
+    margin-right: 0;
+    margin-top: 3rem;
     opacity: 1;
   }
   80% {
     opacity: 1;
   }
   100% {
-    margin-left: 1rem;
-    margin-top: -6rem;
+    margin-right: 4rem;
+    margin-top: 6rem;
+    opacity: 0;
+  }
+}
+@keyframes floating-text-hostile {
+  0% {
+    margin-left: 0;
+    margin-top: 3rem;
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    margin-left: 4rem;
+    margin-top: 6rem;
     opacity: 0;
   }
 }
@@ -1079,12 +1094,13 @@ $effects-size: 6rem;
   }
 }
 
+$side-position: 1rem;
 .floating-combat-text {
   $shadow: 0 0 0.5rem 0.5rem;
   position: absolute;
   z-index: 200;
   top: 0;
-  left: 0.5rem;
+  right: $side-position;
   animation: floating-text 2s linear forwards;
   text-align: center;
   background: rgba(0, 0, 0, 0.6);
@@ -1102,6 +1118,14 @@ $effects-size: 6rem;
     font-size: 70%;
     @include text-outline();
     white-space: nowrap;
+  }
+}
+
+.creature.hostile {
+  .floating-combat-text {
+    right: auto;
+    left: $side-position;
+    animation: floating-text-hostile 2s linear forwards;
   }
 }
 
