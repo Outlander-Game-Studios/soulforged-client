@@ -85,6 +85,7 @@ export default {
 
 const factory = (onMounted = () => {}, onInit = () => {}) => () => {
   GameService.mock({
+    checkQuickActions: () => {},
     getEntityStream: (id) => Rx.Observable.of(entities[id]),
     getRootEntityStream: () =>
       Rx.Observable.of({
