@@ -396,13 +396,15 @@ export const GameService = (window.GameService = {
     this.getQuickActionsStream()
       .first()
       .subscribe((quickActions) => {
-        quickActions.forEach((action) => {
-          GameService.getEntityStream(
-            action.item.id,
-            ENTITY_VARIANTS.BASE,
-            true
-          );
-        });
+        quickActions
+          .filter((action) => !!action.item)
+          .forEach((action) => {
+            GameService.getEntityStream(
+              action.item.id,
+              ENTITY_VARIANTS.BASE,
+              true
+            );
+          });
       });
   },
   getQuickActionsStream() {
