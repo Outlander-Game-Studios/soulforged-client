@@ -27,33 +27,39 @@
               <div class="creature-icon-wrapper">
                 <CreatureIcon :creature="creature" size="large" />
               </div>
-              <HorizontalCenter v-if="creature.operationInfo">
-                <Container>
-                  <Horizontal tight>
-                    <Icon :src="creature.operationInfo.icon" size="5" />
-                    <div
-                      class="operation-name"
-                      :class="{
-                        'without-context': !creature.operationInfo.subtext,
-                      }"
-                    >
-                      {{ creature.operationInfo.name }}
+              <div v-if="creature.operationInfo">
+                <HorizontalCenter>
+                  <Container>
+                    <Horizontal tight>
+                      <Icon :src="creature.operationInfo.icon" size="6" />
                       <div
-                        v-if="creature.operationInfo.subtext"
-                        class="subtext"
+                        class="operation-name"
+                        :class="{
+                          'without-context': !creature.operationInfo.subtext,
+                        }"
                       >
-                        {{ creature.operationInfo.subtext }}
+                        {{ creature.operationInfo.name }}
+                        <div
+                          v-if="creature.operationInfo.subtext"
+                          class="subtext"
+                        >
+                          {{ creature.operationInfo.subtext }}
+                        </div>
                       </div>
-                    </div>
-                    <Button
-                      v-if="creature.operationInfo.action"
-                      @click="operationAction(creature.operationInfo)"
-                    >
-                      {{ creature.operationInfo.action.name }}
-                    </Button>
-                  </Horizontal>
-                </Container>
-              </HorizontalCenter>
+                      <Button
+                        v-if="creature.operationInfo.action"
+                        @click="operationAction(creature.operationInfo)"
+                      >
+                        {{ creature.operationInfo.action.name }}
+                      </Button>
+                      <CreaturesPanel
+                        :creatures="creature.operationInfo.creatures"
+                        hideHeader
+                      />
+                    </Horizontal>
+                  </Container>
+                </HorizontalCenter>
+              </div>
               <Actions :target="creature" @action="$emit('action')" />
               <div>
                 <Effects :effects="creature.tracks" />
@@ -148,7 +154,7 @@ export default {
   padding: 0.5rem;
 
   &.without-context {
-    padding: 1.3rem;
+    padding: 1.8rem 2.5rem;
   }
 
   .subtext {

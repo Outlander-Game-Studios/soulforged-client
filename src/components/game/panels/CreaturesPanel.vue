@@ -8,7 +8,9 @@
         showingList = false;
       "
     />
-    <Header class="interactive" @click="showList()">Creatures</Header>
+    <Header v-if="!hideHeader" class="interactive" @click="showList()"
+      >Creatures</Header
+    >
     <LoadingPlaceholder v-if="!loadedCreatures" :size="6" />
     <div v-else-if="!loadedCreatures.length" class="empty-text">None</div>
     <HorizontalWrap v-else tight class="scroll-spacing">
@@ -65,6 +67,9 @@ export default {
   props: {
     header: {},
     creatures: {},
+    hideHeader: {
+      type: Boolean,
+    },
   },
 
   data: () => ({
