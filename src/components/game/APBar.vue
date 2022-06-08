@@ -35,14 +35,16 @@
           {{ consideredAP === Infinity ? "Impossible" : consideredAP + " AP" }}
         </LabeledValue>
         <div>
-          Gaining {{ mainEntity.nextAP.gain }} AP every
-          {{ mainEntity.nextAP.interval }} minutes
-          <br />
-          Next gain in
-          <Countdown :seconds="nextTickSeconds" />
-          <br />
-          Max action points on
-          {{ fullAPWhen }}
+          <LabeledValue label="Gaining">
+            {{ mainEntity.nextAP.gain }} AP every
+            {{ mainEntity.nextAP.interval }} minutes
+          </LabeledValue>
+          <LabeledValue label="Next gain in">
+            <Countdown :seconds="nextTickSeconds" />
+          </LabeledValue>
+          <LabeledValue label="Max action points on">
+            {{ fullAPWhen }}
+          </LabeledValue>
         </div>
       </Vertical>
     </Modal>
@@ -117,7 +119,9 @@ export default {
       const secondsTillFull = ticksTillFull * interval * 60 + nextTickSeconds;
       const dateFull = new Date(this.lastUpdated);
       dateFull.setTime(dateFull.getTime() + secondsTillFull * IN_MILISECONDS);
-      return dateFull.toLocaleTimeString();
+      return (
+        dateFull.toLocaleTimeString() + ", " + DAYS_OF_WEEK[dateFull.getDay()]
+      );
     },
 
     consideredStyle() {
