@@ -52,7 +52,8 @@ export default {
   flex-grow: 1;
   display: flex;
   text-align: right;
-  justify-content: start;
+  justify-content: flex-start;
+  justify-content: start; // failsafe
 
   &.inline {
     display: inline-block;
