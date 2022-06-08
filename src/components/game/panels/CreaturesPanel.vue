@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="creatures">
     <CreatureDetailsModal
       :creatureId="showDetailsId"
       @close="showDetailsId = null"
