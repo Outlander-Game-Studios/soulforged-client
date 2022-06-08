@@ -38,6 +38,11 @@
           <div v-if="target.unitWeight && parameters.amount">
             <CarryCapacityIndicator :modifier="inventoryWeightChange" />
           </div>
+          <component
+            v-if="currentAction.extra"
+            :is="currentAction.extra.component"
+            v-bind="currentAction.extra"
+          />
           <div>
             <LoadingPlaceholder
               :size="3.5"
