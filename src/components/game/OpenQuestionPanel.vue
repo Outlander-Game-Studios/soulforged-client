@@ -37,7 +37,7 @@
       </Vertical>
       <Description>
         Your open questions:
-        {{ operation.context.openQuestions.pendingCount }} /
+        {{ pendingQuestions && pendingQuestions.length }} /
         {{ MAX_PENDING_OPEN_QUESTIONS }}
       </Description>
     </Vertical>
@@ -93,6 +93,12 @@ export default window.OperationDialogue = {
         this.loading = false;
       }
     },
+  },
+
+  subscriptions() {
+    return {
+      pendingQuestions: GameService.getInfoStream("OpenQuestion"),
+    };
   },
 
   mounted() {
