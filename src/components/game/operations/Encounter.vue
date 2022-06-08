@@ -167,10 +167,12 @@ export default window.OperationEncounter = {
 
   mounted() {
     this.updateConsideredAP();
+    GameService.checkQuickActions();
   },
 
   beforeDestroy() {
     ControlsService.updateConsideredAP(0);
+    GameService.checkQuickActions();
   },
 
   methods: {

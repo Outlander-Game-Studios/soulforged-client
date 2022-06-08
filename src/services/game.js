@@ -392,6 +392,44 @@ export const GameService = (window.GameService = {
     return itemCountStream;
   },
 
+  checkQuickActions() {
+    this.getQuickActionsStream()
+      .first()
+      .subscribe((quickActions) => {
+        quickActions.forEach((action) => {
+          GameService.getEntityStream(
+            action.item.id,
+            ENTITY_VARIANTS.BASE,
+            true
+          );
+        });
+      });
+  },
+  getQuickActionsStream() {
+    let mainEntity = GameService.getRootEntityStream();
+    const quickActionsStream = ControlsService.getSettingStream(
+      "quickActions",
+      []
+    );
+    const inventoryStream = GameService.getInventoryStream(mainEntity);
+    return quickActionsStream
+      .switchMap((quickActions) => {
+        const itemIds = quickActions.map(({ itemId }) => itemId);
+        return GameService.getEntitiesStream(itemIds).map((inventory) => {
+          const inventoryMap = inventory.toObject(({ id }) => id);
+          return quickActions.map(({ itemId, actionId, label }) => {
+            const item = inventoryMap[itemId];
+            return {
+              item,
+              actionId,
+              label: label,
+            };
+          });
+        });
+      })
+      .shareReplay(1);
+  },
+
   getEquipmentMapStream() {
     return GameService.getRootEntityStream()
       .pluck("equipment")

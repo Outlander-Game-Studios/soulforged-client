@@ -137,29 +137,12 @@ export default {
 
   subscriptions() {
     let mainEntity = GameService.getRootEntityStream();
-    const quickActionsStream = ControlsService.getSettingStream(
-      "quickActions",
-      []
-    );
     const inventoryStream = GameService.getInventoryStream(mainEntity);
-    const quickActionsWithItemsStream = Rx.combineLatest([
-      inventoryStream,
-      quickActionsStream,
-    ]).map(([inventory, quickActions]) => {
-      const inventoryMap = inventory.toObject(({ id }) => id);
-      return quickActions.map(({ itemId, actionId, label }) => {
-        const item = inventoryMap[itemId];
-        return {
-          item,
-          actionId,
-          label: label,
-        };
-      });
-    });
+    const quickActionsStream = GameService.getQuickActionsStream();
     return {
       inventory: inventoryStream,
-      quickActions: quickActionsWithItemsStream,
-      validQuickActions: quickActionsWithItemsStream.map((quickActions) =>
+      quickActions: quickActionsStream,
+      validQuickActions: quickActionsStream.map((quickActions) =>
         quickActions.filter(
           (quick) =>
             !!quick &&
