@@ -53,6 +53,7 @@
                         {{ creature.operationInfo.action.name }}
                       </Button>
                       <CreaturesPanel
+                        v-if="creature.operationInfo.creatures"
                         :creatures="creature.operationInfo.creatures"
                         hideHeader
                       />
