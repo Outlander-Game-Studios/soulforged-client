@@ -12,13 +12,9 @@ export default {
     return {
       effects: Rx.combineLatest([
         GameService.getRootEntityStream(),
-        this.$stream("effectId"),
-      ]).map(([mainEntity, effectId]) => {
-        console.log(
-          mainEntity.effects,
-          mainEntity.effects.filter((e) => e.name === this.name)
-        );
-        return mainEntity.effects.filter((e) => e.name === this.name);
+        this.$stream("name"),
+      ]).map(([mainEntity, name]) => {
+        return mainEntity.effects.filter((e) => e.name === name);
       }),
     };
   },
