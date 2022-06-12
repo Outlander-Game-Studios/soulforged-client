@@ -25,7 +25,7 @@ global.SHOP_LISTING_SIDES = {
   BUY: "b",
 };
 
-global.PING_FREQUENCY = 2000;
+global.PING_FREQUENCY = 1000;
 
 global.DAYS_OF_WEEK = [
   "Sunday",
