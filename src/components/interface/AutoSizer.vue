@@ -42,10 +42,9 @@ export default {
       const screenSize = Math.min(getScreenWidth(), getScreenHeight());
       const currentRatio = screenSize / referenceSize;
       if (currentRatio !== targetRatio) {
-        newOverride = Math.min(
-          12,
-          (this.fontSizeOverride * screenSize) / referenceSize / targetRatio
-        );
+        newOverride =
+          (this.fontSizeOverride * screenSize) / referenceSize / targetRatio;
+        // newOverride = Math.min(12, newOverride);
         if (newOverride !== this.fontSizeOverride) {
           this.fontSizeOverride = newOverride;
           document.querySelector("html").style.fontSize =

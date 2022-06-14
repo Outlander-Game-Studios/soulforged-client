@@ -4,7 +4,10 @@ export const LocalStorageService = (window.LocalStorageService = {
   getItemStream(key, defaultValue) {
     if (!streams[key]) {
       streams[key] = new Rx.ReplaySubject(1);
-      streams[key].next(LocalStorageService.getItem(key, defaultValue));
+      const initial = LocalStorageService.getItem(key, defaultValue);
+      if (initial !== undefined) {
+        streams[key].next(initial);
+      }
     }
     return streams[key];
   },
@@ -25,5 +28,13 @@ export const LocalStorageService = (window.LocalStorageService = {
       streams[key] = new Rx.ReplaySubject(1);
     }
     streams[key].next(value);
+  },
+
+  isImageCached(src) {
+    const image = new Image();
+    image.src = src;
+    const cached = image.complete;
+    image.remove();
+    return cached;
   },
 });

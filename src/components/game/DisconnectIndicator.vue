@@ -1,11 +1,15 @@
 <template>
-  <transition name="fade-slide">
-    <div v-if="disconnected" class="disconnect-container">
+  <transition name="fade">
+    <div
+      v-if="disconnected"
+      class="disconnect-container"
+      :class="'stage-' + disconnected"
+    >
       <Container
         :borderSize="1"
         borderType="alt"
         backgroundType="alt2"
-        class="interactive"
+        class="interactive container"
         @click="onClick()"
       >
         <div class="disconnect-indicator flex">
@@ -57,27 +61,55 @@ export default {
   @include filter-fix();
   display: flex;
   width: 100%;
-  top: 1rem;
   position: fixed;
   z-index: 90009000;
-  justify-content: center;
   pointer-events: none;
   > * {
     pointer-events: all;
   }
 
-  &.fade-slide-enter-active {
-    transition-duration: 0.8s;
+  top: 1rem;
+  left: 1rem;
+  justify-content: flex-start;
+
+  &.stage-1 {
+    @media (orientation: landscape) {
+      .container {
+        border-color: transparent;
+        border-image: none;
+        background: none;
+        pointer-events: none;
+      }
+
+      .disconnect-text {
+        display: none;
+      }
+
+      .disconnect-icon {
+        transform: scale(0.5);
+      }
+    }
+
+    @media (orientation: portrait) {
+    }
   }
-  &.fade-slide-leave-active {
+  &.stage-2 {
+  }
+
+  &.fade-enter-active {
+    transition-duration: 1s;
+  }
+  &.fade-leave-active {
     transition-duration: 0.2s;
   }
 }
 
 .disconnect-indicator {
   .disconnect-icon {
+    transition: transform 0.2s linear;
     padding: 0.5rem;
     animation: blink 1s infinite;
+    transform-origin: top left;
   }
 }
 

@@ -4,6 +4,12 @@ const devices = require("puppeteer-core/DeviceDescriptors");
 
 process.setMaxListeners(30);
 
+global.window = global.window || {
+  navigator: {
+    userAgent: "",
+  },
+};
+
 const beforeScreenshot = async (page) => {
   await page.addStyleTag({
     content: `

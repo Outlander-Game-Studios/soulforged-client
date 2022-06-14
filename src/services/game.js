@@ -84,12 +84,12 @@ export const GameService = (window.GameService = {
       const setupDisconnectionDetection = () => {
         clearTimeout(disconnectionDetectedTimeout);
         connection.send("G");
-        disconnectionDetectedStream.next(false);
+        disconnectionDetectedStream.next(0);
         disconnectionDetectedTimeout = setTimeout(() => {
-          disconnectionDetectedStream.next(true);
-          if (ControlsService.isGameFocused()) {
-            throw "Connection timing out...";
-          }
+          disconnectionDetectedStream.next(1);
+          disconnectionDetectedTimeout = setTimeout(() => {
+            disconnectionDetectedStream.next(2);
+          }, global.PING_FREQUENCY * 10);
         }, global.PING_FREQUENCY * 2.5);
       };
 
@@ -150,7 +150,6 @@ export const GameService = (window.GameService = {
 
       openPromise = new Promise((resolve, reject) => {
         connection.onclose = (error, ...args) => {
-          console.log("Connection closed", connection.connectionId);
           reject("Failed to connect");
           if (connection.connectionId === connectionCount) {
             setTimeout(() => {
@@ -240,6 +239,28 @@ export const GameService = (window.GameService = {
   fetchResearchUpdate(researchId) {
     GameService.getInfoStream("Research", { researchId }, true);
   },
+  getCraftDetails(craftId) {
+    const key = `craft.${craftId}`;
+    const cached = LocalStorageService.getItem(key);
+    if (!cached) {
+      GameService.getInfoStream("Craft", { craftId })
+        .first()
+        .subscribe((data) => {
+          LocalStorageService.setItem(key, data);
+        });
+    } else {
+      const icons = [
+        cached.icon,
+        ...cached.materials.map((m) => m.itemDef.icon),
+        ...cached.produce.map((m) => m.itemDef.icon),
+      ];
+      if (icons.some((icon) => !LocalStorageService.isImageCached(icon))) {
+        console.log(`Refetching images for craft ${craftId}`);
+        GameService.getInfoStream("Craft", { craftId });
+      }
+    }
+    return LocalStorageService.getItemStream(key);
+  },
   getCraftsStream() {
     return GameService.getKnowledgeBaseStream()
       .pluck("craftIds")
@@ -247,9 +268,7 @@ export const GameService = (window.GameService = {
         !craftIds.length
           ? Rx.Observable.of([])
           : Rx.combineLatest(
-              craftIds.map((craftId) =>
-                GameService.getInfoStream("Craft", { craftId })
-              )
+              craftIds.map((craftId) => GameService.getCraftDetails(craftId))
             )
       );
   },
