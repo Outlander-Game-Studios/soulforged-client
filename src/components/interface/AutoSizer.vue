@@ -41,8 +41,8 @@ export default {
       const [width, height] = [getScreenWidth(), getScreenHeight()];
       const screenSize =
         width > height
-          ? Math.min(width, height * 0.66)
-          : Math.min(width * 0.66, height);
+          ? Math.min(width * 0.66, height)
+          : Math.min(width, height * 0.66);
       const currentRatio = screenSize / referenceSize;
       if (currentRatio !== targetRatio) {
         newOverride =
