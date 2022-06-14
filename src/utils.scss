@@ -156,6 +156,47 @@ $disabled-color: #ccc;
   }
 }
 
+@mixin main-tab-extra() {
+  position: fixed;
+  z-index: 20;
+  opacity: 1;
+
+  @media (orientation: portrait) {
+    bottom: 40rem;
+    left: 0;
+
+    .item-selection {
+      max-height: calc(0.35 * var(--app-height));
+      overflow: auto;
+    }
+
+    &.slide-enter,
+    &.slide-leave-to {
+      margin-bottom: -5rem;
+      opacity: 0;
+    }
+  }
+
+  @media (orientation: landscape) {
+    margin-top: 4rem;
+    min-width: 34rem;
+    max-width: 34rem;
+    right: 40rem;
+    top: 0;
+
+    .item-selection {
+      max-height: calc(0.45 * var(--app-height));
+      overflow: auto;
+    }
+
+    &.slide-enter,
+    &.slide-leave-to {
+      margin-right: -5rem;
+      opacity: 0;
+    }
+  }
+}
+
 $theme: "cartoon";
 @import "./themes/cartoon.scss";
 

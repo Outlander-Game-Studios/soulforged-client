@@ -383,31 +383,9 @@ export default {
 }
 
 .item-selection-wrapper {
-  position: fixed;
-  z-index: 20;
-  opacity: 1;
-
-  .item.invalid {
-    pointer-events: none;
-    z-index: 5;
-    @include filter(saturate(0));
-  }
-  .item-selection {
-    overflow: visible;
-    transform: translateZ(0);
-  }
+  @include main-tab-extra();
 
   @media (orientation: portrait) {
-    margin-bottom: -1rem;
-    bottom: 40rem;
-    left: 0;
-
-    .item-selection {
-      margin-bottom: 1rem;
-      max-height: calc(0.35 * var(--app-height));
-      overflow: auto;
-    }
-
     &.slide-enter,
     &.slide-leave-to {
       margin-bottom: -5rem;
@@ -416,24 +394,21 @@ export default {
   }
 
   @media (orientation: landscape) {
-    margin-right: -1rem;
-    margin-top: 4rem;
-    min-width: 34rem;
-    max-width: 34rem;
-    right: 40rem;
-    top: 0;
-
-    .item-selection {
-      margin-right: 1rem;
-      max-height: calc(0.45 * var(--app-height));
-      overflow: auto;
-    }
-
     &.slide-enter,
     &.slide-leave-to {
       margin-right: -5rem;
       opacity: 0;
     }
+  }
+
+  .item.invalid {
+    pointer-events: none;
+    z-index: 5;
+    @include filter(saturate(0));
+  }
+  .item-selection {
+    overflow: auto;
+    transform: translateZ(0);
   }
 
   &.slide-enter-active,

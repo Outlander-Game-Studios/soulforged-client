@@ -2,12 +2,10 @@
   <div
     class="main-container"
     :class="{ flexible: flexible, 'lazy-load': lazyLoad }"
+    v-observe-visibility="onVisibilityChange"
   >
-    <div
-      v-if="lazyLoad && !loadedData"
-      v-observe-visibility="onVisibilityChange"
-    >
-      <LoadingPlaceholder :size="6" v-if="visible" />
+    <div v-if="(lazyLoad && !loadedData) || !visible" class="flex-grow">
+      <LoadingPlaceholder :size="6" />
     </div>
     <div
       v-else
@@ -66,7 +64,9 @@ export default {
         .distinctUntilChanged()
         .switchMap(() => this.$stream("lazyLoad"))
         .filter((visible) => !!visible)
-        .switchMap((fn) => fn()),
+        .switchMap((fn) =>
+          typeof fn === "function" ? fn() : Rx.Observable.of(true)
+        ),
     };
   },
 

@@ -18,6 +18,7 @@ const dataUsageStream = new Rx.ReplaySubject(1);
 const versionStream = new Rx.ReplaySubject(1);
 dataUsageStream.next(0);
 resetStream.next();
+const craftDetailsStreams = {};
 
 const fetcher = (url, params) =>
   new Promise((resolve, reject) =>
@@ -240,26 +241,43 @@ export const GameService = (window.GameService = {
     GameService.getInfoStream("Research", { researchId }, true);
   },
   getCraftDetails(craftId) {
-    const key = `craft.${craftId}`;
-    const cached = LocalStorageService.getItem(key);
-    if (!cached) {
-      GameService.getInfoStream("Craft", { craftId })
-        .first()
-        .subscribe((data) => {
-          LocalStorageService.setItem(key, data);
-        });
-    } else {
-      const icons = [
-        cached.icon,
-        ...cached.materials.map((m) => m.itemDef.icon),
-        ...cached.produce.map((m) => m.itemDef.icon),
-      ];
-      if (icons.some((icon) => !LocalStorageService.isImageCached(icon))) {
-        console.log(`Refetching images for craft ${craftId}`);
-        GameService.getInfoStream("Craft", { craftId });
+    if (!craftDetailsStreams[craftId]) {
+      function fetchFromServer() {
+        GameService.getInfoStream("Craft", { craftId })
+          .first()
+          .subscribe((data) => {
+            LocalStorageService.setItem(key, data);
+          });
       }
+
+      const key = `craft.${craftId}`;
+      const cached = LocalStorageService.getItem(key);
+      if (!cached) {
+        fetchFromServer();
+      } else if (!cached.tools) {
+        console.log(`Requires update from server ${craftId}`);
+        LocalStorageService.removeItem(key);
+        fetchFromServer();
+      } else {
+        const icons = [
+          cached.icon,
+          ...cached.materials.map((m) => m.itemDef.icon),
+          ...cached.produce.map((m) => m.itemDef.icon),
+        ];
+        setTimeout(async () => {
+          if (
+            await icons.someAsync(
+              async (icon) => !(await LocalStorageService.isImageCached(icon))
+            )
+          ) {
+            console.log(`Refetching images for craft ${craftId}`);
+            fetchFromServer();
+          }
+        });
+      }
+      craftDetailsStreams[craftId] = LocalStorageService.getItemStream(key);
     }
-    return LocalStorageService.getItemStream(key);
+    return craftDetailsStreams[craftId];
   },
   getCraftsStream() {
     return GameService.getKnowledgeBaseStream()

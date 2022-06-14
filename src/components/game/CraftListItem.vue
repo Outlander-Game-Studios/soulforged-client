@@ -3,6 +3,7 @@
     :iconSrc="craft.icon"
     class="craft-list-item"
     @click="showDetails = true"
+    :lazyLoad="true"
   >
     <template v-slot:title>
       <RichText :value="craft.name" />
@@ -16,9 +17,33 @@
           <RichText :value="craft.name" />
         </template>
         <template v-slot:contents>
-          <HorizontalCenter>
-            <CraftDiagram :craft="craft" tight :size="8" @action="actioned()" />
-          </HorizontalCenter>
+          <Vertical>
+            <div>
+              <LabeledValue v-if="craft.skill" label="Skill">
+                {{ craft.skill }}
+              </LabeledValue>
+              <LabeledValue
+                v-if="craft.difficulty !== undefined"
+                label="Difficulty"
+              >
+                {{ craft.difficulty }}
+              </LabeledValue>
+              <LabeledValue
+                v-if="craft.tools && craft.tools.length"
+                label="Tools required"
+              >
+                {{ craft.tools.join(", ") }}
+              </LabeledValue>
+            </div>
+            <HorizontalCenter>
+              <CraftDiagram
+                :craft="craft"
+                tight
+                :size="8"
+                @action="actioned()"
+              />
+            </HorizontalCenter>
+          </Vertical>
         </template>
       </Modal>
     </template>

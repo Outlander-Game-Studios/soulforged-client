@@ -2,19 +2,37 @@
   <div>
     <Header @click="toggle()" class="interactive">
       <div class="header-wrapper">
+        <div
+          v-if="left"
+          class="indicator left"
+          :class="{ collapsed: collapsed }"
+        />
         <div class="flex-grow">
-          <slot name="header" />
+          <slot name="header" :collapsed="collapsed" />
         </div>
-        <div class="indicator" :class="{ collapsed: collapsed }" />
+        <div v-if="!left" class="indicator" :class="{ collapsed: collapsed }" />
       </div>
     </Header>
-    <slot v-if="!collapsed" name="content" />
+    <slot v-if="!collapsed" name="content" :collapsed="collapsed" />
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    left: {
+      type: Boolean,
+    },
+    startCollapsed: {
+      type: Boolean,
+    },
+  },
+
   data: () => ({ collapsed: false }),
+
+  created() {
+    this.collapsed = this.startCollapsed;
+  },
 
   methods: {
     toggle() {
@@ -41,6 +59,11 @@ export default {
   transition: all 0.1s ease-in-out;
   transition-property: filter, transform;
   @include filter(drop-shadow(0.05em -0.05em 0.05em black));
+
+  &.left {
+    transform: rotate(180deg);
+    @include filter(drop-shadow(-0.05em -0.05em 0.05em black));
+  }
 
   &.collapsed {
     transform: rotate(0deg);

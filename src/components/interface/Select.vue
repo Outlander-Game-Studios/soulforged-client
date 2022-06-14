@@ -1,7 +1,12 @@
 <template>
   <div>
-    <HorizontalFill class="select-component">
+    <HorizontalFill v-if="!label" class="select-component">
       <Button @click="selecting = true">{{ currentLabel }}</Button>
+    </HorizontalFill>
+    <HorizontalFill v-else>
+      <LabeledValue :label="label">
+        <Button @click="selecting = true">{{ currentLabel }}</Button>
+      </LabeledValue>
     </HorizontalFill>
     <Modal v-if="selecting" dialog @close="selecting = false">
       <Vertical>
@@ -23,6 +28,7 @@
 <script>
 export default {
   props: {
+    label: {},
     options: {
       default: () => ({}),
     },

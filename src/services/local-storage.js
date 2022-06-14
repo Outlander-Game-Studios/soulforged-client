@@ -30,11 +30,25 @@ export const LocalStorageService = (window.LocalStorageService = {
     streams[key].next(value);
   },
 
-  isImageCached(src) {
-    const image = new Image();
-    image.src = src;
-    const cached = image.complete;
-    image.remove();
-    return cached;
+  removeItem(key) {
+    localStorage.removeItem(key);
+    delete streams[key];
+  },
+
+  async isImageCached(src) {
+    return new Promise((resolve) => {
+      const image = new Image();
+      image.src = src;
+      if (image.complete) {
+        image.remove();
+        resolve(true);
+      } else {
+        setTimeout(() => {
+          const cached = image.complete;
+          image.remove();
+          resolve(cached);
+        }, 500);
+      }
+    });
   },
 });

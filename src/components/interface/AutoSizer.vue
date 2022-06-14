@@ -4,11 +4,10 @@
 
 <script>
 let fontSizeOriginal;
+let fontSizeOverride;
 
 export default {
-  data: () => ({
-    fontSizeOverride: null,
-  }),
+  data: () => ({}),
 
   created() {
     this.handler = this.handleResize.bind(this);
@@ -31,7 +30,7 @@ export default {
 
   methods: {
     handleResize() {
-      this.fontSizeOverride = this.fontSizeOverride || fontSizeOriginal;
+      fontSizeOverride = fontSizeOverride || fontSizeOriginal;
       let newOverride;
       const referenceSize = this.$refs.sizeReference?.getBoundingClientRect()
         .width;
@@ -39,16 +38,19 @@ export default {
         return;
       }
       const targetRatio = 55;
-      const screenSize = Math.min(getScreenWidth(), getScreenHeight());
+      const [width, height] = [getScreenWidth(), getScreenHeight()];
+      const screenSize =
+        width > height
+          ? Math.min(width, height * 0.66)
+          : Math.min(width * 0.66, height);
       const currentRatio = screenSize / referenceSize;
       if (currentRatio !== targetRatio) {
         newOverride =
-          (this.fontSizeOverride * screenSize) / referenceSize / targetRatio;
-        // newOverride = Math.min(12, newOverride);
-        if (newOverride !== this.fontSizeOverride) {
-          this.fontSizeOverride = newOverride;
+          (fontSizeOverride * screenSize) / referenceSize / targetRatio;
+        if (newOverride !== fontSizeOverride) {
+          fontSizeOverride = newOverride;
           document.querySelector("html").style.fontSize =
-            this.fontSizeOverride + "px";
+            fontSizeOverride + "px";
         }
       }
     },

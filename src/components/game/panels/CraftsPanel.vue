@@ -1,22 +1,122 @@
 <template>
   <div>
+    <div class="craft-filters-wrapper">
+      <Container borderType="alt" :borderSize="1.2">
+        <Collapsible>
+          <template v-slot:header="{ collapsed: collapsed }">
+            <span v-if="!collapsed">Filters</span>
+          </template>
+          <template v-slot:content>
+            <div class="craft-filters">
+              <Spaced>
+                <Vertical>
+                  <Input placeholder="Text search..." v-model="textFilter" />
+                  <Select
+                    label="Skill"
+                    :options="availableSkills"
+                    v-model="skillFilter"
+                  />
+                  <Select
+                    label="Sort"
+                    :options="sortOptions"
+                    v-model="sortOrder"
+                  />
+                </Vertical>
+              </Spaced>
+            </div>
+          </template>
+        </Collapsible>
+      </Container>
+    </div>
     <Header>Crafts</Header>
     <div v-if="!crafts">
       <LoadingPlaceholder />
     </div>
     <div v-else-if="!crafts.length" class="empty-text">None</div>
-    <div v-else v-for="craft in crafts">
+    <div v-else-if="!sortedFilteredCrafts.length" class="empty-text">
+      No results found
+    </div>
+    <div v-else v-for="craft in sortedFilteredCrafts">
       <CraftListItem :craft="craft" />
     </div>
   </div>
 </template>
 
 <script>
+const NO_FILTER = "_";
+const SORTING = [
+  {
+    label: "Default",
+  },
+  {
+    label: "Difficulty",
+    sorter: (a, b) => b.difficulty - a.difficulty,
+  },
+  {
+    label: "Skill",
+    sorter: (a, b) => compareStrings(a.skill, b.skill),
+  },
+];
+
 export default {
+  data: () => ({
+    collapsed: true,
+    sortOptions: SORTING.map((s) => s.label),
+    textFilter: "",
+    skillFilter: NO_FILTER,
+    sortOrder: 0,
+  }),
+
   subscriptions() {
     return {
       crafts: GameService.getCraftsStream(),
     };
   },
+
+  computed: {
+    availableSkills() {
+      return {
+        [NO_FILTER]: "Any",
+        ...(this.crafts || [])
+          .map((c) => c.skill)
+          .filter((skill) => !!skill)
+          .uniq()
+          .sort()
+          .toObject(),
+      };
+    },
+    sortedFilteredCrafts() {
+      let result = [...this.crafts];
+      if (!result) {
+        return;
+      }
+      if (this.skillFilter !== NO_FILTER) {
+        result = result.filter((craft) => craft.skill === this.skillFilter);
+      }
+      if (this.textFilter) {
+        result = result.filter((craft) =>
+          craft.name
+            .replace(/\{[^:]+:[0-1]:([^}]+)\}/g, "$1")
+            .toLowerCase()
+            .includes(this.textFilter.toLowerCase())
+        );
+      }
+      const { sorter } = SORTING[this.sortOrder];
+      if (sorter) {
+        result.sort(sorter);
+      }
+      return result;
+    },
+  },
 };
 </script>
+
+<style scoped lang="scss">
+@import "../../../utils.scss";
+
+.craft-filters-wrapper {
+  @include main-tab-extra();
+  display: flex;
+  justify-content: flex-end;
+}
+</style>

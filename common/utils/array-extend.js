@@ -1,4 +1,9 @@
-Array.prototype.toObject = function (keyGetter, valueGetter = (i) => i) {
+import uniq from "lodash/uniq.js";
+
+Array.prototype.toObject = function (
+  keyGetter = (i) => i,
+  valueGetter = (i) => i
+) {
   const object = {};
   this.forEach((i, idx) => {
     object[keyGetter(i, idx)] = valueGetter(i, idx);
@@ -25,14 +30,23 @@ Array.prototype.last = function () {
   return this[this.length - 1];
 };
 
-Array.prototype.asyncFilter = async function (predicate) {
-  const results = await Promise.all(this.map(predicate));
-  return this.filter((_, index) => results[index]);
+Array.prototype.uniq = function () {
+  return uniq(this);
 };
 
 Array.prototype.asyncMap = async function (predicate) {
   const results = await Promise.all(this.map(predicate));
   return this.map((_, index) => results[index]);
+};
+
+Array.prototype.asyncFilter = async function (predicate) {
+  const results = await Promise.all(this.map(predicate));
+  return this.filter((_, index) => results[index]);
+};
+
+Array.prototype.someAsync = async function (predicate) {
+  const results = await Promise.all(this.map(predicate));
+  return this.some((_, index) => results[index]);
 };
 
 Array.create = (size) => Array.apply(null, Array(size));

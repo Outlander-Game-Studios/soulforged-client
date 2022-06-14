@@ -128,6 +128,10 @@ function defineSymbol(identifier) {
   return global.symbols[identifier];
 }
 
+function compareStrings(a, b) {
+  return a > b ? 1 : a === b ? 0 : -1;
+}
+
 export {
   md5,
   sum,
@@ -139,4 +143,5 @@ export {
   pluralize,
   preposition,
   defineSymbol,
+  compareStrings,
 };

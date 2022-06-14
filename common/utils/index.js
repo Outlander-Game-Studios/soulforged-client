@@ -15,6 +15,7 @@ import {
   pluralize,
   preposition,
   defineSymbol,
+  compareStrings,
 } from "./misc.js";
 import { stacktrace } from "./debug.js";
 
@@ -30,3 +31,4 @@ global.dynamicPluralize = dynamicPluralize;
 global.pluralize = pluralize;
 global.preposition = preposition;
 global.defineSymbol = defineSymbol;
+global.compareStrings = compareStrings;
