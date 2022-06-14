@@ -47,6 +47,9 @@ export default {
       if (currentRatio !== targetRatio) {
         newOverride =
           (fontSizeOverride * screenSize) / referenceSize / targetRatio;
+        if (newOverride > 12) {
+          newOverride = newOverride * 0.625;
+        }
         if (newOverride !== fontSizeOverride) {
           fontSizeOverride = newOverride;
           document.querySelector("html").style.fontSize =
