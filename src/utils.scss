@@ -71,7 +71,7 @@ $disabled-color: #ccc;
 
 @mixin text-outline($outline-color: black, $text-color: white) {
   color: $text-color;
-  $spacing: 1px;
+  $spacing: 0.04em;
   text-shadow: #{$spacing} #{-$spacing} 0 $outline-color,
   #{-$spacing} #{$spacing} 0 $outline-color,
   #{$spacing} #{$spacing} 0 $outline-color,

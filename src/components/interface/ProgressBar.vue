@@ -6,8 +6,9 @@
         backgroundType="alt"
         class="container"
         :left="left"
+        :style="containerStyle"
       >
-        <div class="container-inner" :style="containerStyle">
+        <div class="container-inner" :style="containerInnerStyle">
           <template v-if="current !== undefined">
             <div class="fill-wrapper" :style="getFillWrapperStyle(current)">
               <div class="fill" :class="color" :style="getFillStyle(current)" />
@@ -54,6 +55,11 @@ export default {
 
   computed: {
     containerStyle() {
+      return {
+        height: this.size + "rem",
+      };
+    },
+    containerInnerStyle() {
       return {
         height: (this.size * 5) / 7 + "rem",
       };

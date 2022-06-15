@@ -37,7 +37,10 @@ export default {
       if (!referenceSize) {
         return;
       }
-      const targetRatio = 55;
+      const pixelRatio = ControlsService.isTouchDevice()
+        ? 1
+        : window.devicePixelRatio || 1;
+      const targetRatio = 55 / pixelRatio;
       const [width, height] = [getScreenWidth(), getScreenHeight()];
       const screenSize =
         width > height
