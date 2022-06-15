@@ -11,15 +11,18 @@ Array.prototype.toObject = function (
   return object;
 };
 
-Array.prototype.remove = function (itemOrCallback) {
+Array.prototype.remove = function (itemOrCallback, check = true) {
   const index =
     typeof itemOrCallback === "function"
       ? this.findIndex(itemOrCallback)
       : this.indexOf(itemOrCallback);
   if (index === -1) {
-    throw new Error("Unable to remove item from an array, item not present");
+    if (check) {
+      throw new Error("Unable to remove item from an array, item not present");
+    }
+  } else {
+    this.splice(index, 1);
   }
-  this.splice(index, 1);
 };
 
 Array.prototype.first = function () {
