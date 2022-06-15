@@ -55,6 +55,7 @@ export default {
         }
         if (newOverride !== fontSizeOverride) {
           fontSizeOverride = newOverride;
+          window.fontSizeOverride = fontSizeOverride;
           document.querySelector("html").style.fontSize =
             fontSizeOverride + "px";
         }

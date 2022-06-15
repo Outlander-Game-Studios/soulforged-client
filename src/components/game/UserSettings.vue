@@ -43,6 +43,13 @@
     >
       Play ambience in background
     </Checkbox>
+    <div class="debug-info">
+      <LabeledValue label="Rev ID">{{ startupId }}</LabeledValue>
+      <LabeledValue label="Touch enabled">{{ touch }}</LabeledValue>
+      <LabeledValue label="Resolution">{{ resolution }}</LabeledValue>
+      <LabeledValue label="UI Scaling">{{ scaling }}</LabeledValue>
+      <LabeledValue label="Pixel ratio">{{ pixelRatio }}</LabeledValue>
+    </div>
   </Vertical>
 </template>
 
@@ -51,6 +58,11 @@ export default {
   data: () => ({
     audioVolume: {},
     enableSoundsInBackground: null,
+    startupId: GameService.getClientStartupId(),
+    touch: ControlsService.isTouchDevice() ? "Yes" : "No",
+    resolution: `${getScreenWidth()} x ${getScreenHeight()}`,
+    scaling: window.fontSizeOverride.toFixed(2),
+    pixelRatio: window.devicePixelRatio,
   }),
 
   created() {
@@ -88,3 +100,9 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+.debug-info {
+  font-size: 65%;
+}
+</style>
