@@ -35,6 +35,9 @@ export const ControlsService = (window.ControlsService = {
 
   isTouchDevice() {
     return (
+      "ontouchstart" in window ||
+      navigator.MaxTouchPoints > 0 ||
+      navigator.msMaxTouchPoints > 0 ||
       window.getComputedStyle(document.querySelector("html")).cursor === "none"
     );
   },
