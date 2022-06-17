@@ -172,8 +172,11 @@
               />
               <span v-else class="text-none">None</span>
             </LabeledValue>
-            <LabeledValue label="Ground">
+            <LabeledValue label="Moisture">
               {{ viewDetails.water.label }}
+            </LabeledValue>
+            <LabeledValue label="Environment">
+              {{ viewDetails.climate.label }}
             </LabeledValue>
             <LabeledValue label="Vermin">
               <RichText
@@ -327,7 +330,7 @@ const ACTION_NAMES = {
 
 const MODIFIER_NAMES = {
   ground: "Ground",
-  climate: "Climate",
+  climate: "Environment",
   wateringMinus: "Drought",
   wateringPlus: "Flood",
   vermin: "Vermin control",

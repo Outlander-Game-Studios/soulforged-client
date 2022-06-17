@@ -73,6 +73,9 @@ export default {
           ) {
             SoundService.playSound(fanfareSound);
           }
+          if (!newObjective) {
+            this.showDetails = false;
+          }
         })
         .delay(500),
       fullscreenOperation: ControlsService.getFullscreenOperationStream(),
