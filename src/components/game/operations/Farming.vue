@@ -176,7 +176,10 @@
               {{ viewDetails.water.label }}
             </LabeledValue>
             <LabeledValue label="Environment">
-              {{ viewDetails.climate.label }}
+              <span v-if="viewDetails.environmentSuitability">
+                {{ viewDetails.environmentSuitability }}
+              </span>
+              <span v-else class="text-none">No plant</span>
             </LabeledValue>
             <LabeledValue label="Vermin">
               <RichText
