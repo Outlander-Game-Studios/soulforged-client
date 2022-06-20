@@ -146,7 +146,11 @@ export default {
 
   methods: {
     characterPresent(creature) {
-      return this.creaturesAtLocation[creature.id];
+      return (
+        creature &&
+        this.creaturesAtLocation &&
+        this.creaturesAtLocation[creature.id]
+      );
     },
   },
 };
