@@ -11,6 +11,7 @@
         </div>
       </div>
       <Avatar
+        :class="{ absent: !characterPresent(creature) }"
         :creature="creature"
         size="small"
         headOnly
@@ -137,7 +138,16 @@ export default {
         .switchMap((id) =>
           GameService.getEntityStream(id, ENTITY_VARIANTS.TRADE)
         ),
+      creaturesAtLocation: GameService.getLocationStream().map((location) =>
+        location.creatures.toObject((cId) => cId)
+      ),
     };
+  },
+
+  methods: {
+    characterPresent(creature) {
+      return this.creaturesAtLocation[creature.id];
+    },
   },
 };
 </script>
@@ -209,5 +219,9 @@ export default {
 .set-essence-icon {
   width: 2.6rem;
   max-width: 2.6rem;
+}
+
+.absent {
+  opacity: 0.4;
 }
 </style>
