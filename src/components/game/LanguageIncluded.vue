@@ -1,15 +1,11 @@
 <template>
   <div>
     <span v-for="(part, idx) in parts" :key="idx">
-      <span v-if="part.text !== undefined">
+      <span v-if="part.language === undefined">
         <RichText :value="part.text" />
       </span>
       <span v-else>
-        <LanguagePhrase
-          :languageCode="part.language"
-          :encoded="part.encoded"
-          :decoded="part.decoded"
-        />
+        <LanguagePhrase :languageCode="part.language" :text="part.text" />
       </span>
     </span>
   </div>
@@ -32,11 +28,10 @@ export default {
           text: first,
         });
         if (second) {
-          const [language, encoded, decoded] = second.split("⍡");
+          const [language, text] = second.split("⍡");
           acc.push({
             language,
-            encoded,
-            decoded,
+            text,
           });
         }
         return acc;

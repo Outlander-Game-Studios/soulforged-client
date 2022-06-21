@@ -3,7 +3,7 @@
     <CloseButton class="close-button" @click="cancel()" />
     <Header>Note</Header>
     <Spaced>
-      <LanguageIncluded :value="operation.context.text" showOriginal />
+      <LanguageIncluded :value="operation.context.text" />
     </Spaced>
   </div>
 </template>

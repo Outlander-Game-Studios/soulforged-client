@@ -1,22 +1,41 @@
 <template>
   <span>
-    <div :class="'language-' + languageCode" v-if="showOriginal">
-      <RichText :value="encoded" />
-    </div>
-    <pre>Using <RichText v-if="language" :value="language.name" />:
-<RichText class="language-text" :value="decoded" /></pre>
+    <Horizontal>
+      <Header alt2 small>
+        Using <RichText v-if="language" :value="language.name" />
+      </Header>
+    </Horizontal>
+    <pre><template v-for="(part, idx) in parts"><span :class="part.obfuscated ? ['language-' + languageCode, 'obfuscated'] : []"><RichText :value="part.text" /></span></template></pre>
   </span>
 </template>
 
 <script>
+import flatten from "lodash/flatten.js";
+
 export default {
   props: {
-    showOriginal: {
-      default: false,
-    },
     languageCode: {},
-    encoded: {},
-    decoded: {},
+    text: {},
+  },
+
+  computed: {
+    parts() {
+      return flatten(
+        this.text.split("」").map((item) => {
+          const [first, second] = item.split("「");
+          return [
+            {
+              obfuscated: false,
+              text: first,
+            },
+            {
+              obfuscated: true,
+              text: second,
+            },
+          ];
+        })
+      );
+    },
   },
 
   subscriptions() {
@@ -47,7 +66,7 @@ export default {
   src: url(${language.font});
 }
 
-.language-${this.languageCode}, .language-${this.languageCode} * { font-family: Language${this.languageCode} }
+.language-${this.languageCode}, .language-${this.languageCode} * { font-family: Language${this.languageCode}; visibility: visible !important; }
 `;
         document.querySelector("head").appendChild(styleElement);
       }
@@ -57,6 +76,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.obfuscated {
+  color: #ac836b;
+  visibility: hidden;
+}
+
 .language-text {
   font-style: italic;
 }

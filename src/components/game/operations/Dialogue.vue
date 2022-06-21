@@ -21,12 +21,14 @@
         :class="{ own: isOwnEntry(entry) }"
         :ref="'message_' + entry.when"
       >
-        <CreatureIcon
-          :creatureId="entry.who"
-          noSleep
-          class="entry-avatar"
-          size="tiny"
-        />
+        <div>
+          <CreatureIcon
+            :creatureId="entry.who"
+            noSleep
+            class="entry-avatar"
+            size="tiny"
+          />
+        </div>
         <div>
           <div class="title">
             <span class="name">
@@ -171,7 +173,7 @@ export default window.OperationDialogue = {
   }
 
   .entry-text {
-    font-size: 80%;
+    font-size: 95%;
   }
 
   &:not(.own) {
