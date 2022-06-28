@@ -37,6 +37,10 @@ Array.prototype.uniq = function () {
   return uniq(this);
 };
 
+Array.prototype.asyncForEach = async function (predicate) {
+  await Promise.all(this.map(predicate));
+};
+
 Array.prototype.asyncMap = async function (predicate) {
   const results = await Promise.all(this.map(predicate));
   return this.map((_, index) => results[index]);
