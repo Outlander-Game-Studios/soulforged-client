@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="main-container" v-if="combat">
+    <div class="combat-container" v-if="combat">
       <CreatureDetailsModal
         :creatureId="selectedCreatureId"
         @close="selectedCreatureId = null"
@@ -233,25 +233,112 @@
                 <Header large v-else>Victory!</Header>
               </HorizontalCenter>
               <HorizontalCenter>
-                <Container v-if="!operation.fled" class="loot-section">
-                  <Spaced>
-                    <Header alt2>Loot</Header>
-                    <div class="loot-list">
-                      <Inventory :inventory="loot" />
-                    </div>
-                    <HorizontalCenter v-if="loot && loot.length">
-                      <Button @click="lootAll()"> Loot all </Button>
-                    </HorizontalCenter>
-                  </Spaced>
-                </Container>
-              </HorizontalCenter>
-              <HorizontalCenter>
                 <Button @click="cancel()">Finish</Button>
               </HorizontalCenter>
+              <DynamicLayout>
+                <HorizontalFill v-if="loot && !operation.fled">
+                  <Container class="loot-section">
+                    <Spaced>
+                      <Header>Loot</Header>
+                      <div class="loot-list">
+                        <Inventory :inventory="loot" />
+                      </div>
+                      <HorizontalCenter>
+                        <Button @click="lootAll()"> Loot all </Button>
+                      </HorizontalCenter>
+                    </Spaced>
+                  </Container>
+                </HorizontalFill>
+                <HorizontalFill
+                  v-if="
+                    operation.context.summary &&
+                    (operation.context.summary.skills.length ||
+                      operation.context.summary.effects.length ||
+                      operation.context.summary.mobKnowledge.length)
+                  "
+                >
+                  <Container class="summary-section">
+                    <Spaced>
+                      <LoadingPlaceholder v-if="!operation.context.summary" />
+                      <Vertical v-else>
+                        <Header>Summary</Header>
+                        <template
+                          v-if="operation.context.summary.skills.length"
+                        >
+                          <Header alt2>Skills</Header>
+                          <Horizontal
+                            v-for="skill in operation.context.summary.skills"
+                            :key="skill.name"
+                          >
+                            <SkillBar
+                              :skillName="skill.name"
+                              :skillLevel="skill.level"
+                              class="flex-grow"
+                            />
+                            <span class="gained-text">
+                              <Plused :value="skill.gain" />
+                            </span>
+                          </Horizontal>
+                        </template>
+                        <template
+                          v-if="operation.context.summary.effects.length"
+                        >
+                          <Header alt2>Effects</Header>
+                          <Effects
+                            :effects="operation.context.summary.effects"
+                          />
+                        </template>
+                        <template
+                          v-if="operation.context.summary.mobKnowledge.length"
+                        >
+                          <Header alt2>Monster Knowledge</Header>
+                          <ListItem
+                            v-for="mobKnowledge in operation.context.summary
+                              .mobKnowledge"
+                            :key="mobKnowledge.name"
+                            :iconSize="4"
+                            :iconSrc="mobKnowledge.icon"
+                            flexible
+                            @click="showMobInfoDetails = mobKnowledge"
+                          >
+                            <template v-slot:title>
+                              <RichText :value="mobKnowledge.name" />
+                              Level:
+                              {{ mobKnowledge.info.mobExpLevel }}
+                            </template>
+                            <template v-slot:subtitle>
+                              <CreatureKnowledgeBar
+                                :mobInfo="mobKnowledge.info"
+                              />
+                            </template>
+                            <template v-slot:buttons>
+                              <span class="gained-text">
+                                <Plused :value="mobKnowledge.gained" />
+                              </span>
+                            </template>
+                          </ListItem>
+                        </template>
+                      </Vertical>
+                    </Spaced>
+                  </Container>
+                </HorizontalFill>
+              </DynamicLayout>
             </Vertical>
           </Spaced>
         </div>
       </template>
+      <Modal
+        dialog
+        v-if="showMobInfoDetails"
+        @close="showMobInfoDetails = null"
+      >
+        <template v-slot:title>
+          <RichText :value="showMobInfoDetails.name" />
+        </template>
+        <template v-slot:contents>
+          <CreatureKnowledgeLevelInfo :mobInfo="showMobInfoDetails.info" />
+        </template>
+      </Modal>
       <Modal dialog v-if="!combat.running && !combat.finished">
         <template v-slot:title>
           Combat Paused
@@ -366,6 +453,7 @@ export default window.OperationCombat = {
     bigText: null,
     selectedMoveId: null,
     skipConfirm: true,
+    showMobInfoDetails: null,
   }),
 
   watch: {
@@ -820,7 +908,7 @@ export default window.OperationCombat = {
 $avatar-size: 9rem;
 $effects-size: 6rem;
 
-.main-container {
+.combat-container {
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -1074,6 +1162,8 @@ $effects-size: 6rem;
 
 .combat-summary {
   flex-grow: 1;
+  max-height: 100vh;
+  display: flex;
 }
 
 .effects-container {
@@ -1159,11 +1249,6 @@ $side-position: 1rem;
   }
 }
 
-.loot-section {
-  max-width: 45rem;
-  flex-grow: 1;
-}
-
 .targetting-overlay {
   position: absolute;
   @include fill();
@@ -1243,5 +1328,11 @@ $side-position: 1rem;
   height: auto !important;
   max-height: calc(100% - 2.5rem) !important;
   z-index: 20;
+}
+
+.gained-text {
+  padding-top: 1rem;
+  display: block;
+  @include text-good();
 }
 </style>
