@@ -37,7 +37,9 @@
             <Vertical>
               <Header small> {{ selectedMove.name }} </Header>
               <CombatMoveDetails :moveDetails="selectedMove" noIcon />
-              <Button @click="selectMove(selectedMoveId)">Perform</Button>
+              <Button @click="selectMove(selectedMoveId)" reactToEnter
+                >Perform</Button
+              >
             </Vertical>
           </Container>
           <div class="creatures">

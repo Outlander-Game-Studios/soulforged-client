@@ -28,12 +28,22 @@
 <script>
 import buttonClickSound from "../../assets/sounds/button-click.ogg";
 
+let boundComponent;
+window.addEventListener("keypress", ($event) => {
+  if (($event.key || $event.code) === "Enter" && boundComponent) {
+    boundComponent.click($event);
+  }
+});
+
 export default {
   props: {
     processing: null,
     highlighted: false,
     disabled: false,
     type: null,
+    reactToEnter: {
+      type: Boolean,
+    },
     noPadding: {
       type: Boolean,
     },
@@ -71,6 +81,21 @@ export default {
     isDisabled() {
       return this.disabled;
     },
+  },
+
+  mounted() {
+    if (this.reactToEnter) {
+      if (boundComponent) {
+        throw new Error("Conflicting global keypress listeners");
+      }
+      boundComponent = this;
+    }
+  },
+
+  beforeDestroy() {
+    if (this.reactToEnter) {
+      boundComponent = null;
+    }
   },
 
   methods: {
