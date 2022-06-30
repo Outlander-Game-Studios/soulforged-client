@@ -12,7 +12,7 @@ mockEntity(
     effects: [],
     tracks: [
       {
-        text: "Recently moved into the area",
+        text: "Distracted",
         icon: trackFreshIcon,
       },
     ],
