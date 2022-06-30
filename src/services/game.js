@@ -702,6 +702,14 @@ export const GameService = (window.GameService = {
     });
   },
 
+  triggerExecutor(executorGroup, executor, args = {}) {
+    return GameService.request(REQUEST_CODES.TRIGGER_EXECUTOR, {
+      executorGroup,
+      executor,
+      ...args,
+    });
+  },
+
   getInfoStream(infoType, params = {}, reFetch = false) {
     const key = `${infoType}:${JSON.stringify(params)}`;
     const alreadyExists = !!infoStreams[key];
