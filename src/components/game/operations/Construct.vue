@@ -73,6 +73,13 @@
         <Header alt2>Step 2: Construction</Header>
         <Vertical v-if="step === 2">
           <OperationToolSelector :operation="operation" />
+          <LabeledValue label="Speed">
+            {{ operation.context.finalSpeed }}%
+            <span
+              class="highlight-problem"
+              v-if="!operation.context.finalSpeed"
+            />
+          </LabeledValue>
           <ProgressBar
             :fills="{
               green:

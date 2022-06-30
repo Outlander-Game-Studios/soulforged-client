@@ -273,4 +273,14 @@ label {
   padding: 0 0.5rem;
   display: block;
 }
+
+.highlight-problem {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  vertical-align: text-top;
+  background-image: url(ui-asset("/icons/problem.png"));
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
 </style>
