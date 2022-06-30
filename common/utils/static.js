@@ -145,6 +145,13 @@ global.destructurePayloadId = (payloadId) => {
   return { id, variant };
 };
 const MAX_CHAT_LENGTH = 128;
+const letters = "a-zA-Z";
+const digits = "0-9";
+const space = " ";
+const punctuation = "\\-.,!?\"'`‘’“”";
+const extendedLetters =
+  "ĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİıĲĳĴĵĶķĸĹĺĻļĽľĿŀŁłŃńŅņŇňŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŦŧŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽžſ";
+
 global.ChatMessageValidator = (message) => {
   message = message.trim();
   const disallowedCharacter = message.match(/[\\/<>]/);
@@ -157,7 +164,12 @@ global.ChatMessageValidator = (message) => {
   if (message.length >= MAX_CHAT_LENGTH) {
     return `Message needs to be shorter than ${MAX_CHAT_LENGTH} characters.`;
   }
-  const allValid = message.match(/^[a-zA-Z0-9 \-.,!?"'`‘’“”]+$/);
+
+  const allValid = message.match(
+    new RegExp(
+      `^[${letters}${extendedLetters}${digits}${space}${punctuation}]+$`
+    )
+  );
   if (!allValid) {
     return `Unexpected character. Only letters, numbers, spaces and punctuation is allowed.`;
   }
