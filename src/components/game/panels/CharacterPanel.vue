@@ -46,12 +46,27 @@
     </Header>
     <div v-if="noSkills" class="empty-text">None</div>
     <Spaced>
-      <SkillBar
-        v-for="(level, skill) in sortedSkills"
-        :key="skill"
-        :skillName="skill"
-        :skillLevel="level"
-      />
+      <template v-if="!showAllSkills">
+        <SkillBar
+          v-for="skill in topSortedSkills"
+          :key="skill.skillName + '_top'"
+          :skillName="skill.skillName"
+          :skillLevel="skill.level"
+        />
+      </template>
+      <template v-else>
+        <SkillBar
+          v-for="skill in sortedSkills"
+          :key="skill.skillName"
+          :skillName="skill.skillName"
+          :skillLevel="skill.level"
+        />
+      </template>
+      <HorizontalCenter v-if="topSortedSkills.length !== sortedSkills.length">
+        <Button @click="showAllSkills = !showAllSkills">
+          {{ showAllSkills ? "Show fewer" : "Show all" }}
+        </Button>
+      </HorizontalCenter>
     </Spaced>
     <Header>Combat</Header>
     <Spaced>
@@ -102,6 +117,7 @@ import CombatMoves from "../CombatMoves";
 export default {
   data: () => ({
     showStatDetails: false,
+    showAllSkills: false,
   }),
 
   components: { CombatMoves },
@@ -113,11 +129,14 @@ export default {
       sortedSkills: mainEntityStream.map((mainEntity) =>
         mainEntity.skills
           ? Object.keys(mainEntity.skills)
-              .sort((a, b) => mainEntity.skills[b] - mainEntity.skills[a])
-              .toObject(
-                (key) => key,
-                (key) => mainEntity.skills[key]
-              )
+              .sort((a, b) => {
+                const diff = mainEntity.skills[b] - mainEntity.skills[a];
+                return diff || compareStrings(a, b);
+              })
+              .map((skillName) => ({
+                skillName,
+                level: mainEntity.skills[skillName],
+              }))
           : Rx.Observable.empty()
       ),
     };
@@ -126,6 +145,9 @@ export default {
   computed: {
     noSkills() {
       return this.sortedSkills && !Object.keys(this.sortedSkills).length;
+    },
+    topSortedSkills() {
+      return this.sortedSkills?.slice(0, 5);
     },
   },
 };
