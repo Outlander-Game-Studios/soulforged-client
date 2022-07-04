@@ -28,13 +28,13 @@ global.BACKGROUNDS = [
 
 @keyframes effect-max-severity {
   0% {
-    background-size: 50% 50%;
-  }
-  50% {
     background-size: 100% 100%;
   }
+  50% {
+    background-size: 200% 200%;
+  }
   100% {
-    background-size: 50% 50%;
+    background-size: 100% 100%;
   }
 }
 
@@ -87,13 +87,11 @@ global.BACKGROUNDS = [
   @include effect-sev-background(red);
 }
 .background-severity-4 {
-  @include effect-sev-background(red, black);
-  @include filter-fix();
   background-color: black;
   background-repeat: no-repeat;
+  background-image: url(ui-asset("/backgrounds/severity-blink.gif"));
   background-position: center center;
   background-size: 100%;
-  animation: linear 0.5s effect-max-severity infinite;
   border-radius: 0 !important;
 }
 </style>
