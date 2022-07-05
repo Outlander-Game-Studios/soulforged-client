@@ -13,6 +13,7 @@ const params = {
     paramId: "amount",
     type: "integer",
     required: true,
+    default: 1,
     min: 1,
     max: 1,
   },

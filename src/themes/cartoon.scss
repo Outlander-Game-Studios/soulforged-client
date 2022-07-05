@@ -127,26 +127,23 @@ $backgroundAlt3Url: url(ui-asset("/backgrounds/ui_panel_paper_inset_bg.png"));
   border-width: 0 $rail-height / 2;
   cursor: pointer;
 
-  &::before {
+  &::before , &::after {
     content: '';
     position: absolute;
-    left: calc(#{-$rail-height / 2} + 1px);
     top: 0;
     height: $rail-height;
-    width: $rail-height / 2;
-    background-image: url(ui-asset("/misc/knob_rail-l.png"));
+    width: $rail-height * 0.625;
     background-size: 100% 100%;
   }
 
+  &::before {
+    left: calc(#{-$rail-height / 2} + 1px);
+    background-image: url(ui-asset("/misc/knob_rail_l.png"));
+  }
+
   &::after {
-    content: '';
-    position: absolute;
     right: calc(#{-$rail-height / 2} + 1px);
-    top: 0;
-    height: $rail-height;
-    width: $rail-height / 2;
-    background-image: url(ui-asset("/misc/knob_rail-r.png"));
-    background-size: 100% 100%;
+    background-image: url(ui-asset("/misc/knob_rail_r.png"));
   }
 }
 
