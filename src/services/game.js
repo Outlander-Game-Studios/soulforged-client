@@ -450,10 +450,13 @@ export const GameService = (window.GameService = {
       "quickActions",
       []
     );
-    const inventoryStream = GameService.getInventoryStream(mainEntity);
-    return quickActionsStream
-      .switchMap((quickActions) => {
-        const itemIds = quickActions.map(({ itemId }) => itemId);
+    const inventoryStream = mainEntity.pluck("inventory");
+    return Rx.combineLatest(quickActionsStream, inventoryStream)
+      .switchMap(([quickActions, inventoryItemsIds]) => {
+        const inventoryMap = inventoryItemsIds.toObject((itemId) => itemId);
+        const itemIds = quickActions
+          .map(({ itemId }) => itemId)
+          .filter((itemId) => inventoryMap[itemId]);
         return GameService.getEntitiesStream(itemIds).map((inventory) => {
           const inventoryMap = inventory.toObject(({ id }) => id);
           return quickActions.map(({ itemId, actionId, label }) => {
