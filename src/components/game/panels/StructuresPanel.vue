@@ -144,7 +144,7 @@
                     {{ value }}
                   </LabeledValue>
                 </div>
-                <div alt2 v-if="showDetailsInfo.toolUtility">
+                <div alt2 v-if="hasUtility(showDetailsInfo.toolUtility)">
                   <Header alt2>Tool</Header>
                   <LabeledValue
                     v-for="(efficiency, tool) in showDetailsInfo.toolUtility"
@@ -245,6 +245,10 @@ export default {
   },
 
   methods: {
+    hasUtility(utilities) {
+      return utilities && Object.keys(utilities).length;
+    },
+
     getStructureDetailsStream(structure) {
       return GameService.getEntityStream(structure.id, ENTITY_VARIANTS.DETAILS);
     },
