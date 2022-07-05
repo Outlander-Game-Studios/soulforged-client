@@ -102,6 +102,16 @@ global.FARMING_ACTIONS = {
   USE_LIQUID: 5,
 };
 
+global.SPACING_NAMES = {
+  0: "None",
+  1: "Very tight",
+  2: "Tight",
+  3: "Limited",
+  4: "Sizeable",
+  5: "Spacious",
+  6: "Expansive",
+};
+
 global.NAMING_RULES = [
   {
     regex: /^[A-Za-z\- ]*$/,
