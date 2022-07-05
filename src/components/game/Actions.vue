@@ -238,7 +238,7 @@ export default {
       this.currentAction = action;
       this.parameters = (action.parameters || []).reduce(
         (acc, param) => ({
-          [param.paramId]: param.type === "essence" ? 0 : 1,
+          [param.paramId]: param.default,
           ...acc,
         }),
         {}
@@ -264,6 +264,11 @@ export default {
       if (this.customActionHandler) {
         return this.customActionHandler(action, parameters);
       }
+      console.log(
+        "Perform action",
+        JSON.stringify(action),
+        JSON.stringify(parameters)
+      );
       this.performing = GameService.performAction(
         this.target,
         action,

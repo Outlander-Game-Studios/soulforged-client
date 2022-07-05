@@ -137,6 +137,7 @@ export default {
   methods: {
     selectedItem(item) {
       this.internalValue = item;
+      console.log("Selected item", JSON.stringify(item));
       this.$emit("selected", item);
       this.$emit("input", item);
     },
