@@ -14,11 +14,12 @@
       <Header alt2>Defense</Header>
       <Spaced>
         <LabeledValue
-          v-for="(value, type) in mainEntity.combatStats.defense"
-          :label="type"
-          :key="type"
+          v-for="armor in mainEntity.combatStats.defense"
+          :label="armor.label"
+          :icon="armor.icon"
+          :key="armor.label"
         >
-          {{ value }}
+          {{ armor.value }}
         </LabeledValue>
       </Spaced>
     </Spaced>

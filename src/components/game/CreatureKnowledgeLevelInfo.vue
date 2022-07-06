@@ -34,11 +34,12 @@
           {{ mobInfo.defenseRating }}
         </LabeledValue>
         <LabeledValue
-          v-for="(value, armour) in mobInfo.armour"
-          :label="armour"
-          :key="armour"
+          v-for="armor in mobInfo.armour"
+          :label="armor.label"
+          :icon="armor.icon"
+          :key="armor.label"
         >
-          {{ value }}
+          {{ armor.value }}
         </LabeledValue>
       </Spaced>
       <Spaced v-if="creature">

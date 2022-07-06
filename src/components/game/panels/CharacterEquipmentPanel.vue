@@ -56,9 +56,7 @@ export default {
   }),
 
   subscriptions() {
-    const draggedItemStream = ControlsService.getControlEventStream(
-      "draggingItem"
-    ).map(([item]) => item);
+    const draggedItemStream = ControlsService.getDraggedItemStream();
     return {
       draggingOther: ControlsService.getControlEventStream(
         "draggingInventory"

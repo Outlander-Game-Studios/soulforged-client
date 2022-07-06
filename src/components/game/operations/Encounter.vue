@@ -70,28 +70,56 @@
             Some creatures are engaged in combat, you must wait for it to be
             resolved before you're able to engage
           </div>
-          <template
+          <HorizontalFill
             v-if="
               (!hostiles || hostiles.length) &&
               operation.context.hasAliveHostiles
             "
           >
-            <Button
-              :disabled="!operation.context.canAttack"
-              @click="commence()"
-            >
-              Engage
-            </Button>
-            <Button
-              :disabled="!operation.context.canBackAway"
-              @click="action('backAway')"
-            >
-              Back away
-            </Button>
-          </template>
-          <template v-else>
+            <Vertical>
+              <Button
+                :disabled="!operation.context.canAttack"
+                @click="commence()"
+              >
+                Engage
+              </Button>
+              <Button
+                :disabled="!operation.context.canBackAway"
+                @click="action('backAway')"
+              >
+                Back away
+              </Button>
+            </Vertical>
+            <div class="quick-info">
+              <LabeledValue flex label="Weapon">
+                <Item v-if="weapon" :data="weapon" :size="2.5" />
+                <div v-else>None</div>
+              </LabeledValue>
+              <LabeledValue flex label="Utilities">
+                <Horizontal tight>
+                  <Item
+                    v-for="(util, idx) in utilities"
+                    :key="idx"
+                    :data="util"
+                    :size="2.5"
+                  />
+                </Horizontal>
+              </LabeledValue>
+              <div>
+                <LabeledValue
+                  v-for="armor in mainEntity.combatStats.defense"
+                  :label="armor.label"
+                  :icon="armor.icon"
+                  :key="armor.label"
+                >
+                  {{ armor.value }}
+                </LabeledValue>
+              </div>
+            </div>
+          </HorizontalFill>
+          <div v-else>
             <Button @click="action('backAway')"> Leave </Button>
-          </template>
+          </div>
         </Vertical>
         <CreatureDetailsModal
           :creatureId="selectedCreatureId"
@@ -135,10 +163,13 @@ export default window.OperationEncounter = {
       creatures.filter((c) => !!c.hostile)
     );
     return {
+      mainEntity: GameService.getRootEntityStream(),
       combatEngagement: combatEngagementStream,
       friendlies: friendliesStream,
       hostiles: hostilesStream,
       consideredAP: ControlsService.getConsideredAPStream(),
+      weapon: GameService.getWeaponStream(),
+      utilities: GameService.getUtilitiesStream(),
       inCombatCheck: creaturesStream
         .map((creatures) =>
           creatures.map(
@@ -265,5 +296,10 @@ export default window.OperationEncounter = {
   font-size: 90%;
   padding: 0 10% 1rem;
   text-align: center;
+}
+
+.quick-info {
+  max-width: 50%;
+  font-size: 70%;
 }
 </style>

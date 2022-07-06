@@ -88,11 +88,12 @@
         </Header>
         <div>
           <LabeledValue
-            v-for="(value, stat) in mainEntity.combatStats.defense"
-            :label="stat"
-            :key="stat"
+            v-for="armor in mainEntity.combatStats.defense"
+            :label="armor.label"
+            :icon="armor.icon"
+            :key="armor.label"
           >
-            {{ value }}
+            {{ armor.value }}
           </LabeledValue>
         </div>
       </Vertical>

@@ -71,6 +71,14 @@ export const ControlsService = (window.ControlsService = {
       .map(({ params }) => params);
   },
 
+  getDraggedItemStream() {
+    return ControlsService.getControlEventStream("draggingItem")
+      .map(([item]) => item)
+      .switchMap((item) =>
+        GameService.getEntityStream(item.id, ENTITY_VARIANTS.BASE, true)
+      );
+  },
+
   setCurrentOpenTab(tab) {
     tabStream.next(tab);
   },

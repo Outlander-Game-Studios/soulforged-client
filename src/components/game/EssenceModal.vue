@@ -60,7 +60,11 @@
                   :key="power.powerId"
                 >
                   <Spaced>
-                    <ListItem class="craft-list-item" flexible>
+                    <ListItem
+                      class="craft-list-item"
+                      flexible
+                      titleClass="wrap"
+                    >
                       <template v-slot:icon>
                         <Icon
                           class="power-icon"

@@ -304,6 +304,41 @@ export const GameService = (window.GameService = {
       );
   },
 
+  getWeaponStream() {
+    return GameService.getRootEntityStream()
+      .pluck("equipment")
+      .switchMap((equipment) => {
+        const slotName = "Weapon";
+        return equipment && equipment[slotName]
+          ? GameService.getEntityStream(
+              equipment[slotName],
+              ENTITY_VARIANTS.BASE
+            )
+          : Rx.Observable.of(null);
+      });
+  },
+
+  getUtilitiesStream() {
+    return GameService.getRootEntityStream()
+      .pluck("equipment")
+      .switchMap((equipment) => {
+        const utils = Object.keys(equipment).filter((slotName) =>
+          slotName.includes("Utility")
+        );
+        if (!utils.length) {
+          return Rx.Observable.of([]);
+        }
+        return Rx.combineLatest(
+          utils.map((slotName) =>
+            GameService.getEntityStream(
+              equipment[slotName],
+              ENTITY_VARIANTS.BASE
+            )
+          )
+        );
+      });
+  },
+
   getRootEntityStream(forceReFetchId = false, forceReFetchData = false) {
     forceReFetchId = forceReFetchId || !rootEntityIdStream;
     if (!rootEntityIdStream) {

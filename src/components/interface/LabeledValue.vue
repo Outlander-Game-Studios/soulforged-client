@@ -5,6 +5,7 @@
     @click="$emit('click')"
   >
     <div class="label">
+      <img v-if="icon" :src="icon" class="label-icon" />
       {{ label }}
       <slot name="label" />
     </div>
@@ -20,6 +21,7 @@
 export default {
   props: {
     label: {},
+    icon: {},
     inline: { type: Boolean, default: false },
     flex: { type: Boolean, default: false },
     wrap: { type: Boolean, default: false },
@@ -30,6 +32,21 @@ export default {
 
 <style scoped lang="scss">
 @import "../../utils.scss";
+
+.label-icon {
+  display: inline-block;
+  margin-top: 0.1em;
+  $size: 1.2em;
+  $color: #402300;
+  width: $size;
+  height: $size;
+  min-width: $size;
+  min-height: $size;
+  background: $color;
+  box-sizing: border-box;
+  border: 2px dotted $color;
+  vertical-align: text-bottom;
+}
 
 .labeled-value {
   //white-space: nowrap;

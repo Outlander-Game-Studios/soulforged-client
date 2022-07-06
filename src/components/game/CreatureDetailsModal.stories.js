@@ -28,11 +28,11 @@ const attackInfo = {
   hitRating: 60,
 };
 const defenseInfo = {
-  armour: {
-    "Cut Resistance": 2,
-    "Blunt Resistance": 2,
-    "Pierce Resistance": 2,
-  },
+  armour: [
+    { label: "Cut Resistance", value: 2 },
+    { label: "Blunt Resistance", value: 2 },
+    { label: "Pierce Resistance", value: 2 },
+  ],
   defenseRating: 10,
 };
 const items = [hungerIcon];

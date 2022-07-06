@@ -522,17 +522,7 @@ export default window.OperationCombat = {
         .switchMap((ids) => GameService.getEntitiesStream(ids)),
       mainEntity: GameService.getRootEntityStream(),
       backdropImage: GameService.getBackdropStyleStream(),
-      weapon: GameService.getRootEntityStream()
-        .pluck("equipment")
-        .switchMap((equipment) => {
-          const slotName = "Weapon";
-          return equipment && equipment[slotName]
-            ? GameService.getEntityStream(
-                equipment[slotName],
-                ENTITY_VARIANTS.BASE
-              )
-            : Rx.Observable.of(null);
-        }),
+      weapon: GameService.getWeaponStream(),
       damages: combatStream
         .pluck("damages")
         .filter((damages) => !!damages)
