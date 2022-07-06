@@ -96,7 +96,7 @@
                 <div v-else>None</div>
               </LabeledValue>
               <LabeledValue flex label="Utilities">
-                <Horizontal tight>
+                <Horizontal v-if="utilities && utilities.length" tight>
                   <Item
                     v-for="(util, idx) in utilities"
                     :key="idx"
@@ -104,6 +104,7 @@
                     :size="2.5"
                   />
                 </Horizontal>
+                <div v-else>None</div>
               </LabeledValue>
               <div>
                 <LabeledValue
