@@ -79,9 +79,7 @@ mockEntity(
           icon: fadeMoveIcon,
         },
       ],
-      defense: {
-        "Defense rating": 0,
-      },
+      defense: 0,
     },
     name: "Bobby",
   }),
@@ -129,13 +127,32 @@ mockEntity(
     dead: false,
     trades: [],
     combatStats: {
-      Attack: {
-        "Blunt damage": "1 ‒ 1",
-        "Hit Rating": 0,
-      },
-      Defense: {
-        "Defense Rating": 0,
-      },
+      moves: [
+        {
+          moveId: "attack",
+          name: "Strike",
+          icon: punchMoveIcon,
+        },
+        {
+          moveId: "attack2",
+          name: "Bash",
+          icon: bashMoveIcon,
+          cooldown: 3,
+          cooldownMax: 5,
+        },
+        {
+          moveId: "flee",
+          name: "Flee",
+          secondary: true,
+          icon: fleeMoveIcon,
+        },
+        {
+          moveId: "attack3",
+          name: "Fade",
+          icon: fadeMoveIcon,
+        },
+      ],
+      defense: 0,
     },
     name: "Wannabelle VIII",
   }),

@@ -87,8 +87,11 @@
           </Help>
         </Header>
         <div>
+          <LabeledValue label="Defense rating">
+            {{ mainEntity.combatStats.defense }}
+          </LabeledValue>
           <LabeledValue
-            v-for="armor in mainEntity.combatStats.defense"
+            v-for="armor in mainEntity.combatStats.armor"
             :label="armor.label"
             :icon="armor.icon"
             :key="armor.label"

@@ -33,6 +33,14 @@ const entities = {
     id: 103,
     actions: [],
     name: "Bobby",
+    combatStats: {
+      armor: [
+        {
+          label: "Blunt Resistance",
+          value: 2.5,
+        },
+      ],
+    },
   },
   "E::96::see": {
     name: "Wolf",
@@ -89,6 +97,7 @@ const factory = (onMounted = () => {}, onInit = () => {}) => () => {
     getEntityStream: (id) => Rx.Observable.of(entities[id]),
     getRootEntityStream: () =>
       Rx.Observable.of({
+        ...entities["E::103::see"],
         actionPoints: 18000,
         actionPointsMax: 36000,
       }),

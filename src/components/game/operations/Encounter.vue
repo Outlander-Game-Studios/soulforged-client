@@ -107,7 +107,7 @@
               </LabeledValue>
               <div>
                 <LabeledValue
-                  v-for="armor in mainEntity.combatStats.defense"
+                  v-for="armor in mainEntity.combatStats.armor"
                   :label="armor.label"
                   :icon="armor.icon"
                   :key="armor.label"
