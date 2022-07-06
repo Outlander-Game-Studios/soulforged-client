@@ -26,8 +26,63 @@
           </ItemSelector>
         </div>
       </Modal>
+      <Modal
+        v-if="skipping && !combat.concluded"
+        dialog
+        large
+        @close="skipping = false"
+      >
+        <template v-slot:title> Auto-resolve </template>
+        <template v-slot:contents>
+          <div v-if="combat.autoResolving">
+            <Vertical>
+              <Description>Auto-resolving combat...</Description>
+              <ProgressBar
+                color="orange"
+                :current="
+                  (100 * (AUTO_RESOLVE_TURNS - combat.autoResolving)) /
+                  AUTO_RESOLVE_TURNS
+                "
+              >
+                <div class="auto-resolve-count">
+                  {{ AUTO_RESOLVE_TURNS - combat.autoResolving }} /
+                  {{ AUTO_RESOLVE_TURNS }}
+                </div>
+              </ProgressBar>
+            </Vertical>
+          </div>
+          <div v-else>
+            <Vertical>
+              <Description>
+                This will attempt to resolve combat by automatically executing
+                up to
+                <em>{{ AUTO_RESOLVE_TURNS }}</em>
+                following turns.<br />
+                Your character will use the currently selected move:
+              </Description>
+              <HorizontalCenter>
+                <ListItem :iconSrc="currentMove.icon" flexible>
+                  <template v-slot:title>
+                    {{ currentMove && currentMove.name }}
+                  </template>
+                </ListItem>
+              </HorizontalCenter>
+              <HorizontalCenter>
+                <Button @click="triggerAutoResolve()">Confirm</Button>
+              </HorizontalCenter>
+            </Vertical>
+          </div>
+        </template>
+      </Modal>
       <template v-if="!combat.finished">
         <div class="main-area">
+          <Button
+            v-if="combat.canAutoResolve"
+            class="skipping-button"
+            @click="skipping = true"
+          >
+            Auto-resolve
+          </Button>
           <Container
             v-if="selectedMove && timeRemaining"
             class="move-info"
@@ -439,6 +494,8 @@ export default window.OperationCombat = {
   },
 
   data: () => ({
+    AUTO_RESOLVE_TURNS,
+    skipping: false,
     targetting: false,
     selectingWeapon: false,
     creaturePositions: {},
@@ -506,6 +563,13 @@ export default window.OperationCombat = {
         this.timeRemaining = combat.timeLeft;
         this.timeMax = Math.max(this.timeMax, this.timeRemaining || 0);
       }),
+      currentMove: this.$stream("operation")
+        .pluck("context", "currentMoveId")
+        .switchMap((moveId) =>
+          GameService.getRootEntityStream().map((entity) =>
+            entity?.combatStats?.moves?.find((m) => m.moveId === moveId)
+          )
+        ),
       selectedMove: this.$stream("selectedMoveId").switchMap((selectedMoveId) =>
         !selectedMoveId
           ? Rx.Observable.of(null)
@@ -537,7 +601,7 @@ export default window.OperationCombat = {
         .map(([creatureId, ownId]) => creatureId === ownId)
         .distinctUntilChanged()
         .tap((ownTurn) => {
-          if (ownTurn) {
+          if (ownTurn && !this.combat.autoResolving) {
             this.displayBigText("Your turn!", BIG_TEXT_CLASS.NEUTRAL);
             SoundService.playSound(promptSound);
           }
@@ -702,6 +766,16 @@ export default window.OperationCombat = {
           this.selectedMoveId = moveId;
         }
       }
+    },
+
+    triggerAutoResolve() {
+      GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
+        updateType: "autoResolve",
+      }).then((response) => {
+        if (response?.ok === false) {
+          ToastError(response.message);
+        }
+      });
     },
 
     resume() {
@@ -1326,5 +1400,21 @@ $side-position: 1rem;
   padding-top: 1rem;
   display: block;
   @include text-good();
+}
+
+.skipping-button {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+}
+
+em {
+  color: black;
+  font-weight: bold;
+}
+
+.auto-resolve-count {
+  text-align: center;
+  @include text-outline();
 }
 </style>
