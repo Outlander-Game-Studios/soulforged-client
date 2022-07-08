@@ -14,6 +14,25 @@
         <meta http-equiv="refresh" content="0;static/noscript" />
       </strong>
     </noscript>
+    <style>
+        @keyframes show-critical-failure {
+            0% {
+                opacity: 0;
+            }
+            90% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        #criticalFailure {
+            animation: show-critical-failure 1s linear forwards;
+        }
+    </style>
+    <div id="criticalFailure">
+      The game failed to initialize.
+    </div>
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
