@@ -1228,7 +1228,7 @@ $effects-size: 6rem;
 
 .combat-summary {
   flex-grow: 1;
-  max-height: 100vh;
+  max-height: var(--app-height);
   display: flex;
 }
 

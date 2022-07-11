@@ -23,14 +23,19 @@ global.bubbleEvents = ($listeners, events) => {
     );
 };
 
-global.getScreenWidth = () =>
-  document.documentElement
-    ? document.documentElement.clientWidth
-    : window.innerWidth;
-global.getScreenHeight = () =>
-  document.documentElement
-    ? document.documentElement.clientHeight
-    : window.innerHeight;
+window.getScreenWidth = () =>
+  Math.min(
+    window.outerWidth,
+    window.innerWidth,
+    document.documentElement ? document.documentElement.clientWidth : Infinity
+  );
+window.getScreenHeight = () =>
+  Math.min(
+    window.outerHeight,
+    window.innerHeight,
+    document.documentElement ? document.documentElement.clientHeight : Infinity
+  );
+
 global.isScreenOrientationLandscape = () => {
   const screenWidth = getScreenWidth();
   const screenHeight = getScreenHeight();

@@ -377,7 +377,7 @@ export default {
   position: relative;
 
   @media (orientation: landscape) {
-    height: calc(100vh - 1rem);
+    height: calc(var(--app-height) - 1rem);
   }
 
   @media (orientation: portrait) {

@@ -36,6 +36,7 @@ body {
   width: 100vw;
   height: 100vh;
   height: var(--app-height);
+  position: relative;
 }
 
 html {
@@ -161,7 +162,7 @@ body {
 .fade-expand-enter-active,
 .fade-expand-leave-active {
   transition: opacity 1s ease-in, max-height 2s ease-in;
-  max-height: 100vh;
+  max-height: var(--app-height);
   overflow: hidden;
 }
 .fade-expand-enter,
