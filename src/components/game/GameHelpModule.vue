@@ -311,7 +311,7 @@ export default {
 
 .help-trigger {
   font-size: 250%;
-  @include filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
+  //@include filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
   display: flex;
 }
 .backdrop {

@@ -38,11 +38,11 @@ export default {
   overflow: hidden;
   height: 100%;
 
-  .actions-container,
-  .status,
-  .controls {
-    @include filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
-  }
+  //.actions-container,
+  //.status,
+  //.controls {
+  //  @include filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
+  //}
 
   .status {
     position: fixed;

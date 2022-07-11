@@ -123,7 +123,7 @@ export default {
   flex-direction: column;
   position: fixed;
   z-index: 2;
-  @include filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
+  //@include filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
 
   @media (orientation: landscape) {
     right: 6rem;
@@ -137,7 +137,8 @@ export default {
 
   &:hover {
     cursor: pointer;
-    @include filter(drop-shadow(0.3rem 0.3rem 0.3rem black) brightness(1.2));
+    @include filter(brightness(1.2));
+    //@include filter(drop-shadow(0.3rem 0.3rem 0.3rem black) brightness(1.2));
   }
 }
 

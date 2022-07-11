@@ -161,7 +161,7 @@ export default {
 @import "../../utils.scss";
 
 .overlay {
-  @include filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
+  //@include filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
   display: flex;
 
   &:not(.map-centered) {

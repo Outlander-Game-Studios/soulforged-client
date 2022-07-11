@@ -262,11 +262,16 @@ export default {
 
 @keyframes underline-shine {
   0% {
+    text-decoration-color: inherit;
   }
-  50% {
+  20% {
     text-decoration-color: #c38663;
   }
+  40% {
+    text-decoration-color: inherit;
+  }
   100% {
+    text-decoration-color: inherit;
   }
 }
 
