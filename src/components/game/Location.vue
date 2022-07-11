@@ -288,54 +288,41 @@ $transition-time: 120ms;
 
     .travel-arrow {
       $arrowSize: calc(#{$size} * 0.13);
-      $shadowSize: calc(#{$size} * 0.003);
-      $baseFilter: drop-shadow($shadowSize $shadowSize $shadowSize black);
       height: $arrowSize;
       width: $arrowSize;
 
-      @include filter($baseFilter);
       margin-top: calc(#{$arrowSize} / -2);
       cursor: pointer;
       background-size: 100% 100%;
       transition: all $transition-time ease-out;
       transition-property: margin, width, height, transform;
+      position: relative;
 
       &.invalid {
         @include filter(saturate(0));
       }
 
+      &.backtrack {
+        &::before {
+          content: "";
+          position: absolute;
+          $overlap: 10%;
+          top: $overlap;
+          left: $overlap;
+          width: 100% - 2 * $overlap;
+          height: 100% - 2 * $overlap;
+          opacity: 1;
+          transform: rotate(45deg);
+
+          background-image: url(ui-asset("/borders/reinforced.png"));
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
+        }
+      }
+
       @for $i from 0 through 5 {
         &.difficulty-#{$i} {
           background-image: url(ui-asset("/misc/travel-#{$i}.png"));
-
-          &.backtrack {
-            @include shine-animation();
-
-            &::after {
-              content: "";
-              position: absolute;
-              $space: 15%;
-              top: $space;
-              left: $space;
-              width: 100% - 2 * $space;
-              height: 100% - 2 * $space;
-              opacity: 1;
-              transform: rotate(45deg);
-
-              background-image: linear-gradient(
-                60deg,
-                rgba(255, 255, 255, 0) 40%,
-                rgba(255, 255, 255, 0.23) 45%,
-                rgba(255, 255, 255, 0.6) 50%,
-                rgba(255, 255, 255, 0.23) 55%,
-                rgba(255, 255, 255, 0) 60%
-              );
-              background-repeat: no-repeat;
-              background-clip: unset;
-              background-position: -10rem;
-              animation: shine 5s ease-in-out infinite;
-            }
-          }
         }
       }
 
@@ -345,7 +332,7 @@ $transition-time: 120ms;
 
       &:hover {
         cursor: pointer;
-        @include filter($baseFilter brightness(1.7));
+        @include filter(brightness(1.7));
       }
     }
   }
