@@ -283,7 +283,7 @@ $transition-time: 120ms;
 
     .action {
       transform: translateX(calc(#{$size} * 0.4));
-      transition: transform $transition-time ease-out;
+      //transition: transform $transition-time ease-out;
     }
 
     .travel-arrow {
@@ -294,8 +294,8 @@ $transition-time: 120ms;
       margin-top: calc(#{$arrowSize} / -2);
       cursor: pointer;
       background-size: 100% 100%;
-      transition: all $transition-time ease-out;
-      transition-property: margin, width, height, transform;
+      //transition: all $transition-time ease-out;
+      //transition-property: margin, width, height, transform;
       position: relative;
 
       &.invalid {
@@ -341,7 +341,7 @@ $transition-time: 120ms;
 .visible-map {
   top: 0;
   right: 0;
-  transition: all $transition-time ease-out;
+  //transition: all $transition-time ease-out;
 
   &.normal {
     @include visible-map-style(calc(0.75 * var(--app-min-size)));
