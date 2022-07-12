@@ -87,11 +87,12 @@ global.BACKGROUNDS = [
   @include effect-sev-background(red);
 }
 .background-severity-4 {
-  background-color: black;
-  background-repeat: no-repeat;
-  background-image: url(ui-asset("/backgrounds/severity-blink.gif"));
-  background-position: center center;
-  background-size: 100%;
-  border-radius: 0 !important;
+  @include effect-sev-background(red, #810000);
+  //background-color: black;
+  //background-repeat: no-repeat;
+  //background-image: url(ui-asset("/backgrounds/severity-blink.gif"));
+  //background-position: center center;
+  //background-size: 100%;
+  //border-radius: 0 !important;
 }
 </style>

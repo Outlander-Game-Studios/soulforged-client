@@ -10,6 +10,11 @@ const factory = (severity) =>
 export const icons = () => ({
   template: `
 <HorizontalWrap>
+   ${factory(-5)}
+   ${factory(-4)}
+   ${factory(-3)}
+   ${factory(-2)}
+   ${factory(-1)}
    ${factory(0)}
    ${factory(1)}
    ${factory(2)}
