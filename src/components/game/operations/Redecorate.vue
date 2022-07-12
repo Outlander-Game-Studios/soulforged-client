@@ -36,7 +36,7 @@
         </ListItem>
       </template>
       <HorizontalCenter>
-        <Button @click="commence()">Confirm</Button>
+        <Button @click="commence()" :processing="processing">Confirm</Button>
       </HorizontalCenter>
     </Vertical>
     <LoadingPlaceholder v-else />
@@ -50,6 +50,7 @@ export default window.OperationRedecorate = {
   },
 
   data: () => ({
+    processing: false,
     replacingSlot: null,
   }),
 
@@ -107,11 +108,11 @@ export default window.OperationRedecorate = {
     },
 
     commence() {
-      GameService.request(REQUEST_CODES.COMMENCE_OPERATION).then(
-        ({ statusChanges = [] } = {}) => {
-          ToastNotify(statusChanges);
-        }
-      );
+      this.processing = GameService.request(
+        REQUEST_CODES.COMMENCE_OPERATION
+      ).then(({ statusChanges = [] } = {}) => {
+        ToastNotify(statusChanges);
+      });
     },
 
     replaceSlot(slotId) {

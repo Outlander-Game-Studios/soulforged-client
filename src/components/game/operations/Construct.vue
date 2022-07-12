@@ -94,7 +94,11 @@
             :max="CONSTRUCT_RESOLUTION - structure.constructionProgress"
           />
           <HorizontalCenter>
-            <Button @click="commence()" :disabled="!workAmount">
+            <Button
+              @click="commence()"
+              :disabled="!workAmount"
+              :processing="processing"
+            >
               Commence
             </Button>
           </HorizontalCenter>
@@ -134,6 +138,7 @@ export default window.OperationConstruct = {
     addingMaterial: null,
     addMaterialAmount: 0,
     workAmount: 0,
+    processing: false,
   }),
 
   subscriptions() {
@@ -200,7 +205,7 @@ export default window.OperationConstruct = {
 
   methods: {
     commence() {
-      GameService.request(REQUEST_CODES.COMMENCE_OPERATION, {
+      this.processing = GameService.request(REQUEST_CODES.COMMENCE_OPERATION, {
         workAmount: this.workAmount,
       }).then(({ workAmount, statusChanges }) => {
         this.workAmount = workAmount;

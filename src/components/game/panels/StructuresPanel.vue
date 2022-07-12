@@ -77,7 +77,7 @@
     </Modal>
     <Modal dialog large v-if="showDetailsId" @close="showDetailsId = null">
       <template v-slot:title>
-        <LoadingPlaceholder v-if="!showDetails" />
+        <LoadingPlaceholder v-if="!showDetails" :size="4" />
         <RichText v-else :value="showDetails.name" />
       </template>
       <template v-slot:contents>

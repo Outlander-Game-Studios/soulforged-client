@@ -36,7 +36,7 @@
         </Spaced>
         <div>
           <HorizontalCenter>
-            <Button @click="commence()">Start</Button>
+            <Button @click="commence()" :processing="processing">Start</Button>
           </HorizontalCenter>
         </div>
       </Vertical>
@@ -52,7 +52,9 @@ export default window.OperationPlan = {
     operation: {},
   },
 
-  data: () => ({}),
+  data: () => ({
+    processing: false,
+  }),
 
   watch: {
     operation() {
@@ -95,11 +97,12 @@ export default window.OperationPlan = {
     },
 
     commence() {
-      GameService.request(REQUEST_CODES.COMMENCE_OPERATION, {}).then(
-        ({ statusChanges }) => {
-          ToastNotify(statusChanges);
-        }
-      );
+      this.processing = GameService.request(
+        REQUEST_CODES.COMMENCE_OPERATION,
+        {}
+      ).then(({ statusChanges }) => {
+        ToastNotify(statusChanges);
+      });
     },
 
     cancel() {

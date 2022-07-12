@@ -53,7 +53,9 @@
         </Horizontal>
       </Vertical>
       <HorizontalCenter>
-        <Button ref="submit" @click="commence()">Commence</Button>
+        <Button ref="submit" @click="commence()" :processing="processing"
+          >Commence</Button
+        >
       </HorizontalCenter>
     </Vertical>
   </div>
@@ -68,6 +70,7 @@ export default window.OperationWait = {
   data: () => ({
     amount: 1,
     max: 100,
+    processing: false,
   }),
 
   watch: {
@@ -113,7 +116,7 @@ export default window.OperationWait = {
 
   methods: {
     commence() {
-      GameService.request(REQUEST_CODES.COMMENCE_OPERATION, {
+      this.processing = GameService.request(REQUEST_CODES.COMMENCE_OPERATION, {
         amount: this.amount,
       }).then(({ amount, statusChanges = [] } = {}) => {
         this.amount = amount;
