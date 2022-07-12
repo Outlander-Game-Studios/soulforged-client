@@ -25,13 +25,13 @@ global.bubbleEvents = ($listeners, events) => {
 
 window.getScreenWidth = () =>
   Math.min(
-    window.outerWidth,
+    ControlsService.isTouchDevice() ? window.outerWidth : Infinity,
     window.innerWidth,
     document.documentElement ? document.documentElement.clientWidth : Infinity
   );
 window.getScreenHeight = () =>
   Math.min(
-    window.outerHeight,
+    ControlsService.isTouchDevice() ? window.outerHeight : Infinity,
     window.innerHeight,
     document.documentElement ? document.documentElement.clientHeight : Infinity
   );
