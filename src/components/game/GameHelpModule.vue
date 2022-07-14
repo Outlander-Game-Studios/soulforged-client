@@ -168,6 +168,43 @@
           <Button @click="logout()" :processing="loggingOut">Log out</Button>
           <Button @click="option = null">Stay logged in</Button>
         </HorizontalCenter>
+        <Spaced>
+          <Description>
+            If you'd like to completely delete your account and remove the
+            information click
+            <a href="#" @click="startDeletion()">here</a>
+          </Description>
+        </Spaced>
+      </template>
+    </Modal>
+    <Modal v-if="option === 'deleteMyAccount'" dialog @close="option = null">
+      <template v-slot:title> Delete account </template>
+      <template v-slot:contents>
+        <Vertical>
+          <div>
+            <div class="important-text">
+              Are you sure absolutely sure you want to delete your account?
+            </div>
+            <div class="error-text">
+              Note: This action cannot be reversed and will result in loss of<br />
+              progress and any resources you accumulated in the game!
+            </div>
+          </div>
+          <HorizontalCenter>
+            <Checkbox v-model="confirmDelete">
+              I confirm I want to delete my account
+            </Checkbox>
+          </HorizontalCenter>
+          <HorizontalCenter>
+            <Button
+              @click="deleteMyAccount()"
+              :processing="loggingOut"
+              :disabled="!confirmDelete"
+            >
+              Delete my account
+            </Button>
+          </HorizontalCenter>
+        </Vertical>
       </template>
     </Modal>
   </div>
@@ -188,6 +225,7 @@ export default {
     showHelpIndicator: false,
     option: false,
     loggingOut: false,
+    confirmDelete: false,
     tabHelpers: [
       {
         selector: "location",
@@ -247,6 +285,18 @@ export default {
   },
 
   methods: {
+    startDeletion() {
+      this.option = "deleteMyAccount";
+      this.confirmDelete = false;
+    },
+
+    deleteMyAccount() {
+      this.loggingOut = true;
+      GameService.request(REQUEST_CODES.DELETE_MY_ACCOUNT).then(() => {
+        window.location.reload();
+      });
+    },
+
     logout() {
       this.loggingOut = true;
       GameService.request(REQUEST_CODES.LOGOUT).then(() => {
