@@ -37,9 +37,13 @@ export default {
       if (!referenceSize) {
         return;
       }
+      const isMacOS = navigator.userAgentData.platform
+        .toLowerCase()
+        .includes("mac");
+      const devicePixelRatio = window.devicePixelRatio / (isMacOS ? 2 : 1);
       const pixelRatio = ControlsService.isTouchDevice()
         ? 1
-        : window.devicePixelRatio || 1;
+        : devicePixelRatio || 1;
       const targetRatio = 55 / pixelRatio;
       const [width, height] = [getScreenWidth(), getScreenHeight()];
       const screenSize =
