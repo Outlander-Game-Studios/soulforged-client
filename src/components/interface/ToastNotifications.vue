@@ -11,10 +11,14 @@
         @click="removingToast(toast.toastId)"
       >
         <CloseButton v-if="toast.persisting" :size="2"></CloseButton>
-        <Container :borderSize="1" borderType="alt">
-          <ListItem flexible>
+        <Container
+          class="notification-container"
+          :borderSize="1"
+          borderType="alt"
+        >
+          <ListItem flexible class="notification-list-item">
             <template v-slot:icon>
-              <Icon :src="toast.icon" :size="5" />
+              <Icon class="notification-icon" :src="toast.icon" :size="5" />
             </template>
             <template v-slot:title>
               <div class="toast-title">
@@ -229,5 +233,10 @@ $shiftOut: 50rem;
 .toast-title,
 .sub-text {
   white-space: nowrap;
+}
+
+.notification-container,
+.notification-list-item {
+  overflow: hidden;
 }
 </style>
