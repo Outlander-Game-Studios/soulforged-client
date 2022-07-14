@@ -37,7 +37,9 @@ export default {
       if (!referenceSize) {
         return;
       }
-      const isMacOS = navigator?.userAgentData?.platform
+      const isMacOS = (
+        navigator?.userAgentData?.platform || navigator?.platform
+      )
         ?.toLowerCase()
         .includes("mac");
       const devicePixelRatio = window.devicePixelRatio / (isMacOS ? 2 : 1);
