@@ -173,7 +173,7 @@ export default {
 @import "../utils.scss";
 
 .character-creator {
-  padding: 3rem;
+  padding: 5vw;
   box-sizing: border-box;
   height: 100%;
   max-height: 100%;
@@ -187,7 +187,9 @@ export default {
 }
 .main-container {
   position: relative;
-  min-width: 54rem;
+  width: 54rem;
+  max-width: 90vw;
+  margin: 0 auto;
 }
 .creator-header {
   position: absolute !important;
