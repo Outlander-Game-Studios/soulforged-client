@@ -5,7 +5,7 @@
       Nothing to select from
     </div>
     <Vertical v-if="$scopedSlots.default">
-      <ListItem :iconSrc="crossIcon" flexible>
+      <ListItem :iconSrc="crossIcon" flexible v-if="includeNone">
         <template v-slot:title> </template>
         <template v-slot:subtitle> </template>
         <template v-slot:buttons>

@@ -69,8 +69,8 @@ export default {
 
   .text {
     font-style: italic;
-    margin-top: 0.25rem;
-    line-height: 3rem;
+    margin-top: 0.75rem;
+    line-height: 2rem;
   }
 
   &.disabled {

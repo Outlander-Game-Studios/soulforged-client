@@ -130,7 +130,7 @@ export const ControlsService = (window.ControlsService = {
       value,
     }).then((result) => {
       if (result?.ok === false) {
-        throw new Error(result.message);
+        ToastError(result.message);
       }
     });
   },

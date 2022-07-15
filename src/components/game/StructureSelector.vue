@@ -30,7 +30,7 @@
     </Vertical>
     <HorizontalWrap v-else tight>
       <div v-if="includeEmpty" class="item-button" @click="selectedItem(null)">
-        <ItemIcon :size="8" />
+        <ItemIcon :size="size" />
       </div>
       <div
         v-for="(structure, idx) in filteredStructures"
@@ -38,7 +38,7 @@
         class="item-button"
         @click="selectedStructure(structure)"
       >
-        <Icon :size="8" :src="structure.icon" />
+        <Icon :size="size" :src="structure.icon" />
       </div>
     </HorizontalWrap>
   </div>
@@ -54,16 +54,20 @@ export default {
       type: Array,
     },
     filter: {
-      default: () => true,
+      default: () => () => true,
     },
     label: {},
+    size: {
+      default: 8,
+    },
   },
 
   subscriptions() {
     return {
       structures: GameService.getLocationStream()
         .map((location) => location.structures)
-        .switchMap((ids) => GameService.getEntitiesStream(ids)),
+        .switchMap((ids) => GameService.getEntitiesStream(ids))
+        .map((structures) => structures.sort(structureSorter)),
     };
   },
 
@@ -76,6 +80,7 @@ export default {
   methods: {
     selectedStructure(structure) {
       this.$emit("selected", structure);
+      this.$emit("input", structure);
     },
   },
 };

@@ -402,16 +402,18 @@ export const GameService = (window.GameService = {
       .distinctUntilChanged(null, JSON.stringify);
   },
 
-  getStructuresIdsStream() {
+  getStructuresIdsStream(includePaths = true) {
     const locationStream = GameService.getLocationStream();
 
     const locationStructures = locationStream.pluck("structures");
-    const pathsStructures = locationStream
-      .pluck("paths")
-      .switchMap((ids) => GameService.getEntitiesStream(ids))
-      .map((paths) =>
-        paths.reduce((acc, p) => [...acc, ...(p.structures || [])], [])
-      );
+    const pathsStructures = includePaths
+      ? locationStream
+          .pluck("paths")
+          .switchMap((ids) => GameService.getEntitiesStream(ids))
+          .map((paths) =>
+            paths.reduce((acc, p) => [...acc, ...(p.structures || [])], [])
+          )
+      : Rx.Observable.of([]);
 
     return Rx.combineLatest(
       locationStructures,
@@ -464,6 +466,12 @@ export const GameService = (window.GameService = {
     return itemCountStream;
   },
 
+  getStructuresStream(includePaths = true) {
+    return GameService.getStructuresIdsStream(includePaths)
+      .distinctUntilChanged(null, JSON.stringify)
+      .switchMap((entityIds) => GameService.getEntitiesStream(entityIds));
+  },
+
   checkQuickActions() {
     this.getQuickActionsStream()
       .first()
@@ -485,24 +493,57 @@ export const GameService = (window.GameService = {
       "quickActions",
       []
     );
-    const inventoryStream = mainEntity.pluck("inventory");
-    return Rx.combineLatest(quickActionsStream, inventoryStream)
-      .switchMap(([quickActions, inventoryItemsIds]) => {
-        const inventoryMap = inventoryItemsIds.toObject((itemId) => itemId);
-        const itemIds = quickActions
-          .map(({ itemId }) => itemId)
-          .filter((itemId) => inventoryMap[itemId]);
-        return GameService.getEntitiesStream(itemIds).map((inventory) => {
-          const inventoryMap = inventory.toObject(({ id }) => id);
-          return quickActions.map(({ itemId, actionId, label }) => {
-            const item = inventoryMap[itemId];
-            return {
-              item,
-              actionId,
-              label: label,
-            };
+    const structuresStream = GameService.getStructuresStream(false);
+    const inventoryStream = GameService.getInventoryStream(mainEntity);
+    function isBetterFitThan(candidate, compare) {
+      if (!compare) {
+        return true;
+      }
+      if (candidate?.quality !== compare?.quality) {
+        return candidate?.quality > compare?.quality;
+      }
+      if (candidate?.durabilityStage !== compare?.durabilityStage) {
+        return candidate?.durabilityStage > compare?.durabilityStage;
+      }
+      return false;
+    }
+    return Rx.combineLatest(
+      quickActionsStream,
+      inventoryStream,
+      structuresStream
+    )
+      .debounceTime(50)
+      .map(([quickActions, inventoryItems, structures]) => {
+        const quickActionsMap = quickActions.toObject(
+          ({ itemId, publicId, actionId }) =>
+            itemId ? `i_${itemId}:${actionId}` : `p_${publicId}:${actionId}`,
+          (quickAction) => ({ ...quickAction })
+        );
+        [...inventoryItems, ...structures].forEach((entity) => {
+          entity.actions.forEach((action) => {
+            const itemIdKey = `i_${entity.id}:${action.actionId}`;
+            const publicIdKey = `p_${entity.publicId}:${action.actionId}`;
+            if (quickActionsMap[itemIdKey]) {
+              quickActionsMap[itemIdKey].entity = entity;
+            }
+            if (quickActionsMap[publicIdKey]) {
+              if (
+                isBetterFitThan(entity, quickActionsMap[publicIdKey].entity)
+              ) {
+                quickActionsMap[publicIdKey].entity = entity;
+              }
+            }
           });
         });
+        return Object.values(quickActionsMap).map(
+          ({ itemId, publicId, entity, actionId, label }) => ({
+            item: entity,
+            itemId,
+            publicId,
+            actionId,
+            label,
+          })
+        );
       })
       .shareReplay(1);
   },

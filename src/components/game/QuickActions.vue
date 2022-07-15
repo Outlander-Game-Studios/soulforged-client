@@ -44,7 +44,8 @@
                 v-if="quickAction.item"
                 :value="quickAction.item.name"
               />
-              <span v-else>Item missing</span>
+              <span v-else>Missing</span>
+              <span v-if="!!quickAction.itemId"> (specific one)</span>
             </template>
             <template v-slot:buttons>
               <Horizontal>
@@ -79,22 +80,97 @@
         </Vertical>
       </template>
     </Modal>
-    <Modal v-if="adding" dialog @close="adding = false">
+    <Modal
+      v-if="addingSelectingItem"
+      dialog
+      large
+      @close="addingSelectingItem = false"
+    >
+      <template v-slot:title> Select Item or Structure </template>
       <template v-slot:contents>
         <Vertical>
-          <Header>Select Item</Header>
-          <ItemSelector v-model="selectedItem" :includeNone="false" :size="5" />
-          <Header>Select Action</Header>
-          <div v-if="selectedItem">
-            <Radio
-              v-for="action in selectedItem.actions"
-              :key="action.actionId"
-              v-model="selectedActionId"
-              :option="action.actionId"
-            >
-              {{ action.label }}
-            </Radio>
-          </div>
+          <Header>Items</Header>
+          <ItemSelector
+            v-model="selectedItem"
+            :includeNone="false"
+            :size="5"
+            @selected="addingSelectingItem = false"
+          >
+            <template v-slot="{ item }">
+              <div v-for="action in item.actions" :key="action.actionId">
+                {{ action.label }}
+              </div>
+            </template>
+          </ItemSelector>
+          <Header>Structures</Header>
+          <StructureSelector
+            v-model="selectedItem"
+            :includeEmpty="false"
+            :size="5"
+            @selected="addingSelectingItem = false"
+          >
+            <template v-slot="{ structure }">
+              <div v-for="action in structure.actions" :key="action.actionId">
+                {{ action.label }}
+              </div>
+            </template>
+          </StructureSelector>
+        </Vertical>
+      </template>
+    </Modal>
+    <Modal v-if="adding" dialog @close="adding = false">
+      <template v-slot:title> Add Quick Action </template>
+      <template v-slot:contents>
+        <Vertical>
+          <Header>Item or Structure</Header>
+          <ListItem flexible>
+            <template v-slot:icon>
+              <ItemIcon
+                :size="6"
+                :icon="selectedItem && selectedItem.icon"
+                :amount="selectedItem && selectedItem.amount"
+                :quality="selectedItem && selectedItem.quality"
+                :condition="selectedItem && selectedItem.durabilityStage"
+                class="interactive"
+                @click="addingSelectingItem = true"
+              />
+            </template>
+            <template v-slot:title>
+              <div class="effect-wrap">
+                <RichText v-if="selectedItem" :value="selectedItem.name" />
+                <div v-else>Nothing selected</div>
+              </div>
+            </template>
+            <template v-slot:subtitle></template>
+            <template v-slot:buttons>
+              <Button @click="addingSelectingItem = true">Change</Button>
+            </template>
+          </ListItem>
+          <template v-if="selectedItem">
+            <Header>Options</Header>
+            <Checkbox v-model="specificInstance">
+              Only this specific one
+              <Help title="Specific item or structure">
+                By selecting this option the quick action will only apply to
+                this specific piece of item or building you selected.
+                <br />
+                Leaving this unchecked means that any item or structure of the
+                selected type will be used automatically, preferring the highest
+                quality and lowest durability.
+              </Help>
+            </Checkbox>
+            <Header>Select Action</Header>
+            <div>
+              <Radio
+                v-for="action in selectedItem.actions"
+                :key="action.actionId"
+                v-model="selectedActionId"
+                :option="action.actionId"
+              >
+                {{ action.label }}
+              </Radio>
+            </div>
+          </template>
           <HorizontalCenter>
             <Button
               :disabled="!selectedItem || !selectedActionId"
@@ -111,6 +187,7 @@
 
 <script>
 import unknownImg from "../../assets/ui/cartoon/icons/unknown_nobg.png";
+import isEqual from "lodash/isEqual.js";
 
 export default {
   data: () => ({
@@ -120,6 +197,8 @@ export default {
     QUICK_ACTIONS_LIMIT,
     selectedItem: null,
     selectedActionId: null,
+    addingSelectingItem: false,
+    specificInstance: false,
     unknownImg,
   }),
 
@@ -166,6 +245,7 @@ export default {
       this.adding = true;
       this.selectedItem = null;
       this.selectedActionId = null;
+      this.specificInstance = false;
     },
 
     async addQuickAction() {
@@ -174,10 +254,19 @@ export default {
         ({ actionId }) => actionId === this.selectedActionId
       );
       const newQuickAction = {
-        itemId: this.selectedItem.id,
         actionId: action.actionId,
         label: action.label,
       };
+      if (this.specificInstance) {
+        newQuickAction.itemId = this.selectedItem.id;
+      } else {
+        console.log(this.selectedItem);
+        newQuickAction.publicId = this.selectedItem.publicId;
+      }
+      if (quickActions.some((action) => isEqual(action, newQuickAction))) {
+        ToastError("This action is already added");
+        return;
+      }
       ControlsService.saveSetting("quickActions", [
         ...quickActions,
         newQuickAction,
