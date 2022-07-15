@@ -148,8 +148,10 @@
           </ListItem>
           <template v-if="selectedItem">
             <Header>Options</Header>
-            <Checkbox v-model="specificInstance">
-              Only this specific one
+            <Horizontal>
+              <Checkbox v-model="specificInstance">
+                Only this specific one
+              </Checkbox>
               <Help title="Specific item or structure">
                 By selecting this option the quick action will only apply to
                 this specific piece of item or building you selected.
@@ -158,7 +160,7 @@
                 selected type will be used automatically, preferring the highest
                 quality and lowest durability.
               </Help>
-            </Checkbox>
+            </Horizontal>
             <Header>Select Action</Header>
             <div>
               <Radio
