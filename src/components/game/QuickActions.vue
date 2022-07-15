@@ -2,7 +2,7 @@
   <div v-if="inventory && inventory.length">
     <Container v-if="quickActions" :borderSize="0.35" class="quick-actions">
       <Vertical tight>
-        <div class="settings-button interactive" @click="settings = true">
+        <div class="settings-button interactive" @click="openSettings()">
           <div class="settings-icon"></div>
         </div>
         <Item
@@ -162,7 +162,7 @@
             <Header>Select Action</Header>
             <div>
               <Radio
-                v-for="action in selectedItem.actions"
+                v-for="action in selectedItemActions"
                 :key="action.actionId"
                 v-model="selectedActionId"
                 :option="action.actionId"
@@ -202,23 +202,30 @@ export default {
     unknownImg,
   }),
 
-  watch: {
-    selectedItem(newValue, oldValue) {
-      if (newValue?.id !== oldValue?.id && this.selectedItem) {
-        GameService.getEntityStream(
-          this.selectedItem.id,
-          ENTITY_VARIANTS.BASE,
-          true
-        );
-      }
-    },
-  },
+  // watch: {
+  //   selectedItem(newValue, oldValue) {
+  //     if (newValue?.id !== oldValue?.id && this.selectedItem) {
+  //       GameService.getEntityStream(
+  //         this.selectedItem.id,
+  //         ENTITY_VARIANTS.BASE,
+  //         true
+  //       );
+  //     }
+  //   },
+  // },
 
   subscriptions() {
     let mainEntity = GameService.getRootEntityStream();
     const inventoryStream = GameService.getInventoryStream(mainEntity);
     const quickActionsStream = GameService.getQuickActionsStream();
     return {
+      selectedItemActions: this.$stream("selectedItem")
+        .filter((item) => !!item)
+        .map((item) => item.id)
+        .switchMap((id) =>
+          GameService.getEntityStream(id, ENTITY_VARIANTS.BASE, true)
+        )
+        .pluck("actions"),
       inventory: inventoryStream,
       quickActions: quickActionsStream,
       validQuickActions: quickActionsStream.map((quickActions) =>
@@ -233,6 +240,11 @@ export default {
   },
 
   methods: {
+    openSettings() {
+      this.settings = true;
+      GameService.checkQuickActions();
+    },
+
     triggerQuickAction(validQuickAction) {
       const item = validQuickAction.item;
       const action = item.actions.find(
@@ -250,7 +262,7 @@ export default {
 
     async addQuickAction() {
       const quickActions = await ControlsService.getSetting("quickActions", []);
-      const action = this.selectedItem.actions.find(
+      const action = this.selectedItemActions.find(
         ({ actionId }) => actionId === this.selectedActionId
       );
       const newQuickAction = {
@@ -260,7 +272,6 @@ export default {
       if (this.specificInstance) {
         newQuickAction.itemId = this.selectedItem.id;
       } else {
-        console.log(this.selectedItem);
         newQuickAction.publicId = this.selectedItem.publicId;
       }
       if (quickActions.some((action) => isEqual(action, newQuickAction))) {
