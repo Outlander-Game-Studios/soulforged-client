@@ -110,6 +110,9 @@ export default {
 };
 
 const ToastNotify = (toasts) => {
+  if (!toasts) {
+    return;
+  }
   if (!Array.isArray(toasts)) {
     toasts = [toasts];
   }
