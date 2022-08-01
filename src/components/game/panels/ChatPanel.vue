@@ -239,10 +239,16 @@ export default {
 
   mounted() {
     this.newMessageText = LocalStorageService.getItem("typedChatMessage", "");
-    this.$refs.textInput.focus();
+    this.focusInput();
   },
 
   methods: {
+    focusInput() {
+      setTimeout(() => {
+        this.$refs?.textInput?.focus();
+      });
+    },
+
     onAction(...args) {
       this.viewMessage = null;
     },
@@ -337,15 +343,11 @@ export default {
               this.errorMsg = result;
             }
             this.sending = false;
-            setTimeout(() => {
-              this.$refs.textInput.focus();
-            });
+            this.focusInput();
           })
           .catch(() => {
             this.sending = false;
-            setTimeout(() => {
-              this.$refs.textInput.focus();
-            });
+            this.focusInput();
           });
       });
     },

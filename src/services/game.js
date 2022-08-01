@@ -242,11 +242,18 @@ export const GameService = (window.GameService = {
   },
   getCraftDetails(craftId) {
     if (!craftDetailsStreams[craftId]) {
-      function fetchFromServer() {
-        GameService.getInfoStream("Craft", { craftId })
+      function fetchFromServer(nameOnly = false) {
+        GameService.getInfoStream("Craft", { nameOnly, craftId })
           .first()
           .subscribe((data) => {
-            LocalStorageService.setItem(key, data);
+            if (nameOnly) {
+              LocalStorageService.setItem(key, {
+                ...LocalStorageService.getItem(key),
+                name: data,
+              });
+            } else {
+              LocalStorageService.setItem(key, data);
+            }
           });
       }
 
@@ -272,6 +279,8 @@ export const GameService = (window.GameService = {
           ) {
             console.log(`Refetching images for craft ${craftId}`);
             fetchFromServer();
+          } else {
+            fetchFromServer(true);
           }
         });
       }

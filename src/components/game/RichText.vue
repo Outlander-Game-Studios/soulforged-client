@@ -9,6 +9,7 @@
           named: !!nameOverrides[part.code] || !!part.named,
           nonInteractive: nonInteractive,
         }"
+        :data-code="part.code"
         @click="startNaming(part, $event)"
         >{{ displayName(part) }}</span
       ><span
