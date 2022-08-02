@@ -13,6 +13,7 @@ export const ControlsService = (window.ControlsService = {
   initiateCordovaLogin() {
     const enabled =
       navigator.userAgent.includes("/Cordova") &&
+      navigator.userAgent.includes("/IntegratedLogin") &&
       window?.webkit?.messageHandlers?.cordova_iab?.postMessage;
     if (enabled) {
       window.webkit.messageHandlers.cordova_iab.postMessage(
