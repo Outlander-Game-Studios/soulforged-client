@@ -10,12 +10,16 @@ const controlStream = new Rx.Subject();
 let settingStreams;
 
 export const ControlsService = (window.ControlsService = {
-  initiateCordovaLogin() {
-    return false;
-    const enabled =
+  cordovaLoginAvailable() {
+    return (
       navigator.userAgent.includes("/Cordova") &&
       navigator.userAgent.includes("/IntegratedLogin") &&
-      window?.webkit?.messageHandlers?.cordova_iab?.postMessage;
+      window?.webkit?.messageHandlers?.cordova_iab?.postMessage
+    );
+  },
+
+  initiateCordovaLogin() {
+    const enabled = ControlsService.cordovaLoginAvailable();
     if (enabled) {
       window.webkit.messageHandlers.cordova_iab.postMessage(
         JSON.stringify({ action: "login" })

@@ -41,7 +41,7 @@
             <HorizontalCenter>
               <Button
                 :disabled="!acceptedTOE"
-                @click="goToLogin()"
+                @click="startLogin()"
                 class="login-button"
                 :processing="loggingIn"
                 >Login</Button
@@ -53,6 +53,13 @@
       <div class="spacer"></div>
       <div class="buttons-container">
         <Vertical>
+          <Button
+            v-if="cordovaLoginEnabled"
+            :disabled="!acceptedTOE"
+            @click="goToLogin()"
+            :processing="loggingIn"
+            >Manual Login</Button
+          >
           <Button @click="showRules = true"> Game Rules </Button>
           <Button @click="$refs.discordButton.click()">
             <a
@@ -110,6 +117,7 @@ export default {
     showRules: false,
     showCredits: false,
     loggingIn: false,
+    cordovaLoginEnabled: ControlsService.cordovaLoginAvailable(),
   }),
 
   computed: {
@@ -119,15 +127,19 @@ export default {
   },
 
   methods: {
-    goToLogin() {
+    startLogin() {
       if (ControlsService.initiateCordovaLogin()) {
         this.loggingIn = true;
         setTimeout(() => {
           this.loggingIn = false;
         }, 3000);
       } else {
-        window.location = "/api/login";
+        this.goToLogin();
       }
+    },
+
+    goToLogin() {
+      window.location = "/api/login";
     },
   },
 };
