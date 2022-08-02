@@ -11,6 +11,7 @@ let settingStreams;
 
 export const ControlsService = (window.ControlsService = {
   initiateCordovaLogin() {
+    return false;
     const enabled =
       navigator.userAgent.includes("/Cordova") &&
       navigator.userAgent.includes("/IntegratedLogin") &&
