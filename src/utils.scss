@@ -1,4 +1,6 @@
 @use "sass:map";
+@use "sass:math";
+@use "sass:list";
 
 $disabled-color: #ccc;
 
@@ -69,17 +71,33 @@ $disabled-color: #ccc;
   @include filter(saturate(0) brightness(0.8));
 }
 
+@mixin text-outline-steps($offset, $color, $num-steps: 16) {
+  $shadows: ();
+  @for $i from 0 to $num-steps {
+    $angle: $i * 360deg / $num-steps;
+    $x: calc(#{math.cos($angle)} * #{$offset});
+    $y: calc(#{math.sin($angle)} * #{$offset});
+    $shadows: list.append($shadows, #{$x} #{$y} 0 #{$color}, $separator: comma);
+  }
+  text-shadow: $shadows;
+}
+
 @mixin text-outline($outline-color: black, $text-color: white) {
   color: $text-color;
-  $spacing: 0.04em;
-  text-shadow: #{$spacing} #{-$spacing} 0 $outline-color,
-  #{-$spacing} #{$spacing} 0 $outline-color,
-  #{$spacing} #{$spacing} 0 $outline-color,
-  #{-$spacing} #{-$spacing} 0 $outline-color,
-  0 #{$spacing} 0 $outline-color,
-  0 #{-$spacing} 0 $outline-color,
-  #{$spacing} 0 $outline-color,
-  #{-$spacing} 0 $outline-color;
+  @include text-outline-steps(0.06em, $outline-color, 32);
+
+  //color: $text-color;
+  //$spacing: 0.04em;
+  //-webkit-text-stroke: $spacing black;
+  //paint-order: fill stroke ;
+  //text-shadow: #{$spacing} #{-$spacing} 0 $outline-color,
+  //#{-$spacing} #{$spacing} 0 $outline-color,
+  //#{$spacing} #{$spacing} 0 $outline-color,
+  //#{-$spacing} #{-$spacing} 0 $outline-color,
+  //0 #{$spacing} 0 $outline-color,
+  //0 #{-$spacing} 0 $outline-color,
+  //#{$spacing} 0 $outline-color,
+  //#{-$spacing} 0 $outline-color;
 }
 
 @mixin text-outline-safe($outline-color: black, $text-color: white) {
