@@ -10,6 +10,32 @@ const controlStream = new Rx.Subject();
 let settingStreams;
 
 export const ControlsService = (window.ControlsService = {
+  initiateCordovaLogin() {
+    const enabled =
+      navigator.userAgent.includes("/Cordova/") &&
+      window?.webkit?.messageHandlers?.cordova_iab?.postMessage;
+    if (enabled) {
+      window.webkit.messageHandlers.cordova_iab.postMessage(
+        JSON.stringify({ action: "login" })
+      );
+      return true;
+    }
+    return false;
+  },
+
+  cordovaLogin(profileData) {
+    console.log("logging in...");
+    const form = document.createElement("form");
+    document.body.appendChild(form);
+    form.action = `/api/login`;
+    form.method = "POST";
+    const input = document.createElement("input");
+    form.appendChild(input);
+    input.name = "accessToken";
+    input.value = profileData.accessToken;
+    form.submit();
+  },
+
   isGameFocused() {
     return document.hasFocus ? document.hasFocus() : true;
   },

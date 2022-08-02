@@ -43,6 +43,7 @@
                 :disabled="!acceptedTOE"
                 @click="goToLogin()"
                 class="login-button"
+                :processing="loggingIn"
                 >Login</Button
               >
             </HorizontalCenter>
@@ -108,6 +109,7 @@ export default {
     acceptedTOE: false,
     showRules: false,
     showCredits: false,
+    loggingIn: false,
   }),
 
   computed: {
@@ -118,7 +120,14 @@ export default {
 
   methods: {
     goToLogin() {
-      window.location = "/api/login";
+      if (ControlsService.initiateCordovaLogin()) {
+        this.loggingIn = true;
+        setTimeout(() => {
+          this.loggingIn = false;
+        }, 3000);
+      } else {
+        window.location = "/api/login";
+      }
     },
   },
 };

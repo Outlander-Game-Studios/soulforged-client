@@ -44,6 +44,7 @@
 .text {
   height: 2.6em;
   line-height: 2.6em;
+  padding-right: 2rem;
   @include text-outline();
 }
 </style>
