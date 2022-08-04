@@ -24,8 +24,13 @@ export default {
   computed: {
     displayTimeRemaining() {
       const minutes = Math.floor(this.timeRemaining / 60);
-      let result = minutes > 1 ? `${minutes} minutes ` : "";
-      return `${result} ${this.timeRemaining % 60} seconds`;
+      const seconds = this.timeRemaining % 60;
+      let result =
+        minutes >= 1
+          ? `${minutes} ${dynamicPluralize("minute", minutes)} `
+          : "";
+      result += ` ${seconds} ${dynamicPluralize("second", seconds)}`;
+      return result;
     },
   },
 
