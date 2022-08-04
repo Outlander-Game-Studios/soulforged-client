@@ -309,7 +309,7 @@ export default {
       }
 
       const isScrolledToBottom =
-        el.scrollHeight <= el.scrollTop + el.clientHeight;
+        el.scrollHeight - 2 <= el.scrollTop + el.clientHeight;
       if (isScrolledToBottom) {
         setTimeout(() => {
           this.scrollToNewest();
