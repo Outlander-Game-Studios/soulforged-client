@@ -54,7 +54,7 @@
       <div class="buttons-container">
         <Vertical>
           <Button
-            v-if="cordovaLoginEnabled"
+            v-if="cordovaLoginEnabled || electronLoginEnabled"
             :disabled="!acceptedTOE"
             @click="goToLogin()"
             :processing="loggingIn"
@@ -118,6 +118,7 @@ export default {
     showCredits: false,
     loggingIn: false,
     cordovaLoginEnabled: ControlsService.cordovaLoginAvailable(),
+    electronLoginEnabled: ControlsService.electronLoginAvailable(),
   }),
 
   computed: {
@@ -128,11 +129,14 @@ export default {
 
   methods: {
     startLogin() {
-      if (ControlsService.initiateCordovaLogin()) {
-        this.loggingIn = true;
-        setTimeout(() => {
-          this.loggingIn = false;
-        }, 3000);
+      this.loggingIn = true;
+      setTimeout(() => {
+        this.loggingIn = false;
+      }, 3000);
+      if (ControlsService.electronLoginAvailable()) {
+        ControlsService.initiateElectronLogin();
+      } else if (ControlsService.cordovaLoginAvailable()) {
+        ControlsService.initiateCordovaLogin();
       } else {
         this.goToLogin();
       }

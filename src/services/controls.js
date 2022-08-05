@@ -19,14 +19,9 @@ export const ControlsService = (window.ControlsService = {
   },
 
   initiateCordovaLogin() {
-    const enabled = ControlsService.cordovaLoginAvailable();
-    if (enabled) {
-      window.webkit.messageHandlers.cordova_iab.postMessage(
-        JSON.stringify({ action: "login" })
-      );
-      return true;
-    }
-    return false;
+    window.webkit.messageHandlers.cordova_iab.postMessage(
+      JSON.stringify({ action: "login" })
+    );
   },
 
   cordovaLogin(profileData) {
@@ -40,6 +35,21 @@ export const ControlsService = (window.ControlsService = {
     input.name = "accessToken";
     input.value = profileData.accessToken;
     form.submit();
+  },
+
+  electronLoginAvailable() {
+    return window.SoulforgedElectron?.initLogin;
+  },
+
+  initiateElectronLogin() {
+    const token = [
+      `electron-login`,
+      `${md5(`${Math.random()}`)}`,
+      `${md5(`${new Date()}`)}`,
+      `${md5(`${navigator.userAgent}`)}`,
+    ].join("-");
+    SoulforgedElectron.initLogin(token);
+    window.location = `#/login/electron?token=${token}`;
   },
 
   isGameFocused() {
