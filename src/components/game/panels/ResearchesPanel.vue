@@ -123,7 +123,11 @@
             />
             <div>Are you sure you want to use this item?</div>
           </Horizontal>
-          <Button @click="confirmSelectingItem()">Confirm</Button>
+          <Button
+            @click="confirmSelectingItem()"
+            :processing="itemBeingProcessed"
+            >Confirm</Button
+          >
         </Vertical>
       </template>
     </Modal>
@@ -159,6 +163,7 @@ export default {
     forceUpdate: false,
     appliedMaterials: {},
     selectingItem: false,
+    itemBeingProcessed: false,
   }),
 
   subscriptions() {
@@ -260,10 +265,13 @@ export default {
     },
 
     confirmSelectingItem() {
+      this.itemBeingProcessed = true;
       this.applyMaterial({
         itemId: this.selectingItem.id,
+      }).then(() => {
+        this.selectingItem = null;
+        this.itemBeingProcessed = false;
       });
-      this.selectingItem = null;
     },
 
     selectResearch(research) {
@@ -316,7 +324,7 @@ export default {
 
     applyMaterial({ itemId }) {
       const researchId = this.selectedResearchId;
-      this.applyMaterialOnce({
+      return this.applyMaterialOnce({
         itemId,
         researchId,
       });
@@ -327,7 +335,7 @@ export default {
         return;
       }
       this.appliedMaterials[key] = true;
-      GameService.request(REQUEST_CODES.RESEARCH, {
+      return GameService.request(REQUEST_CODES.RESEARCH, {
         itemId,
         researchId,
       }).then((result) => {
