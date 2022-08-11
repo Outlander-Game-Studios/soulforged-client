@@ -261,7 +261,7 @@ export const GameService = (window.GameService = {
       const cached = LocalStorageService.getItem(key);
       if (!cached) {
         fetchFromServer();
-      } else if (!cached.tools) {
+      } else if (!cached.v || cached.v < CURRENT_CRAFT_VERSION) {
         console.log(`Requires update from server ${craftId}`);
         LocalStorageService.removeItem(key);
         fetchFromServer();

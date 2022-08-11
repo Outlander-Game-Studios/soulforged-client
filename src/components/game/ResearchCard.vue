@@ -66,29 +66,6 @@
         </div>
       </Container>
     </div>
-    <Modal dialog large v-if="viewMissed" @close="viewMissed = null">
-      <Vertical>
-        <Header><RichText :value="research.title" /></Header>
-        <div class="research-description">
-          <RichText :value="research.description" />
-        </div>
-        <Header alt2>Attempted items</Header>
-        <div v-if="!research.failedItems.length">
-          <div class="empty-text">None</div>
-        </div>
-        <div v-else>
-          <HorizontalWrap tight>
-            <ItemIcon
-              v-for="(item, idx) in research.failedItems"
-              :key="idx"
-              :icon="item.icon"
-              :amount="research.difficulty"
-              quality="bad"
-            />
-          </HorizontalWrap>
-        </div>
-      </Vertical>
-    </Modal>
   </div>
 </template>
 
@@ -108,7 +85,6 @@ export default {
   data: () => ({
     unknownImg,
     crossImg,
-    viewMissed: false,
   }),
 
   subscriptions() {

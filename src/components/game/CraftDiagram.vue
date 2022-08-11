@@ -59,17 +59,10 @@
     >
       <template v-slot:title>
         <Horizontal>
-          <ItemIcon
-            :icon="showItemCraftsByItem.itemDef.icon"
-            :size="3"
-            quality="neutral"
-          />
-          <div class="header-text">Related Recipes</div>
-          <ItemIcon
-            :icon="showItemCraftsByItem.itemDef.icon"
-            :size="3"
-            quality="neutral"
-          />
+          <div class="header-text">
+            <RichText :value="showItemCraftsByItem.itemDef.name" /> - Related
+            Recipes
+          </div>
         </Horizontal>
       </template>
       <template v-slot:contents>

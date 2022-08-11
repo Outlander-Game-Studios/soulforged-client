@@ -59,7 +59,7 @@
                 />
               </HorizontalWrap>
               <div v-else class="empty-text">Inventory Empty</div>
-              <Header alt2>Attempted items</Header>
+              <Header alt2>Attempted Items</Header>
               <div v-if="!selectedResearch.failedItems.length">
                 <div class="empty-text">None</div>
               </div>
@@ -68,9 +68,11 @@
                   <ItemIcon
                     v-for="(item, idx) in selectedResearch.failedItems"
                     :key="idx"
+                    class="interactive"
                     :icon="item.icon"
                     :amount="selectedResearch.difficulty"
                     quality="bad"
+                    @click="viewMissed = item"
                   />
                 </HorizontalWrap>
               </div>
@@ -108,6 +110,19 @@
         </Spaced>
       </div>
     </div>
+    <Modal dialog large v-if="viewMissed" @close="viewMissed = null">
+      <template v-slot:title> Attempted Item </template>
+      <template v-slot:contents>
+        <ListItem>
+          <template v-slot:icon>
+            <ItemIcon :icon="viewMissed.icon" quality="bad" :size="8" />
+          </template>
+          <template v-slot:title>
+            <RichText :value="viewMissed.name" />
+          </template>
+        </ListItem>
+      </template>
+    </Modal>
     <Modal dialog v-if="selectingItem" @close="selectingItem = null">
       <template v-slot:title>
         Use
