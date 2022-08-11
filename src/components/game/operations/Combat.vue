@@ -300,7 +300,7 @@
                       <div class="loot-list">
                         <Inventory :inventory="loot" />
                       </div>
-                      <HorizontalCenter>
+                      <HorizontalCenter v-if="loot && loot.length">
                         <Button @click="lootAll()"> Loot all </Button>
                       </HorizontalCenter>
                     </Spaced>
