@@ -45,7 +45,23 @@
                 </Horizontal>
               </Spaced>
             </template>
-            <Header alt2>Available Powers</Header>
+            <Header alt2>Power Counts</Header>
+            <Spaced>
+              <!--            <Description-->
+              <!--              >Unlocked powers: {{ powersInfo.counts.unlocked }} /-->
+              <!--              {{ powersInfo.counts.total }}-->
+              <!--            </Description>-->
+              <LabeledValue label="Purchased Powers">
+                {{ powersInfo.counts.purchased }}
+              </LabeledValue>
+              <LabeledValue label="Discovered Powers">
+                {{ powersInfo.counts.unlocked }}
+              </LabeledValue>
+              <LabeledValue label="Undiscovered Powers">
+                {{ powersInfo.counts.total - powersInfo.counts.unlocked }}
+              </LabeledValue>
+            </Spaced>
+            <Header alt2>Purchase Power</Header>
             <Spaced>
               <Vertical>
                 <div
