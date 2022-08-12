@@ -123,7 +123,11 @@
         </ListItem>
       </template>
     </Modal>
-    <Modal dialog v-if="selectingItem" @close="selectingItem = null">
+    <Modal
+      dialog
+      v-if="selectingItem && selectedResearch"
+      @close="selectingItem = null"
+    >
       <template v-slot:title>
         Use
         <RichText :value="selectingItem.name" />
