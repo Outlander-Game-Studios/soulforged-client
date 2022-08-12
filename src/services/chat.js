@@ -65,6 +65,7 @@ function fetchMessages(locationId, lastMessageWhen) {
 function buildMessageStream(locationId) {
   if (!messagesStreams[locationId]) {
     console.log(`Making chat stream for ${locationId}`);
+    messagesStreams = {};
     messagesStreams[locationId] = new Rx.ReplaySubject(1);
     messagesStreams[locationId].next([]);
 
