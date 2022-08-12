@@ -27,10 +27,17 @@
             }
         }
         #criticalFailure {
-            animation: show-critical-failure 1s linear forwards;
+            animation: show-critical-failure 3s linear forwards;
+        }
+        #introText {
+            opacity: 0;
+            position: absolute;
         }
     </style>
-    <div id="criticalFailure">
+    <div id="introText">
+      Persistent Minimalistic Multiplayer Online Role-playing Game
+    </div>
+    <div id="criticalFailure" data-nosnippet>
       The game failed to initialize.
     </div>
     <div id="app"></div>
