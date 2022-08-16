@@ -63,7 +63,7 @@ export default {
         this.processingOn = true;
         if (typeof promise === "boolean") {
           this.processingOn = promise;
-        } else if (promise) {
+        } else {
           promise
             .then(() => {
               this.processingOn = false;
@@ -71,8 +71,6 @@ export default {
             .catch(() => {
               this.processingOn = false;
             });
-        } else {
-          this.processingOn = !!promise;
         }
       },
       immediate: true,

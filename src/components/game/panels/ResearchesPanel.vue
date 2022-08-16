@@ -351,7 +351,7 @@ export default {
     applyMaterialOnce({ itemId, researchId }) {
       const key = `${itemId}:${researchId}`;
       if (this.appliedMaterials[key]) {
-        return;
+        return Promise.resolve();
       }
       this.appliedMaterials[key] = true;
       return GameService.request(REQUEST_CODES.RESEARCH, {
