@@ -19,6 +19,12 @@
       {{ milestoneInfo.totalSteps - milestoneInfo.current - 1 }} follow-up
       objectives to be discovered
     </Description>
+    <Vertical v-if="milestoneInfo.rewardText">
+      <Header alt2> Reward </Header>
+      <div>
+        {{ milestoneInfo.rewardText }}
+      </div>
+    </Vertical>
   </Vertical>
 </template>
 
