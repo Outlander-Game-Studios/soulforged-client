@@ -2,8 +2,20 @@
   <div>
     <CloseButton class="close-button" @click="cancel()" />
     <Vertical>
-      <Header>Wait</Header>
-      <Description>Spend action points without doing anything.</Description>
+      <Header>
+        Wait
+        <Help title="Waiting">
+          Spending Action Points by waiting allows you very fine control of
+          amount of Action Points spent to wait out specific effects.<br />
+          <br />
+          Waiting has <em>no impact</em> on the effects that are applied to your
+          character. It <em>does not</em> speed up recovery in any way. It also
+          <em>does not</em> change how certain effects accumulate and apply over
+          time - the result of waiting will be the same as performing an action
+          for the same amount of Action Points.
+        </Help>
+      </Header>
+      <Description> Spend action points without doing anything. </Description>
       <HorizontalCenter>How long?</HorizontalCenter>
       <Input
         type="number"

@@ -71,7 +71,10 @@ export default {
             this.nextObjective.key === this.currentObjective.key &&
             this.nextObjective.text !== this.currentObjective.text
           ) {
-            SoundService.playSound(fanfareSound);
+            SoundService.playSound(fanfareSound, {
+              unique: "objectiveTracker",
+              throttle: 1000,
+            });
           }
           if (!newObjective) {
             this.showDetails = false;
