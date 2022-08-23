@@ -240,21 +240,26 @@ export const GameService = (window.GameService = {
   fetchResearchUpdate(researchId) {
     GameService.getInfoStream("Research", { researchId }, true);
   },
+  fetchCraftDetails(craftId, nameOnly = false) {
+    return GameService.getInfoStream("Craft", { nameOnly, craftId })
+      .first()
+      .subscribe((data) => {
+        const key = `craft.${craftId}`;
+        if (nameOnly) {
+          LocalStorageService.setItem(key, {
+            ...LocalStorageService.getItem(key),
+            name: data,
+          });
+        } else {
+          console.log(data);
+          LocalStorageService.setItem(key, data);
+        }
+      });
+  },
   getCraftDetails(craftId) {
     if (!craftDetailsStreams[craftId]) {
       function fetchFromServer(nameOnly = false) {
-        GameService.getInfoStream("Craft", { nameOnly, craftId })
-          .first()
-          .subscribe((data) => {
-            if (nameOnly) {
-              LocalStorageService.setItem(key, {
-                ...LocalStorageService.getItem(key),
-                name: data,
-              });
-            } else {
-              LocalStorageService.setItem(key, data);
-            }
-          });
+        return GameService.fetchCraftDetails(craftId, nameOnly);
       }
 
       const key = `craft.${craftId}`;

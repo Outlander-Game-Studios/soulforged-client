@@ -2,7 +2,7 @@
   <ListItem
     :iconSrc="craft.icon"
     class="craft-list-item"
-    @click="showDetails = true"
+    @click="enableShowDetails()"
     :lazyLoad="true"
   >
     <template v-slot:title>
@@ -66,6 +66,10 @@ export default {
   }),
 
   methods: {
+    enableShowDetails() {
+      this.showDetails = true;
+      GameService.fetchCraftDetails(this.craft.craftId);
+    },
     actioned() {
       this.showDetails = false;
       this.$emit("action");

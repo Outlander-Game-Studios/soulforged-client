@@ -54,6 +54,10 @@ export default window.OperationCraft = {
   subscriptions() {
     return {
       currentAP: GameService.getRootEntityStream().pluck("actionPoints"),
+      craftId: this.$stream("operation")
+        .pluck("context", "craftId")
+        .distinctUntilChanged()
+        .tap((craftId) => GameService.fetchCraftDetails(craftId)),
       craft: this.$stream("operation").switchMap((operation) =>
         GameService.getCraftsStream().map((crafts) =>
           crafts.find((craft) => craft.craftId === operation.context.craftId)
