@@ -116,6 +116,19 @@ $backgroundAlt3Url: url(ui-asset("/backgrounds/ui_panel_paper_inset_bg.png"));
   text-align: center;
 }
 
+@mixin theme-header-border-alt3() {
+  border-image: url(ui-asset("/backgrounds/header_alt3.jpg")) 32;
+  z-index: -1;
+  border-width: 0.6rem;
+}
+@mixin theme-header-background-alt3() {
+  background: url(ui-asset("/backgrounds/header_alt3_bg.jpg"));
+  background-size: 100% 100%;
+  margin: -1px;
+  padding: 0.1rem 1rem;
+  text-align: center;
+}
+
 
 @mixin theme-slider-rail($rail-height) {
   //border-image: url(ui-asset("/misc/knob_rail-m.png")) 16;

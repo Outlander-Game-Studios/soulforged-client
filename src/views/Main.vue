@@ -4,6 +4,7 @@
     <DisconnectIndicator />
     <DeadIndicator />
     <MilestoneTracker />
+    <HappeningDisplay />
     <PageLayout>
       <template v-slot:overlay> </template>
       <template v-slot:status>

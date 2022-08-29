@@ -3,7 +3,7 @@
     <span class="modal-container">
       <div
         class="modal-wrapper"
-        :class="{ dialog: dialog, large: large }"
+        :class="{ dialog: dialog, large: large, specialFrame: specialFrame }"
         ref="modalWrapper"
       >
         <div class="modal">
@@ -14,7 +14,7 @@
               @click="$emit('close')"
             />
             <div v-if="$slots.title || title" class="title-wrapper">
-              <Header class="title-container">
+              <Header class="title-container" :alt3="specialFrame">
                 <div class="title-contents">
                   {{ title }}
                   <slot name="title"></slot>
@@ -51,6 +51,10 @@ export default {
       default: false,
     },
     large: {
+      type: Boolean,
+      default: false,
+    },
+    specialFrame: {
       type: Boolean,
       default: false,
     },
@@ -166,6 +170,21 @@ export default {
 
       .title-contents {
         padding: 0.25rem;
+      }
+    }
+  }
+
+  &.specialFrame {
+    .modal {
+      .border-container {
+        &::before {
+          content: "";
+          @include fill();
+          border-width: 10rem;
+          border-style: solid;
+          border-image: url(ui-asset("/borders/mid_bar_frame_single.png")) 200;
+          background-size: 100% 100%;
+        }
       }
     }
   }

@@ -1,7 +1,14 @@
 <template>
   <div
     class="header-component"
-    :class="{ alt: alt, alt2: alt2, flex: flex, small: small, large: large }"
+    :class="{
+      alt: alt,
+      alt2: alt2,
+      alt3: alt3,
+      flex: flex,
+      small: small,
+      large: large,
+    }"
     @click="mouseClick()"
   >
     <div class="header-border">
@@ -33,6 +40,10 @@ export default {
       default: false,
     },
     alt2: {
+      type: Boolean,
+      default: false,
+    },
+    alt3: {
       type: Boolean,
       default: false,
     },
@@ -101,6 +112,16 @@ export default {
 
       .header-content {
         @include theme-header-background-alt2();
+      }
+    }
+  }
+
+  &.alt3 {
+    .header-border {
+      @include theme-header-border-alt3();
+
+      .header-content {
+        @include theme-header-background-alt3();
       }
     }
   }
