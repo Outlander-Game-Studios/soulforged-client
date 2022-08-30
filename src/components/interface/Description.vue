@@ -1,5 +1,8 @@
 <template>
-  <div class="description-container" :class="{ pre: pre }">
+  <div
+    class="description-container"
+    :class="{ pre: pre, prominent: prominent }"
+  >
     <slot></slot>
   </div>
 </template>
@@ -7,6 +10,9 @@
 <script>
 export default {
   props: {
+    prominent: {
+      type: Boolean,
+    },
     pre: {
       type: Boolean,
     },
@@ -22,6 +28,11 @@ export default {
 
   &.pre {
     white-space: pre-wrap;
+  }
+
+  &.prominent {
+    font-size: 100%;
+    color: #222;
   }
 }
 </style>

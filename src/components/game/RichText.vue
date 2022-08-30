@@ -1,7 +1,8 @@
 <template>
   <span>
     <template v-for="part in parts"
-      ><span v-if="part.type === TYPES.TEXT">{{ part.text }}</span
+      ><span v-if="part.type === TYPES.TEXT && !html">{{ part.text }}</span
+      ><span v-if="part.type === TYPES.TEXT && html" v-html="part.text"></span
       ><span
         v-else-if="part.type === TYPES.NAME"
         :class="{
@@ -114,6 +115,9 @@ export default {
   components: { Effects },
   props: {
     value: {},
+    html: {
+      type: Boolean,
+    },
     nonInteractive: {
       type: Boolean,
     },

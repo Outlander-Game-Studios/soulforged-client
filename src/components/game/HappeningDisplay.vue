@@ -1,18 +1,22 @@
 <template>
-  <div v-if="mainEntity && mainEntity.happening">
+  <div
+    v-if="mainEntity && mainEntity.happening"
+    :key="mainEntity.happening.title"
+  >
     <Modal dialog large specialFrame>
       <template v-slot:title> {{ mainEntity.happening.title }} </template>
       <template v-slot:contents>
         <Spaced>
           <Vertical>
             <img class="banner" :src="mainEntity.happening.image" />
-            <Description>
-              {{ mainEntity.happening.description }}
+            <Description prominent class="center">
+              <RichText :value="mainEntity.happening.description" html />
             </Description>
             <HorizontalCenter>
               <Button
                 v-for="label in mainEntity.happening.options"
                 :key="label"
+                @click="selectOption(label)"
               >
                 {{ label }}
               </Button>
@@ -31,6 +35,14 @@ export default {
       mainEntity: GameService.getRootEntityStream(),
     };
   },
+
+  methods: {
+    selectOption(optionLabel) {
+      GameService.triggerExecutor("Happening", "selectOption", {
+        label: optionLabel,
+      });
+    },
+  },
 };
 </script>
 
@@ -39,5 +51,9 @@ export default {
   margin: 0 auto;
   max-width: calc(0.7 * var(--app-width));
   max-height: calc(0.45 * var(--app-height));
+}
+
+.center {
+  text-align: center;
 }
 </style>

@@ -180,6 +180,7 @@ export default {
         &::before {
           content: "";
           @include fill();
+          pointer-events: none;
           border-width: 10rem;
           border-style: solid;
           border-image: url(ui-asset("/borders/mid_bar_frame_single.png")) 200;
