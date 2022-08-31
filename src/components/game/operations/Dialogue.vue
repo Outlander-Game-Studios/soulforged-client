@@ -96,7 +96,7 @@ export default window.OperationDialogue = {
     scrollToNewest() {
       const interval = setInterval(() => {
         const el = this.$refs.entries;
-        if (el) {
+        if (el && el.scrollTo) {
           el.scrollTo(0, el.scrollHeight, {
             behavior: "smooth",
           });

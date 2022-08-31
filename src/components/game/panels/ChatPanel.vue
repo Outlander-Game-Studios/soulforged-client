@@ -319,7 +319,7 @@ export default {
 
     scrollToNewest() {
       const el = this.$refs.chatMessagesWrapper;
-      if (el) {
+      if (el && el.scrollTo) {
         el.scrollTo(0, el.scrollHeight, {
           behavior: "smooth",
         });
