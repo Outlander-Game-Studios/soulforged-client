@@ -3,7 +3,12 @@
     <span class="modal-container">
       <div
         class="modal-wrapper"
-        :class="{ dialog: dialog, large: large, specialFrame: specialFrame }"
+        :class="{
+          dialog: dialog,
+          large: large,
+          specialFrame: specialFrame,
+          darkBackdrop: darkBackdrop,
+        }"
         ref="modalWrapper"
       >
         <div class="modal">
@@ -55,6 +60,10 @@ export default {
       default: false,
     },
     specialFrame: {
+      type: Boolean,
+      default: false,
+    },
+    darkBackdrop: {
       type: Boolean,
       default: false,
     },
@@ -187,6 +196,12 @@ export default {
           background-size: 100% 100%;
         }
       }
+    }
+  }
+
+  &.darkBackdrop {
+    .backdrop {
+      background-color: rgba(0, 0, 0, 0.9);
     }
   }
 

@@ -3,12 +3,16 @@
     v-if="mainEntity && mainEntity.happening"
     :key="mainEntity.happening.title"
   >
-    <Modal dialog large specialFrame>
+    <Modal dialog large specialFrame darkBackdrop>
       <template v-slot:title> {{ mainEntity.happening.title }} </template>
       <template v-slot:contents>
         <Spaced>
           <Vertical>
-            <img class="banner" :src="mainEntity.happening.image" />
+            <img
+              v-if="mainEntity.happening.image"
+              class="banner"
+              :src="mainEntity.happening.image"
+            />
             <Description prominent class="center">
               <RichText :value="mainEntity.happening.description" html />
             </Description>

@@ -17,9 +17,12 @@
         v-else-if="part.type === TYPES.EFFECT"
         class="effect-part"
         @click="showInfo(part, $event)"
-        ><Icon :src="part.icon" :size="2" backgroundType="severity-0" />{{
-          part.name
-        }}</span
+        ><Icon
+          :src="part.icon"
+          :size="2"
+          backgroundType="severity-0"
+          :text="{ bottomRight: getStacks(part) }"
+        />{{ part.name }}</span
       ></template
     >
     <Modal v-if="effectInfo" dialog @close="effectInfo = null">
@@ -192,6 +195,16 @@ export default {
   },
 
   methods: {
+    getStacks(part) {
+      if (part.effectPayload) {
+        const parsed = JSON.parse(part.effectPayload);
+        if (parsed.stacks !== undefined) {
+          return parsed.stacks;
+        }
+      }
+      return "";
+    },
+
     displayName(part) {
       if (part.code && this.nameOverrides[part.code]) {
         return this.nameOverrides[part.code];
