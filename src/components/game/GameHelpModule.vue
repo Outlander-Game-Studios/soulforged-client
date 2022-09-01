@@ -39,7 +39,7 @@
             ref="discordButton"
             class="button-link"
             href="https://discord.gg/XExbewT5GQ"
-            target="_blank"
+            :target="newPageTarget"
             @click.stop
           >
             Join Discord
@@ -282,6 +282,12 @@ export default {
         });
       }),
     };
+  },
+
+  computed: {
+    newPageTarget() {
+      return ControlsService.cordovaLoginAvailable() ? "_system" : "_blank";
+    },
   },
 
   methods: {

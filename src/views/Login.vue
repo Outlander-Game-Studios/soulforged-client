@@ -66,7 +66,7 @@
               ref="discordButton"
               class="button-link"
               href="https://discord.gg/XExbewT5GQ"
-              target="_blank"
+              :target="newPageTarget"
               @click.stop
             >
               Join Discord
@@ -124,6 +124,10 @@ export default {
   computed: {
     error() {
       return this.$route?.query?.error;
+    },
+
+    newPageTarget() {
+      return ControlsService.cordovaLoginAvailable() ? "_system" : "_blank";
     },
   },
 
