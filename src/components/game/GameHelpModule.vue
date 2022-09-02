@@ -34,16 +34,8 @@
           Changelog
           <div v-if="newVersion" class="new-version button" />
         </Button>
-        <Button class="menu-button" @click="$refs.discordButton.click()">
-          <a
-            ref="discordButton"
-            class="button-link"
-            href="https://discord.gg/XExbewT5GQ"
-            :target="newPageTarget"
-            @click.stop
-          >
-            Join Discord
-          </a>
+        <Button @click="openNewWindow(DISCORD_INVITE_URL)">
+          Join Discord
         </Button>
         <Button class="menu-button" @click="selectOption('credits')">
           Game Credits
@@ -256,6 +248,7 @@ export default {
         label: "Chat",
       },
     ],
+    DISCORD_INVITE_URL,
   }),
 
   subscriptions() {
@@ -340,6 +333,10 @@ export default {
           this.option = option;
           return;
       }
+    },
+
+    openNewWindow(url) {
+      ControlsService.openNewWindow(url);
     },
   },
 };

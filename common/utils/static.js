@@ -15,6 +15,8 @@ global.AUTO_RESOLVE_TURNS = 20;
 
 global.CURRENT_CRAFT_VERSION = 3;
 
+global.DISCORD_INVITE_URL = "https://discord.gg/XExbewT5GQ";
+
 global.CONSTRUCT_RESOLUTION = 100;
 global.ENTITY_VARIANTS = {
   BASE: "n",

@@ -61,16 +61,8 @@
             >Manual Login</Button
           >
           <Button @click="showRules = true"> Game Rules </Button>
-          <Button @click="$refs.discordButton.click()">
-            <a
-              ref="discordButton"
-              class="button-link"
-              href="https://discord.gg/XExbewT5GQ"
-              :target="newPageTarget"
-              @click.stop
-            >
-              Join Discord
-            </a>
+          <Button @click="openNewWindow(DISCORD_INVITE_URL)">
+            Join Discord
           </Button>
           <Button @click="showCredits = true"> Game Credits </Button>
         </Vertical>
@@ -119,15 +111,12 @@ export default {
     loggingIn: false,
     cordovaLoginEnabled: ControlsService.cordovaLoginAvailable(),
     electronLoginEnabled: ControlsService.electronLoginAvailable(),
+    DISCORD_INVITE_URL,
   }),
 
   computed: {
     error() {
       return this.$route?.query?.error;
-    },
-
-    newPageTarget() {
-      return ControlsService.cordovaLoginAvailable() ? "_system" : "_blank";
     },
   },
 
@@ -148,6 +137,10 @@ export default {
 
     goToLogin() {
       window.location = "/api/login";
+    },
+
+    openNewWindow(url) {
+      ControlsService.openNewWindow(url);
     },
   },
 };
@@ -212,11 +205,6 @@ export default {
 
 .login-button {
   margin-top: 2rem;
-}
-.button-link {
-  @include text-outline();
-  text-decoration: none;
-  position: relative;
 }
 
 .buttons-container {

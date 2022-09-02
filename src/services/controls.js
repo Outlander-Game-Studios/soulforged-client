@@ -37,6 +37,24 @@ export const ControlsService = (window.ControlsService = {
     form.submit();
   },
 
+  cordovaOpenNativeBrowserAvailable() {
+    return (
+      navigator.userAgent.includes("/Cordova") &&
+      navigator.userAgent.includes("/OpenBrowser") &&
+      window?.webkit?.messageHandlers?.cordova_iab?.postMessage
+    );
+  },
+
+  openNewWindow(url) {
+    if (ControlsService.cordovaOpenNativeBrowserAvailable()) {
+      window.webkit.messageHandlers.cordova_iab.postMessage(
+        JSON.stringify({ action: "openNativeBrowser", url })
+      );
+    } else {
+      window.open(url, "_blank");
+    }
+  },
+
   electronLoginAvailable() {
     return window.SoulforgedElectron?.initLogin;
   },
