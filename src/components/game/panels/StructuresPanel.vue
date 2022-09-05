@@ -18,61 +18,66 @@
     <Modal v-if="showingList" dialog large @close="showingList = false">
       <template v-slot:title> Structures </template>
       <template v-slot:contents>
-        <div v-if="!filteredStructures.length" class="empty-text">None</div>
-        <div v-for="structure in filteredStructures" :key="structure.id">
-          <ListItem
-            :lazyLoad="() => getStructureDetailsStream(structure)"
-            @click="showDetailsId = structure.id"
-            :flexible="flexible"
-          >
-            <template v-slot:icon="{ lazyData: structureDetails }">
-              <StructureIcon :structure="structureDetails" :size="6" />
-            </template>
-            <template v-slot:title="{ lazyData: structureDetails }">
-              <RichText :value="structureDetails.name" />
-            </template>
-            <template v-slot:subtitle="{ lazyData: structureDetails }">
-              <Horizontal tight>
-                <template
-                  v-if="
-                    structureDetails.materials &&
-                    structureDetails.materials.length
-                  "
-                >
-                  <ItemIcon
-                    v-for="(material, idx) in structureDetails.materials"
-                    :key="'material' + idx"
-                    :icon="material.itemDef.icon"
-                    :amount="material.amount"
-                    :size="3"
-                  />
-                </template>
-                <template v-else>
-                  <div
-                    class="progress-bar-wrapper"
-                    v-if="!structureDetails.operational"
-                  >
-                    <ProgressBar
-                      :size="3"
-                      :current="
-                        (100 * structureDetails.constructionProgress) /
-                        CONSTRUCT_RESOLUTION
-                      "
-                      color="green"
-                    />
-                  </div>
-                </template>
-              </Horizontal>
-            </template>
-            <template v-slot:buttons="{ lazyData: structureDetails }">
-              <Actions
-                :target="structureDetails"
-                @action="showingList = false"
-                noWrap
-              />
-            </template>
-          </ListItem>
+        <LoadingPlaceholder v-if="!filteredStructures" />
+        <div v-else-if="!filteredStructures.length" class="empty-text">
+          None
         </div>
+        <template v-else>
+          <div v-for="structure in filteredStructures" :key="structure.id">
+            <ListItem
+              :lazyLoad="() => getStructureDetailsStream(structure)"
+              @click="showDetailsId = structure.id"
+              :flexible="flexible"
+            >
+              <template v-slot:icon="{ lazyData: structureDetails }">
+                <StructureIcon :structure="structureDetails" :size="6" />
+              </template>
+              <template v-slot:title="{ lazyData: structureDetails }">
+                <RichText :value="structureDetails.name" />
+              </template>
+              <template v-slot:subtitle="{ lazyData: structureDetails }">
+                <Horizontal tight>
+                  <template
+                    v-if="
+                      structureDetails.materials &&
+                      structureDetails.materials.length
+                    "
+                  >
+                    <ItemIcon
+                      v-for="(material, idx) in structureDetails.materials"
+                      :key="'material' + idx"
+                      :icon="material.itemDef.icon"
+                      :amount="material.amount"
+                      :size="3"
+                    />
+                  </template>
+                  <template v-else>
+                    <div
+                      class="progress-bar-wrapper"
+                      v-if="!structureDetails.operational"
+                    >
+                      <ProgressBar
+                        :size="3"
+                        :current="
+                          (100 * structureDetails.constructionProgress) /
+                          CONSTRUCT_RESOLUTION
+                        "
+                        color="green"
+                      />
+                    </div>
+                  </template>
+                </Horizontal>
+              </template>
+              <template v-slot:buttons="{ lazyData: structureDetails }">
+                <Actions
+                  :target="structureDetails"
+                  @action="showingList = false"
+                  noWrap
+                />
+              </template>
+            </ListItem>
+          </div>
+        </template>
       </template>
     </Modal>
     <Modal dialog large v-if="showDetailsId" @close="showDetailsId = null">
