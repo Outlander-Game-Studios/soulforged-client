@@ -20,7 +20,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .description-container {
   color: #555;
   font-style: italic;
@@ -32,6 +32,11 @@ export default {
 
   &.prominent {
     font-size: 100%;
+    color: #222;
+  }
+
+  em {
+    font-weight: bold;
     color: #222;
   }
 }

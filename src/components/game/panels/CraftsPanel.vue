@@ -94,11 +94,11 @@ export default {
         result = result.filter((craft) => craft.skill === this.skillFilter);
       }
       if (this.textFilter) {
+        const textFilter = this.textFilter.toLowerCase();
         result = result.filter((craft) =>
-          craft.name
-            .replace(/\{[^:]+:[0-1]:([^}]+)\}/g, "$1")
+          GameService.stripRichText(craft.name)
             .toLowerCase()
-            .includes(this.textFilter.toLowerCase())
+            .includes(textFilter)
         );
       }
       const { sorter } = SORTING[this.sortOrder];

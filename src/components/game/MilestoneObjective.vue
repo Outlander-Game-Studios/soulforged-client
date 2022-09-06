@@ -9,7 +9,7 @@
       <div class="objective-text">
         {{ text }}
       </div>
-      <Description v-show="!completed">{{ description }}</Description>
+      <Description v-show="!completed" v-html="description" />
     </Vertical>
     <div v-if="iconRight" class="objective-icon right" />
   </div>

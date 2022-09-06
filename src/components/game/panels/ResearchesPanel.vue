@@ -88,6 +88,7 @@
         <Radio v-model="displayMode" option="wip"> In Progress </Radio>
         <Radio v-model="displayMode" option="completed"> Completed </Radio>
         <Spaced>
+          <Input placeholder="Search..." v-model="textSearch" />
           <div v-if="!researches"><LoadingPlaceholder /></div>
           <div v-else-if="!researches.length" class="empty-text">None</div>
           <div v-else>
@@ -183,6 +184,7 @@ export default {
     appliedMaterials: {},
     selectingItem: false,
     itemBeingProcessed: false,
+    textSearch: "",
   }),
 
   subscriptions() {
@@ -199,6 +201,7 @@ export default {
       allResearches: researchesStream,
       researches: Rx.combineLatest([
         this.$stream("displayMode"),
+        this.$stream("textSearch"),
         Rx.Observable.merge(
           researchesStream.first(),
           researchesStream.switchMap((researches) => {
@@ -210,13 +213,17 @@ export default {
             }
           })
         ),
-      ]).map(([displayMode, researches]) =>
+      ]).map(([displayMode, textSearch, researches]) =>
         researches
           .filter(
             (r) =>
-              (displayMode === "completed" && !!r.completed) ||
-              (displayMode === "wip" && !r.completed) ||
-              (displayMode === "favourites" && !!r.fav)
+              ((displayMode === "completed" && !!r.completed) ||
+                (displayMode === "wip" && !r.completed) ||
+                (displayMode === "favourites" && !!r.fav)) &&
+              (!textSearch ||
+                GameService.stripRichText(r.title)
+                  .toLowerCase()
+                  .includes(textSearch.toLowerCase()))
           )
           .reverse()
           .sort((a, b) => {

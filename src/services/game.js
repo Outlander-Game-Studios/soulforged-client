@@ -57,8 +57,9 @@ let rootEntityIdStream;
 let requestId = 1;
 let connectionCount = 0;
 let itemCountStream;
+const nameOverrides = {};
 let nameOverridesStream = new Rx.ReplaySubject(1);
-nameOverridesStream.next({});
+nameOverridesStream.next(nameOverrides);
 export const GameService = (window.GameService = {
   entityStreams,
   fetcher,
@@ -775,12 +776,8 @@ export const GameService = (window.GameService = {
   },
 
   setNameOverride(code, name) {
-    nameOverridesStream.first().subscribe((current) => {
-      nameOverridesStream.next({
-        ...current,
-        [code]: name,
-      });
-    });
+    nameOverrides[code] = name;
+    nameOverridesStream.next({ ...nameOverrides });
   },
 
   getNameOverrideStream() {
@@ -839,5 +836,14 @@ export const GameService = (window.GameService = {
 
   getCurrentObjectiveStream() {
     return GameService.getRootEntityStream().pluck("objective");
+  },
+
+  stripRichText(text) {
+    return text.replace(/\{([^:]+):[0-1]:([^}]+)\}/g, (_, code, baseline) => {
+      if (nameOverrides[code]) {
+        return nameOverrides[code];
+      }
+      return baseline;
+    });
   },
 });
