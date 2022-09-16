@@ -12,7 +12,7 @@
         </span>
       </LabeledValue>
       <div v-if="info.highestLevel !== undefined">
-        <LabeledValue label="Highest skill level ever (without bonuses)">
+        <LabeledValue label="Highest skill level ever">
           {{ info.highestLevel }}
         </LabeledValue>
       </div>
