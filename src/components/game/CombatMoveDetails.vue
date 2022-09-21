@@ -54,7 +54,7 @@
               <SubLabeledValue label="Move Base">
                 {{ moveDetails.raw.damage[damage] }}
               </SubLabeledValue>
-              <SubLabeledValue label="Skill & Effects">
+              <SubLabeledValue label="Statistics & Effects">
                 <Plused :value="+value - +moveDetails.raw.damage[damage]" />
               </SubLabeledValue>
             </template>

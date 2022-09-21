@@ -56,6 +56,14 @@ const SORTING = [
     label: "Skill",
     sorter: (a, b) => compareStrings(a.skill, b.skill),
   },
+  {
+    label: "Name",
+    sorter: (a, b) =>
+      compareStrings(
+        GameService.stripRichText(a.name),
+        GameService.stripRichText(b.name)
+      ),
+  },
 ];
 
 export default {

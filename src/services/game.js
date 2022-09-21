@@ -491,14 +491,21 @@ export const GameService = (window.GameService = {
     this.getQuickActionsStream()
       .first()
       .subscribe((quickActions) => {
-        quickActions
-          .filter((action) => !!action.item)
-          .forEach((action) => {
-            GameService.getEntityStream(
-              action.item.id,
-              ENTITY_VARIANTS.BASE,
-              true
-            );
+        const includedPublicIds = quickActions.toObject(
+          (action) => action.publicId
+        );
+        this.getInventoryStream(GameService.getRootEntityStream())
+          .first()
+          .subscribe((items) => {
+            const exactItemIds = quickActions
+              .filter((action) => !!action.itemId)
+              .map((action) => action.itemId);
+            const itemIdsFromPublicIds = items
+              .filter((i) => includedPublicIds[i.publicId])
+              .map((i) => i.id);
+            [...exactItemIds, ...itemIdsFromPublicIds].forEach((itemId) => {
+              GameService.getEntityStream(itemId, ENTITY_VARIANTS.BASE, true);
+            });
           });
       });
   },

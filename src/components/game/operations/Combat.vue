@@ -30,7 +30,7 @@
         v-if="skipping && !combat.concluded"
         dialog
         large
-        @close="skipping = false"
+        v-on="combat.autoResolving ? {} : { close: () => (skipping = false) }"
       >
         <template v-slot:title> Auto-resolve </template>
         <template v-slot:contents>
@@ -857,7 +857,7 @@ export default window.OperationCombat = {
       };
       this.creaturePositions[defenderId].stance = STANCES.DEFENDING;
       // update creature position
-      await wait(200);
+      await wait(100);
     },
     async attackDefender(damages) {
       // update creature position
@@ -883,7 +883,7 @@ export default window.OperationCombat = {
         this.creaturePositions[defenderId].animation = ANIMATIONS.BEING_HIT;
         this.addFloatingCombatText(defenderId, attackerDamageDealt);
         this.updateCreatureState(defenderId);
-        await wait(250);
+        await wait(150);
       }
     },
     async defenderRetaliates(damages) {
@@ -908,7 +908,7 @@ export default window.OperationCombat = {
         this.addFloatingCombatText(attackerId, defenderDamageDealt);
         this.updateCreatureState(attackerId);
         // update creature position
-        await wait(250);
+        await wait(150);
       }
     },
     async attackerGoesBack(damages) {
@@ -928,7 +928,7 @@ export default window.OperationCombat = {
         ...this.creaturePositions[attackerId].initial,
       };
       // update creature position
-      await wait(200);
+      await wait(100);
     },
 
     addFloatingCombatText(creatureId, damageInfo) {

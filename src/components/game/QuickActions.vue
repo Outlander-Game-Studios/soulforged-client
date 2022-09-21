@@ -1,10 +1,29 @@
 <template>
   <div v-if="inventory && inventory.length">
-    <Container v-if="quickActions" :borderSize="0.35" class="quick-actions">
-      <Vertical tight>
-        <div class="settings-button interactive" @click="openSettings()">
-          <div class="settings-icon"></div>
+    <div class="quick-actions">
+      <div class="flex">
+        <Container v-if="quickActions" :borderSize="0.35">
+          <div class="settings-button interactive" @click="openSettings()">
+            <div class="settings-icon"></div>
+          </div>
+        </Container>
+        <div class="collapse-button-wrapper" @click="toggleCollapse()">
+          <BorderRound
+            v-if="showCollapseControls"
+            class="collapse-button-border"
+            borderType="tightGlow"
+            backgroundType="base"
+            :size="3"
+          >
+            <div class="collapse-button" :class="{ collapsed: collapsed }" />
+          </BorderRound>
         </div>
+      </div>
+      <div
+        ref="quickActionContainer"
+        class="quick-action-container"
+        :class="{ collapsed: collapsed }"
+      >
         <Item
           v-for="(validQuickAction, idx) in validQuickActions"
           :key="idx"
@@ -19,8 +38,8 @@
             </span>
           </template>
         </Item>
-      </Vertical>
-    </Container>
+      </div>
+    </div>
     <Modal v-if="settings" dialog large @close="settings = false">
       <template v-slot:title>
         <Horizontal>
@@ -201,6 +220,8 @@ export default {
     selectedActionId: null,
     addingSelectingItem: false,
     specificInstance: false,
+    collapsed: true,
+    showCollapseControls: null,
     unknownImg,
   }),
 
@@ -221,6 +242,10 @@ export default {
     const inventoryStream = GameService.getInventoryStream(mainEntity);
     const quickActionsStream = GameService.getQuickActionsStream();
     return {
+      collapsed: LocalStorageService.getItemStream(
+        "quickActionsCollapsed",
+        false
+      ),
       selectedItemActions: this.$stream("selectedItem")
         .filter((item) => !!item)
         .map((item) => item.id)
@@ -229,7 +254,11 @@ export default {
         )
         .pluck("actions"),
       inventory: inventoryStream,
-      quickActions: quickActionsStream,
+      quickActions: quickActionsStream.tap(() => {
+        setTimeout(() => {
+          this.checkExpandVisibility();
+        });
+      }),
       validQuickActions: quickActionsStream.map((quickActions) =>
         quickActions.filter(
           (quick) =>
@@ -241,7 +270,31 @@ export default {
     };
   },
 
+  created() {
+    this.handler = this.handleResize.bind(this);
+    window.addEventListener("resize", this.handler);
+  },
+
+  destroyed() {
+    window.removeEventListener("resize", this.handler);
+  },
+
   methods: {
+    toggleCollapse() {
+      LocalStorageService.setItem("quickActionsCollapsed", !this.collapsed);
+    },
+
+    handleResize() {
+      this.checkExpandVisibility();
+    },
+
+    checkExpandVisibility() {
+      this.showCollapseControls =
+        this.$refs.quickActionContainer &&
+        this.$refs.quickActionContainer.scrollWidth >
+          this.$refs.quickActionContainer.clientWidth;
+    },
+
     openSettings() {
       this.settings = true;
       GameService.checkQuickActions();
@@ -297,7 +350,7 @@ export default {
     async removeQuickAction(idx) {
       const quickActions = await ControlsService.getSetting("quickActions", []);
       quickActions.splice(idx, 1);
-      ControlsService.saveSetting("quickActions", quickActions);
+      await ControlsService.saveSetting("quickActions", quickActions);
     },
 
     async moveDown(idx) {
@@ -305,14 +358,14 @@ export default {
       const old = quickActions[idx + 1];
       quickActions[idx + 1] = quickActions[idx];
       quickActions[idx] = old;
-      ControlsService.saveSetting("quickActions", quickActions);
+      await ControlsService.saveSetting("quickActions", quickActions);
     },
     async moveUp(idx) {
       const quickActions = await ControlsService.getSetting("quickActions", []);
       const old = quickActions[idx - 1];
       quickActions[idx - 1] = quickActions[idx];
       quickActions[idx] = old;
-      ControlsService.saveSetting("quickActions", quickActions);
+      await ControlsService.saveSetting("quickActions", quickActions);
     },
   },
 };
@@ -338,7 +391,7 @@ $border-size: 0.35rem;
 }
 
 .settings-button {
-  padding: 0.5rem ($height - $icon-height)/2;
+  padding: 0.5rem ($height - $icon-height)/2 - 0.2rem;
   overflow: hidden;
 }
 
@@ -359,6 +412,48 @@ $border-size: 0.35rem;
   &.no {
     pointer-events: none;
     visibility: hidden;
+  }
+}
+
+.quick-action-container {
+  margin-left: 0.3rem;
+  max-height: calc(1 * var(--app-height) - 30rem);
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+  &.collapsed {
+    overflow: hidden;
+  }
+}
+
+.collapse-button-wrapper {
+  position: absolute;
+  left: 100%;
+  padding: 0.5rem 0.25rem;
+
+  &:hover {
+    cursor: pointer;
+    @include filter(brightness(1.2) saturate(1.2));
+  }
+}
+
+.collapse-button {
+  margin: 0.35rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  background-image: url(ui-asset("/misc/arrow_right.png"));
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  transform: rotate(180deg);
+  transition: all 0.1s ease-in-out;
+  transition-property: filter, transform;
+  @include filter(drop-shadow(0.05em -0.05em 0.05em black));
+
+  &.collapsed {
+    transform: rotate(0deg);
+    @include filter(drop-shadow(0.1em 0.05em 0.05em black));
   }
 }
 </style>
