@@ -76,7 +76,7 @@ global.itemSorter = (a, b) => {
     return a.isRuined ? 1 : -1;
   }
   if (a.category !== b.category) {
-    return a.category > b.category ? 1 : -1;
+    return (a.category || Infinity) > (b.category || Infinity) ? 1 : -1;
   }
   if (a.name !== b.name) {
     return a.name > b.name ? 1 : -1;

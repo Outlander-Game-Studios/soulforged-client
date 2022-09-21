@@ -58,6 +58,7 @@ let requestId = 1;
 let connectionCount = 0;
 let itemCountStream;
 const nameOverrides = {};
+let stripRichTextCache = {};
 let nameOverridesStream = new Rx.ReplaySubject(1);
 nameOverridesStream.next(nameOverrides);
 export const GameService = (window.GameService = {
@@ -252,7 +253,6 @@ export const GameService = (window.GameService = {
             name: data,
           });
         } else {
-          console.log(data);
           LocalStorageService.setItem(key, data);
         }
       });
@@ -778,6 +778,7 @@ export const GameService = (window.GameService = {
   setNameOverride(code, name) {
     nameOverrides[code] = name;
     nameOverridesStream.next({ ...nameOverrides });
+    stripRichTextCache = {};
   },
 
   getNameOverrideStream() {
@@ -839,11 +840,17 @@ export const GameService = (window.GameService = {
   },
 
   stripRichText(text) {
-    return text.replace(/\{([^:]+):[0-1]:([^}]+)\}/g, (_, code, baseline) => {
-      if (nameOverrides[code]) {
-        return nameOverrides[code];
-      }
-      return baseline;
-    });
+    return (
+      stripRichTextCache[text] ||
+      (stripRichTextCache[text] = text.replace(
+        /\{([^:]+):[0-1]:([^}]+)\}/g,
+        (_, code, baseline) => {
+          if (nameOverrides[code]) {
+            return nameOverrides[code];
+          }
+          return baseline;
+        }
+      ))
+    );
   },
 });
