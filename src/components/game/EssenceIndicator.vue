@@ -41,7 +41,7 @@ export default {
 
 .currency-display {
   height: 3.5rem !important;
-  overflow: hidden;
+  overflow: hidden !important;
   display: flex;
   padding: 0.35rem 0.5rem;
   font-size: 85%;
