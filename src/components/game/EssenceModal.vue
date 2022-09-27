@@ -22,16 +22,7 @@
               />
             </Container>
             <template v-if="knowledgeBase.pendingEssence">
-              <Header alt2>
-                Pending Essence
-                <Help title="Pending Essence">
-                  Every day your contributions are turned into Pending Essence,
-                  for you to collect.<br />
-                  If you don't collect it on the day it'll simply continue to
-                  accumulate for you to collect at a later time. There is no
-                  penalty for not collecting your pending essence.
-                </Help>
-              </Header>
+              <Header alt2> Pending Essence </Header>
               <Spaced>
                 <Horizontal>
                   <CurrencyDisplay

@@ -52,6 +52,8 @@
                 class="density"
                 :density="showDetails.density"
               />
+              &nbsp;
+              <HelpResourceDensity :resource="showDetails" />
             </LabeledValue>
           </div>
           <Actions

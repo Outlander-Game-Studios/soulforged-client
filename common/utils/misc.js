@@ -6,6 +6,7 @@ const hash = (method) => (string) =>
 const md5 = hash("md5");
 
 const sum = (acc, i) => acc + i;
+const multiply = (acc, i) => acc * i;
 
 function parseCookies(cookiesString) {
   if (typeof cookiesString === "object") {
@@ -135,6 +136,7 @@ function compareStrings(a, b) {
 export {
   md5,
   sum,
+  multiply,
   parseCookies,
   formatSize,
   formatNumber,

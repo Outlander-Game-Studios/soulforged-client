@@ -9,34 +9,118 @@
     </div>
     <div v-if="successChance !== undefined">
       <LabeledValue label="Success">
-        <span :class="'rate rate-color-' + successChance">
-          {{ CHANCE_LABEL[successChance] }}
+        <span class="interactive" @click="explain = 'success'">
+          <span :class="'rate rate-color-' + successChance">
+            {{ CHANCE_LABEL[successChance] }}
+          </span>
         </span>
       </LabeledValue>
     </div>
     <div v-if="accidentChance !== undefined">
       <LabeledValue label="Accident">
-        <span :class="'rate rate-color-' + (5 - accidentChance)">
-          {{ CHANCE_LABEL[accidentChance] }}
-        </span>
-        <span v-if="accidentChance"> / </span>
-        <span
-          v-if="accidentChance"
-          :class="'rate rate-color-' + (5 - accidentSeverity)"
-        >
-          {{ SEVERITY_LABEL[accidentSeverity] }}
+        <span class="interactive" @click="explain = 'accident'">
+          <span :class="'rate rate-color-' + (5 - accidentChance)">
+            {{ CHANCE_LABEL[accidentChance] }}
+          </span>
+          <span v-if="accidentChance"> / </span>
+          <span
+            v-if="accidentChance"
+            :class="'rate rate-color-' + (5 - accidentSeverity)"
+          >
+            {{ SEVERITY_LABEL[accidentSeverity] }}
+          </span>
         </span>
       </LabeledValue>
     </div>
     <div v-if="finalSpeed !== undefined">
       <LabeledValue label="Speed">
-        {{ finalSpeed }}%
-        <span class="highlight-problem" v-if="!finalSpeed" />
+        <span class="interactive" @click="explain = 'speed'">
+          <span class="rate" :class="speedClass">{{ finalSpeed }}%</span>
+          <span class="highlight-problem" v-if="finalSpeed <= 0" />
+        </span>
       </LabeledValue>
     </div>
     <div v-else-if="baseSpeed !== undefined">
       <LabeledValue label="Base speed"> {{ baseSpeed }}% </LabeledValue>
     </div>
+    <Modal dialog v-if="explain === 'speed'" @close="explain = null">
+      <template v-slot:title> Speed </template>
+      <template v-slot:contents>
+        <Description prominent>
+          Speed determines how many Action Points are used to perform an
+          action.<br />
+          Having higher speed means you spend fewer Action Points.<br />
+        </Description>
+        <div v-if="speedModifiers">
+          <hr />
+          <Description prominent>
+            For your current action the speed is determined based on:
+          </Description>
+          <LabeledValue
+            v-for="(value, mod) in speedModifiers"
+            :key="mod"
+            :label="mod"
+          >
+            {{ value }}%
+          </LabeledValue>
+        </div>
+        <hr />
+        <LabeledValue label="Final Speed">
+          <span class="rate" :class="speedClass">{{ finalSpeed }}%</span>
+          <span class="highlight-problem" v-if="finalSpeed <= 0" />
+        </LabeledValue>
+      </template>
+    </Modal>
+    <Modal dialog v-if="explain === 'accident'" @close="explain = null">
+      <template v-slot:title> Accidents </template>
+      <template v-slot:contents>
+        <Description prominent>
+          Performing most actions may result in an accident.<br />
+          An accident is independent to whether the action succeeds.
+        </Description>
+        <hr />
+        <LabeledValue label="Accident Chance">
+          <span :class="'rate rate-color-' + (5 - accidentChance)">
+            {{ CHANCE_LABEL[accidentChance] }}
+          </span>
+        </LabeledValue>
+        <Description prominent>
+          Accident chance depends on the difficulty of the task and your
+          skill.<br />
+        </Description>
+        <hr />
+        <LabeledValue label="Accident Severity">
+          <span :class="'rate rate-color-' + (5 - accidentSeverity)">
+            {{ SEVERITY_LABEL[accidentSeverity] }}
+          </span>
+        </LabeledValue>
+        <Description prominent>
+          Accident severity determines how big an injury you may sustain if an
+          accident happens.<br />
+          It depends on the difficulty of the task, your skill, base Action
+          Point cost and other factors.
+        </Description>
+      </template>
+    </Modal>
+    <Modal dialog v-if="explain === 'success'" @close="explain = null">
+      <template v-slot:title> Success </template>
+      <template v-slot:contents>
+        <Description prominent>
+          Performing most actions may only have a chance for a success.<br />
+          What success means depends on the specific task being performed.
+        </Description>
+        <hr />
+        <LabeledValue label="Success">
+          <span :class="'rate rate-color-' + successChance">
+            {{ CHANCE_LABEL[successChance] }}
+          </span>
+        </LabeledValue>
+        <Description prominent>
+          Success chance depends on the difficulty of the task, your skill and
+          other factors.
+        </Description>
+      </template>
+    </Modal>
   </div>
 </template>
 
@@ -64,16 +148,36 @@ export default {
   },
 
   data: () => ({
+    explain: null,
     CHANCE_LABEL,
     SEVERITY_LABEL,
   }),
 
   computed: {
+    speedClass() {
+      switch (true) {
+        case this.finalSpeed < 25:
+          return "rate-color-0";
+        case this.finalSpeed < 50:
+          return "rate-color-1";
+        case this.finalSpeed < 75:
+          return "rate-color-2";
+        case this.finalSpeed < 100:
+          return "rate-color-3";
+        case this.finalSpeed < 120:
+          return "rate-color-4";
+        default:
+          return "rate-color-5";
+      }
+    },
     finalSpeed() {
       return this.operation?.context?.skillInfo?.finalSpeed;
     },
     baseSpeed() {
       return this.operation?.context?.skillInfo?.baseSpeed;
+    },
+    speedModifiers() {
+      return this.operation?.context?.skillInfo?.speedModifiers;
     },
     skill() {
       return this.operation?.context?.skillInfo?.skill;

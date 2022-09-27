@@ -14,26 +14,13 @@
                 Exhausted
               </LabeledValue>
               <div v-else>
-                <SkillInfoDisplay :operation="operation" />
                 <LabeledValue label="Density">
                   {{ ucFirst(resource.densityName) }}
                   <IndicatorResourceDensity :density="resource.density" />
                   &nbsp;
-                  <Help title="Density">
-                    <div class="density-help">
-                      The density of the resource indicates how much of the
-                      resource is available and the speed of gathering that
-                      resource.<br />
-                      <LabeledValue label="Current density">
-                        {{ ucFirst(resource.densityName) }}
-                        <IndicatorResourceDensity :density="resource.density" />
-                      </LabeledValue>
-                      <LabeledValue label="Gathering speed multiplier">
-                        {{ 100 * resource.densitySpeed }}%
-                      </LabeledValue>
-                    </div>
-                  </Help>
+                  <HelpResourceDensity :resource="resource" />
                 </LabeledValue>
+                <SkillInfoDisplay :operation="operation" />
               </div>
             </div>
             <div class="icon">

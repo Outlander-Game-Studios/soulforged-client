@@ -23,6 +23,14 @@ const factory = (onMounted, onCreate) => {
 };
 
 export const base = factory();
+export const noItem = factory((vm) => {
+  vm.operation = JSON.parse(JSON.stringify(storyMocks.operations.craft));
+  vm.operation.context.toolsSelected = {
+    Hammering: {
+      toolType: "Hammering",
+    },
+  };
+});
 export const selectingItems = factory((vm) => {
   vm.$el.querySelector(".icon-wrapper").click();
 });

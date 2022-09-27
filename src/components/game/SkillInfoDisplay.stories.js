@@ -4,7 +4,7 @@ export default {
 
 export const sample = mockComponent({
   methods: {
-    makeOp(successChance, accidentChance, accidentSeverity) {
+    makeOp(successChance, accidentChance, accidentSeverity, finalSpeed = 100) {
       return {
         context: {
           skillInfo: {
@@ -12,6 +12,7 @@ export const sample = mockComponent({
             successChance,
             accidentChance,
             accidentSeverity,
+            finalSpeed,
             skillGainMult: 4,
           },
         },
@@ -21,23 +22,37 @@ export const sample = mockComponent({
 
   template: `
 <Container>
-  <SkillInfoDisplay :operation="makeOp(5,0,0)" />
-  <SkillInfoDisplay :operation="makeOp(4,1,1)" />
-  <SkillInfoDisplay :operation="makeOp(3,2,2)" />
-  <SkillInfoDisplay :operation="makeOp(2,3,3)" />
-  <SkillInfoDisplay :operation="makeOp(1,4,4)" />
-  <SkillInfoDisplay :operation="makeOp(0,5,5)" />
+<Spaced>
+  <SkillInfoDisplay :operation="makeOp(5,0,0, 150)" />
+  <hr/>
+  <SkillInfoDisplay :operation="makeOp(4,1,1,100)" />
+  <hr/>
+  <SkillInfoDisplay :operation="makeOp(3,2,2,75)" />
+  <hr/>
+  <SkillInfoDisplay :operation="makeOp(2,3,3,50)" />
+  <hr/>
+  <SkillInfoDisplay :operation="makeOp(1,4,4,30)" />
+  <hr/>
+  <SkillInfoDisplay :operation="makeOp(0,5,5,0)" />
+  <hr/>
   <hr/>
   <SkillInfoDisplay :operation="makeOp(0,0,0)" />
+  <hr/>
   <SkillInfoDisplay :operation="makeOp(1,1,1)" />
+  <hr/>
   <SkillInfoDisplay :operation="makeOp(2,2,2)" />
+  <hr/>
   <SkillInfoDisplay :operation="makeOp(3,3,3)" />
+  <hr/>
   <SkillInfoDisplay :operation="makeOp(4,4,4)" />
+  <hr/>
   <SkillInfoDisplay :operation="makeOp(5,5,5)" />
   <hr/>
+  <hr/>
   <SkillInfoDisplay :operation="makeOp(0,1,0)" />
+  <hr/>
   <SkillInfoDisplay :operation="makeOp(0,0,1)" />
-
+</Spaced>
 </Container>
 `,
 });

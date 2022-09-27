@@ -1,34 +1,6 @@
 <template>
   <div class="operation-tool-selector">
-    <Modal
-      dialog
-      v-if="selectingToolType"
-      title="Select tool"
-      @close="selectingToolType = null"
-    >
-      <Vertical class="select-tool">
-        <ItemSelector
-          :filter="itemToolsFilter(selectingToolType)"
-          @selected="selectItemTool(selectingToolType, $event)"
-        >
-          <template v-slot="{ item }">
-            {{ selectingToolType }}
-            {{ item.toolEfficiency[selectingToolType] }}%
-          </template>
-        </ItemSelector>
-        <StructureSelector
-          :includeEmpty="false"
-          :filter="structureToolsFilter(selectingToolType)"
-          @selected="selectStructureTool(selectingToolType, $event)"
-        >
-          <template v-slot="{ structure }">
-            {{ selectingToolType }}
-            {{ structure.toolEfficiency[selectingToolType] }}%
-          </template>
-        </StructureSelector>
-      </Vertical>
-    </Modal>
-    <div v-if="operation.context.tools.length">
+    <div v-if="operation.context.tools.length" class="outer-container">
       <Header alt2 class="tools-header">Tools</Header>
       <HorizontalFill
         v-for="toolType in operation.context.tools"
@@ -48,19 +20,55 @@
               :size="4"
             />
             <div class="tool-name">
-              {{ operation.context.toolsSelected[toolType].toolType }}
-              <span class="tool-efficiency">
-                <span
+              <div>
+                {{ operation.context.toolsSelected[toolType].toolType }}
+              </div>
+              <div class="tool-efficiency">
+                <div v-if="!operation.context.toolsSelected[toolType].icon">
+                  Nothing selected
+                </div>
+                <LabeledValue
                   v-if="operation.context.toolsSelected[toolType].efficiency"
+                  label="Speed"
                 >
                   {{ operation.context.toolsSelected[toolType].efficiency }}%
-                </span>
-              </span>
+                </LabeledValue>
+              </div>
             </div>
           </Horizontal>
         </Container>
       </HorizontalFill>
     </div>
+    <Modal
+      dialog
+      v-if="selectingToolType"
+      title="Select tool"
+      @close="selectingToolType = null"
+    >
+      <Vertical class="select-tool">
+        <ItemSelector
+          :filter="itemToolsFilter(selectingToolType)"
+          @selected="selectItemTool(selectingToolType, $event)"
+        >
+          <template v-slot="{ item }">
+            <LabeledValue label="Speed">
+              {{ item.toolEfficiency[selectingToolType] }}%
+            </LabeledValue>
+          </template>
+        </ItemSelector>
+        <StructureSelector
+          :includeEmpty="false"
+          :filter="structureToolsFilter(selectingToolType)"
+          @selected="selectStructureTool(selectingToolType, $event)"
+        >
+          <template v-slot="{ structure }">
+            <LabeledValue label="Speed">
+              {{ structure.toolEfficiency[selectingToolType] }}%
+            </LabeledValue>
+          </template>
+        </StructureSelector>
+      </Vertical>
+    </Modal>
   </div>
 </template>
 
@@ -115,6 +123,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.outer-container {
+  min-width: 20rem;
+}
+
 .operation-tool-selector {
   display: flex;
   justify-content: center;
@@ -129,13 +141,20 @@ export default {
 }
 
 .tool-name {
-  padding: 0.7rem 0.5rem 0;
+  $height: 4rem;
+  $padding-top: 0.5rem;
+  padding: $padding-top 1.5rem 0 0.5rem;
+  line-height: 1.6rem;
+  overflow: hidden;
+  height: $height - $padding-top;
 
   .tool-efficiency {
+    line-height: 0;
     display: inline-block;
     min-width: 5.5rem;
-    text-align: right;
+    text-align: left;
     font-style: italic;
+    font-size: 60%;
   }
 }
 </style>

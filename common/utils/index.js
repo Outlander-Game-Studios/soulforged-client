@@ -7,6 +7,7 @@ import { random } from "./random.js";
 import {
   md5,
   sum,
+  multiply,
   parseCookies,
   formatSize,
   formatNumber,
@@ -23,6 +24,7 @@ global.numberToText = numberToText;
 global.random = random;
 global.md5 = md5;
 global.sum = sum;
+global.multiply = multiply;
 global.parseCookies = parseCookies;
 global.formatSize = formatSize;
 global.formatNumber = formatNumber;
