@@ -2,14 +2,14 @@
   <div
     class="collection-card"
     :class="{
-      unknown: !cardInfo,
+      unknown: !cardInfo || !cardInfo.name,
       interactive: cardInfo && cardInfo.collectibleDetails,
     }"
     @click="
       showDetails = cardInfo && cardInfo.collectibleDetails ? cardInfo : null
     "
   >
-    <div v-if="cardInfo">
+    <div v-if="cardInfo && cardInfo.name">
       <div
         class="icon"
         :style="{ backgroundImage: 'url(' + cardInfo.icon + ')' }"
