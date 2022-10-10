@@ -6,13 +6,13 @@
       @dragstart="startDragging($event)"
       @dragend="stopDragging($event)"
       @touchstart.prevent="startTouchDragging($event)"
+      @mousedown="mouseDown($event)"
+      @mouseup="mouseUp($event)"
       @touchend="stopTouchDragging($event)"
       @touchcancel="stopTouchDragging($event)"
     >
       <ItemIcon
-        v-on="
-          hasClick ? { click: () => $emit('click') } : { click: openDetails }
-        "
+        v-on="hasClick ? { click: emitClick } : { click: openDetails }"
         :icon="data.icon"
         :size="size"
         :amount="data.amount"
@@ -265,10 +265,39 @@ export default {
     startTouchDragging($event) {
       ControlsService.triggerControlEvent("draggingInventory", this.dragSource);
       ControlsService.triggerControlEvent("draggingItem", this.data);
+
+      document.body.addEventListener("touchcancel", this.touchUp);
+      document.body.addEventListener("touchend", this.touchUp);
+      this.pressAndHoldTimeout = setTimeout(() => {
+        this.longClicked = true;
+        this.$emit("longClick");
+        this.touchUp();
+      }, 500);
+    },
+
+    touchUp() {
+      document.body.removeEventListener("touchcancel", this.touchUp);
+      document.body.removeEventListener("touchend", this.touchUp);
+      clearTimeout(this.pressAndHoldTimeout);
     },
 
     stopDragging($event) {
       ControlsService.triggerControlEvent("draggingInventory", null);
+    },
+
+    mouseDown() {
+      this.longClicked = false;
+      document.body.addEventListener("mouseup", this.mouseUp);
+      this.pressAndHoldTimeout = setTimeout(() => {
+        this.longClicked = true;
+        this.$emit("longClick");
+        this.mouseUp();
+      }, 500);
+    },
+
+    mouseUp() {
+      document.body.removeEventListener("mouseup", this.mouseUp);
+      clearTimeout(this.pressAndHoldTimeout);
     },
 
     created() {
@@ -308,6 +337,12 @@ export default {
 
     openDetails() {
       this.showDetails = true;
+    },
+
+    emitClick() {
+      if (!this.longClicked) {
+        this.$emit("click");
+      }
     },
 
     selectCraft(craft) {

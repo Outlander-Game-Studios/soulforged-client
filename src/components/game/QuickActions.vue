@@ -31,6 +31,7 @@
           :size="5"
           class="interactive"
           @click="triggerQuickAction(validQuickAction)"
+          @longClick="triggerQuickAction(validQuickAction, true)"
         >
           <template v-slot:textTopRight>
             <span class="quick-action-label">
@@ -96,6 +97,11 @@
               Add quick action
             </Button>
           </HorizontalCenter>
+          <Description>
+            <em>Tip:</em> Pressing and holding your cursor over a Quick
+            Action<br />
+            will apply to maximum possible amount of the item.
+          </Description>
         </Vertical>
       </template>
     </Modal>
@@ -298,12 +304,14 @@ export default {
       GameService.checkQuickActions();
     },
 
-    triggerQuickAction(validQuickAction) {
+    triggerQuickAction(validQuickAction, max = false) {
       const item = validQuickAction.item;
       const action = item.actions.find(
         ({ actionId }) => actionId === validQuickAction.actionId
       );
-      GameService.performAction(item, action);
+      GameService.performAction(item, action, {
+        amount: max ? item.amount || 1 : 1,
+      });
     },
 
     startAdding() {
