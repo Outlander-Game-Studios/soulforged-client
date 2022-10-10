@@ -194,10 +194,13 @@ export default {
     const researchesStream = GameService.getResearchesStream();
 
     return {
-      playerInventory: Rx.Observable.merge(
-        inventoryStream.first(),
-        inventoryStream.delay(delay)
-      ).map((items) => items.filter((item) => !!item).sort(itemSorter)),
+      playerInventory: GameService.getItemSorterStream().switchMap(
+        (itemSorter) =>
+          Rx.Observable.merge(
+            inventoryStream.first(),
+            inventoryStream.delay(delay)
+          ).map((items) => items.filter((item) => !!item).sort(itemSorter))
+      ),
       allResearches: researchesStream,
       researches: Rx.combineLatest([
         this.$stream("displayMode"),

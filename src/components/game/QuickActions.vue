@@ -1,5 +1,5 @@
 <template>
-  <div v-if="inventory && inventory.length">
+  <div>
     <div class="quick-actions">
       <div class="flex">
         <Container v-if="quickActions" :borderSize="0.35">
@@ -239,7 +239,6 @@ export default {
 
   subscriptions() {
     let mainEntity = GameService.getRootEntityStream();
-    const inventoryStream = GameService.getInventoryStream(mainEntity);
     const quickActionsStream = GameService.getQuickActionsStream();
     return {
       collapsed: LocalStorageService.getItemStream(
@@ -253,7 +252,6 @@ export default {
           GameService.getEntityStream(id, ENTITY_VARIANTS.BASE, true)
         )
         .pluck("actions"),
-      inventory: inventoryStream,
       quickActions: quickActionsStream.tap(() => {
         setTimeout(() => {
           this.checkExpandVisibility();

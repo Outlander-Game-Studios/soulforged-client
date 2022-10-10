@@ -601,6 +601,27 @@ export const GameService = (window.GameService = {
       .map((items) => items.toObject((item) => item.id));
   },
 
+  getItemSorterStream() {
+    return nameOverridesStream.map(() => (a, b) => {
+      if (a.isRuined !== b.isRuined) {
+        return a.isRuined ? 1 : -1;
+      }
+      if (a.category !== b.category) {
+        return (a.category || Infinity) > (b.category || Infinity) ? 1 : -1;
+      }
+      if (a.name !== b.name) {
+        return GameService.stripRichText(a.name).toLowerCase() >
+          GameService.stripRichText(b.name).toLowerCase()
+          ? 1
+          : -1;
+      }
+      if (b.quality !== a.quality) {
+        return b.quality - a.quality;
+      }
+      return +a.durabilityStage - +b.durabilityStage;
+    });
+  },
+
   getEntityStream(
     id,
     variant = ENTITY_VARIANTS.BASE,
