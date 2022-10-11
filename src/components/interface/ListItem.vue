@@ -110,6 +110,10 @@ export default {
     .title {
       font-size: 2rem;
       font-style: italic;
+
+      em {
+        font-weight: bold;
+      }
     }
 
     .subtitle {
