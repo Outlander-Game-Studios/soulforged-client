@@ -137,10 +137,11 @@
     <ExplanationIndicator
       v-if="showHelpIndicator"
       selector=".help-trigger"
-      placement="left"
+      landscapePlacement="top-left"
+      portraitPlacement="left"
       class="help-indicator"
     >
-      Click here for additional help
+      <div class="help-indicator-text">Click here for additional help</div>
     </ExplanationIndicator>
     <Modal v-if="showChangelog" dialog large @close="showChangelog = false">
       <template v-slot:title> Changelog </template>
@@ -347,19 +348,25 @@ export default {
 
 @keyframes help-indicator {
   0% {
-    transform: translateX(0rem);
+    color: white;
   }
   50% {
-    transform: translateX(-0.5rem);
+    color: deepskyblue;
   }
   100% {
-    transform: translateX(0rem);
+    color: white;
   }
 }
 
 .help-indicator {
+  left: initial !important;
+  margin-bottom: -1rem;
   display: inline-block;
   animation: help-indicator 1s linear infinite;
+
+  @media (orientation: landscape) {
+    position: absolute !important;
+  }
 }
 
 .help-trigger {
