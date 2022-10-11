@@ -51,7 +51,7 @@
     <CollectionsDisplay
       ref="collectionsComponent"
       v-if="showCollections"
-      @close="showCollections = false"
+      @close="closeCollections()"
     />
     <Modal v-if="showCoreConcepts" @close="showCoreConcepts = false">
       <template v-slot:title> Core concepts </template>
@@ -68,7 +68,7 @@
     </Modal>
     <CreditsModal v-if="showCredits" @close="showCredits = false" />
     <div class="interface-overview" v-if="showInterfaceOverview">
-      <div class="backdrop" @click="showInterfaceOverview = false" />
+      <div class="backdrop" @click="closeInterfaceOverview()" />
       <ExplanationIndicator
         v-for="tabHelper in tabHelpers"
         :key="tabHelper.label"
@@ -121,10 +121,7 @@
         </Help>
         Travel
       </ExplanationIndicator>
-      <Button
-        @click="showInterfaceOverview = false"
-        class="close-interface-guide"
-      >
+      <Button @click="closeInterfaceOverview()" class="close-interface-guide">
         Close
       </Button>
     </div>
@@ -310,12 +307,12 @@ export default {
     },
 
     selectOption(option) {
-      this.$refs.trigger.close();
       switch (option) {
         case "changelog":
           this.showChangelog = true;
           return;
         case "collections":
+          this.$refs.trigger.close();
           this.showCollections = true;
           return;
         case "core":
@@ -325,6 +322,7 @@ export default {
           this.showCredits = true;
           return;
         case "interface":
+          this.$refs.trigger.close();
           this.showInterfaceOverview = true;
           return;
         case "settings":
@@ -334,6 +332,16 @@ export default {
           this.option = option;
           return;
       }
+    },
+
+    closeInterfaceOverview() {
+      this.showInterfaceOverview = false;
+      this.$refs.trigger.open();
+    },
+
+    closeCollections() {
+      this.showCollections = false;
+      this.$refs.trigger.open();
     },
 
     openNewWindow(url) {
