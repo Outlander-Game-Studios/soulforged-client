@@ -24,7 +24,9 @@
                 {{ operation.context.toolsSelected[toolType].toolType }}
               </div>
               <div class="tool-efficiency">
-                <div v-if="!operation.context.toolsSelected[toolType].icon">
+                <div
+                  v-if="!operation.context.toolsSelected[toolType].efficiency"
+                >
                   Nothing selected
                 </div>
                 <LabeledValue

@@ -70,19 +70,3 @@ global.structureSorter = (a, b) => {
   }
   return +a.condition - +b.condition;
 };
-
-global.itemSorter = (a, b) => {
-  if (a.isRuined !== b.isRuined) {
-    return a.isRuined ? 1 : -1;
-  }
-  if (a.category !== b.category) {
-    return (a.category || Infinity) > (b.category || Infinity) ? 1 : -1;
-  }
-  if (a.name !== b.name) {
-    return a.name > b.name ? 1 : -1;
-  }
-  if (b.quality !== a.quality) {
-    return b.quality - a.quality;
-  }
-  return +a.durabilityStage - +b.durabilityStage;
-};

@@ -89,7 +89,7 @@ export default {
 
   computed: {
     sortedInventory() {
-      return [...this.inventory].filter((item) => !!item).sort(itemSorter);
+      return [...this.inventory].filter((item) => !!item).sort(this.itemSorter);
     },
 
     hasClick() {
@@ -101,6 +101,7 @@ export default {
     const draggedItemStream = ControlsService.getDraggedItemStream();
 
     return {
+      itemSorter: GameService.getItemSorterStream(),
       equipmentMap: GameService.getEquipmentMapStream(),
       draggingSource: ControlsService.getControlEventStream(
         "draggingInventory"

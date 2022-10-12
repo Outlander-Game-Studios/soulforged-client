@@ -1,5 +1,5 @@
 <template>
-  <div v-if="inventory && inventory.length">
+  <div>
     <div class="quick-actions">
       <div class="flex">
         <Container v-if="quickActions" :borderSize="0.35">
@@ -31,6 +31,7 @@
           :size="5"
           class="interactive"
           @click="triggerQuickAction(validQuickAction)"
+          @longClick="triggerQuickAction(validQuickAction, true)"
         >
           <template v-slot:textTopRight>
             <span class="quick-action-label">
@@ -96,6 +97,11 @@
               Add quick action
             </Button>
           </HorizontalCenter>
+          <Description>
+            <em>Tip:</em> Pressing and holding your cursor over a Quick
+            Action<br />
+            will apply to maximum possible amount of the item.
+          </Description>
         </Vertical>
       </template>
     </Modal>
@@ -239,7 +245,6 @@ export default {
 
   subscriptions() {
     let mainEntity = GameService.getRootEntityStream();
-    const inventoryStream = GameService.getInventoryStream(mainEntity);
     const quickActionsStream = GameService.getQuickActionsStream();
     return {
       collapsed: LocalStorageService.getItemStream(
@@ -253,7 +258,6 @@ export default {
           GameService.getEntityStream(id, ENTITY_VARIANTS.BASE, true)
         )
         .pluck("actions"),
-      inventory: inventoryStream,
       quickActions: quickActionsStream.tap(() => {
         setTimeout(() => {
           this.checkExpandVisibility();
@@ -300,12 +304,14 @@ export default {
       GameService.checkQuickActions();
     },
 
-    triggerQuickAction(validQuickAction) {
+    triggerQuickAction(validQuickAction, max = false) {
       const item = validQuickAction.item;
       const action = item.actions.find(
         ({ actionId }) => actionId === validQuickAction.actionId
       );
-      GameService.performAction(item, action);
+      GameService.performAction(item, action, {
+        amount: max ? item.amount || 1 : 1,
+      });
     },
 
     startAdding() {

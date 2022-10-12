@@ -15,6 +15,7 @@ global.BACKGROUNDS = [
   "severity-2",
   "severity-3",
   "severity-4",
+  "severity-5",
 ];
 </script>
 

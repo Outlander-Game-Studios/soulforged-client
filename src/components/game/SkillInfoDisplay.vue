@@ -35,7 +35,7 @@
     <div v-if="finalSpeed !== undefined">
       <LabeledValue label="Speed">
         <span class="interactive" @click="explain = 'speed'">
-          <span class="rate" :class="speedClass">{{ finalSpeed }}%</span>
+          <span class="rate" :class="speedClass">{{ finalSpeed || 0 }}%</span>
           <span class="highlight-problem" v-if="finalSpeed <= 0" />
         </span>
       </LabeledValue>
@@ -66,7 +66,7 @@
         </div>
         <hr />
         <LabeledValue label="Final Speed">
-          <span class="rate" :class="speedClass">{{ finalSpeed }}%</span>
+          <span class="rate" :class="speedClass">{{ finalSpeed || 0 }}%</span>
           <span class="highlight-problem" v-if="finalSpeed <= 0" />
         </LabeledValue>
       </template>

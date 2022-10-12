@@ -101,6 +101,7 @@ export default {
     const rootEntityStream = GameService.getRootEntityStream();
     const locationStream = GameService.getLocationStream();
     return {
+      itemSorter: GameService.getItemSorterStream(),
       equipmentMap: GameService.getEquipmentMapStream(),
       playerInventory: this.$stream("includeLocation")
         .switchMap((includeLocation) => {
@@ -129,7 +130,7 @@ export default {
         this.playerInventory
           ?.filter(this.filter)
           .filter((item) => !!item)
-          .sort(itemSorter) || []
+          .sort(this.itemSorter) || []
       );
     },
   },

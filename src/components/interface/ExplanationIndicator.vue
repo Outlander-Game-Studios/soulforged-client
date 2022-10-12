@@ -79,6 +79,12 @@ export default {
             bottom: `${screenHeight - boundingRect.y}px`,
           };
           return;
+        case "top-left":
+          this.anchorStyle = {
+            left: `${boundingRect.x + boundingRect.width / 2}px`,
+            bottom: `${screenHeight - boundingRect.y}px`,
+          };
+          return;
         case "bottom":
           this.anchorStyle = {
             left: `${boundingRect.x + boundingRect.width / 2}px`,
@@ -144,6 +150,7 @@ export default {
   .pointer {
     $dashHeight: 0.2rem;
     width: 2rem;
+    min-width: 2rem;
     margin-top: ($lineHeight - $dashHeight) / 2;
     height: $dashHeight;
     background: white;
@@ -187,6 +194,23 @@ export default {
       }
     }
   }
+  &.top-left {
+    flex-direction: row-reverse;
+    right: 100%;
+    transform: rotate(45deg);
+    transform-origin: right;
+
+    .text {
+      margin-right: 0.5rem;
+      transform: rotate(-45deg);
+      transform-origin: right;
+    }
+
+    .pointer {
+      margin-left: 0.5rem;
+    }
+  }
+
   &.bottom {
     transform: rotate(90deg);
     transform-origin: left;
