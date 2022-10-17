@@ -745,17 +745,21 @@ export default window.OperationCombat = {
     executeMove(moveId) {
       GameService.request(REQUEST_CODES.COMMENCE_OPERATION, {
         moveId,
+      }).then(() => {
+        this.performingMove = false;
       });
     },
 
     selectMove(moveId) {
-      if (this.ownTurn) {
+      if (this.timeRemaining && !this.performingMove) {
         if (this.selectedMoveId === moveId || this.skipConfirm) {
+          this.performingMove = true;
           GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
             updateType: "selectMove",
             moveId,
           }).then((response) => {
             if (!response || !response.ok) {
+              this.performingMove = false;
               ToastError(response && response.message);
               return;
             }
