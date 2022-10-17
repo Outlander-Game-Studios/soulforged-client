@@ -11,6 +11,7 @@ import {
   parseCookies,
   formatSize,
   formatNumber,
+  formatTime,
   ordinal,
   dynamicPluralize,
   pluralize,
@@ -28,6 +29,7 @@ global.multiply = multiply;
 global.parseCookies = parseCookies;
 global.formatSize = formatSize;
 global.formatNumber = formatNumber;
+global.formatTime = formatTime;
 global.ordinal = ordinal;
 global.dynamicPluralize = dynamicPluralize;
 global.pluralize = pluralize;

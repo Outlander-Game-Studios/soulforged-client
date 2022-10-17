@@ -45,6 +45,19 @@ function formatNumber(number) {
   return formatFloatPoint(number, 1000, ["", "k", "m", "b", "t"]);
 }
 
+function formatTime(seconds) {
+  seconds = Math.floor(seconds);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  const units = ["d", "h", "m", "s"];
+  const mods = [Infinity, 24, 60, 60];
+  return [days, hours, minutes, seconds]
+    .map((i, idx) => (i % mods[idx] ? `${i % mods[idx]}${units[idx]}` : ""))
+    .join(" ");
+}
+
 function ordinal(number) {
   const lastDigit = `${number}`.substring(-1);
   let ending;
@@ -140,6 +153,7 @@ export {
   parseCookies,
   formatSize,
   formatNumber,
+  formatTime,
   ordinal,
   dynamicPluralize,
   pluralize,

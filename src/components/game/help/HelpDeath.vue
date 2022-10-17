@@ -20,8 +20,8 @@
     </p>
     <ul>
       <li>
-        You will retain ownership of all buildings that your previous character
-        owned, including items stored inside them
+        You will initially retain ownership of all buildings that your previous
+        character owned, including items stored inside them
       </li>
       <li>
         You will retain knowledge of all of the crafting and building recipes
@@ -37,6 +37,12 @@
         retained
       </li>
     </ul>
+    <p>
+      Please note that if you do not create a new character after dying, the
+      buildings you own will eventually be marked as unclaimed. How long it
+      takes depends on how much of the game you have explored, ranging from few
+      hours to several months.
+    </p>
     <p>
       Character death also means that the price increase for the number of
       powers you purchased is reset.

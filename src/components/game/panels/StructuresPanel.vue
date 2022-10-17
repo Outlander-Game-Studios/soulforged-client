@@ -90,6 +90,18 @@
         <Vertical v-else>
           <div class="info-panel-with-icon">
             <Vertical class="info">
+              <Header alt2 v-if="showDetails.name.includes(skull)">
+                {{ skull }} Owner dead {{ skull }}
+              </Header>
+              <Header alt2 v-if="showDetails.name.includes(permanentOwner)">
+                {{ permanentOwner }} Ownership will never expire
+                <Help title="Ownership will never expire">
+                  The owner of this building last died before the update
+                  enabling auto-abandoning structures was introduced. Because of
+                  this their buildings will not be automatically abandoned.
+                </Help>
+                {{ permanentOwner }}
+              </Header>
               <Header alt2 v-if="!showDetails.operational">
                 <IndicatorConstruction />
                 Under construction
@@ -199,6 +211,8 @@ export default {
     CONSTRUCT_RESOLUTION,
     showDetailsId: false,
     showingList: false,
+    skull: " ☠️",
+    permanentOwner: "📜",
   }),
 
   subscriptions() {
