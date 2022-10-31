@@ -15,7 +15,10 @@
       <div
         v-for="move in groupedMoves"
         class="move-button"
-        v-if="!!move || !noSpacing"
+        v-if="
+          (!!move || !noSpacing) &&
+          (!autoResolveOnly || (!move.count && !move.cooldownMax))
+        "
         :class="{ 'flex-grow': !move, 'miss-req': move && move.missingReq }"
       >
         <template v-if="!!move">
@@ -30,7 +33,7 @@
             </div>
             <div class="count-text" v-if="move.count">{{ move.count }}</div>
             <div class="move-text">{{ move.name }}</div>
-            <div class="hotkey-text" v-if="!showDetailsOnClick">
+            <div class="hotkey-text" v-if="hotkeysEnabled">
               {{ hotkeys[move.moveId] }}
             </div>
           </Button>
@@ -71,6 +74,9 @@ export default {
       type: Boolean,
     },
     noSpacing: {
+      type: Boolean,
+    },
+    autoResolveOnly: {
       type: Boolean,
     },
     moves: {},
@@ -124,8 +130,12 @@ export default {
   },
 
   computed: {
+    hotkeysEnabled() {
+      return !this.showDetailsOnClick && !this.autoResolveOnly;
+    },
+
     hotkeys() {
-      if (this.showDetailsOnClick) {
+      if (!this.hotkeysEnabled) {
         return {};
       }
       const remainingMoves = [...this.groupedMoves];
@@ -166,7 +176,7 @@ export default {
 
   mounted() {
     this.keyPressHandler = ($event) => {
-      if (!this.showDetailsOnClick) {
+      if (this.hotkeysEnabled) {
         const key = $event.key;
         const moveId = Object.keys(this.hotkeys).find(
           (moveId) => this.hotkeys[moveId] === key

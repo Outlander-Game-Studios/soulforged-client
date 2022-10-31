@@ -69,30 +69,7 @@
         <Modal v-if="showRules" dialog large @close="showRules = false">
           <template v-slot:title> Game rules </template>
           <template v-slot:contents>
-            <p>
-              The following activities are considered against the rules and may
-              result in termination of your access to the game:
-            </p>
-            <Description>
-              <ul>
-                <li>
-                  Accessing the game in an unauthorized manner (including using
-                  automated third party software)
-                </li>
-                <li>Playing using multiple accounts</li>
-                <li>Sharing accounts</li>
-                <li>Selling or trading accounts</li>
-                <li>
-                  Gathering in-game currency, items, or resources for sale
-                  outside of the game
-                </li>
-                <li>
-                  Using language that is deemed obscene, invasive, threatening,
-                  harassing, abusive, hateful, racist or otherwise objectionable
-                  or inappropriate
-                </li>
-              </ul>
-            </Description>
+            <HelpGameRules />
           </template>
         </Modal>
       </div>

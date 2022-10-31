@@ -84,12 +84,7 @@ export default {
 @import "../../utils.scss";
 
 .requirement {
-  @include text-outline();
-  text-align: center;
-  margin-bottom: 0.5rem;
-  padding: 0.5rem;
-  border-radius: 1rem;
-  background: #c40000;
+  @include big-warning();
 }
 
 .details-move-icon {

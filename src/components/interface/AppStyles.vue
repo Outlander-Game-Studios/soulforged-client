@@ -284,4 +284,8 @@ label {
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }
+
+.big-warning {
+  @include big-warning();
+}
 </style>

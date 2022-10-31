@@ -122,6 +122,15 @@ $disabled-color: #ccc;
   @include text-outline(#541111, red);
 }
 
+@mixin big-warning() {
+  @include text-outline();
+  text-align: center;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  background: #c40000;
+}
+
 @mixin touch-device() {
   @media (hover: none) {
     @content;
