@@ -56,6 +56,8 @@
     <Modal v-if="showCoreConcepts" @close="showCoreConcepts = false">
       <template v-slot:title> Core concepts </template>
       <template v-slot:contents>
+        <Header alt2>Game Rules</Header>
+        <HelpGameRules />
         <Header alt2>Time & Action Points</Header>
         <HelpActionPoints />
         <Header alt2>Naming</Header>
@@ -149,22 +151,22 @@
     <Modal v-if="option === 'logout'" dialog @close="option = null">
       <template v-slot:title> Log out </template>
       <template v-slot:contents>
-        <div class="important-text">Are you sure you want to log out?</div>
-        <div class="error-text">
-          Note: It against the rules to use multiple accounts to access the
-          game.
-        </div>
-        <HorizontalCenter>
-          <Button @click="logout()" :processing="loggingOut">Log out</Button>
-          <Button @click="option = null">Stay logged in</Button>
-        </HorizontalCenter>
-        <Spaced>
+        <Vertical>
+          <div class="important-text">Are you sure you want to log out?</div>
+          <div class="big-warning">
+            It is against the rules to use<br />
+            multiple accounts to access the game.
+          </div>
+          <HorizontalCenter>
+            <Button @click="logout()" :processing="loggingOut">Log out</Button>
+            <Button @click="option = null">Stay logged in</Button>
+          </HorizontalCenter>
           <Description>
             If you'd like to completely delete your account and remove the
             information click
             <a href="#" @click="startDeletion()">here</a>
           </Description>
-        </Spaced>
+        </Vertical>
       </template>
     </Modal>
     <Modal v-if="option === 'deleteMyAccount'" dialog @close="option = null">
