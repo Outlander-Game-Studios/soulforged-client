@@ -1,31 +1,35 @@
 <template>
   <LoadingPlaceholder v-if="!info" />
   <div v-else>
-    <div>
-      <Icon :src="info.icon" backgroundType="alt" class="float-left" />
-      <LabeledValue label="Current Base Skill Level">
-        {{ info.baseLevel }}
-      </LabeledValue>
-      <LabeledValue label="Skill Level Bonus">
-        <span :class="bonusClass">
-          <span v-if="info.bonuses > 0">+</span>{{ info.bonuses }}
-        </span>
-      </LabeledValue>
-      <div v-if="info.highestLevel !== undefined">
-        <LabeledValue label="Highest skill level ever">
-          {{ info.highestLevel }}
+    <template v-if="info.baseLevel !== undefined">
+      <div>
+        <Icon :src="info.icon" backgroundType="alt" class="float-left" />
+        <LabeledValue label="Current Base Skill Level">
+          {{ info.baseLevel }}
         </LabeledValue>
+        <LabeledValue label="Skill Level Bonus">
+          <span :class="bonusClass">
+            <span v-if="info.bonuses > 0">+</span>{{ info.bonuses }}
+          </span>
+        </LabeledValue>
+        <div v-if="info.highestLevel !== undefined">
+          <LabeledValue label="Highest skill level ever">
+            {{ info.highestLevel }}
+          </LabeledValue>
+        </div>
       </div>
-    </div>
-    <LabeledValue
-      label="Related attributes"
-      v-if="info.relatedStats && info.relatedStats.length"
-    >
-      {{ info.relatedStats.join(", ") }}
-    </LabeledValue>
-    <div class="clear-both"></div>
+      <LabeledValue
+        label="Related attributes"
+        v-if="info.relatedStats && info.relatedStats.length"
+      >
+        {{ info.relatedStats.join(", ") }}
+      </LabeledValue>
+      <div class="clear-both"></div>
+      <template v-if="info.explained">
+        <hr />
+      </template>
+    </template>
     <template v-if="info.explained">
-      <hr />
       <Description pre>
         {{ info.explained }}
       </Description>

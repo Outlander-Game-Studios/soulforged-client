@@ -60,15 +60,14 @@
                 following turns.<br />
                 Your character will use the currently selected move:
               </Description>
+              <Header alt2>Select move to auto-resolve combat with</Header>
               <HorizontalCenter>
-                <ListItem :iconSrc="currentMove.icon" flexible>
-                  <template v-slot:title>
-                    {{ currentMove && currentMove.name }}
-                  </template>
-                </ListItem>
-              </HorizontalCenter>
-              <HorizontalCenter>
-                <Button @click="triggerAutoResolve()">Confirm</Button>
+                <CombatMoves
+                  @selected="triggerAutoResolve($event)"
+                  wrap
+                  autoResolveOnly
+                  noSpacing
+                />
               </HorizontalCenter>
             </Vertical>
           </div>
@@ -142,6 +141,7 @@
                 size="normal"
                 noOperation
                 @click="clickedCreature(creature)"
+                noSleep
               />
               <div
                 v-for="floatingCombatText in floatingCombatTexts[creature.id]"
@@ -772,13 +772,18 @@ export default window.OperationCombat = {
       }
     },
 
-    triggerAutoResolve() {
+    triggerAutoResolve(moveId) {
       GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-        updateType: "autoResolve",
+        updateType: "selectMove",
+        moveId,
       }).then((response) => {
-        if (response?.ok === false) {
-          ToastError(response.message);
-        }
+        GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
+          updateType: "autoResolve",
+        }).then((response) => {
+          if (response?.ok === false) {
+            ToastError(response.message);
+          }
+        });
       });
     },
 
