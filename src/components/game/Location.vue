@@ -79,9 +79,6 @@ export default {
             );
         }),
       location: GameService.getLocationStream(),
-      ambientSound: GameService.getLocationStream()
-        .map((location) => location.ambientSound)
-        .tap((ambientSound) => SoundService.playMusic(ambientSound)),
       paths: GameService.getLocationStream()
         .map(({ id, paths }) => ({ id, paths }))
         .distinctUntilChanged(null, JSON.stringify)

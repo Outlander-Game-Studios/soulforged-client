@@ -2,6 +2,7 @@
   <div class="main-component" :class="{ dead: dead }">
     <AutoSizer />
     <DisconnectIndicator />
+    <MusicPlayer />
     <DeadIndicator />
     <MilestoneTracker />
     <HappeningDisplay />
