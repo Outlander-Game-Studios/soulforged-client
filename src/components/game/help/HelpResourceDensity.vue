@@ -6,7 +6,7 @@
         available and the <em>speed of gathering</em> that resource.<br />
         <LabeledValue label="Current density">
           {{ ucFirst(resource.densityName) }}
-          <IndicatorResourceDensity :density="resource.density" />
+          <IndicatorResourceDensity :density="resource.density" highRes />
         </LabeledValue>
         <LabeledValue label="Gathering speed multiplier">
           {{ 100 * resource.densitySpeed }}%
