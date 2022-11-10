@@ -55,6 +55,7 @@ function formatTime(seconds) {
   const mods = [Infinity, 24, 60, 60];
   return [days, hours, minutes, seconds]
     .map((i, idx) => (i % mods[idx] ? `${i % mods[idx]}${units[idx]}` : ""))
+    .filter((t) => !!t)
     .join(" ");
 }
 
@@ -146,6 +147,12 @@ function compareStrings(a, b) {
   return a > b ? 1 : a === b ? 0 : -1;
 }
 
+function strPadLeft(base, length, char = " ") {
+  base = `${base}`;
+  while (base.length < length) base = char + base;
+  return base;
+}
+
 export {
   md5,
   sum,
@@ -160,4 +167,5 @@ export {
   preposition,
   defineSymbol,
   compareStrings,
+  strPadLeft,
 };

@@ -18,6 +18,7 @@ import {
   preposition,
   defineSymbol,
   compareStrings,
+  strPadLeft,
 } from "./misc.js";
 import { stacktrace } from "./debug.js";
 
@@ -36,3 +37,4 @@ global.pluralize = pluralize;
 global.preposition = preposition;
 global.defineSymbol = defineSymbol;
 global.compareStrings = compareStrings;
+global.strPadLeft = strPadLeft;
