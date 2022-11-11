@@ -38,8 +38,8 @@ export default {
 
 .density {
   position: absolute !important;
-  font-size: 1.25rem;
-  top: 5%;
-  right: 5%;
+  font-size: 1.5rem;
+  top: 2%;
+  right: 2%;
 }
 </style>

@@ -288,4 +288,8 @@ label {
 .big-warning {
   @include big-warning();
 }
+
+.overflow-hidden {
+  overflow: hidden;
+}
 </style>

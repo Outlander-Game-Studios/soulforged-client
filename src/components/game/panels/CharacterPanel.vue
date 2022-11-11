@@ -8,13 +8,23 @@
         </LabeledValue>
         <div>
           <LabeledValue
-            v-for="(value, stat) in mainEntity.statistics"
+            v-for="(data, stat) in mainEntity.statistics"
             :key="stat"
-            :label="stat"
-            class="interactive"
+            class="interactive clear-both"
             @click="showStatDetails = stat"
           >
-            {{ value }}
+            <template v-slot:label>
+              <Icon
+                :src="data.icon"
+                backgroundType="alt"
+                class="float-left"
+                :size="2.5"
+              />
+              {{ stat }}
+            </template>
+            <template>
+              {{ data.value }}
+            </template>
           </LabeledValue>
         </div>
         <LabeledValue label="Mortal Wounds">

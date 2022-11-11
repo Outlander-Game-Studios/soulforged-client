@@ -98,10 +98,7 @@ export default {
 
   &.use-img {
     display: inline-block;
-    background-image: url(ui-asset(
-      "/misc/resource-indicators-small.png",
-      "../"
-    ));
+    background-image: url(ui-asset("/misc/resource-indicators-s.png", "../"));
     background-size: 100% 500%;
 
     &.high-res {
