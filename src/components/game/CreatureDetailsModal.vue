@@ -30,7 +30,7 @@
               <div v-if="creature.operationInfo">
                 <HorizontalCenter>
                   <Container>
-                    <Horizontal tight>
+                    <Horizontal tight class="overflow-hidden">
                       <Icon :src="creature.operationInfo.icon" size="6" />
                       <div
                         class="operation-name"

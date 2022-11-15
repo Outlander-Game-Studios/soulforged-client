@@ -1,11 +1,19 @@
 <template>
   <div>
     <HorizontalFill v-if="!label" class="select-component">
-      <Button @click="selecting = true">{{ currentLabel }}</Button>
+      <Button @click="selecting = true">
+        <slot name="option" :label="currentLabel">
+          {{ currentLabel }}
+        </slot>
+      </Button>
     </HorizontalFill>
     <HorizontalFill v-else>
       <LabeledValue :label="label">
-        <Button @click="selecting = true">{{ currentLabel }}</Button>
+        <Button @click="selecting = true">
+          <slot name="option" :label="currentLabel">
+            {{ currentLabel }}
+          </slot>
+        </Button>
       </LabeledValue>
     </HorizontalFill>
     <Modal v-if="selecting" dialog @close="selecting = false">
@@ -18,7 +26,9 @@
             selecting = false;
           "
         >
-          {{ label }}
+          <slot name="option" :label="label">
+            {{ label }}
+          </slot>
         </Button>
       </Vertical>
     </Modal>

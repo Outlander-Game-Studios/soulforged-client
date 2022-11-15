@@ -2,8 +2,13 @@
   <div>
     <div class="quick-actions">
       <div class="flex">
-        <Container v-if="quickActions" :borderSize="0.35">
-          <div class="settings-button interactive" @click="openSettings()">
+        <Container :borderSize="0.35">
+          <LoadingPlaceholder v-if="!quickActions" :size="3" />
+          <div
+            v-else
+            class="settings-button interactive"
+            @click="openSettings()"
+          >
             <div class="settings-icon"></div>
           </div>
         </Container>
@@ -35,7 +40,7 @@
         >
           <template v-slot:textTopRight>
             <span class="quick-action-label">
-              {{ validQuickAction.label }}
+              <RichText :value="validQuickAction.label" nonInteractive />
             </span>
           </template>
         </Item>
@@ -57,7 +62,7 @@
               <Item v-else :size="6" :data="quickAction.item" />
             </template>
             <template v-slot:title>
-              {{ quickAction.label }}
+              <RichText :value="quickAction.label" />
             </template>
             <template v-slot:subtitle>
               <RichText
@@ -123,7 +128,7 @@
           >
             <template v-slot="{ item }">
               <div v-for="action in item.actions" :key="action.actionId">
-                {{ action.label }}
+                <RichText :value="action.label" />
               </div>
             </template>
           </ItemSelector>
@@ -194,7 +199,7 @@
                 v-model="selectedActionId"
                 :option="action.actionId"
               >
-                {{ action.label }}
+                <RichText :value="action.label" />
               </Radio>
             </div>
           </template>
@@ -215,8 +220,10 @@
 <script>
 import unknownImg from "../../assets/ui/cartoon/icons/unknown_nobg.png";
 import isEqual from "lodash/isEqual.js";
+import RichText from "./RichText";
 
 export default {
+  components: { RichText },
   data: () => ({
     showDetails: false,
     settings: false,
@@ -244,7 +251,6 @@ export default {
   // },
 
   subscriptions() {
-    let mainEntity = GameService.getRootEntityStream();
     const quickActionsStream = GameService.getQuickActionsStream();
     return {
       collapsed: LocalStorageService.getItemStream(

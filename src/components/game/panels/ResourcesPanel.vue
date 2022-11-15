@@ -51,6 +51,7 @@
               <IndicatorResourceDensity
                 class="density"
                 :density="showDetails.density"
+                highRes
               />
               &nbsp;
               <HelpResourceDensity :resource="showDetails" />

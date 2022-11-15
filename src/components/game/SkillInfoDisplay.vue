@@ -63,6 +63,34 @@
             :label="mod"
           >
             {{ value }}%
+            <div v-if="mod === 'Efficiency'" class="stats-icons">
+              <Effects
+                class="efficiency-effects"
+                row
+                :effects="mainEntity.effects"
+                :filter="efficiencyEffectFilter"
+                :size="2.5"
+              />
+              <Effects
+                class="efficiency-effects"
+                row
+                :effects="mainEntity.environment"
+                :filter="efficiencyEffectFilter"
+                :size="2.5"
+              />
+            </div>
+            <div
+              v-if="mod === 'Attributes' && !!skillDetails"
+              class="stats-icons"
+            >
+              <StatIcon
+                v-for="stat in skillDetails.relatedStats"
+                :key="stat"
+                :stat="stat"
+                :size="2.5"
+                class="stats-icon"
+              />
+            </div>
           </LabeledValue>
         </div>
         <hr />
@@ -126,6 +154,7 @@
 </template>
 
 <script>
+import Horizontal from "../layouts/Horizontal";
 const CHANCE_LABEL = {
   0: "Impossible",
   1: "Unlikely",
@@ -144,6 +173,7 @@ const SEVERITY_LABEL = {
 };
 
 export default {
+  components: { Horizontal },
   props: {
     operation: {},
     skillData: {},
@@ -151,9 +181,22 @@ export default {
 
   data: () => ({
     explain: null,
+    efficiencyEffectFilter: (effect) =>
+      effect?.impacts?.some((i) => i.name === "Efficiency"),
     CHANCE_LABEL,
     SEVERITY_LABEL,
   }),
+
+  subscriptions() {
+    return {
+      mainEntity: GameService.getRootEntityStream(),
+      skillDetails: this.$stream("operation")
+        .pluck("context", "skillInfo", "skill")
+        .switchMap((skillName) =>
+          GameService.getInfoStream("SKILLS", { skillName: skillName }, true)
+        ),
+    };
+  },
 
   computed: {
     speedClass() {
@@ -208,6 +251,21 @@ export default {
 
 <style scoped lang="scss">
 @import "../../utils.scss";
+
+.efficiency-effects {
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.stats-icons {
+  display: inline-block;
+  vertical-align: bottom;
+  height: 2.5rem;
+
+  .stats-icon {
+    display: inline-block;
+  }
+}
 
 .rate {
   text-align: right;

@@ -16,7 +16,10 @@
               <div v-else>
                 <LabeledValue label="Density">
                   {{ ucFirst(resource.densityName) }}
-                  <IndicatorResourceDensity :density="resource.density" />
+                  <IndicatorResourceDensity
+                    :density="resource.density"
+                    highRes
+                  />
                   &nbsp;
                   <HelpResourceDensity :resource="resource" />
                 </LabeledValue>
