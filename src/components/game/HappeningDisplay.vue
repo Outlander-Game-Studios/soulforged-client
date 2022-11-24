@@ -6,7 +6,7 @@
     <Modal dialog large specialFrame darkBackdrop>
       <template v-slot:title> {{ mainEntity.happening.title }} </template>
       <template v-slot:contents>
-        <Spaced>
+        <Spaced class="happening-container">
           <Vertical>
             <img
               v-if="mainEntity.happening.image"
@@ -59,5 +59,12 @@ export default {
 
 .center {
   text-align: center;
+}
+
+.happening-container {
+  min-height: 15rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 </style>

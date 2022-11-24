@@ -90,7 +90,9 @@ export const ControlsService = (window.ControlsService = {
   },
 
   goToCharacterCreator() {
-    window.location.hash = "/character-creator";
+    if (!window.location.hash?.includes("/login")) {
+      window.location.hash = "/character-creator";
+    }
   },
 
   isTouchDevice() {
