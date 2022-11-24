@@ -61,7 +61,7 @@ export default {
     startupId: GameService.getClientStartupId(),
     touch: ControlsService.isTouchDevice() ? "Yes" : "No",
     resolution: `${getScreenWidth()} x ${getScreenHeight()}`,
-    scaling: window.fontSizeOverride.toFixed(2),
+    scaling: window.fontSizeOverride?.toFixed(2),
     pixelRatio: window.devicePixelRatio,
   }),
 
