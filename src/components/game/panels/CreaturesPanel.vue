@@ -142,6 +142,7 @@ export default {
 
     getCreatureId(creature, extras = {}) {
       return JSON.stringify({
+        nonAggro: creature.nonAggressive,
         icon: creature.icon,
         dead: creature.dead,
         ...extras,

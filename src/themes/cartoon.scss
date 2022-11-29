@@ -55,7 +55,14 @@ $backgroundAlt3Url: url(ui-asset("/backgrounds/ui_panel_paper_inset_bg.png"));
 @mixin theme-background-danger() {
   color: khaki;
   border-radius: 0;
-  background-image: radial-gradient(circle, goldenrod, #560000);
+  background-image: radial-gradient(circle, red, #560000);
+  background-position: center center;
+}
+
+@mixin theme-background-danger-low() {
+  color: khaki;
+  border-radius: 0;
+  background-image: radial-gradient(circle, khaki, darkorange);
   background-position: center center;
 }
 
