@@ -130,7 +130,7 @@
                   <Effects
                     row
                     :effects="creature.effects"
-                    :size="1.9"
+                    :size="2.5"
                     :filter="nonCombatEffectFilter"
                   />
                 </div>
@@ -138,7 +138,7 @@
               <CreatureIcon
                 class="avatar interactive"
                 :creature="creature"
-                size="normal"
+                size="large"
                 noOperation
                 @click="clickedCreature(creature)"
                 noSleep
@@ -218,7 +218,7 @@
         </div>
         <div>
           <Container borderSize="0.5" class="effects-container">
-            <Effects row :effects="mainEntity.effects" :size="3" />
+            <Effects row :effects="mainEntity.effects" :size="4" />
           </Container>
         </div>
         <div class="relative">
@@ -1202,7 +1202,7 @@ $effects-size: 6rem;
 
   .effects-wrapper {
     overflow: hidden;
-    width: 9rem;
+    width: 12rem;
     position: absolute;
     bottom: 100%;
   }

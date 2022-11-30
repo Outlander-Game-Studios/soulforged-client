@@ -194,7 +194,7 @@ $shiftOut: 50rem;
   right: 1rem;
 
   &.offset {
-    bottom: 21rem;
+    bottom: 22rem;
   }
 }
 
