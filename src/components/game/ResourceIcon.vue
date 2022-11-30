@@ -2,7 +2,7 @@
   <Icon
     @click="mouseClick()"
     :src="resource.icon"
-    :backgroundType="resource.fight ? 'danger' : 'alt2'"
+    :backgroundType="resource.fight ? 'danger-low' : 'alt2'"
     :size="size"
   >
     <IndicatorResourceDensity class="density" :density="resource.density" />

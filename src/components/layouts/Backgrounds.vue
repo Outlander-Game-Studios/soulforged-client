@@ -6,6 +6,7 @@ global.BACKGROUNDS = [
   "alt2",
   "alt3",
   "danger",
+  "danger-low",
   "severity--4",
   "severity--3",
   "severity--2",
@@ -56,6 +57,9 @@ global.BACKGROUNDS = [
 }
 .background-danger {
   @include theme-background-danger();
+}
+.background-danger-low {
+  @include theme-background-danger-low();
 }
 .background-important {
   @include theme-background-important();

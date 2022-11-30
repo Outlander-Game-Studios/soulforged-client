@@ -63,8 +63,8 @@
               </div>
               <Actions :target="creature" @action="$emit('action')" />
               <div>
-                <Effects :effects="creature.tracks" />
                 <Effects :effects="creature.effects" />
+                <Effects :effects="creature.tracks" />
               </div>
             </Vertical>
             <div v-if="creature.description">

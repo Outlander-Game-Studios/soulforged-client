@@ -22,7 +22,7 @@
       :flipped="internalCreature.hostile"
       :size="iconSize"
       :text="{ bottomRight: internalCreature.number }"
-      :backgroundType="internalCreature.hostile ? 'danger' : 'alt2'"
+      :backgroundType="backgroundType"
     />
     <div
       v-if="!!internalCreature.operationInfo && !noOperation"
@@ -79,6 +79,19 @@ export default {
   },
 
   computed: {
+    backgroundType() {
+      if (!this.internalCreature) {
+        return;
+      }
+      if (!this.internalCreature.hostile) {
+        return "alt2";
+      }
+      if (this.internalCreature.nonAggressive) {
+        return "danger-low";
+      }
+      return "danger";
+    },
+
     operationIndicatorStyle() {
       return {
         fontSize: this.iconSize / 2.5 + "rem",

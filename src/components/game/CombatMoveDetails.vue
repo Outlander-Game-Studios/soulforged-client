@@ -65,7 +65,7 @@
     <div v-if="moveDetails && moveDetails.description" class="clear-both">
       <hr />
       <Description pre
-        ><RichText :value="moveDetails.description"
+        ><RichText :value="moveDetails.description" html
       /></Description>
     </div>
   </div>
