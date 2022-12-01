@@ -52,8 +52,13 @@ global.creaturesSort = (a, b) => {
   if (a.inactive !== b.inactive) {
     return a.inactive ? 1 : -1;
   }
+  if (a.nonAggressive !== b.nonAggressive) {
+    return a.nonAggressive ? 1 : -1;
+  }
   if (a.name !== b.name) {
-    return a.name > b.name ? 1 : -1;
+    return GameService.stripRichText(a.name) > GameService.stripRichText(b.name)
+      ? 1
+      : -1;
   }
   return 0;
 };
