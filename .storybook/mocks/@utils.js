@@ -65,6 +65,7 @@ global.mockComponent = (
     getRootEntityStream: () => stream(entitiesMocks["mainEntity"].id),
     getLocationStream: () => stream(entitiesMocks["location"].id),
     getKnowledgeBaseStream: () => stream(entitiesMocks["knowledgeBase"].id),
+    getQuickActionsStream: () => Rx.Observable.of([]),
   });
 
   onCreate();

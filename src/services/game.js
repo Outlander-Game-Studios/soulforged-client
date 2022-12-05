@@ -298,7 +298,7 @@ export const GameService = (window.GameService = {
     return GameService.getKnowledgeBaseStream()
       .pluck("craftIds")
       .switchMap((craftIds) =>
-        !craftIds.length
+        !craftIds || !craftIds.length
           ? Rx.Observable.of([])
           : Rx.combineLatest(
               craftIds.map((craftId) => GameService.getCraftDetails(craftId))

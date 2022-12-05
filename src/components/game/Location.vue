@@ -2,9 +2,6 @@
   <div v-if="!location">
     <LoadingPlaceholder />
   </div>
-  <div v-else-if="location.indoors">
-    <slot />
-  </div>
   <div v-else class="visible-map framed" :class="visibleMapClass">
     <transition name="fade">
       <div v-if="loading" class="loading-texture-wrapper">
@@ -94,13 +91,17 @@ export default {
 
   computed: {
     visibleMapClass() {
+      let classResult = "";
+      if (this.location?.indoors) {
+        classResult = "indoors";
+      }
       if (this.small) {
-        return "small";
+        return [classResult, "small"];
       }
       if (this.shrink) {
-        return "shrink";
+        return [classResult, "shrink"];
       }
-      return "normal";
+      return [classResult, "normal"];
     },
 
     travelPathId() {
@@ -338,7 +339,18 @@ $transition-time: 120ms;
 .visible-map {
   top: 0;
   right: 0;
-  //transition: all $transition-time ease-out;
+
+  &.indoors {
+    &.framed {
+      background-image: none !important;
+    }
+
+    .location-image,
+    .loading-texture-wrapper,
+    .glow {
+      display: none;
+    }
+  }
 
   &.normal {
     @include visible-map-style(calc(0.75 * var(--app-min-size)));

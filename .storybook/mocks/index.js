@@ -11,11 +11,13 @@ import "./@path.js";
 import "./@item.js";
 import "./@combat.js";
 import "./@knowledge-base.js";
+import { dungeonAssets } from "./@dungeon.js";
 import { effects } from "./@effects.js";
 import { operations } from "./@operations.js";
 import { crafts, plans } from "./@recipes.js";
 
 global.storyMocks = {
+  dungeonAssets,
   effects,
   operations,
   crafts,

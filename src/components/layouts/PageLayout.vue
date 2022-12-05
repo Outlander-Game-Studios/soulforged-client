@@ -5,6 +5,7 @@
     </div>
     <div class="main">
       <div class="bg-image" :style="backdropImage" />
+      <DungeonScene />
       <slot name="main" />
     </div>
     <div class="controls" v-if="!fullscreenOperation">
@@ -99,7 +100,7 @@ export default {
   }
 
   .help-container {
-    position: absolute;
+    position: fixed;
     bottom: 0.3rem;
     right: 0.3rem;
     z-index: 6;

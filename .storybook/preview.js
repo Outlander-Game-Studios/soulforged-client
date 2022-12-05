@@ -15,6 +15,7 @@ VueObserveVisibility.install(Vue);
 
 import "../src/utils.js";
 import "../src/services/game.mock.js";
+import "../src/services/local-storage.mock.js";
 import "../src/services/chat.mock.js";
 import "../src/services/controls.mock.js";
 import "../src/services/sound.mock.js";

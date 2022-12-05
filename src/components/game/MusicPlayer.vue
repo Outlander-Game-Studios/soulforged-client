@@ -22,15 +22,21 @@ export default {
 
   methods: {
     setMusicTracks(ambientSounds) {
-      const ambientSoundsByTrack = ambientSounds.reduce((acc, ambientSound) => {
-        if (
-          (acc[ambientSound.track]?.priority || 0) <
-          (ambientSound.priority || 500)
-        ) {
-          acc[ambientSound.track] = ambientSound;
-        }
-        return acc;
-      }, {});
+      const ambientSoundsByTrack = (ambientSounds || []).reduce(
+        (acc, ambientSound) => {
+          if (
+            (acc[ambientSound.track]?.priority || 0) <
+            (ambientSound.priority || 500)
+          ) {
+            acc[ambientSound.track] = ambientSound;
+          }
+          return acc;
+        },
+        {}
+      );
+      if (!this.currentMusicsByFile) {
+        this.currentMusicsByFile = {};
+      }
       Object.values(this.currentMusicsByFile).forEach((music) => {
         music.stop = true;
       });

@@ -5,6 +5,8 @@ import cutIcon from "../../../.storybook/mocks/assets/cut.png";
 import combatIcon from "../../../.storybook/mocks/assets/combat.png";
 import Vue from "vue";
 import { effects } from "../../../.storybook/mocks/@effects";
+import { dungeonAssets } from "../../../.storybook/mocks/@dungeon";
+import { GameService } from "../../services/game";
 
 Vue.component("OperationEncounter", window.OperationEncounter);
 Vue.component("OperationGather", window.OperationGather);
@@ -32,6 +34,7 @@ const factory = (onMounted = () => {}, onCreate = () => {}) =>
     },
     onMounted,
     () => {
+      ControlsService.setCurrentOpenTab(null);
       GameService.mock({
         request: () => new Promise(() => {}),
       });
@@ -395,3 +398,57 @@ export const helpDialogInterface = factory((vm) => {
     });
   });
 });
+
+const setupDungeon = () => {
+  storyMocks.modifyEntity("location", {
+    indoors: true,
+    paths: [mockEntityId("path2"), mockEntityId("path3")],
+    dungeon: {
+      assets: {
+        ...storyMocks.dungeonAssets,
+        wallLeft: null,
+      },
+    },
+  });
+  storyMocks.modifyEntity("path1", {
+    position: 180,
+    accidentGrade: 1,
+  });
+  storyMocks.modifyEntity("path2", {
+    position: 0,
+    accidentGrade: 1,
+  });
+  storyMocks.modifyEntity("path3", {
+    position: 120,
+    accidentGrade: 1,
+  });
+  LocalStorageService.mock({
+    getItem: (itemKey) => (itemKey === "HideHelpIndicator" ? 2 : undefined),
+  });
+  GameService.mock({
+    getBackdropStyleStream: () => Rx.Observable.of(null),
+  });
+};
+export const dungeon = factory(
+  () => {},
+  () => {
+    setupDungeon();
+  }
+);
+chatPanel.parameters = {
+  storyshotsScope: "extended",
+};
+
+export const dungeonWithPanel = factory(
+  (vm) => {
+    setTimeout(() => {
+      vm.$el.querySelectorAll(".tab-header")[TABS.inventory].click();
+    });
+  },
+  () => {
+    setupDungeon();
+  }
+);
+chatPanel.parameters = {
+  storyshotsScope: "extended",
+};
