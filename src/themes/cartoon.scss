@@ -144,7 +144,7 @@ $backgroundAlt3Url: url(ui-asset("/backgrounds/ui_panel_paper_inset_bg.png"));
   background-clip: content-box;
   border-style: solid;
   border-color: transparent;
-  border-width: 0 $rail-height / 2;
+  border-width: 0 calc($rail-height / 2);
   cursor: pointer;
 
   &::before , &::after {
@@ -157,12 +157,12 @@ $backgroundAlt3Url: url(ui-asset("/backgrounds/ui_panel_paper_inset_bg.png"));
   }
 
   &::before {
-    left: calc(#{-$rail-height / 2} + 1px);
+    left: calc(#{calc($rail-height / -2)} + 1px);
     background-image: url(ui-asset("/misc/knob_rail_l.png"));
   }
 
   &::after {
-    right: calc(#{-$rail-height / 2} + 1px);
+    right: calc(#{calc($rail-height / -2)} + 1px);
     background-image: url(ui-asset("/misc/knob_rail_r.png"));
   }
 }

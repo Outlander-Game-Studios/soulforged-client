@@ -1,6 +1,6 @@
 <template>
-  <div class="dungeon-scene-wrapper">
-    <div v-if="dungeonAssets" class="dungeon-scene" :class="sceneClass">
+  <div v-if="dungeonAssets" class="dungeon-scene-wrapper">
+    <div class="dungeon-scene" :class="sceneClass">
       <div class="ceiling" :style="styles.ceiling">
         <div class="fill-top" :style="styles.fillTop"></div>
         <div class="wall-left" :style="styles.wallLeft"></div>

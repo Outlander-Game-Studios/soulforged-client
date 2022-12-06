@@ -715,13 +715,13 @@ export default window.OperationFarming = {
       position: absolute;
       width: (1 + $overlap) * $size;
       height: (1 + $overlap) * $size;
-      left: -($overlap / 2) * $size;
-      top: -($overlap / 2) * $size;
+      left: calc(-1 * ($overlap / 2) * $size);
+      top: calc(-1 * ($overlap / 2) * $size);
       z-index: 1;
       background-size: 100% 100%;
     }
     .plant {
-      $plant-spacing: ($size - $plant-width) / 2;
+      $plant-spacing: calc(($size - $plant-width) / 2);
       pointer-events: none;
       width: $plant-width;
       height: $plant-height;
@@ -733,11 +733,11 @@ export default window.OperationFarming = {
     }
     .weed {
       pointer-events: none;
-      $weed-size: $size / 2;
+      $weed-size: calc($size / 2);
       width: $weed-size;
       height: $weed-size;
-      margin-top: -$weed-size / 2;
-      margin-left: -$weed-size / 2;
+      margin-top: calc($weed-size / -2);
+      margin-left: calc($weed-size / -2);
       background-size: 100% 100%;
 
       position: absolute;

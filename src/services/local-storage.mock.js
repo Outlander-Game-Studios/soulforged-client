@@ -6,6 +6,6 @@ LocalStorageService.mock = (object) => {
   });
 };
 
-LocalStorageService.mock(() => {
-  getItem: () => undefined;
+LocalStorageService.mock({
+  getItem: (key, defaultValue) => defaultValue,
 });

@@ -1006,8 +1006,8 @@ $effects-size: 6rem;
 .creatures {
   transform: translateZ(0);
   border: 1rem solid transparent;
-  margin: ($avatar-size / 2 + $effects-size) ($avatar-size / 2 + 2rem)
-    ($avatar-size / 2);
+  margin: calc($avatar-size / 2 + $effects-size) calc($avatar-size / 2 + 2rem)
+    calc($avatar-size / 2);
   flex-grow: 1;
 }
 
@@ -1139,7 +1139,7 @@ $effects-size: 6rem;
     transition: none;
   }
 
-  margin: -$avatar-size / 2;
+  margin: calc($avatar-size / -2);
   position: absolute;
   display: inline-block;
 
@@ -1305,9 +1305,9 @@ $side-position: 1rem;
   pointer-events: none;
   position: absolute;
   $size: 2.5rem;
-  top: 0.8rem - $size/ 2;
+  top: calc(0.8rem - $size / 2);
   left: 50%;
-  margin-left: -$size / 2;
+  margin-left: calc($size / -2);
   z-index: 3;
 
   .marker {

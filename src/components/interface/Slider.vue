@@ -178,10 +178,10 @@ export default {
   &::before {
     content: "";
     position: absolute;
-    left: $knob-size / 2;
-    right: $knob-size / 2;
-    top: $knob-size / 3;
-    bottom: $knob-size / 3;
+    left: calc($knob-size / 2);
+    right: calc($knob-size / 2);
+    top: calc($knob-size / 3);
+    bottom: calc($knob-size / 3);
   }
 
   &.disabled {
@@ -189,9 +189,9 @@ export default {
   }
 
   .rail {
-    $rail-height: $knob-size / 2;
+    $rail-height: calc($knob-size / 2);
     box-sizing: border-box;
-    margin: $knob-size / 4 $knob-size / 2;
+    margin: calc($knob-size / 4) calc($knob-size / 2);
     @include fill();
     @include theme-slider-rail($rail-height);
 
@@ -203,14 +203,14 @@ export default {
 
   .handle-container {
     position: absolute;
-    left: $knob-size / 2;
+    left: calc($knob-size / 2);
     width: calc(100% - #{$knob-size});
   }
 
   .handle {
     position: absolute;
     box-sizing: border-box;
-    margin-left: -$knob-size / 2;
+    margin-left: calc($knob-size / -2);
     width: $knob-size;
     height: $knob-size;
     border-radius: 0.1rem;

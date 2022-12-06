@@ -435,7 +435,7 @@ export const dungeon = factory(
     setupDungeon();
   }
 );
-chatPanel.parameters = {
+dungeon.parameters = {
   storyshotsScope: "extended",
 };
 
@@ -449,6 +449,6 @@ export const dungeonWithPanel = factory(
     setupDungeon();
   }
 );
-chatPanel.parameters = {
+dungeonWithPanel.parameters = {
   storyshotsScope: "extended",
 };

@@ -13,6 +13,7 @@ export const sample = mockComponent({
             accidentChance,
             accidentSeverity,
             finalSpeed,
+            skillLevel: 0,
             skillGainMult: 4,
           },
         },

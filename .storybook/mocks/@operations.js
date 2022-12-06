@@ -16,6 +16,7 @@ export const operations = {
       },
       skillInfo: {
         skill: "Crafting",
+        skillLevel: 0,
         skillGainMult: 4,
         successChance: 2,
         accidentChance: 1,
@@ -57,6 +58,7 @@ export const operations = {
       unitCost: 2332,
       skillInfo: {
         skill: "Pathfinding",
+        skillLevel: 0,
         skillGainMult: 2,
         accidentChance: 2,
         accidentSeverity: 3,
@@ -75,6 +77,14 @@ export const operations = {
         Cutting: { efficiency: 0, toolType: "Cutting" },
         Hammering: { efficiency: 0, toolType: "Hammering" },
       },
+      skillInfo: {
+        baseSpeed: 100,
+        finalSpeed: 100,
+        speedModifiers: {
+          Efficiency: 100,
+          Attributes: 100,
+        },
+      },
     },
   },
   gather: {
@@ -89,6 +99,7 @@ export const operations = {
       toolsSelected: { Hunting: { efficiency: 0, toolType: "Hunting" } },
       skillInfo: {
         skill: "Hunting",
+        skillLevel: 0,
         skillGainMult: 1,
         successChance: 1,
         accidentChance: 4,

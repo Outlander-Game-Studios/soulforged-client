@@ -547,7 +547,7 @@ $avatar-bg-color: beige;
 }
 
 @mixin player-avatar($avatar-size) {
-  $avatar-size-units: $avatar-size / 160;
+  $avatar-size-units: calc($avatar-size / 160);
   position: relative;
 
   @include size(200, 300, $avatar-size-units);

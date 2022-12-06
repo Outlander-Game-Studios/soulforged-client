@@ -836,7 +836,7 @@ export const GameService = (window.GameService = {
       infoStreams[key] = new Rx.ReplaySubject(1);
     }
     if (!alreadyExists || reFetch) {
-      this.request(REQUEST_CODES.GET_INFO, {
+      GameService.request(REQUEST_CODES.GET_INFO, {
         infoType,
         ...params,
       }).then((result) => {

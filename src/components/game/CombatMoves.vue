@@ -322,8 +322,8 @@ export default {
   z-index: 3;
   top: -0.5rem;
   left: 50%;
-  margin-top: -$size / 2;
-  margin-left: -$size / 2;
+  margin-top: calc($size / -2);
+  margin-left: calc($size / -2);
   background-image: url(ui-asset("/misc/current-move.png"));
   background-size: 100% 100%;
   background-repeat: no-repeat;
