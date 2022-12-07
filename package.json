@@ -28,6 +28,7 @@
     "@vue/cli-service": "~4.5.0",
     "babel-loader": "^8.2.2",
     "css-loader": "^5.0.1",
+    "cytoscape-dagre": "^2.3.2",
     "git-describe": "^4.0.4",
     "jest-environment-jsdom": "^28.1.1",
     "npm-run-all": "^4.1.5",
@@ -36,6 +37,7 @@
     "sass-loader": "^10.1.1",
     "storybook": "^6.5.14",
     "style-loader": "^2.0.0",
+    "vue-cytoscape": "^1.0.8",
     "vue-loader": "^15.9.5",
     "vue-template-compiler": "2.7.14"
   },
@@ -45,7 +47,7 @@
     "not dead"
   ],
   "scripts": {
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -p 6006 -s ./",
     "build-storybook": "build-storybook -o .storybook/dist",
     "test-storyshots": "npm-run-all build-storybook test-storyshots:run",
     "test-storyshots:update": "npm-run-all build-storybook test-storyshots:run-update",

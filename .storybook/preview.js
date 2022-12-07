@@ -3,6 +3,7 @@ import VueRx from "vue-rx";
 import Vue from "vue";
 import "../common/utils/static.js";
 import VueObserveVisibility from "vue-observe-visibility";
+import "./dungeon-story-tools.js";
 
 Vue.prototype.$stream = function (prop) {
   return this.$watchAsObservable(prop).pluck("newValue").startWith(this[prop]);

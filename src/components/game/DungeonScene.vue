@@ -32,17 +32,22 @@
 
 <script>
 export default {
+  props: {
+    location: {},
+  },
+
   subscriptions() {
     return {
       tabOpened: ControlsService.getCurrentOpenTabStream().map((tab) => !!tab),
       myCreature: GameService.getMyCreatureStream(),
-      dungeonAssets: GameService.getLocationStream()
-        .pluck("dungeon")
-        .pluck("assets"),
     };
   },
 
   computed: {
+    dungeonAssets() {
+      return this.location?.dungeon?.assets;
+    },
+
     sceneClass() {
       if (this.tabOpened) {
         return "panel-opened";

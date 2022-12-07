@@ -5,7 +5,7 @@
     </div>
     <div class="main">
       <div class="bg-image" :style="backdropImage" />
-      <DungeonScene />
+      <DungeonScene :location="location" />
       <slot name="main" />
     </div>
     <div class="controls" v-if="!fullscreenOperation">
@@ -24,6 +24,7 @@
 export default {
   subscriptions() {
     return {
+      location: GameService.getLocationStream(),
       backdropImage: GameService.getBackdropStyleStream(),
       fullscreenOperation: ControlsService.getFullscreenOperationStream(),
     };

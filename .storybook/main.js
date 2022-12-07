@@ -2,6 +2,7 @@ module.exports = {
   stories: [
     "../src/**/*.stories.@(js|jsx|ts|tsx)",
     "../server/**/*.server.stories.@(js|jsx|ts|tsx)",
+    "../world/**/*.server.stories.@(js|jsx|ts|tsx)",
   ],
   addons: ["@storybook/addon-links", "@storybook/preset-scss"],
   webpackFinal: (config) => {
