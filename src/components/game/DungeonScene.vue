@@ -81,9 +81,12 @@ export default {
         "wallRight",
       ].toObject(
         (key) => key,
-        (key) => ({
-          backgroundImage: `url(${this.dungeonAssets[key]})`,
-        })
+        (key) =>
+          this.dungeonAssets[key]
+            ? {
+                backgroundImage: `url(${this.dungeonAssets[key]})`,
+              }
+            : {}
       );
     },
   },

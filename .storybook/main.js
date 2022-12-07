@@ -2,9 +2,10 @@ module.exports = {
   stories: [
     "../src/**/*.stories.@(js|jsx|ts|tsx)",
     "../server/**/*.server.stories.@(js|jsx|ts|tsx)",
-    "../world/**/*.server.stories.@(js|jsx|ts|tsx)",
+    "../world/**/*.world.stories.@(js|jsx|ts|tsx)",
   ],
   addons: ["@storybook/addon-links", "@storybook/preset-scss"],
+  staticDirs: ["../world/assets/dungeons"],
   webpackFinal: (config) => {
     config.module.rules = [
       ...config.module.rules,

@@ -47,7 +47,7 @@
     "not dead"
   ],
   "scripts": {
-    "storybook": "start-storybook -p 6006 -s ./",
+    "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook -o .storybook/dist",
     "test-storyshots": "npm-run-all build-storybook test-storyshots:run",
     "test-storyshots:update": "npm-run-all build-storybook test-storyshots:run-update",
