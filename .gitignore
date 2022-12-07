@@ -1,8 +1,8 @@
 .DS_Store
 node_modules
 dist/
-/server/
-/world/
+/server
+/world
 *.kra
 
 # local env files
