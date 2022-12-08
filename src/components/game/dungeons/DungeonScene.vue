@@ -14,12 +14,12 @@
             <!--              noFrame-->
             <!--            />-->
           </div>
-          <div
-            class="doodad"
-            v-for="(doodad, idx) in processedDoodads"
+          <DungeonSceneDoodad
+            v-for="(doodad, idx) in dungeonAssets.doodads"
             :key="idx"
-            :style="doodad.style"
-          ></div>
+            class="doodad"
+            :doodad="doodad"
+          />
         </div>
       </div>
       <div class="backwall" :style="styles.backwall"></div>
@@ -58,16 +58,22 @@ export default {
     processedDoodads() {
       return this.dungeonAssets.doodads
         ?.sort((a, b) => a.layer - b.layer)
-        .map((doodad) => ({
-          ...doodad,
-          style: {
-            backgroundImage: `url(${doodad.img})`,
-            backgroundSize: `${0.2 * doodad.size}% auto`,
-            left: doodad.placement.first() + "%",
-            top: doodad.placement.last() + "%",
-            zIndex: doodad.layer,
-          },
-        }));
+        .map((doodad) => {
+          const { frames = 1 } = doodad.animation || {};
+          const [x, y] = doodad.placement;
+          return {
+            ...doodad,
+            style: {
+              backgroundImage: `url(${doodad.img})`,
+              backgroundSize: `${100 * frames}% auto`,
+              width: 0.2 * doodad.size + "%",
+              marginLeft: -0.1 * doodad.size + "%",
+              left: x + "%",
+              top: y + "%",
+              zIndex: doodad.layer,
+            },
+          };
+        });
     },
 
     styles() {
@@ -94,7 +100,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@import "../../../utils.scss";
 
 $size-base: min(var(--app-width), var(--app-height) * 3);
 $ceiling-height: calc(#{$size-base} * 0.065);
@@ -188,11 +194,9 @@ $floor-height: calc(#{$size-base} * 0.1);
   }
   .doodad {
     position: absolute;
-    background-repeat: no-repeat;
+    background-repeat: repeat-x;
     background-position: center center;
-    width: $size-base;
     height: $size-base;
-    margin-left: calc(#{$size-base} / -2);
     margin-top: calc(#{$size-base} / -2);
   }
 }
