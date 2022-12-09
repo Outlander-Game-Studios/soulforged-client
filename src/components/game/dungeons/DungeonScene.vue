@@ -15,17 +15,16 @@
             <!--            />-->
           </div>
           <DungeonSceneDoodad
-            v-for="(doodad, idx) in dungeonAssets.doodads"
+            v-for="(doodad, idx) in dungeonAssetsDoodads"
             :key="idx"
             class="doodad"
             :doodad="doodad"
           />
         </div>
-      </div>
-      <div class="backwall" :style="styles.backwall"></div>
-      <div class="floor" :style="styles.floor">
         <div class="fill-bottom" :style="styles.fillBottom"></div>
       </div>
+      <div class="backwall" :style="styles.backwall"></div>
+      <div class="floor" :style="styles.floor"></div>
     </div>
   </div>
 </template>
@@ -46,6 +45,24 @@ export default {
   computed: {
     dungeonAssets() {
       return this.location?.dungeon?.assets;
+    },
+
+    dungeonAssetsDoodads() {
+      if (this.dungeonAssets?.doodads) {
+        this.dungeonAssets.doodads.forEach((d) => {
+          if (!d) {
+            throw new Error(
+              `Invalid doodads definitions.\n${JSON.stringify(
+                this.dungeonAssets.doodads,
+                null,
+                2
+              )}`
+            );
+          }
+        });
+        return this.dungeonAssets.doodads;
+      }
+      return [];
     },
 
     sceneClass() {
@@ -102,12 +119,15 @@ export default {
 <style scoped lang="scss">
 @import "../../../utils.scss";
 
-$size-base: min(var(--app-width), var(--app-height) * 3);
+$size-base: min(var(--app-width), var(--app-height) * 2.6);
 $ceiling-height: calc(#{$size-base} * 0.065);
 $backwall-width: calc(#{$size-base} * 0.35);
 $backwall-ratio: calc(2048 / 958);
 $backwall-height: calc(#{$backwall-width} * 1 / #{$backwall-ratio});
 $floor-height: calc(#{$size-base} * 0.1);
+$total-height: calc(
+  #{$ceiling-height} + #{$backwall-height} + #{$floor-height}
+);
 
 .dungeon-scene-wrapper {
   @include fill();
@@ -168,7 +188,7 @@ $floor-height: calc(#{$size-base} * 0.1);
   .wall-right {
     position: absolute;
     top: 0;
-    height: calc(#{$ceiling-height} + #{$backwall-height} + #{$floor-height});
+    height: $total-height;
     width: calc(#{$size-base} / 3);
     background-size: 100% auto;
     background-repeat: no-repeat;
@@ -181,7 +201,7 @@ $floor-height: calc(#{$size-base} * 0.1);
   }
 
   .objects {
-    height: calc(#{$ceiling-height} + #{$backwall-height} + #{$floor-height});
+    height: $total-height;
     width: 100%;
     position: absolute;
   }
@@ -214,16 +234,15 @@ $floor-height: calc(#{$size-base} * 0.1);
   position: relative;
   z-index: -1;
   margin-top: calc(#{$size-base} * -0.01);
+}
 
-  .fill-bottom {
-    position: absolute;
-    height: calc(var(--app-height) / 2);
-    width: 100%;
-    top: $floor-height;
-    background-size: auto 100%;
-    background-position: center center;
-    margin-top: calc(#{$size-base} * -0.004);
-    z-index: 3;
-  }
+.fill-bottom {
+  position: absolute;
+  height: calc(var(--app-height) / 2);
+  width: 100%;
+  top: calc(#{$total-height} - #{$size-base} * 0.032);
+  background-size: auto 100%;
+  background-position: center center;
+  z-index: 30;
 }
 </style>

@@ -41,6 +41,8 @@
 <script>
 export default {
   props: {
+    locationOverride: {},
+    pathsOverride: {},
     highlightId: {},
     small: {
       type: Boolean,
@@ -56,6 +58,24 @@ export default {
   }),
 
   subscriptions() {
+    const locationStream = this.$stream(
+      "locationOverride"
+    ).switchMap((locationOverride) =>
+      locationOverride
+        ? Rx.Observable.of(locationOverride)
+        : GameService.getLocationStream()
+    );
+    const pathsStream = this.$stream("pathsOverride").switchMap(
+      (pathsOverride) =>
+        pathsOverride
+          ? Rx.Observable.of(pathsOverride)
+          : locationStream
+              .map(({ id, paths }) => ({ id, paths }))
+              .distinctUntilChanged(null, JSON.stringify)
+              .switchMap(({ paths }) =>
+                GameService.getEntitiesStream(paths, ENTITY_VARIANTS.BASE, true)
+              )
+    );
     return {
       shrink: ControlsService.getCurrentOpenTabStream().map((tab) => !!tab),
       mainEntity: GameService.getRootEntityStream(),
@@ -75,13 +95,8 @@ export default {
               GameService.getEntityStream(path.id, ENTITY_VARIANTS.BASE, true)
             );
         }),
-      location: GameService.getLocationStream(),
-      paths: GameService.getLocationStream()
-        .map(({ id, paths }) => ({ id, paths }))
-        .distinctUntilChanged(null, JSON.stringify)
-        .switchMap(({ paths }) =>
-          GameService.getEntitiesStream(paths, ENTITY_VARIANTS.BASE, true)
-        ),
+      location: locationStream,
+      paths: pathsStream,
       myCreature: GameService.getMyCreatureStream(),
       locationImageUpdate: GameService.getMapImageUpdateStream().tap(() => {
         this.imageUpdate += "?";

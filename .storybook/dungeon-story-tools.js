@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueCytoscape from "vue-cytoscape";
-import dagre from "cytoscape-dagre";
+import coseBilkent from "cytoscape-cose-bilkent";
 
 Vue.use(VueCytoscape);
 
@@ -28,7 +28,11 @@ global.DungeonStoryTools = {
           cytoscapeRender: 1,
           cytoscapeConfig: {
             layout: {
-              name: "dagre",
+              name: "cose-bilkent",
+              randomize: false,
+              padding: 5,
+              animationDuration: 0,
+              idealEdgeLength: 20,
             },
             elements: dungeonLayoutElements,
             style: [
@@ -41,8 +45,8 @@ global.DungeonStoryTools = {
                   "text-halign": "center",
                   "text-wrap": "wrap",
                   "text-max-width": 240,
-                  width: 250,
-                  height: 130,
+                  width: 180,
+                  height: 40,
                 },
               },
               {
@@ -50,7 +54,8 @@ global.DungeonStoryTools = {
                 style: {
                   "background-color": "green",
                   width: 3,
-                  "target-arrow-shape": "triangle",
+                  "arrow-scale": 2,
+                  "target-arrow-color": "red",
                   "curve-style": "bezier",
                 },
               },
@@ -75,7 +80,7 @@ global.DungeonStoryTools = {
               },
             };
           });
-          const edges = [];
+          const edges = {};
           Object.values(dungeonLocations).forEach((room) => {
             const roomId = room.dungeon.roomId;
             console.log(room.dungeon.paths);
@@ -91,28 +96,34 @@ global.DungeonStoryTools = {
                   },
                 });
               }
-              edges.push({
-                data: {
-                  id: `edge-${roomId}-${target}`,
-                  source: `${roomId}-room`,
-                  target: `${target}-room`,
-                },
-                style: {
-                  "line-color": loopColor,
-                },
-              });
+              const edgeId = [roomId, target].sort().join("__");
+              if (edges[edgeId]) {
+                edges[edgeId].style["target-arrow-shape"] = null;
+              } else {
+                edges[edgeId] = {
+                  data: {
+                    id: `edge-${edgeId}`,
+                    source: `${roomId}-room`,
+                    target: `${target}-room`,
+                  },
+                  style: {
+                    "line-color": loopColor,
+                    "target-arrow-shape": "triangle",
+                  },
+                };
+              }
             });
           });
           dungeonLayoutElements = this.cytoscapeConfig.elements = {
             nodes: roomNodes,
-            edges: edges,
+            edges: Object.values(edges),
           };
           this.cytoscapeRender = this.cytoscapeRender + 1;
         },
 
         methods: {
           preConfig(cytoscape) {
-            cytoscape.use(dagre);
+            cytoscape.use(coseBilkent);
           },
         },
 
@@ -145,10 +156,35 @@ global.DungeonStoryTools = {
             (this.dungeonLocations = dungeonLocations);
         },
 
+        computed: {
+          locationMock() {
+            return {
+              indoors: true,
+            };
+          },
+          pathsMock() {
+            const pathsDef = this.dungeonLocations[roomId].dungeon.paths;
+            return Object.keys(pathsDef).map((position) => ({
+              id: pathsDef[position],
+              accidentGrade: 0,
+              position: +position,
+              actions: [
+                {
+                  actionId: "travel",
+                  label: "Travel",
+                  actionPoints: 0,
+                  parameters: [],
+                },
+              ],
+            }));
+          },
+        },
+
         template: `
 <div>
   <div :style="{position: 'relative', width: '100vw', height: '80%'}">
-    <DungeonScene  :location="dungeonLocations[roomId]" />
+    <Location :locationOverride="locationMock" :pathsOverride="pathsMock" />
+    <DungeonScene :location="dungeonLocations[roomId]" />
   </div>
 </div>`,
       },
