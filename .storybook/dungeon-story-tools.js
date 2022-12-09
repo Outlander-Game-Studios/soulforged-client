@@ -168,6 +168,7 @@ global.DungeonStoryTools = {
               id: pathsDef[position],
               accidentGrade: 0,
               position: +position,
+              info: pathsDef[position],
               actions: [
                 {
                   actionId: "travel",
