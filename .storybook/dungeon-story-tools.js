@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueCytoscape from "vue-cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";
+import flatten from "lodash/flatten.js";
 
 Vue.use(VueCytoscape);
 
@@ -16,7 +17,13 @@ global.DungeonStoryTools = {
     dungeonLocations = importedDungeon.rooms.toObject(
       (room) => room.roomId,
       (room) => ({
-        dungeon: room,
+        dungeon: {
+          ...room,
+          assets: {
+            ...room.assets,
+            doodads: flatten(room.assets.doodads),
+          },
+        },
       })
     );
   },

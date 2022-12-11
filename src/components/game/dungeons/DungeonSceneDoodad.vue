@@ -47,7 +47,7 @@ export default {
         marginLeft: -0.1 * this.doodad.size + "%",
         left: x + "%",
         top: y + "%",
-        zIndex: this.doodad.layer,
+        zIndex: Math.round(10 * this.doodad.layer),
       };
     },
   },

@@ -49,18 +49,19 @@ export default {
 
     dungeonAssetsDoodads() {
       if (this.dungeonAssets?.doodads) {
-        this.dungeonAssets.doodads.forEach((d) => {
-          if (!d) {
+        const doodads = this.dungeonAssets.doodads;
+        doodads.forEach((d) => {
+          if (!d || !d.img) {
             throw new Error(
-              `Invalid doodads definitions.\n${JSON.stringify(
-                this.dungeonAssets.doodads,
+              `Invalid doodads definitions.\n\n${JSON.stringify(
+                d,
                 null,
                 2
-              )}`
+              )}\n\n${JSON.stringify(this.dungeonAssets.doodads, null, 2)}`
             );
           }
         });
-        return this.dungeonAssets.doodads;
+        return doodads;
       }
       return [];
     },
@@ -73,7 +74,7 @@ export default {
     },
 
     processedDoodads() {
-      return this.dungeonAssets.doodads
+      return this.dungeonAssetsDoodads
         ?.sort((a, b) => a.layer - b.layer)
         .map((doodad) => {
           const { frames = 1 } = doodad.animation || {};
@@ -243,6 +244,6 @@ $total-height: calc(
   top: calc(#{$total-height} - #{$size-base} * 0.032);
   background-size: auto 100%;
   background-position: center center;
-  z-index: 30;
+  z-index: 150;
 }
 </style>
