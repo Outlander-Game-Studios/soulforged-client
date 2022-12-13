@@ -16,7 +16,7 @@
           </div>
           <DungeonSceneDoodad
             v-for="(doodad, idx) in dungeonAssetsDoodads"
-            :key="idx"
+            :key="idx + '-' + location.id"
             class="doodad"
             :doodad="doodad"
           />

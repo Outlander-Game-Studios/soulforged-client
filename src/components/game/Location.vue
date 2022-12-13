@@ -9,6 +9,7 @@
       </div>
     </transition>
     <img
+      v-if="!location.indoor"
       v-show="!loading"
       :key="location.id"
       class="location-image"
