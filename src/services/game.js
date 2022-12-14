@@ -237,7 +237,8 @@ export const GameService = (window.GameService = {
                 GameService.getInfoStream("Research", { researchId })
               )
             )
-      );
+      )
+      .map((researches) => researches.filter((research) => !!research));
   },
   fetchResearchUpdate(researchId) {
     GameService.getInfoStream("Research", { researchId }, true);
