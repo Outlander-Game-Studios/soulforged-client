@@ -304,7 +304,8 @@ export const GameService = (window.GameService = {
           : Rx.combineLatest(
               craftIds.map((craftId) => GameService.getCraftDetails(craftId))
             )
-      );
+      )
+      .map((crafts) => crafts.filter((craft) => !!craft));
   },
   getPlansStream() {
     return GameService.getKnowledgeBaseStream()
@@ -317,7 +318,8 @@ export const GameService = (window.GameService = {
                 GameService.getInfoStream("Plan", { planId })
               )
             )
-      );
+      )
+      .map((plans) => plans.filter((plan) => !!plan));
   },
 
   getWeaponStream() {
