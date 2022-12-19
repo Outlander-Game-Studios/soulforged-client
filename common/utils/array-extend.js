@@ -41,6 +41,13 @@ Array.prototype.asyncForEach = async function (predicate) {
   await Promise.all(this.map(predicate));
 };
 
+Array.prototype.asyncForEachOrdered = async function (predicate) {
+  await this.reduce(
+    (acc, item) => acc.then(() => predicate(item)),
+    Promise.resolve()
+  );
+};
+
 Array.prototype.asyncMap = async function (predicate) {
   const results = await Promise.all(this.map(predicate));
   return this.map((_, index) => results[index]);
