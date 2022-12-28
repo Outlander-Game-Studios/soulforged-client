@@ -8,6 +8,7 @@ consideredAPStream.next(0);
 const tabStream = new Rx.ReplaySubject(1);
 const controlStream = new Rx.Subject();
 let settingStreams;
+let draggedItemStream;
 
 export const ControlsService = (window.ControlsService = {
   cordovaLoginAvailable() {
@@ -134,11 +135,15 @@ export const ControlsService = (window.ControlsService = {
   },
 
   getDraggedItemStream() {
-    return ControlsService.getControlEventStream("draggingItem")
-      .map(([item]) => item)
-      .switchMap((item) =>
-        GameService.getEntityStream(item.id, ENTITY_VARIANTS.BASE, true)
-      );
+    if (!draggedItemStream) {
+      draggedItemStream = ControlsService.getControlEventStream("draggingItem")
+        .map(([item]) => item)
+        .switchMap((item) =>
+          GameService.getEntityStream(item.id, ENTITY_VARIANTS.BASE, true)
+        )
+        .shareReplay(1);
+    }
+    return draggedItemStream;
   },
 
   setCurrentOpenTab(tab) {
