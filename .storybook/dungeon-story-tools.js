@@ -8,11 +8,21 @@ Vue.use(VueCytoscape);
 let dungeonLocations = {};
 let dungeonLayoutElements = null;
 
+global.CLIMATE_TYPES = {
+  DARKNESS: "DARKNESS",
+};
 global.WORLD_FOLDER_ASSETS_DUNGEONS = "./";
 global.Dungeon = {
   registerDungeon: () => {},
 };
 global.DungeonStoryTools = {
+  roomStoriesBuilder(importedDungeon) {
+    return importedDungeon.rooms.toObject(
+      (room) => room.roomId.replace(/-/g, "_"),
+      (room) => DungeonStoryTools.loadDungeonRoom(importedDungeon, room.roomId)
+    );
+  },
+
   loadDungeonData(importedDungeon) {
     dungeonLocations = importedDungeon.rooms.toObject(
       (room) => room.roomId,
@@ -82,6 +92,10 @@ global.DungeonStoryTools = {
                 id: `${roomId}-room`,
                 label: roomId,
               },
+              position: {
+                x: 1 + Math.random() * 1000,
+                y: 1 + Math.random() * 1000,
+              },
               style: {
                 "background-color": colorRoom,
               },
@@ -90,7 +104,6 @@ global.DungeonStoryTools = {
           const edges = {};
           Object.values(dungeonLocations).forEach((room) => {
             const roomId = room.dungeon.roomId;
-            console.log(room.dungeon.paths);
             Object.values(room.dungeon.paths).forEach((target) => {
               if (!dungeonLocations[target]) {
                 roomNodes.push({

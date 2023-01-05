@@ -183,6 +183,7 @@ $total-height: calc(
     background-size: auto 100%;
     background-position: center center;
     margin-bottom: calc(#{$size-base} * -0.004);
+    z-index: 200;
   }
 
   .wall-left,
@@ -193,6 +194,7 @@ $total-height: calc(
     width: calc(#{$size-base} / 3);
     background-size: 100% auto;
     background-repeat: no-repeat;
+    z-index: 50;
   }
   .wall-left {
     left: calc(#{$size-base} * -0.065);
@@ -244,6 +246,6 @@ $total-height: calc(
   top: calc(#{$total-height} - #{$size-base} * 0.032);
   background-size: auto 100%;
   background-position: center center;
-  z-index: 150;
+  z-index: 200;
 }
 </style>
