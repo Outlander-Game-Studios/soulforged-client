@@ -45,11 +45,12 @@ global.DungeonStoryTools = {
           cytoscapeRender: 1,
           cytoscapeConfig: {
             layout: {
-              name: "cose-bilkent",
-              randomize: false,
-              padding: 5,
-              animationDuration: 0,
-              idealEdgeLength: 20,
+              name: "preset",
+              // name: "cose-bilkent",
+              // randomize: false,
+              // padding: 5,
+              // animationDuration: 0,
+              // idealEdgeLength: 20,
             },
             elements: dungeonLayoutElements,
             style: [
@@ -87,14 +88,19 @@ global.DungeonStoryTools = {
 
           const roomNodes = Object.values(dungeonLocations).map((room) => {
             const roomId = room.dungeon.roomId;
+            if (!room.dungeon.layout) {
+              throw new Error(
+                `Missing layout: ${JSON.stringify(room.dungeon)}`
+              );
+            }
             return {
               data: {
                 id: `${roomId}-room`,
                 label: roomId,
               },
               position: {
-                x: 1 + Math.random() * 1000,
-                y: 1 + Math.random() * 1000,
+                x: room.dungeon.layout.x * 250,
+                y: room.dungeon.layout.y * 120,
               },
               style: {
                 "background-color": colorRoom,
@@ -102,6 +108,9 @@ global.DungeonStoryTools = {
             };
           });
           const edges = {};
+          const pathPropsMap = importedDungeon.pathProps.toObject((p) =>
+            p.connecting.sort().join("__")
+          );
           Object.values(dungeonLocations).forEach((room) => {
             const roomId = room.dungeon.roomId;
             Object.values(room.dungeon.paths).forEach((target) => {
@@ -111,14 +120,32 @@ global.DungeonStoryTools = {
                     id: `${target}-room`,
                     label: "OUTSIDE",
                   },
+                  position: { x: 0, y: 0 },
                   style: {
                     "background-color": "skyblue",
                   },
                 });
               }
               const edgeId = [roomId, target].sort().join("__");
+              const pathProps = pathPropsMap[edgeId] || {};
+              let color = loopColor;
+              switch (pathProps.pathType) {
+                case "DungeonObstaclePath":
+                  color = "firebrick";
+                  break;
+                case "DungeonDropPath":
+                  color = "black";
+                  break;
+                case "CliffPath":
+                  color = "burlywood";
+                  break;
+              }
+
               if (edges[edgeId]) {
-                edges[edgeId].style["target-arrow-shape"] = null;
+                edges[edgeId].style["source-arrow-shape"] = "circle";
+                edges[edgeId].style["target-arrow-shape"] = "circle";
+                edges[edgeId].style["source-arrow-color"] = color;
+                edges[edgeId].style["target-arrow-color"] = color;
               } else {
                 edges[edgeId] = {
                   data: {
@@ -127,7 +154,7 @@ global.DungeonStoryTools = {
                     target: `${target}-room`,
                   },
                   style: {
-                    "line-color": loopColor,
+                    "line-color": color,
                     "target-arrow-shape": "triangle",
                   },
                 };
@@ -152,6 +179,7 @@ global.DungeonStoryTools = {
   <cytoscape
     :key="cytoscapeRender"
     class="cytoscape"
+    :style="{background: 'cornflowerblue'}"
     ref="cy"
     :config="cytoscapeConfig"
     :preConfig="preConfig"
