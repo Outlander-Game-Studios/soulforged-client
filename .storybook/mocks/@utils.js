@@ -11,6 +11,7 @@ global.idToIdentifier = {};
 global.entitiesMocks = {};
 
 let ids = 90000;
+let idsGenerated = false;
 global.mockEntity = (identifier, definitionFn) => {
   const id = ids++;
   onIdsGenerated(() => {
@@ -21,16 +22,22 @@ global.mockEntity = (identifier, definitionFn) => {
   });
   idToIdentifier[id] = identifier;
   return (entitiesMocks[identifier] = {
+    ...(entitiesMocks[identifier] || {}),
     id,
   });
 };
 const entityGenerators = [];
 global.onIdsGenerated = (callback) => {
-  entityGenerators.push(callback);
+  if (!idsGenerated) {
+    entityGenerators.push(callback);
+  } else {
+    callback();
+  }
 };
 global.allIdsGenerated = () => {
   console.log(`Generating ${entityGenerators.length} entities payloads...`);
   entityGenerators.forEach((callback) => callback());
+  idsGenerated = true;
   console.log("Payloads ready");
 };
 

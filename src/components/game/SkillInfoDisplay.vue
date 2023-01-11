@@ -32,7 +32,7 @@
         </span>
       </LabeledValue>
     </div>
-    <div v-if="finalSpeed !== undefined">
+    <div v-if="finalSpeed !== undefined && finalSpeed !== null">
       <LabeledValue label="Speed">
         <span class="interactive" @click="explain = 'speed'">
           <span class="rate" :class="speedClass">{{ finalSpeed || 0 }}%</span>
@@ -40,7 +40,7 @@
         </span>
       </LabeledValue>
     </div>
-    <div v-else-if="baseSpeed !== undefined">
+    <div v-else-if="baseSpeed !== undefined && finalSpeed !== null">
       <LabeledValue label="Base speed"> {{ baseSpeed }}% </LabeledValue>
     </div>
     <slot />
