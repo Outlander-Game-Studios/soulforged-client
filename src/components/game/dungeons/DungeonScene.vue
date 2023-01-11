@@ -149,16 +149,6 @@ $total-height: calc(
   &.panel-opened {
     @media (orientation: landscape) {
       left: -20rem;
-
-      &::after {
-        content: "";
-        right: -0.5rem;
-        height: 200%;
-        width: 50%;
-        position: absolute;
-        z-index: 1;
-        box-shadow: -2.5rem 0 2rem inset black;
-      }
     }
     @media (orientation: portrait) {
       top: calc(-0.2 * var(--app-height));
