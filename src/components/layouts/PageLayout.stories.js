@@ -452,3 +452,26 @@ export const dungeonWithPanel = factory(
 dungeonWithPanel.parameters = {
   storyshotsScope: "extended",
 };
+
+export const dungeonInCombat = factory(
+  (vm) => {},
+  () => {
+    setupDungeon();
+    storyMocks.operations.start(storyMocks.operations.combat);
+    storyMocks.modifyEntity("mainEntity", {
+      operationInfo: {
+        icon: combatIcon,
+        name: "In Combat",
+      },
+    });
+    storyMocks.modifyEntity("mob1", {
+      operationInfo: {
+        icon: combatIcon,
+        name: "In Combat",
+      },
+    });
+  }
+);
+dungeonWithPanel.parameters = {
+  storyshotsScope: "extended",
+};

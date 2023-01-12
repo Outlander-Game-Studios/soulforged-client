@@ -67,6 +67,9 @@ export default {
     },
 
     sceneClass() {
+      if (this.myCreature?.operation?.type === "CombatOperation") {
+        return "in-combat";
+      }
       if (this.tabOpened) {
         return "panel-opened";
       }
@@ -145,6 +148,9 @@ $total-height: calc(
   display: flex;
   flex-direction: column;
   justify-content: center;
+  &.in-combat {
+    margin-top: -20rem;
+  }
 
   &.panel-opened {
     @media (orientation: landscape) {
