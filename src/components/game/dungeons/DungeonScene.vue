@@ -148,7 +148,7 @@ $total-height: calc(
 
   &.panel-opened {
     @media (orientation: landscape) {
-      left: -20rem;
+      //left: -20rem;
     }
     @media (orientation: portrait) {
       top: calc(-0.2 * var(--app-height));
