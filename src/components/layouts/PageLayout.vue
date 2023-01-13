@@ -6,6 +6,7 @@
     <div class="main">
       <div class="bg-image" :style="backdropImage" />
       <DungeonScene :location="location" />
+      <EnvironmentOverlay />
       <slot name="main" />
     </div>
     <div class="controls" v-if="!fullscreenOperation">

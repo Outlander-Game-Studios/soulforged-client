@@ -30,7 +30,9 @@
 </template>
 
 <script>
+import EnvironmentPanel from "../panels/EnvironmentPanel";
 export default {
+  components: { EnvironmentPanel },
   props: {
     location: {},
   },
