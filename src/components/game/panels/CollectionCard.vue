@@ -3,6 +3,7 @@
     class="collection-card"
     :class="{
       unknown: !cardInfo || !cardInfo.name,
+      faded: cardInfo.faded,
       interactive: cardInfo && cardInfo.collectibleDetails,
     }"
     @click="
@@ -74,6 +75,9 @@ export default {
 
   position: relative;
 
+  &.faded {
+    opacity: 0.6;
+  }
   &.unknown {
     background-image: url(ui-asset("/card/back.png", "../"));
     opacity: 0.2;

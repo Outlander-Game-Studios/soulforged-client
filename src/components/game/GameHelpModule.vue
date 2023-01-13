@@ -24,7 +24,7 @@
           @click="selectOption('collections')"
           v-if="isInGame"
         >
-          Your Collections
+          Collections
         </Button>
         <Button
           class="menu-button"

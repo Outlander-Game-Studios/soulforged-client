@@ -5,7 +5,7 @@
         <LoadingPlaceholder v-if="!categories" />
         <template v-else>
           <HorizontalFill tight>
-            <Header class="flex-grow">Your Collections</Header>
+            <Header class="flex-grow">Collections</Header>
             <CloseButton static @click="$emit('close')" />
           </HorizontalFill>
           <Tabs
@@ -17,6 +17,9 @@
           >
             <template v-slot:header:Undiscovered>
               <span class="undiscovered-label">Undiscovered</span>
+            </template>
+            <template v-slot:header:Story_Chapters>
+              <span class="community-label">Story Chapters</span>
             </template>
             <Tab
               :header="label"
@@ -32,7 +35,18 @@
           </Tabs>
           <div v-else class="vertical-tight">
             <HorizontalFill>
-              <Select v-model="currentCollection" :options="categories" />
+              <Select v-model="currentCollection" :options="categories">
+                <template v-slot:option="{ label }">
+                  <span
+                    :class="{
+                      'undiscovered-label': label === 'Undiscovered',
+                      'community-label': label === 'Story Chapters',
+                    }"
+                  >
+                    {{ label }}
+                  </span>
+                </template>
+              </Select>
             </HorizontalFill>
             <div class="flex-grow shrink">
               <Container>
@@ -51,7 +65,10 @@
 </template>
 
 <script>
+import Horizontal from "../../layouts/Horizontal";
+import HorizontalCenter from "../../layouts/HorizontalCenter";
 export default {
+  components: { HorizontalCenter, Horizontal },
   data: () => ({
     landscape: false,
     currentCollection: null,
@@ -94,6 +111,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "../../../utils.scss";
+
 .collection-display-wrapper {
   background: #150a03;
   position: fixed;
@@ -109,6 +128,13 @@ export default {
 
 .undiscovered-label {
   opacity: 0.4;
+}
+
+.community-label {
+  background-image: url(ui-asset("/icons/story.png", "../"));
+  padding-left: 2.8rem;
+  background-size: auto 100%;
+  background-repeat: no-repeat;
 }
 
 .vertical-tight {
