@@ -45,7 +45,6 @@
           </Description>
         </Spaced>
         <div class="select-weapon">
-          {{ mainEntity.equipment }}
           <ItemSelector
             :filter="itemOffhandFilter()"
             @selected="selectOffhand($event)"

@@ -31,7 +31,7 @@
           <DisplayImpacts :impacts="effect.impacts" inline wrap />
           <LabeledValue inline wrap html>
             <template v-slot:label>
-              <span class="effect-description" v-html="effect.desc" />
+              <RichText class="effect-description" :value="effect.desc" html />
             </template>
           </LabeledValue>
         </template>
@@ -105,6 +105,12 @@ export default {
 .effect-description {
   em {
     @include text-bad();
+    &.ok {
+      @include text-outline();
+    }
+  }
+  .nameable {
+    @include text-outline();
   }
 }
 </style>
