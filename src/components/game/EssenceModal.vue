@@ -87,6 +87,18 @@
                         <div class="power-description">
                           <DisplayImpacts :impacts="power.impacts" />
                           <DisplayImpacts :impacts="power.description" />
+                          <LabeledValue
+                            v-if="power.requiredPowers.length"
+                            label="Requires having"
+                          >
+                            <span
+                              v-for="powerName in power.requiredPowers"
+                              class="required-power"
+                              :class="{ pass: knownPowers[powerName] }"
+                            >
+                              {{ powerName }}
+                            </span>
+                          </LabeledValue>
                         </div>
                       </template>
                       <template v-slot:buttons>
@@ -219,7 +231,9 @@
 </template>
 
 <script>
+import LabeledValue from "../interface/LabeledValue";
 export default {
+  components: { LabeledValue },
   data: () => ({
     collecting: false,
     collected: null,
@@ -233,6 +247,9 @@ export default {
       Rx.fromPromise(GameService.requestPowersInfo())
     );
     return {
+      knownPowers: GameService.getRootEntityStream().map((c) =>
+        c.effects.toObject((e) => e.name)
+      ),
       knowledgeBase: GameService.getKnowledgeBaseStream(),
       powersInfo: powersInfoStream,
       availablePowers: powersInfoStream.map((powersInfo) =>
@@ -285,6 +302,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "../../utils.scss";
+
 .purchase-button {
   display: flex;
 
@@ -313,5 +332,14 @@ export default {
 
 .power-description {
   white-space: normal;
+}
+
+.required-power {
+  &:not(.pass) {
+    @include text-bad();
+  }
+  &.pass {
+    @include text-good();
+  }
 }
 </style>

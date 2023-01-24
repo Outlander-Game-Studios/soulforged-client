@@ -322,6 +322,19 @@ export const GameService = (window.GameService = {
       .map((plans) => plans.filter((plan) => !!plan));
   },
 
+  getOffhandStream() {
+    return GameService.getRootEntityStream()
+      .pluck("equipment")
+      .switchMap((equipment) => {
+        const slotName = "Offhand";
+        return equipment && equipment[slotName]
+          ? GameService.getEntityStream(
+              equipment[slotName],
+              ENTITY_VARIANTS.BASE
+            )
+          : Rx.Observable.of(null);
+      });
+  },
   getWeaponStream() {
     return GameService.getRootEntityStream()
       .pluck("equipment")

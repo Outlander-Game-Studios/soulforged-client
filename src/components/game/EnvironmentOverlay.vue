@@ -92,8 +92,8 @@ export default {
       border-radius: 100%;
       width: $size;
       height: $size;
-      margin-left: $size / -2;
-      margin-top: $size / -2;
+      margin-left: calc($size / -2);
+      margin-top: calc($size / -2);
       left: 50vw + $placement * 1vw;
       top: 50vh + $placement * $positionRatio * 1vh;
     }

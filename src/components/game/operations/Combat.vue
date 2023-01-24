@@ -14,13 +14,41 @@
         <Spaced>
           <Description>
             Swapping weapon will stop you from<br />
-            counter-attacking until your next turn
+            counter-attacking until your next turn<br />
+            <br />
+            It will also put all of the skills of the<br />
+            newly equipped item on minimum 1 turn cooldown
           </Description>
         </Spaced>
         <div class="select-weapon">
           <ItemSelector
             :filter="itemWeaponFilter()"
             @selected="selectWeapon($event)"
+          >
+            <template v-slot="{ item }"> </template>
+          </ItemSelector>
+        </div>
+      </Modal>
+      <Modal
+        dialog
+        v-if="selectingOffhand"
+        title="Select offhand"
+        @close="selectingOffhand = null"
+      >
+        <Spaced>
+          <Description>
+            Swapping offhand will stop you from<br />
+            counter-attacking until your next turn<br />
+            <br />
+            It will also put all of the skills of the<br />
+            newly equipped item on minimum 1 turn cooldown
+          </Description>
+        </Spaced>
+        <div class="select-weapon">
+          {{ mainEntity.equipment }}
+          <ItemSelector
+            :filter="itemOffhandFilter()"
+            @selected="selectOffhand($event)"
           >
             <template v-slot="{ item }"> </template>
           </ItemSelector>
@@ -244,6 +272,23 @@
                       v-else
                       class="interactive"
                       @click="selectingWeapon = true"
+                      :size="7"
+                    />
+                  </HorizontalCenter>
+                </Vertical>
+                <Vertical :class="{ 'not-your-turn': !timeRemaining }">
+                  <Header alt2 small>Offhand</Header>
+                  <HorizontalCenter>
+                    <Item
+                      v-if="offhand"
+                      :data="offhand"
+                      @click="selectingOffhand = true"
+                      :size="7"
+                    />
+                    <Icon
+                      v-else
+                      class="interactive"
+                      @click="selectingOffhand = true"
                       :size="7"
                     />
                   </HorizontalCenter>
@@ -498,6 +543,7 @@ export default window.OperationCombat = {
     skipping: false,
     targetting: false,
     selectingWeapon: false,
+    selectingOffhand: false,
     creaturePositions: {},
     damageQueue: [],
     damagePresentation: null,
@@ -587,6 +633,7 @@ export default window.OperationCombat = {
       mainEntity: GameService.getRootEntityStream(),
       backdropImage: GameService.getBackdropStyleStream(),
       weapon: GameService.getWeaponStream(),
+      offhand: GameService.getOffhandStream(),
       damages: combatStream
         .pluck("damages")
         .filter((damages) => !!damages)
@@ -724,10 +771,26 @@ export default window.OperationCombat = {
       }
     },
 
+    itemOffhandFilter() {
+      return (item) => item.actions.some((a) => a.actionId === "equip_Offhand");
+    },
+    selectOffhand(item) {
+      if (!item) {
+        if (this.offhand) {
+          GameService.performAction(this.offhand, {
+            actionId: "un_equip_Offhand",
+          });
+        }
+      } else {
+        GameService.performAction(item, { actionId: "equip_Offhand" });
+      }
+      this.selectingOffhand = false;
+      this.selectedMoveId = null;
+    },
+
     itemWeaponFilter() {
       return (item) => item.actions.some((a) => a.actionId === "equip_Weapon");
     },
-
     selectWeapon(item) {
       if (!item) {
         if (this.weapon) {
