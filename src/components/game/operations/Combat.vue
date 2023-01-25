@@ -17,7 +17,7 @@
             counter-attacking until your next turn<br />
             <br />
             It will also put all of the skills of the<br />
-            newly equipped item on minimum 1 turn cooldown
+            newly equipped item on minimum {{ SWAP_COOLDOWN }} turn cooldown
           </Description>
         </Spaced>
         <div class="select-weapon">
@@ -41,7 +41,7 @@
             counter-attacking until your next turn<br />
             <br />
             It will also put all of the skills of the<br />
-            newly equipped item on minimum 1 turn cooldown
+            newly equipped item on minimum {{ SWAP_COOLDOWN }} turn cooldown
           </Description>
         </Spaced>
         <div class="select-weapon">
@@ -539,6 +539,7 @@ export default window.OperationCombat = {
 
   data: () => ({
     AUTO_RESOLVE_TURNS,
+    SWAP_COOLDOWN,
     skipping: false,
     targetting: false,
     selectingWeapon: false,

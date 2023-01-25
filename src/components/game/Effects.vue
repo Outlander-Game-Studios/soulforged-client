@@ -109,6 +109,13 @@ export default {
       @include text-outline();
     }
   }
+
+  .ok {
+    em {
+      @include text-outline();
+    }
+  }
+
   .nameable {
     @include text-outline();
   }
