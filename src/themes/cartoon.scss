@@ -52,6 +52,13 @@ $backgroundAlt3Url: url(ui-asset("/backgrounds/ui_panel_paper_inset_bg.png"));
   background-position: center center;
 }
 
+@mixin theme-background-self() {
+  color: lightskyblue;
+  border-radius: 0;
+  background-image: radial-gradient(circle, lightskyblue, lightblue);
+  background-position: center center;
+}
+
 @mixin theme-background-danger() {
   color: khaki;
   border-radius: 0;

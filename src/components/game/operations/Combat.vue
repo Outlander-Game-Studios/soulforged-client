@@ -163,12 +163,13 @@
                 </div>
               </div>
               <CreatureIcon
-                class="avatar interactive"
+                class="avatar"
                 :creature="creature"
                 size="large"
                 noOperation
                 @click="clickedCreature(creature)"
                 noSleep
+                moveIndicator
               />
               <div
                 v-for="floatingCombatText in floatingCombatTexts[creature.id]"
@@ -1070,7 +1071,7 @@ $effects-size: 6rem;
   transform: translateZ(0);
   border: 1rem solid transparent;
   margin: calc($avatar-size / 2 + $effects-size) calc($avatar-size / 2 + 2rem)
-    calc($avatar-size / 2);
+    calc($avatar-size / 2 + 4rem);
   flex-grow: 1;
 }
 
@@ -1324,6 +1325,7 @@ $effects-size: 6rem;
 
 $side-position: 1rem;
 .floating-combat-text {
+  pointer-events: none;
   $shadow: 0 0 0.5rem 0.5rem;
   position: absolute;
   z-index: 200;

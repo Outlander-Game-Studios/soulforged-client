@@ -18,7 +18,7 @@
     <div v-if="text" class="avatar-text">{{ text }}</div>
     <div
       class="player-avatar"
-      :class="[{ 'head-only': headOnly }, animations, size]"
+      :class="[{ 'head-only': headOnly }, animations, size, { self: self }]"
     >
       <div v-show="loading" class="loading">
         <Spinner centered :size="spinnerSize" color="#964500" />
@@ -212,6 +212,14 @@ export default {
 
   subscriptions() {
     return {
+      self: Rx.combineLatest(
+        this.$stream("creature"),
+        this.$stream("chatHead"),
+        GameService.getRootEntityStream()
+      ).map(
+        ([creature, chatHead, self]) =>
+          self.id === creature?.id || self.id === chatHead
+      ),
       chatHeadAssets: this.$stream("chatHead")
         .filter((whoId) => !!whoId)
         .switchMap((whoId) =>
@@ -759,6 +767,10 @@ $size-relative: calc(0.1 * var(--app-min-size));
 .avatar-wrapper.frame {
   .player-avatar {
     background: $avatar-bg-color;
+
+    &.self {
+      @include theme-background-self();
+    }
   }
 }
 

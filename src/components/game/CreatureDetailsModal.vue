@@ -27,39 +27,61 @@
               <div class="creature-icon-wrapper">
                 <CreatureIcon :creature="creature" size="large" />
               </div>
+              <div v-if="creature.nextMove">
+                <Vertical>
+                  <Header alt2 small>Next move</Header>
+                  <HorizontalCenter>
+                    <ListItem flexible>
+                      <template v-slot:icon>
+                        <NextMoveIndicator :moveData="creature.nextMove" />
+                      </template>
+                      <template v-slot:title>
+                        {{ creature.nextMove.name }}
+                      </template>
+                      <template v-slot:subtitle>
+                        Targeting
+                        <span class="target-text">{{ targetText }}</span>
+                      </template>
+                    </ListItem>
+                  </HorizontalCenter>
+                </Vertical>
+              </div>
               <div v-if="creature.operationInfo">
-                <HorizontalCenter>
-                  <Container>
-                    <Horizontal tight class="overflow-hidden">
-                      <Icon :src="creature.operationInfo.icon" size="6" />
-                      <div
-                        class="operation-name"
-                        :class="{
-                          'without-context': !creature.operationInfo.subtext,
-                        }"
-                      >
-                        {{ creature.operationInfo.name }}
+                <Vertical>
+                  <Header alt2 small>Current action</Header>
+                  <HorizontalCenter>
+                    <Container>
+                      <Horizontal tight class="overflow-hidden">
+                        <Icon :src="creature.operationInfo.icon" size="6" />
                         <div
-                          v-if="creature.operationInfo.subtext"
-                          class="subtext"
+                          class="operation-name"
+                          :class="{
+                            'without-context': !creature.operationInfo.subtext,
+                          }"
                         >
-                          {{ creature.operationInfo.subtext }}
+                          {{ creature.operationInfo.name }}
+                          <div
+                            v-if="creature.operationInfo.subtext"
+                            class="subtext"
+                          >
+                            {{ creature.operationInfo.subtext }}
+                          </div>
                         </div>
-                      </div>
-                      <Button
-                        v-if="creature.operationInfo.action"
-                        @click="operationAction(creature.operationInfo)"
-                      >
-                        {{ creature.operationInfo.action.name }}
-                      </Button>
-                      <CreaturesPanel
-                        v-if="creature.operationInfo.creatures"
-                        :creatures="creature.operationInfo.creatures"
-                        hideHeader
-                      />
-                    </Horizontal>
-                  </Container>
-                </HorizontalCenter>
+                        <Button
+                          v-if="creature.operationInfo.action"
+                          @click="operationAction(creature.operationInfo)"
+                        >
+                          {{ creature.operationInfo.action.name }}
+                        </Button>
+                        <CreaturesPanel
+                          v-if="creature.operationInfo.creatures"
+                          :creatures="creature.operationInfo.creatures"
+                          hideHeader
+                        />
+                      </Horizontal>
+                    </Container>
+                  </HorizontalCenter>
+                </Vertical>
               </div>
               <Actions :target="creature" @action="$emit('action')" />
               <div>
@@ -95,7 +117,11 @@
 </template>
 
 <script>
+import Horizontal from "../layouts/Horizontal";
+import NextMoveIndicator from "./indicators/NextMoveIndicator";
+import Vertical from "../layouts/Vertical";
 export default {
+  components: { Vertical, NextMoveIndicator, Horizontal },
   props: {
     creatureId: {},
   },
@@ -109,6 +135,17 @@ export default {
     return {
       mainEntity: GameService.getRootEntityStream(),
       creature: creatureStream,
+      targetText: Rx.combineLatest(
+        creatureStream.pluck("nextMove", "targetId"),
+        GameService.getRootEntityStream()
+      ).switchMap(([creatureId, mainEntity]) =>
+        creatureId === mainEntity.id
+          ? Rx.Observable.of("you")
+          : GameService.getEntityStream(
+              creatureId,
+              ENTITY_VARIANTS.DETAILS
+            ).map((c) => c.name)
+      ),
       mobInfo: creatureStream
         .filter((creature) => !!creature && creature.hostile)
         .pluck("publicId")
@@ -162,5 +199,9 @@ export default {
     font-style: italic;
     font-size: 75%;
   }
+}
+
+.target-text {
+  font-weight: bold;
 }
 </style>

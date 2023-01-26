@@ -75,6 +75,10 @@ body {
 .interactive {
   @include interactive();
 }
+.interactive-alt:hover {
+  cursor: pointer;
+  @include filter(brightness(1.2));
+}
 
 .relative {
   position: relative;
