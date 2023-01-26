@@ -9,10 +9,7 @@
           amount of Action Points spent to wait out specific effects.<br />
           <br />
           Waiting has <em>no impact</em> on the effects that are applied to your
-          character. It <em>does not</em> speed up recovery in any way. It also
-          <em>does not</em> change how certain effects accumulate and apply over
-          time - the result of waiting will be the same as performing an action
-          for the same amount of Action Points.
+          character. It <em>does not</em> speed up recovery in any way.
         </Help>
       </Header>
       <Description> Spend action points without doing anything. </Description>
