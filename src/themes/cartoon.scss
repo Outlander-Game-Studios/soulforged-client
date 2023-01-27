@@ -55,7 +55,7 @@ $backgroundAlt3Url: url(ui-asset("/backgrounds/ui_panel_paper_inset_bg.png"));
 @mixin theme-background-self() {
   color: lightskyblue;
   border-radius: 0;
-  background-image: radial-gradient(circle, lightskyblue, lightblue);
+  background-image: radial-gradient(circle, white, lightskyblue);
   background-position: center center;
 }
 
