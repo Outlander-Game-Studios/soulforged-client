@@ -133,11 +133,11 @@ export default window.OperationDialogue = {
 
   @media (orientation: landscape) {
     width: 50rem;
-    height: min(var(--app-height) - 16rem, 45rem);
+    height: min(var(--app-height) - 18rem, 85rem);
   }
   @media (orientation: portrait) {
     width: calc(0.85 * var(--app-width));
-    height: min(var(--app-height) - 30rem, 45rem);
+    height: min(var(--app-height) - 30rem, 85rem);
   }
 
   > * {
