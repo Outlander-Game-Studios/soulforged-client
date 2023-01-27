@@ -57,7 +57,7 @@ export default {
 
   @for $i from 0 through 10 {
     &.level-#{$i} {
-      background: rgba(0, 0, 0, $i / 14);
+      background: rgba(0, 0, 0, calc($i / 14));
     }
   }
 }
@@ -73,10 +73,10 @@ export default {
   @for $i from 0 through 10 {
     &.level-#{$i} {
       .overlay {
-        background: rgba(218, 165, 32, $i / 30);
+        background: rgba(218, 165, 32, calc($i / 30));
       }
       .lens-center {
-        opacity: $i / 10;
+        opacity: calc($i / 10);
       }
     }
   }

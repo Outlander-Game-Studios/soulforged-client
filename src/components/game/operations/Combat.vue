@@ -100,7 +100,7 @@
           </div>
         </template>
       </Modal>
-      <template v-if="!combat.finished">
+      <template v-if="inBattle">
         <div class="main-area">
           <Button
             v-if="combat.canAutoResolve"
@@ -325,7 +325,7 @@
           </Container>
         </div>
       </template>
-      <template v-if="combat.finished">
+      <template v-else>
         <div class="combat-summary">
           <Spaced>
             <Vertical>
@@ -572,6 +572,11 @@ export default window.OperationCombat = {
   },
 
   computed: {
+    inBattle() {
+      return (
+        !this.combat.finished && !this.operation.fled && !this.operation.lost
+      );
+    },
     fleeIconStyle() {
       return {
         backgroundImage: `url("${GameService.getSecureResource(fleeIcon)}")`,
