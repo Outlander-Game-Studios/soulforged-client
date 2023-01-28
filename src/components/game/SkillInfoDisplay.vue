@@ -83,7 +83,7 @@
               class="stats-icons"
             >
               <StatIcon
-                v-for="stat in skillDetails.relatedStats"
+                v-for="stat in relatedStatsSorted"
                 :key="stat"
                 :stat="stat"
                 :size="2.5"
@@ -197,6 +197,9 @@ export default {
   },
 
   computed: {
+    relatedStatsSorted() {
+      return [...this.skillDetails.relatedStats].sort();
+    },
     speedClass() {
       switch (true) {
         case this.finalSpeed < 25:
