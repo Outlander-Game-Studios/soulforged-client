@@ -123,7 +123,7 @@ export default {
   padding: 0.5rem;
   display: flex;
   flex-direction: column;
-  z-index: 25;
+  z-index: 1100;
 }
 
 .undiscovered-label {

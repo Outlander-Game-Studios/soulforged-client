@@ -85,8 +85,12 @@
               </div>
               <Actions :target="creature" @action="$emit('action')" />
               <div>
+                <Effects :effects="creature.effects" :filter="combatEffects" />
                 <Effects :effects="creature.tracks" />
-                <Effects :effects="creature.effects" />
+                <Effects
+                  :effects="creature.effects"
+                  :filter="nonCombatEffects"
+                />
               </div>
             </Vertical>
             <div v-if="creature.description">
@@ -125,6 +129,11 @@ export default {
   props: {
     creatureId: {},
   },
+
+  data: () => ({
+    combatEffects: (effect) => effect.combat,
+    nonCombatEffects: (effect) => !effect.combat,
+  }),
 
   subscriptions() {
     const creatureStream = this.$stream("creatureId").switchMap((creatureId) =>

@@ -228,6 +228,9 @@
           </div>
         </div>
         <div class="top-controls">
+          <div class="game-help-container">
+            <GameHelpModule />
+          </div>
           <div
             v-if="bigText"
             class="big-text"
@@ -1495,5 +1498,11 @@ em {
 .auto-resolve-count {
   text-align: center;
   @include text-outline();
+}
+
+.game-help-container {
+  position: absolute;
+  bottom: 2.8rem;
+  right: 0.3rem;
 }
 </style>
