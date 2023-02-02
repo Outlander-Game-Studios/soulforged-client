@@ -1277,6 +1277,7 @@ $effects-size: 6rem;
     width: 12rem;
     position: absolute;
     bottom: 100%;
+    pointer-events: none;
   }
 
   &.animation-attacking {
