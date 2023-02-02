@@ -108,7 +108,7 @@ global.DungeonStoryTools = {
             };
           });
           const edges = {};
-          const pathPropsMap = importedDungeon.pathProps.toObject((p) =>
+          const pathPropsMap = (importedDungeon.pathProps || []).toObject((p) =>
             p.connecting.sort().join("__")
           );
           Object.values(dungeonLocations).forEach((room) => {
