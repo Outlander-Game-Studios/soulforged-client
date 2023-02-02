@@ -126,7 +126,7 @@ export const locationCreature = factory((vm) => {
   setTimeout(() => {
     vm.$el.querySelectorAll(".tab-header")[TABS.location].click();
     setTimeout(() => {
-      vm.$el.querySelector(".creature-icon-wrapper.interactive").click();
+      vm.$el.querySelector(".location-panel .creature-icon-wrapper").click();
     });
   });
 });

@@ -8,6 +8,7 @@ export default {
 
 GameService.mock({
   getEntityStream: () => Rx.Observable.empty(),
+  getRootEntityStream: () => Rx.Observable.of({ id: 5 }),
 });
 
 export const sizes = () => ({
@@ -69,6 +70,20 @@ export const framing = () => ({
     <Avatar :avatarAssets="avatarAssets" size="large" />
     <Avatar :avatarAssets="avatarAssets" size="large" noFrame />
     <Avatar :avatarAssets="avatarAssets" size="large" headOnly />
+  </HorizontalWrap>
+</div>`,
+});
+
+export const self = () => ({
+  data: () => ({
+    avatarAssets,
+  }),
+  template: `
+<div>
+  <HorizontalWrap>
+    <Avatar :avatarAssets="avatarAssets" size="large" :creature="{ id: 5 }" />
+    <Avatar :avatarAssets="avatarAssets" size="large" :creature="{ id: 5 }" noFrame />
+    <Avatar :avatarAssets="avatarAssets" size="large" :creature="{ id: 5 }" headOnly />
   </HorizontalWrap>
 </div>`,
 });
