@@ -61,56 +61,21 @@
                 >
                   No powers available for purchase
                 </div>
-                <Container
-                  borderType="alt3"
+                <PowerItem
                   v-for="power in availablePowers"
                   :key="power.powerId"
-                >
-                  <Spaced>
-                    <ListItem
-                      class="craft-list-item"
-                      flexible
-                      titleClass="wrap"
-                    >
-                      <template v-slot:icon>
-                        <Icon
-                          class="power-icon"
-                          :src="power.icon"
-                          backgroundType="alt"
-                          :size="6"
-                        />
-                      </template>
-                      <template v-slot:title>
-                        <RichText :value="power.name" />
-                      </template>
-                      <template v-slot:subtitle>
-                        <div class="power-description">
-                          <DisplayImpacts :impacts="power.impacts" />
-                          <DisplayImpacts :impacts="power.description" />
-                          <LabeledValue
-                            v-if="power.requiredPowers.length"
-                            label="Requires having"
-                          >
-                            <span
-                              v-for="powerName in power.requiredPowers"
-                              class="required-power"
-                              :class="{ pass: knownPowers[powerName] }"
-                            >
-                              {{ powerName }}
-                            </span>
-                          </LabeledValue>
-                        </div>
-                      </template>
-                      <template v-slot:buttons>
-                        <Button @click="purchasingPower(power)">
-                          <div class="purchase-button">
-                            <CurrencyDisplay :value="power.price" />
-                          </div>
-                        </Button>
-                      </template>
-                    </ListItem>
-                  </Spaced>
-                </Container>
+                  :power="power"
+                  :purchasedPowers="purchasedPowers"
+                  @purchasingPower="purchasingPower(power)"
+                />
+                <PowerGroup
+                  v-for="powerGroup in availablePowerGroups"
+                  :key="powerGroup.name"
+                  v-show="!powerGroup.purchased"
+                  :powerGroup="powerGroup"
+                  :purchasedPowers="purchasedPowers"
+                  @purchasingPower="purchasingPower($event)"
+                />
               </Vertical>
             </Spaced>
           </Vertical>
@@ -126,7 +91,7 @@
           <Icon
             class="power-icon"
             :src="purchasing.icon"
-            backgroundType="alt"
+            backgroundType="severity--3"
           />
           <Header alt2>Bonuses</Header>
           <div>
@@ -172,6 +137,21 @@
               />
             </LabeledValue>
           </div>
+          <template v-if="purchasing.groupName">
+            <Header alt2>Power Group</Header>
+            <Description warning>
+              Purchasing this power will make the following powers unavailable
+              for this character:
+            </Description>
+            <PowerItem
+              v-for="power in availablePowerGroups[purchasing.groupName].powers"
+              :key="power.powerId"
+              v-show="power.powerId !== purchasing.powerId"
+              :power="power"
+              :purchasedPowers="purchasedPowers"
+              small
+            />
+          </template>
           <Button @click="confirmPurchase()" :processing="processing">
             Purchase
           </Button>
@@ -232,8 +212,10 @@
 
 <script>
 import LabeledValue from "../interface/LabeledValue";
+import PowerItem from "./PowerItem";
+import Description from "../interface/Description";
 export default {
-  components: { LabeledValue },
+  components: { Description, PowerItem, LabeledValue },
   data: () => ({
     collecting: false,
     collected: null,
@@ -247,16 +229,34 @@ export default {
       Rx.fromPromise(GameService.requestPowersInfo())
     );
     return {
-      knownPowers: GameService.getRootEntityStream().map((c) =>
+      purchasedPowers: GameService.getRootEntityStream().map((c) =>
         c.effects.toObject((e) => e.name)
       ),
       knowledgeBase: GameService.getKnowledgeBaseStream(),
       powersInfo: powersInfoStream,
-      availablePowers: powersInfoStream.map((powersInfo) =>
-        powersInfo.availablePowers.filter(
-          (power) => !powersInfo.selectedPowers.includes(power.powerId)
-        )
-      ),
+      availablePowers: powersInfoStream.map((powersInfo) => {
+        return powersInfo.availablePowers.filter(
+          (power) =>
+            !powersInfo.selectedPowers.includes(power.powerId) &&
+            !power.groupName
+        );
+      }),
+      availablePowerGroups: powersInfoStream.map((powersInfo) => {
+        const allGroups = {};
+        powersInfo.availablePowers
+          .filter((power) => !!power.groupName)
+          .forEach((power) => {
+            allGroups[power.groupName] = {
+              name: power.groupName,
+              powers: [...(allGroups[power.groupName]?.powers || []), power],
+              purchased: allGroups[power.groupName]?.purchased,
+            };
+            if (powersInfo.selectedPowers.includes(power.powerId)) {
+              allGroups[power.groupName].purchased = true;
+            }
+          });
+        return allGroups;
+      }),
     };
   },
 
@@ -334,6 +334,9 @@ export default {
   white-space: normal;
 }
 
+.power-group-label {
+  @include text-outline();
+}
 .required-power {
   &:not(.pass) {
     @include text-bad();
