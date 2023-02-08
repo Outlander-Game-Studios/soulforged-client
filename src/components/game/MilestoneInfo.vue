@@ -6,6 +6,7 @@
       :text="step.text"
       :description="step.info"
       :completed="idx < milestoneInfo.current"
+      :inactive="idx > milestoneInfo.current"
     />
     <Checkbox
       v-if="milestoneInfo.current < milestoneInfo.steps.length"
@@ -14,9 +15,9 @@
       Tracked
     </Checkbox>
     <Description
-      v-if="milestoneInfo.totalSteps - milestoneInfo.current - 1 > 0"
+      v-if="milestoneInfo.totalSteps - milestoneInfo.steps.length > 0"
     >
-      {{ milestoneInfo.totalSteps - milestoneInfo.current - 1 }} follow-up
+      {{ milestoneInfo.totalSteps - milestoneInfo.steps.length }} follow-up
       objectives to be discovered
     </Description>
     <Vertical v-if="milestoneInfo.rewardText">

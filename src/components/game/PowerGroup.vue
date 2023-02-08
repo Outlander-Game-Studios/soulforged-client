@@ -2,7 +2,9 @@
   <div class="relative">
     <Header> Power Group: {{ powerGroup.name }} </Header>
     <Container borderType="base" backgroundType="alt3">
-      <div class="instructions">You can select 1 power from this group</div>
+      <div class="instructions">
+        You can select only one power from this group
+      </div>
       <Spaced>
         <Vertical>
           <PowerItem
@@ -19,10 +21,7 @@
 </template>
 
 <script>
-import Vertical from "../layouts/Vertical";
-import Container from "../layouts/Container";
 export default {
-  components: { Container, Vertical },
   props: {
     powerGroup: {},
     purchasedPowers: {},

@@ -2,12 +2,17 @@
   <div
     @click="$emit('click', $event)"
     class="objective"
-    :class="{ completed: completed, right: iconRight }"
+    :class="{ completed: completed, inactive: inactive, right: iconRight }"
   >
     <div v-if="!iconRight" class="objective-icon left" />
     <Vertical>
-      <div class="objective-text">
-        {{ text }}
+      <div>
+        <span class="objective-text">
+          {{ text }}
+        </span>
+        <span v-if="inactive" class="inactive-text"
+          >(Inactive, complete previous step)</span
+        >
       </div>
       <Description v-show="!completed" v-html="description" />
     </Vertical>
@@ -24,6 +29,9 @@ export default {
       type: Boolean,
     },
     completed: {
+      type: Boolean,
+    },
+    inactive: {
       type: Boolean,
     },
   },
@@ -47,6 +55,10 @@ $size: 3.5rem;
     }
   }
 
+  &.inactive {
+    opacity: 0.3;
+  }
+
   &.right {
     justify-content: flex-end;
     .objective-text {
@@ -60,12 +72,16 @@ $size: 3.5rem;
   }
 }
 
-.objective-text {
-  @include text-outline(black, #ffa83b);
+.objective-text,
+.inactive-text {
   display: inline-block;
   line-height: 2.5rem;
   padding-top: 0.75rem;
   vertical-align: top;
+}
+
+.objective-text {
+  @include text-outline(black, #ffa83b);
 }
 
 .objective-icon {
