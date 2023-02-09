@@ -56,7 +56,10 @@ $size: 3.5rem;
   }
 
   &.inactive {
-    opacity: 0.3;
+    .objective-text,
+    .objective-icon {
+      opacity: 0.3;
+    }
   }
 
   &.right {

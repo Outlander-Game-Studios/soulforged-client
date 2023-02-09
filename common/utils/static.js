@@ -120,6 +120,13 @@ global.SPACING_NAMES = {
   6: "Expansive",
 };
 
+global.EFFECTS = {
+  STACK_DISPLAY: {
+    HIDE: 1,
+    PERCENT: 2,
+  },
+};
+
 global.NAMING_RULES = [
   {
     regex: /^[A-Za-z\- ]*$/,
