@@ -3,7 +3,7 @@
     <div v-for="(impact, idx) in impacts" :key="idx">
       <LabeledValue :inline="inline" :wrap="wrap">
         <template v-slot:label>
-          <RichText :value="impact.name || impact" />
+          <RichText :value="impact.name || impact" html />
         </template>
         <template v-slot:default>
           <span
