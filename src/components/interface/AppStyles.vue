@@ -296,4 +296,8 @@ label {
 .overflow-hidden {
   overflow: hidden;
 }
+
+em {
+  font-weight: bold;
+}
 </style>
