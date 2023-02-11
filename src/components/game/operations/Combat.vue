@@ -109,20 +109,25 @@
           >
             Auto-resolve
           </Button>
-          <Container
-            v-if="selectedMove && timeRemaining"
-            class="move-info"
-            borderType="alt"
-            :borderSize="0.8"
-          >
-            <Vertical>
-              <Header small> {{ selectedMove.name }} </Header>
-              <CombatMoveDetails :moveDetails="selectedMove" noIcon />
-              <Button @click="selectMove(selectedMoveId)" reactToEnter
-                >Perform</Button
-              >
-            </Vertical>
-          </Container>
+          <div v-if="selectedMove && timeRemaining" class="move-info">
+            <CloseButton
+              class="move-preview-close"
+              @click="selectedMoveId = null"
+            />
+            <Container borderType="alt" :borderSize="0.8">
+              <Vertical>
+                <Header small>
+                  {{ selectedMove.name }}
+                </Header>
+                <Spaced>
+                  <CombatMoveDetails :moveDetails="selectedMove" noIcon />
+                </Spaced>
+                <Button @click="selectMove(selectedMoveId)" reactToEnter
+                  >Perform</Button
+                >
+              </Vertical>
+            </Container>
+          </div>
           <div class="creatures">
             <div
               v-for="creature in displayedCreatures"
@@ -312,6 +317,7 @@
                       :currentMove="operation.context.currentMoveId"
                       @selected="selectMove($event)"
                       wrap
+                      :selectedMoveId="selectedMoveId"
                     />
                   </Vertical>
                 </div>
@@ -1505,5 +1511,10 @@ em {
   position: absolute;
   bottom: 2.8rem;
   right: 0.3rem;
+}
+.move-preview-close {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 </style>

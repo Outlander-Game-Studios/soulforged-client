@@ -19,7 +19,11 @@
           (!!move || !noSpacing) &&
           (!autoResolveOnly || (!move.count && !move.cooldownMax))
         "
-        :class="{ 'flex-grow': !move, 'miss-req': move && move.missingReq }"
+        :class="{
+          'flex-grow': !move,
+          'miss-req': move && move.missingReq,
+          selected: move && selectedMoveId === move.moveId,
+        }"
       >
         <template v-if="!!move">
           <Button @click="selectMove(move.moveId)" noPadding>
@@ -79,6 +83,7 @@ export default {
     autoResolveOnly: {
       type: Boolean,
     },
+    selectedMoveId: {},
     moves: {},
   },
 
@@ -220,6 +225,10 @@ export default {
   $size: 6rem;
   margin-right: 0.3rem;
   margin-bottom: 0.3rem;
+
+  &.selected {
+    @include filter(brightness(1.5));
+  }
 
   &.miss-req {
     @include filter(saturate(0));

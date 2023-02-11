@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div v-if="moveDetails">
+    <template v-if="moveDetails">
       <div v-if="moveDetails.missingReqMessage" class="requirement">
         {{ moveDetails.missingReqMessage }}
       </div>
-      <div class="details-move-icon" v-if="!noIcon">
+      <div v-if="!noIcon" class="details-move-icon">
         <Icon :src="moveDetails.icon" :size="11" />
       </div>
       <Vertical>
@@ -52,18 +52,20 @@
             </LabeledValue>
             <template v-if="moveDetails.raw">
               <SubLabeledValue label="Move Base">
-                {{ moveDetails.raw.damage[damage] }}
+                {{ moveDetails.raw.damage[damage] || 0 }}
               </SubLabeledValue>
               <SubLabeledValue label="Attributes & Effects">
-                <Plused :value="+value - +moveDetails.raw.damage[damage]" />
+                <Plused
+                  :value="+value - (+moveDetails.raw.damage[damage] || 0)"
+                />
               </SubLabeledValue>
             </template>
           </div>
         </div>
       </Vertical>
-    </div>
+    </template>
+    <hr />
     <div v-if="moveDetails && moveDetails.description" class="clear-both">
-      <hr />
       <Description pre
         ><RichText :value="moveDetails.description" html
       /></Description>
@@ -91,5 +93,11 @@ export default {
   float: right;
   margin-left: 1rem;
   margin-bottom: 1rem;
+}
+
+hr:first-child,
+hr:last-child,
+hr + hr {
+  display: none;
 }
 </style>
