@@ -156,6 +156,7 @@
                     :effects="creature.effects"
                     :size="3"
                     :filter="combatEffectFilter"
+                    group
                   />
                 </div>
                 <div class="effects">
