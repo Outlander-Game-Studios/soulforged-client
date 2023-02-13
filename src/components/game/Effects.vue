@@ -91,7 +91,6 @@ export default {
           return orderDelta;
         });
       if (this.group) {
-        console.log(effects);
         const grouped = groupBy(effects, "icon");
         effects = Object.values(grouped)
           .map((group) =>
@@ -111,7 +110,6 @@ export default {
             duration: formatDuration(e.duration),
             durationTurns: formatDuration(e.durationTurns),
           }));
-        console.log(effects);
       }
       return effects;
     },
