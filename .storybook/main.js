@@ -13,6 +13,10 @@ module.exports = {
         test: /\.(ogg)$/,
         loader: "file-loader",
       },
+      {
+        test: /\.(html|txt)$/,
+        loader: "raw-loader",
+      },
     ];
     config.module.unknownContextCritical = false;
     config.optimization = {
