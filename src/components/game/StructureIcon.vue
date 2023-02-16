@@ -8,6 +8,7 @@
     :isEquipped="structure.own"
     :amount="structure.number"
     class="structure-icon"
+    :class="{ ruin: structure.ruin }"
   >
     <IndicatorPresence class="presence" v-if="!!structure.presence" />
     <IndicatorConstruction
@@ -54,5 +55,9 @@ export default {
   position: absolute;
   top: 5%;
   left: 5%;
+}
+
+.ruin {
+  @include filter(saturate(0));
 }
 </style>
