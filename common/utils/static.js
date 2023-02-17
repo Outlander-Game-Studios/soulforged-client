@@ -14,7 +14,7 @@ global.LIST_SIMILAR_OPEN_QUESTION = 5;
 global.AUTO_RESOLVE_TURNS = 20;
 global.SWAP_COOLDOWN = 2;
 
-global.CURRENT_CRAFT_VERSION = 3;
+global.CURRENT_CRAFT_VERSION = 4;
 
 global.DISCORD_INVITE_URL = "https://discord.gg/XExbewT5GQ";
 
