@@ -41,7 +41,7 @@
 <script>
 import fanfareSound from "../../assets/sounds/fanfare.ogg";
 
-window.MILESTONES_IDX = 0;
+window.MILESTONES_IDX = 1;
 
 export default {
   data: () => ({

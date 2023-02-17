@@ -17,14 +17,15 @@
         v-else-if="part.type === TYPES.EFFECT"
         class="effect-part"
         @click="showInfo(part, $event)"
-        ><Icon
+      >
+        <Icon
           :src="part.icon"
           :size="2"
           backgroundType="severity-0"
-          :text="{ bottomRight: getStacks(part) }"
-        />{{ part.name }}</span
-      ></template
-    >
+          :text="{ bottomRight: getStacks(part) }" /><RichText
+          nonInteractive
+          :value="part.name" /></span
+    ></template>
     <Modal v-if="effectInfo" dialog @close="effectInfo = null">
       <template v-slot:title> Effect </template>
       <template v-slot:contents>

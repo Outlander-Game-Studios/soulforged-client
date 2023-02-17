@@ -217,7 +217,7 @@ export default {
   padding: 0.4rem 0 0;
   flex-grow: 1;
   font-size: 75%;
-  height: 3rem;
+  height: 2.6rem !important;
 }
 
 .set-essence-icon {

@@ -12,6 +12,7 @@ global.MAX_PENDING_OPEN_QUESTIONS = 3;
 global.LIST_SIMILAR_OPEN_QUESTION = 5;
 
 global.AUTO_RESOLVE_TURNS = 20;
+global.SWAP_COOLDOWN = 2;
 
 global.CURRENT_CRAFT_VERSION = 3;
 
@@ -117,6 +118,13 @@ global.SPACING_NAMES = {
   4: "Sizeable",
   5: "Spacious",
   6: "Expansive",
+};
+
+global.EFFECTS = {
+  STACK_DISPLAY: {
+    HIDE: 1,
+    PERCENT: 2,
+  },
 };
 
 global.NAMING_RULES = [

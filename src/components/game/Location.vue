@@ -2,9 +2,6 @@
   <div v-if="!location">
     <LoadingPlaceholder />
   </div>
-  <div v-else-if="location.indoors">
-    <slot />
-  </div>
   <div v-else class="visible-map framed" :class="visibleMapClass">
     <transition name="fade">
       <div v-if="loading" class="loading-texture-wrapper">
@@ -12,6 +9,7 @@
       </div>
     </transition>
     <img
+      v-if="!location.indoors"
       v-show="!loading"
       :key="location.id"
       class="location-image"
@@ -44,6 +42,8 @@
 <script>
 export default {
   props: {
+    locationOverride: {},
+    pathsOverride: {},
     highlightId: {},
     small: {
       type: Boolean,
@@ -59,6 +59,24 @@ export default {
   }),
 
   subscriptions() {
+    const locationStream = this.$stream(
+      "locationOverride"
+    ).switchMap((locationOverride) =>
+      locationOverride
+        ? Rx.Observable.of(locationOverride)
+        : GameService.getLocationStream()
+    );
+    const pathsStream = this.$stream("pathsOverride").switchMap(
+      (pathsOverride) =>
+        pathsOverride
+          ? Rx.Observable.of(pathsOverride)
+          : locationStream
+              .map(({ id, paths }) => ({ id, paths }))
+              .distinctUntilChanged(null, JSON.stringify)
+              .switchMap(({ paths }) =>
+                GameService.getEntitiesStream(paths, ENTITY_VARIANTS.BASE, true)
+              )
+    );
     return {
       shrink: ControlsService.getCurrentOpenTabStream().map((tab) => !!tab),
       mainEntity: GameService.getRootEntityStream(),
@@ -78,16 +96,8 @@ export default {
               GameService.getEntityStream(path.id, ENTITY_VARIANTS.BASE, true)
             );
         }),
-      location: GameService.getLocationStream(),
-      ambientSound: GameService.getLocationStream()
-        .map((location) => location.ambientSound)
-        .tap((ambientSound) => SoundService.playMusic(ambientSound)),
-      paths: GameService.getLocationStream()
-        .map(({ id, paths }) => ({ id, paths }))
-        .distinctUntilChanged(null, JSON.stringify)
-        .switchMap(({ paths }) =>
-          GameService.getEntitiesStream(paths, ENTITY_VARIANTS.BASE, true)
-        ),
+      location: locationStream,
+      paths: pathsStream,
       myCreature: GameService.getMyCreatureStream(),
       locationImageUpdate: GameService.getMapImageUpdateStream().tap(() => {
         this.imageUpdate += "?";
@@ -97,13 +107,17 @@ export default {
 
   computed: {
     visibleMapClass() {
+      let classResult = "";
+      if (this.location?.indoors) {
+        classResult = "indoors";
+      }
       if (this.small) {
-        return "small";
+        return [classResult, "small"];
       }
       if (this.shrink) {
-        return "shrink";
+        return [classResult, "shrink"];
       }
-      return "normal";
+      return [classResult, "normal"];
     },
 
     travelPathId() {
@@ -341,7 +355,18 @@ $transition-time: 120ms;
 .visible-map {
   top: 0;
   right: 0;
-  //transition: all $transition-time ease-out;
+
+  &.indoors {
+    &.framed {
+      background-image: none !important;
+    }
+
+    .location-image,
+    .loading-texture-wrapper,
+    .glow {
+      display: none;
+    }
+  }
 
   &.normal {
     @include visible-map-style(calc(0.75 * var(--app-min-size)));

@@ -7,6 +7,7 @@ import {
   clickAndRespond,
   operationWrapper,
 } from "../../../../.storybook/story-utils.js";
+import { GameService } from "../../../services/game";
 
 export default {
   title: "Operations/Gather",
@@ -29,15 +30,13 @@ const factory = (
   onDestroyed = () => {},
   resourceData = resource
 ) => () => {
-  console.log(resource);
+  GameService.mockRequest(
+    REQUEST_CODES.COMMENCE_OPERATION,
+    () => commenceResult
+  );
   GameService.mock({
     getEntityStream: () => Rx.Observable.of(resourceData),
     getRootEntityStream: () => rootEntityStream,
-    request: (req) => {
-      if (req === REQUEST_CODES.COMMENCE_OPERATION) {
-        return Promise.resolve(commenceResult);
-      }
-    },
   });
 
   rootEntityStream.next({
@@ -64,6 +63,7 @@ const factory = (
           },
           skillInfo: {
             skill: "Crafting",
+            skillLevel: 0,
             skillGainMult: 4,
             successChance: 3,
             accidentChance: 2,

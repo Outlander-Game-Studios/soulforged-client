@@ -2,14 +2,15 @@
   <div
     class="collection-card"
     :class="{
-      unknown: !cardInfo,
+      unknown: !cardInfo || !cardInfo.name,
+      faded: cardInfo.faded,
       interactive: cardInfo && cardInfo.collectibleDetails,
     }"
     @click="
       showDetails = cardInfo && cardInfo.collectibleDetails ? cardInfo : null
     "
   >
-    <div v-if="cardInfo">
+    <div v-if="cardInfo && cardInfo.name">
       <div
         class="icon"
         :style="{ backgroundImage: 'url(' + cardInfo.icon + ')' }"
@@ -66,14 +67,17 @@ export default {
 
 .collection-card {
   font-size: calc(0.02 * var(--app-min-size));
-  width: 10em;
-  height: 14em;
+  width: 9.5em;
+  height: 13.3em;
 
   background-image: url(ui-asset("/card/face.png", "../"));
   background-size: 100% 100%;
 
   position: relative;
 
+  &.faded {
+    opacity: 0.6;
+  }
   &.unknown {
     background-image: url(ui-asset("/card/back.png", "../"));
     opacity: 0.2;
@@ -82,11 +86,11 @@ export default {
   .name {
     font-size: 1em;
     position: absolute;
-    top: 8.4em;
+    top: 8em;
     text-align: center;
     width: 8em;
     max-width: 8em;
-    margin-left: 1em;
+    margin-left: 0.75em;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

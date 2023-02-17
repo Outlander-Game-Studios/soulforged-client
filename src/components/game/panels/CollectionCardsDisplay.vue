@@ -5,13 +5,20 @@
   <div v-else-if="!cards.length">You have not discovered this category yet</div>
   <div v-else class="card-display">
     <Horizontal>
-      <Checkbox v-model="onlyCollected"> Show only collected </Checkbox>
+      <div class="flex-grow">
+        <Horizontal>
+          <Checkbox v-model="onlyCollected"> Show only collected </Checkbox>
+        </Horizontal>
+        <div>
+          <LabeledValue label="Collected">
+            {{ collectedCount }} / {{ allCount }}
+          </LabeledValue>
+        </div>
+      </div>
+      <div>
+        <Select v-model="chapterSelected" :options="chapters" />
+      </div>
     </Horizontal>
-    <div>
-      <LabeledValue label="Collected">
-        {{ collectedCount }} / {{ allCount }}
-      </LabeledValue>
-    </div>
     <div class="cards">
       <CollectionCard
         v-for="(item, idx) in shownCards"
@@ -20,7 +27,7 @@
         :cardInfo="item"
       />
     </div>
-    <HorizontalCenter v-if="collectedCount || !onlyCollected">
+    <HorizontalCenter v-if="collectedCount || (!onlyCollected && allCount)">
       <OptionSelector
         :label="'Page: ' + (page + 1) + ' / ' + maxPages"
         v-model="page"
@@ -42,37 +49,56 @@ export default {
   data: () => ({
     onlyCollected: null,
     page: 0,
+    chapterSelected: "",
+    chapters: {
+      0: "All Chapters",
+      ...Array.create(2).toObject(
+        (_, idx) => idx + 1,
+        (_, idx) => `Chapter ${idx + 1}`
+      ),
+    },
   }),
 
   watch: {
     onlyCollected() {
-      if (this.onlyCollected) {
-        this.page = 0;
-      }
       LocalStorageService.setItem("onlyCollected", this.onlyCollected);
+    },
+    chapterSelected() {
+      LocalStorageService.setItem("collections-chapter", this.chapterSelected);
     },
   },
 
   computed: {
+    chapterCards() {
+      const chapterSelected = +this.chapterSelected;
+      return this.cards.filter(
+        (c) => !chapterSelected || c.chapter === chapterSelected
+      );
+    },
+    collectedCards() {
+      return this.chapterCards.filter((c) => !!c.name);
+    },
+    filteredCards() {
+      return this.onlyCollected ? this.collectedCards : this.chapterCards;
+    },
     collectedCount() {
-      return this.cards.filter((c) => !!c).length;
+      return this.collectedCards.length;
     },
     allCount() {
-      return this.cards.length;
+      return this.chapterCards.length;
     },
     perPage() {
       return this.landscape ? 10 : 9;
     },
     pages() {
-      return Array.create(
-        Math.ceil((this.filteredCards?.length || 0) / this.perPage)
+      const pages = Array.create(
+        Math.ceil((this.filteredCards?.length || 1) / this.perPage)
       ).map((_, idx) => idx);
+      this.page = Math.max(0, Math.min(this.page, pages.length - 1));
+      return pages;
     },
     maxPages() {
       return this.pages?.length;
-    },
-    filteredCards() {
-      return this.cards.filter((c) => !this.onlyCollected || !!c);
     },
     shownCards() {
       return this.filteredCards
@@ -102,6 +128,10 @@ export default {
 
   created() {
     this.onlyCollected = LocalStorageService.getItem("onlyCollected", true);
+    this.chapterSelected = LocalStorageService.getItem(
+      "collections-chapter",
+      0
+    );
   },
 };
 </script>
@@ -124,7 +154,7 @@ export default {
     }
 
     @media (orientation: landscape) {
-      width: calc(1.1 * var(--app-min-size));
+      width: calc(1.05 * var(--app-min-size));
 
       .single-card {
         margin: 1em 0.5em;

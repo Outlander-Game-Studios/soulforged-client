@@ -403,7 +403,7 @@ $border-size: 0.35rem;
 }
 
 .settings-button {
-  padding: 0.5rem ($height - $icon-height)/2 - 0.2rem;
+  padding: 0.5rem calc(($height - $icon-height) / 2 - 0.2rem);
   overflow: hidden;
 }
 

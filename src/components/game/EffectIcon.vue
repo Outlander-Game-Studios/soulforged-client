@@ -47,6 +47,11 @@ export default {
   computed: {
     text() {
       if (this.effect.stacks) {
+        if (this.effect.stackDisplay === EFFECTS.STACK_DISPLAY.PERCENT) {
+          return `${(100 * this.effect.stacks).toFixed(0)}%`;
+        } else if (this.effect.stackDisplay === EFFECTS.STACK_DISPLAY.HIDE) {
+          return "";
+        }
         return formatNumber(this.effect.stacks);
       }
       if (this.effect.level !== undefined) {

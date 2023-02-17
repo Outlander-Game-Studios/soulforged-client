@@ -28,6 +28,3 @@ GameService.mock({
     );
   },
 });
-
-console.log("Mock localStorage.getItem");
-localStorage.getItem = () => undefined;

@@ -23,7 +23,7 @@ const SOUNDS = {
 
 export const SoundService = (window.SoundService = {
   focused: true,
-  currentMusic: null,
+  currentMusic: [],
   SOUNDS,
 
   initialize() {
@@ -42,23 +42,25 @@ export const SoundService = (window.SoundService = {
 
     window.onfocus = function () {
       SoundService.focused = true;
-      if (
-        SoundService.currentMusic &&
-        SoundService.currentMusic.playing() &&
-        !SoundService.getSoundInBackgroundEnabled()
-      ) {
-        SoundService.currentMusic.fade(0, SoundService.getMusicVolume(), 300);
-      }
+      SoundService.currentMusic.forEach((currentMusic) => {
+        if (
+          currentMusic.playing() &&
+          !SoundService.getSoundInBackgroundEnabled()
+        ) {
+          currentMusic.fade(0, SoundService.getMusicVolume(), 300);
+        }
+      });
     };
     window.onblur = function () {
       SoundService.focused = false;
-      if (
-        SoundService.currentMusic &&
-        SoundService.currentMusic.playing() &&
-        !SoundService.getSoundInBackgroundEnabled()
-      ) {
-        SoundService.currentMusic.fade(SoundService.getMusicVolume(), 0, 300);
-      }
+      SoundService.currentMusic.forEach((currentMusic) => {
+        if (
+          currentMusic.playing() &&
+          !SoundService.getSoundInBackgroundEnabled()
+        ) {
+          currentMusic.fade(SoundService.getMusicVolume(), 0, 300);
+        }
+      });
     };
     SoundService.focused = ControlsService.isGameFocused();
   },
@@ -90,9 +92,9 @@ export const SoundService = (window.SoundService = {
   adjustMusicVolume(value) {
     soundSettings.music = value;
     localStorage.setItem("audioVolume", JSON.stringify(soundSettings));
-    if (this.currentMusic) {
-      this.currentMusic.volume(this.getMusicVolume());
-    }
+    SoundService.currentMusic.forEach((currentMusic) => {
+      currentMusic.volume(SoundService.getMusicVolume());
+    });
   },
   adjustNotifVolume(value) {
     if (soundSettings.notif === value) {
@@ -105,9 +107,9 @@ export const SoundService = (window.SoundService = {
   adjustMasterVolume(value) {
     soundSettings.master = value;
     localStorage.setItem("audioVolume", JSON.stringify(soundSettings));
-    if (this.currentMusic) {
-      this.currentMusic.volume(this.getMusicVolume());
-    }
+    SoundService.currentMusic.forEach((currentMusic) => {
+      currentMusic.volume(SoundService.getMusicVolume());
+    });
   },
 
   playNotificationSound(
@@ -172,38 +174,40 @@ export const SoundService = (window.SoundService = {
   },
 
   playMusic(musicFile) {
-    if (this.currentMusic?._src === musicFile) {
+    if (
+      this.currentMusic.some((currentMusic) => currentMusic?._src === musicFile)
+    ) {
       return;
     }
-    if (this.currentMusic) {
-      const oldMusic = this.currentMusic;
-      oldMusic.fade(this.getMusicVolume(), 0, 1000);
-      setTimeout(() => {
-        oldMusic.stop();
-      }, 1000);
-    }
-    if (!musicFile) {
-      this.currentMusic = null;
-      return;
-    }
-    this.currentMusic = new Howl({
+    const howl = new Howl({
       src: musicFile,
       loop: true,
       volume: this.getMusicVolume(),
     });
-    SoundService.currentMusic.on("play", () => {
-      if (this.currentMusic) {
-        if (
-          SoundService.focused ||
-          SoundService.getSoundInBackgroundEnabled()
-        ) {
-          this.currentMusic.fade(0, this.getMusicVolume(), 1000);
-        } else {
-          this.currentMusic.volume(0);
-        }
+    howl.on("play", () => {
+      if (SoundService.focused || SoundService.getSoundInBackgroundEnabled()) {
+        howl.fade(0, this.getMusicVolume(), 1000);
+      } else {
+        howl.volume(0);
       }
     });
-    SoundService.currentMusic.play();
+    howl.play();
+
+    this.currentMusic.push(howl);
+  },
+
+  stopMusic(musicFile) {
+    const howl = this.currentMusic.find(
+      (currentMusic) => currentMusic?._src === musicFile
+    );
+    if (!howl) {
+      return;
+    }
+    this.currentMusic.remove(howl);
+    howl.fade(this.getMusicVolume(), 0, 1000);
+    setTimeout(() => {
+      howl.stop();
+    }, 1000);
   },
 });
 

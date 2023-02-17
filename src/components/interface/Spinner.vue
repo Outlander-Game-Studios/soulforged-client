@@ -66,7 +66,7 @@ $size: 22%;
       &:nth-child(#{$i}) {
         transform: rotate(#{$i * 30}deg);
         .dot {
-          animation-delay: -#{(12 - $i) * $speed / 12};
+          animation-delay: -#{calc((12 - $i) * $speed / 12)};
         }
       }
     }
@@ -74,7 +74,7 @@ $size: 22%;
     .dot {
       width: $size;
       height: $size;
-      left: 50% - $size / 2;
+      left: 50% - calc($size / 2);
       position: absolute;
       border-radius: 50%;
       animation: spinner $speed linear infinite;

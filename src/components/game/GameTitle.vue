@@ -2,14 +2,14 @@
   <div class="game-title">
     <div class="logo" />
     <div class="text">Soulforged</div>
-    <div class="early-access">
-      <Header alt2>
-        Early access
-        <Help title="About Early Access">
-          <HelpEarlyAccess />
-        </Help>
-      </Header>
-    </div>
+    <!--    <div class="early-access">-->
+    <!--      <Header alt2>-->
+    <!--        Early access-->
+    <!--        <Help title="About Early Access">-->
+    <!--          <HelpEarlyAccess />-->
+    <!--        </Help>-->
+    <!--      </Header>-->
+    <!--    </div>-->
   </div>
 </template>
 

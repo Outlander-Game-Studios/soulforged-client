@@ -31,7 +31,7 @@
           <DisplayImpacts :impacts="effect.impacts" inline wrap />
           <LabeledValue inline wrap html>
             <template v-slot:label>
-              <span class="effect-description" v-html="effect.desc" />
+              <RichText class="effect-description" :value="effect.desc" html />
             </template>
           </LabeledValue>
         </template>
@@ -42,6 +42,9 @@
 </template>
 
 <script>
+import groupBy from "lodash/groupBy.js";
+import flatten from "lodash/flatten.js";
+
 export default {
   props: {
     effects: {},
@@ -60,17 +63,55 @@ export default {
       type: Boolean,
       default: false,
     },
+    group: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
     sortedEffects() {
-      return [...(this.effects || [])].filter(this.filter).sort((a, b) => {
-        const orderDelta = a.order - b.order;
-        if (orderDelta === 0) {
-          return (b.severity || 0) - (a.severity || 0);
+      function formatDuration(durationValue) {
+        if (!durationValue) {
+          return;
         }
-        return orderDelta;
-      });
+        if (Array.isArray(durationValue)) {
+          return `${Math.min(...durationValue)}-${Math.max(...durationValue)}`;
+        }
+        return durationValue;
+      }
+
+      let effects = [...(this.effects || [])]
+        .filter(this.filter)
+        .sort((a, b) => {
+          const orderDelta = a.order - b.order;
+          if (orderDelta === 0) {
+            return (b.severity || 0) - (a.severity || 0);
+          }
+          return orderDelta;
+        });
+      if (this.group) {
+        const grouped = groupBy(effects, "icon");
+        effects = Object.values(grouped)
+          .map((group) =>
+            group.reduce((acc, i) => ({
+              ...acc,
+              stacks: (acc.stacks || 1) + (i.stacks || 1),
+              duration: acc.duration
+                ? flatten([acc.duration, i.duration])
+                : undefined,
+              durationTurns: acc.durationTurns
+                ? flatten([acc.durationTurns, i.durationTurns])
+                : undefined,
+            }))
+          )
+          .map((e) => ({
+            ...e,
+            duration: formatDuration(e.duration),
+            durationTurns: formatDuration(e.durationTurns),
+          }));
+      }
+      return effects;
     },
   },
 
@@ -105,6 +146,19 @@ export default {
 .effect-description {
   em {
     @include text-bad();
+    &.ok {
+      @include text-outline();
+    }
+  }
+
+  .ok {
+    em {
+      @include text-outline();
+    }
+  }
+
+  .nameable {
+    @include text-outline();
   }
 }
 </style>

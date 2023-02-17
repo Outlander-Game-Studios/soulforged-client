@@ -231,7 +231,7 @@ export default {
       return parameter.max;
     },
     startAction(action) {
-      if (!action.parameters?.length && !action.actionPoints) {
+      if (!action.parameters?.length && !action.actionPoints && !action.extra) {
         this.performAction(action);
         return;
       }

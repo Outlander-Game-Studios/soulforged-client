@@ -64,6 +64,9 @@ global.creaturesSort = (a, b) => {
 };
 
 global.structureSorter = (a, b) => {
+  if (!!a.ruin !== !!b.ruin) {
+    return a.ruin ? 1 : -1;
+  }
   if (!!a.own !== !!b.own) {
     return b.own ? 1 : -1;
   }

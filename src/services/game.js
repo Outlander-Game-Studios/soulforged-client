@@ -299,7 +299,7 @@ export const GameService = (window.GameService = {
     return GameService.getKnowledgeBaseStream()
       .pluck("craftIds")
       .switchMap((craftIds) =>
-        !craftIds.length
+        !craftIds || !craftIds.length
           ? Rx.Observable.of([])
           : Rx.combineLatest(
               craftIds.map((craftId) => GameService.getCraftDetails(craftId))
@@ -322,6 +322,19 @@ export const GameService = (window.GameService = {
       .map((plans) => plans.filter((plan) => !!plan));
   },
 
+  getOffhandStream() {
+    return GameService.getRootEntityStream()
+      .pluck("equipment")
+      .switchMap((equipment) => {
+        const slotName = "Offhand";
+        return equipment && equipment[slotName]
+          ? GameService.getEntityStream(
+              equipment[slotName],
+              ENTITY_VARIANTS.BASE
+            )
+          : Rx.Observable.of(null);
+      });
+  },
   getWeaponStream() {
     return GameService.getRootEntityStream()
       .pluck("equipment")
@@ -839,7 +852,7 @@ export const GameService = (window.GameService = {
       infoStreams[key] = new Rx.ReplaySubject(1);
     }
     if (!alreadyExists || reFetch) {
-      this.request(REQUEST_CODES.GET_INFO, {
+      GameService.request(REQUEST_CODES.GET_INFO, {
         infoType,
         ...params,
       }).then((result) => {

@@ -12,7 +12,7 @@
         <Button
           class="menu-button"
           @click="selectOption('interface')"
-          v-if="isInGame"
+          v-if="isInGame && !isInCombat"
         >
           Interface overview
         </Button>
@@ -24,7 +24,7 @@
           @click="selectOption('collections')"
           v-if="isInGame"
         >
-          Your Collections
+          Collections
         </Button>
         <Button
           class="menu-button"
@@ -262,6 +262,9 @@ export default {
         }
       }),
       isInGame: GameService.getRootEntityStream(),
+      isInCombat: GameService.getRootEntityStream()
+        .map((c) => c?.operation?.type === "CombatOperation")
+        .distinctUntilChanged(undefined, JSON.stringify),
       newVersion: Rx.combineLatest(
         GameService.getVersionStream(),
         GameService.getLastViewedVersionStream()

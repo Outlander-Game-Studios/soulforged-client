@@ -6,6 +6,34 @@ import bashMoveIcon from "./assets/moves/bash.jpg";
 import fadeMoveIcon from "./assets/moves/fade.jpg";
 import fleeMoveIcon from "./assets/moves/flee.png";
 import punchMoveIcon from "./assets/moves/punch.jpg";
+import iconStrength from "./assets/stats/stats_strength.jpg";
+import iconDexterity from "./assets/stats/stats_dexterity.jpg";
+import iconEndurance from "./assets/stats/stats_endurance.jpg";
+import iconPerception from "./assets/stats/stats_perception.jpg";
+import iconIntelligence from "./assets/stats/stats_intelligence.jpg";
+
+const statistics = {
+  Strength: {
+    value: 100,
+    icon: iconStrength,
+  },
+  Dexterity: {
+    value: 100,
+    icon: iconDexterity,
+  },
+  Endurance: {
+    value: 100,
+    icon: iconEndurance,
+  },
+  Perception: {
+    value: 100,
+    icon: iconPerception,
+  },
+  Intelligence: {
+    value: 100,
+    icon: iconIntelligence,
+  },
+};
 
 mockEntity(
   "mainEntity",
@@ -23,13 +51,7 @@ mockEntity(
       current: 0,
       max: 3,
     },
-    statistics: {
-      Strength: 100,
-      Dexterity: 100,
-      Endurance: 100,
-      Perception: 100,
-      Intelligence: 100,
-    },
+    statistics,
     nextAP: {
       gain: 15,
       nextTickSeconds: 15,
@@ -105,13 +127,7 @@ mockEntity(
       effects.hunger,
       effects.moodOk,
     ],
-    statistics: {
-      Strength: 100,
-      Dexterity: 100,
-      Endurance: 100,
-      Perception: 100,
-      Intelligence: 100,
-    },
+    statistics,
     skills: {
       Foraging: 0.1,
       Pathfinding: 0.2,
@@ -158,3 +174,7 @@ mockEntity(
   }),
   [ENTITY_VARIANTS.BASE, ENTITY_VARIANTS.SELF, ENTITY_VARIANTS.TRADE]
 );
+
+GameService.mockRequest(REQUEST_CODES.GET_INFO, (params) => {
+  return {};
+});

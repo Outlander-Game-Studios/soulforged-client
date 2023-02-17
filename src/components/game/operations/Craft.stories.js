@@ -89,6 +89,7 @@ const factory = (onMounted = () => {}) => () => {
           },
           skillInfo: {
             skill: "Crafting",
+            skillLevel: 0,
             skillGainMult: 4,
             successChance: 2,
             accidentChance: 1,

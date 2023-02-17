@@ -22,8 +22,10 @@
           :backgroundType="backgroundType"
         >
           <div class="tab-header-content" :class="{ indent: !!lastTab }">
-            <slot :name="'header:' + tab.header"></slot>
-            <div v-if="!$slots['header:' + tab.header]">{{ tab.header }}</div>
+            <slot :name="'header:' + tab.tabId"></slot>
+            <div v-if="!$slots['header:' + tab.tabId]">
+              {{ tab.header }}
+            </div>
             <transition name="fade">
               <div
                 class="indicator"
@@ -142,7 +144,7 @@ export default {
     registerTab(idx, header, setActiveCallback, compVm) {
       const { title, indicator, indicatorStyle } = compVm;
       this.tabs.splice(idx, 0, {
-        tabId: header,
+        tabId: header.replace(/ /g, "_"),
         header: header,
         callback: setActiveCallback,
         title,

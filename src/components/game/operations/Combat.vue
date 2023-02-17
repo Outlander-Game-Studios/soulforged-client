@@ -14,13 +14,40 @@
         <Spaced>
           <Description>
             Swapping weapon will stop you from<br />
-            counter-attacking until your next turn
+            counter-attacking until your next turn<br />
+            <br />
+            It will also put all of the skills of the<br />
+            newly equipped item on minimum {{ SWAP_COOLDOWN }} turn cooldown
           </Description>
         </Spaced>
         <div class="select-weapon">
           <ItemSelector
             :filter="itemWeaponFilter()"
             @selected="selectWeapon($event)"
+          >
+            <template v-slot="{ item }"> </template>
+          </ItemSelector>
+        </div>
+      </Modal>
+      <Modal
+        dialog
+        v-if="selectingOffhand"
+        title="Select offhand"
+        @close="selectingOffhand = null"
+      >
+        <Spaced>
+          <Description>
+            Swapping offhand will stop you from<br />
+            counter-attacking until your next turn<br />
+            <br />
+            It will also put all of the skills of the<br />
+            newly equipped item on minimum {{ SWAP_COOLDOWN }} turn cooldown
+          </Description>
+        </Spaced>
+        <div class="select-weapon">
+          <ItemSelector
+            :filter="itemOffhandFilter()"
+            @selected="selectOffhand($event)"
           >
             <template v-slot="{ item }"> </template>
           </ItemSelector>
@@ -73,7 +100,7 @@
           </div>
         </template>
       </Modal>
-      <template v-if="!combat.finished">
+      <template v-if="inBattle">
         <div class="main-area">
           <Button
             v-if="combat.canAutoResolve"
@@ -82,20 +109,25 @@
           >
             Auto-resolve
           </Button>
-          <Container
-            v-if="selectedMove && timeRemaining"
-            class="move-info"
-            borderType="alt"
-            :borderSize="0.8"
-          >
-            <Vertical>
-              <Header small> {{ selectedMove.name }} </Header>
-              <CombatMoveDetails :moveDetails="selectedMove" noIcon />
-              <Button @click="selectMove(selectedMoveId)" reactToEnter
-                >Perform</Button
-              >
-            </Vertical>
-          </Container>
+          <div v-if="selectedMove && timeRemaining" class="move-info">
+            <CloseButton
+              class="move-preview-close"
+              @click="selectedMoveId = null"
+            />
+            <Container borderType="alt" :borderSize="0.8">
+              <Vertical>
+                <Header small>
+                  {{ selectedMove.name }}
+                </Header>
+                <Spaced>
+                  <CombatMoveDetails :moveDetails="selectedMove" noIcon />
+                </Spaced>
+                <Button @click="selectMove(selectedMoveId)" reactToEnter
+                  >Perform</Button
+                >
+              </Vertical>
+            </Container>
+          </div>
           <div class="creatures">
             <div
               v-for="creature in displayedCreatures"
@@ -124,6 +156,7 @@
                     :effects="creature.effects"
                     :size="3"
                     :filter="combatEffectFilter"
+                    group
                   />
                 </div>
                 <div class="effects">
@@ -136,12 +169,13 @@
                 </div>
               </div>
               <CreatureIcon
-                class="avatar interactive"
+                class="avatar"
                 :creature="creature"
                 size="large"
                 noOperation
                 @click="clickedCreature(creature)"
                 noSleep
+                moveIndicator
               />
               <div
                 v-for="floatingCombatText in floatingCombatTexts[creature.id]"
@@ -200,6 +234,9 @@
           </div>
         </div>
         <div class="top-controls">
+          <div class="game-help-container">
+            <GameHelpModule />
+          </div>
           <div
             v-if="bigText"
             class="big-text"
@@ -248,6 +285,23 @@
                     />
                   </HorizontalCenter>
                 </Vertical>
+                <Vertical :class="{ 'not-your-turn': !timeRemaining }">
+                  <Header alt2 small>Offhand</Header>
+                  <HorizontalCenter>
+                    <Item
+                      v-if="offhand"
+                      :data="offhand"
+                      @click="selectingOffhand = true"
+                      :size="7"
+                    />
+                    <Icon
+                      v-else
+                      class="interactive"
+                      @click="selectingOffhand = true"
+                      :size="7"
+                    />
+                  </HorizontalCenter>
+                </Vertical>
                 <div
                   class="flex-grow"
                   :class="{ 'not-your-turn': !timeRemaining }"
@@ -264,6 +318,7 @@
                       :currentMove="operation.context.currentMoveId"
                       @selected="selectMove($event)"
                       wrap
+                      :selectedMoveId="selectedMoveId"
                     />
                   </Vertical>
                 </div>
@@ -280,7 +335,7 @@
           </Container>
         </div>
       </template>
-      <template v-if="combat.finished">
+      <template v-else>
         <div class="combat-summary">
           <Spaced>
             <Vertical>
@@ -495,9 +550,11 @@ export default window.OperationCombat = {
 
   data: () => ({
     AUTO_RESOLVE_TURNS,
+    SWAP_COOLDOWN,
     skipping: false,
     targetting: false,
     selectingWeapon: false,
+    selectingOffhand: false,
     creaturePositions: {},
     damageQueue: [],
     damagePresentation: null,
@@ -525,6 +582,11 @@ export default window.OperationCombat = {
   },
 
   computed: {
+    inBattle() {
+      return (
+        !this.combat.finished && !this.operation.fled && !this.operation.lost
+      );
+    },
     fleeIconStyle() {
       return {
         backgroundImage: `url("${GameService.getSecureResource(fleeIcon)}")`,
@@ -587,6 +649,7 @@ export default window.OperationCombat = {
       mainEntity: GameService.getRootEntityStream(),
       backdropImage: GameService.getBackdropStyleStream(),
       weapon: GameService.getWeaponStream(),
+      offhand: GameService.getOffhandStream(),
       damages: combatStream
         .pluck("damages")
         .filter((damages) => !!damages)
@@ -724,10 +787,26 @@ export default window.OperationCombat = {
       }
     },
 
+    itemOffhandFilter() {
+      return (item) => item.actions.some((a) => a.actionId === "equip_Offhand");
+    },
+    selectOffhand(item) {
+      if (!item) {
+        if (this.offhand) {
+          GameService.performAction(this.offhand, {
+            actionId: "un_equip_Offhand",
+          });
+        }
+      } else {
+        GameService.performAction(item, { actionId: "equip_Offhand" });
+      }
+      this.selectingOffhand = false;
+      this.selectedMoveId = null;
+    },
+
     itemWeaponFilter() {
       return (item) => item.actions.some((a) => a.actionId === "equip_Weapon");
     },
-
     selectWeapon(item) {
       if (!item) {
         if (this.weapon) {
@@ -1006,8 +1085,8 @@ $effects-size: 6rem;
 .creatures {
   transform: translateZ(0);
   border: 1rem solid transparent;
-  margin: ($avatar-size / 2 + $effects-size) ($avatar-size / 2 + 2rem)
-    ($avatar-size / 2);
+  margin: calc($avatar-size / 2 + $effects-size) calc($avatar-size / 2 + 2rem)
+    calc($avatar-size / 2 + 4rem);
   flex-grow: 1;
 }
 
@@ -1139,7 +1218,7 @@ $effects-size: 6rem;
     transition: none;
   }
 
-  margin: -$avatar-size / 2;
+  margin: calc($avatar-size / -2);
   position: absolute;
   display: inline-block;
 
@@ -1205,6 +1284,7 @@ $effects-size: 6rem;
     width: 12rem;
     position: absolute;
     bottom: 100%;
+    pointer-events: none;
   }
 
   &.animation-attacking {
@@ -1261,6 +1341,7 @@ $effects-size: 6rem;
 
 $side-position: 1rem;
 .floating-combat-text {
+  pointer-events: none;
   $shadow: 0 0 0.5rem 0.5rem;
   position: absolute;
   z-index: 200;
@@ -1305,9 +1386,9 @@ $side-position: 1rem;
   pointer-events: none;
   position: absolute;
   $size: 2.5rem;
-  top: 0.8rem - $size/ 2;
+  top: calc(0.8rem - $size / 2);
   left: 50%;
-  margin-left: -$size / 2;
+  margin-left: calc($size / -2);
   z-index: 3;
 
   .marker {
@@ -1425,5 +1506,16 @@ em {
 .auto-resolve-count {
   text-align: center;
   @include text-outline();
+}
+
+.game-help-container {
+  position: absolute;
+  bottom: 2.8rem;
+  right: 0.3rem;
+}
+.move-preview-close {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 </style>

@@ -1,10 +1,10 @@
 <template>
-  <div v-if="operation.context.skillInfo">
-    <div v-if="skill">
+  <div v-if="internalSkillData">
+    <div v-if="skillLevel !== undefined">
       <SkillBar
         :skillName="skill"
         :skillLevel="skillLevel"
-        :extras="'(x' + expGainMultiplier + ' exp)'"
+        :extras="expGainMultiplier ? '(x' + expGainMultiplier + ' exp)' : ''"
       />
     </div>
     <div v-if="successChance !== undefined">
@@ -32,7 +32,7 @@
         </span>
       </LabeledValue>
     </div>
-    <div v-if="finalSpeed !== undefined">
+    <div v-if="finalSpeed !== undefined && finalSpeed !== null">
       <LabeledValue label="Speed">
         <span class="interactive" @click="explain = 'speed'">
           <span class="rate" :class="speedClass">{{ finalSpeed || 0 }}%</span>
@@ -40,9 +40,10 @@
         </span>
       </LabeledValue>
     </div>
-    <div v-else-if="baseSpeed !== undefined">
+    <div v-else-if="baseSpeed !== undefined && finalSpeed !== null">
       <LabeledValue label="Base speed"> {{ baseSpeed }}% </LabeledValue>
     </div>
+    <slot />
     <Modal dialog v-if="explain === 'speed'" @close="explain = null">
       <template v-slot:title> Speed </template>
       <template v-slot:contents>
@@ -175,6 +176,7 @@ export default {
   components: { Horizontal },
   props: {
     operation: {},
+    skillData: {},
   },
 
   data: () => ({
@@ -216,32 +218,35 @@ export default {
           return "rate-color-5";
       }
     },
+    internalSkillData() {
+      return this.skillData || this.operation?.context?.skillInfo;
+    },
     finalSpeed() {
-      return this.operation?.context?.skillInfo?.finalSpeed;
+      return this.internalSkillData?.finalSpeed;
     },
     baseSpeed() {
-      return this.operation?.context?.skillInfo?.baseSpeed;
+      return this.internalSkillData?.baseSpeed;
     },
     speedModifiers() {
-      return this.operation?.context?.skillInfo?.speedModifiers;
+      return this.internalSkillData?.speedModifiers;
     },
     skill() {
-      return this.operation?.context?.skillInfo?.skill;
+      return this.internalSkillData?.skill;
     },
     successChance() {
-      return this.operation?.context?.skillInfo?.successChance;
+      return this.internalSkillData?.successChance;
     },
     accidentChance() {
-      return this.operation?.context?.skillInfo?.accidentChance;
+      return this.internalSkillData?.accidentChance;
     },
     accidentSeverity() {
-      return this.operation?.context?.skillInfo?.accidentSeverity;
+      return this.internalSkillData?.accidentSeverity;
     },
     expGainMultiplier() {
-      return this.operation?.context?.skillInfo?.skillGainMult;
+      return this.internalSkillData?.skillGainMult;
     },
     skillLevel() {
-      return this.operation?.context?.skillInfo?.skillLevel;
+      return this.internalSkillData?.skillLevel;
     },
   },
 };

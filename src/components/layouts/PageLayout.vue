@@ -5,6 +5,8 @@
     </div>
     <div class="main">
       <div class="bg-image" :style="backdropImage" />
+      <DungeonScene :location="location" />
+      <EnvironmentOverlay />
       <slot name="main" />
     </div>
     <div class="controls" v-if="!fullscreenOperation">
@@ -23,6 +25,7 @@
 export default {
   subscriptions() {
     return {
+      location: GameService.getLocationStream(),
       backdropImage: GameService.getBackdropStyleStream(),
       fullscreenOperation: ControlsService.getFullscreenOperationStream(),
     };
@@ -99,7 +102,7 @@ export default {
   }
 
   .help-container {
-    position: absolute;
+    position: fixed;
     bottom: 0.3rem;
     right: 0.3rem;
     z-index: 6;

@@ -60,11 +60,18 @@ const testDevice = (device = {}) =>
         .replace(/_+/g, "_")
         .toLowerCase();
 
-      const customSnapshotsDir = config.context.parameters.fileName.includes(
-        ".server.stories.js"
-      )
-        ? `${__dirname}/../../server/storyshots-snapshots`
-        : `${__dirname}/storyshots-snapshots`;
+      let customSnapshotsDir;
+      const { fileName } = config.context.parameters;
+      switch (true) {
+        case fileName.includes(".server.stories.js"):
+          customSnapshotsDir = `${__dirname}/../../server/storyshots-snapshots`;
+          break;
+        case fileName.includes(".world.stories.js"):
+          customSnapshotsDir = `${__dirname}/../../world/storyshots-snapshots`;
+          break;
+        default:
+          customSnapshotsDir = `${__dirname}/storyshots-snapshots`;
+      }
 
       return {
         customDiffConfig: {

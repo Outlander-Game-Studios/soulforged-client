@@ -2,7 +2,7 @@
   <div
     v-if="internalCreature"
     class="creature-icon-wrapper"
-    :class="{ dead: internalCreature.dead, interactive: hasClick }"
+    :class="{ dead: internalCreature.dead, 'interactive-alt': hasClick }"
     @click="mouseClick($event)"
   >
     <Avatar
@@ -23,6 +23,11 @@
       :size="iconSize"
       :text="{ bottomRight: internalCreature.number }"
       :backgroundType="backgroundType"
+    />
+    <NextMoveIndicator
+      v-if="moveIndicator"
+      class="move-indicator"
+      :moveData="internalCreature.nextMove"
     />
     <div
       v-if="!!internalCreature.operationInfo && !noOperation"
@@ -63,10 +68,15 @@ export default {
         "tiny",
       ]),
     },
+    moveIndicator: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   subscriptions() {
     return {
+      mainEntity: GameService.getRootEntityStream(),
       internalCreature: Rx.combineLatest(
         this.$stream("creature"),
         this.$stream("creatureId")
@@ -80,6 +90,14 @@ export default {
 
   computed: {
     backgroundType() {
+      if (this.internalCreature.nextMove) {
+        const { targetId } = this.internalCreature.nextMove;
+        if (targetId === this.mainEntity.id) {
+          return "danger";
+        } else {
+          return "danger-low";
+        }
+      }
       if (!this.internalCreature) {
         return;
       }
@@ -174,5 +192,11 @@ export default {
     @include filter(saturate(0) brightness(0.8));
     opacity: 0.4;
   }
+}
+
+.move-indicator {
+  position: absolute;
+  top: calc(100% - 2.5rem);
+  left: -1.5rem;
 }
 </style>

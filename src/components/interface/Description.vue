@@ -1,7 +1,7 @@
 <template>
   <div
     class="description-container"
-    :class="{ pre: pre, prominent: prominent }"
+    :class="{ pre: pre, prominent: prominent, warning: warning }"
   >
     <slot></slot>
   </div>
@@ -13,6 +13,9 @@ export default {
     prominent: {
       type: Boolean,
     },
+    warning: {
+      type: Boolean,
+    },
     pre: {
       type: Boolean,
     },
@@ -21,6 +24,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../../utils.scss";
+
 .description-container {
   color: #555;
   font-style: italic;
@@ -33,6 +38,11 @@ export default {
   &.prominent {
     font-size: 100%;
     color: #222;
+  }
+  &.warning {
+    font-style: normal;
+    text-align: center;
+    @include text-outline(#492000, #ffbb4f);
   }
 
   em {

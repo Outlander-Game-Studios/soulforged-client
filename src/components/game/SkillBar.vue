@@ -1,19 +1,23 @@
 <template>
   <div class="skill-bar interactive" @click="showDetails = true">
-    <LabeledValue :label="skillName + ' ' + extras" flex>
-      {{ skillSign }}{{ skillLevelFloor || 0 }}.<span class="fraction">{{
-        fractionTwoDigits
-      }}</span>
+    <LabeledValue flex>
+      <template #label>
+        <RichText :value="skillName + ' ' + extras" nonInteractive />
+      </template>
+      <template>
+        {{ skillSign }}{{ skillLevelFloor || 0 }}.<span class="fraction">{{
+          fractionTwoDigits
+        }}</span>
+      </template>
     </LabeledValue>
     <ProgressBar :current="percentage" :size="0.6" color="blue" />
-    <Modal
-      v-if="showDetails"
-      dialog
-      large
-      @close="showDetails = false"
-      :title="skillName"
-    >
-      <SkillDetails :skillName="skillName" />
+    <Modal v-if="showDetails" dialog large @close="showDetails = false">
+      <template v-slot:title>
+        <RichText :value="skillName" />
+      </template>
+      <template v-slot:contents>
+        <SkillDetails :skillName="skillName" />
+      </template>
     </Modal>
   </div>
 </template>

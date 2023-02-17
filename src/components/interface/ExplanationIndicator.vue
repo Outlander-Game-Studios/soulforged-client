@@ -142,7 +142,7 @@ export default {
   z-index: 500;
   display: flex;
   line-height: $lineHeight;
-  margin-top: -$lineHeight / 2;
+  margin-top: calc($lineHeight / -2);
   pointer-events: none;
   @include text-outline();
   @include filter(drop-shadow(0.2rem 0.2rem 0.1rem black));
@@ -151,7 +151,7 @@ export default {
     $dashHeight: 0.2rem;
     width: 2rem;
     min-width: 2rem;
-    margin-top: ($lineHeight - $dashHeight) / 2;
+    margin-top: calc(($lineHeight - $dashHeight) / 2);
     height: $dashHeight;
     background: white;
     //border: 1px solid black;
@@ -164,7 +164,7 @@ export default {
       border-left: 1rem solid white;
       border-top: 0.5rem solid transparent;
       border-bottom: 0.5rem solid transparent;
-      bottom: -0.5rem + $dashHeight / 2;
+      bottom: calc(-0.5rem + $dashHeight / 2);
       right: -0.3rem;
     }
   }
@@ -176,7 +176,7 @@ export default {
   &.top {
     transform: rotate(-90deg);
     transform-origin: left;
-    margin-bottom: -$lineHeight / 2;
+    margin-bottom: calc($lineHeight / -2);
 
     .text {
       margin-left: 1.5rem;
@@ -214,7 +214,7 @@ export default {
   &.bottom {
     transform: rotate(90deg);
     transform-origin: left;
-    margin-bottom: -$lineHeight / 2;
+    margin-bottom: calc($lineHeight / -2);
 
     .text {
       margin-left: 1.5rem;
