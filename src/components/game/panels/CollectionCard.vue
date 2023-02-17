@@ -67,8 +67,8 @@ export default {
 
 .collection-card {
   font-size: calc(0.02 * var(--app-min-size));
-  width: 10em;
-  height: 14em;
+  width: 9.5em;
+  height: 13.3em;
 
   background-image: url(ui-asset("/card/face.png", "../"));
   background-size: 100% 100%;
@@ -86,11 +86,11 @@ export default {
   .name {
     font-size: 1em;
     position: absolute;
-    top: 8.4em;
+    top: 8em;
     text-align: center;
     width: 8em;
     max-width: 8em;
-    margin-left: 1em;
+    margin-left: 0.75em;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

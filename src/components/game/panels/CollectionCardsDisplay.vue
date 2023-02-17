@@ -154,7 +154,7 @@ export default {
     }
 
     @media (orientation: landscape) {
-      width: calc(1.1 * var(--app-min-size));
+      width: calc(1.05 * var(--app-min-size));
 
       .single-card {
         margin: 1em 0.5em;
