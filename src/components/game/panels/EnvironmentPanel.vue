@@ -16,6 +16,9 @@
       <template v-slot:title> Environment </template>
       <template v-slot:contents>
         <Effects :effects="details === true ? effects : [details]" />
+        <HelpBuildingSpacing
+          v-if="details.name && details.name.includes('Spacing')"
+        />
       </template>
     </Modal>
   </div>

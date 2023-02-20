@@ -46,13 +46,13 @@ global.getScreenOrientation = () =>
   isScreenOrientationLandscape() ? "landscape" : "portrait";
 
 global.creaturesSort = (a, b) => {
-  if (a.hostile !== b.hostile) {
+  if (!!a.hostile !== !!b.hostile) {
     return a.hostile ? 1 : -1;
   }
-  if (a.inactive !== b.inactive) {
+  if (!!a.inactive !== !!b.inactive) {
     return a.inactive ? 1 : -1;
   }
-  if (a.nonAggressive !== b.nonAggressive) {
+  if (!!a.nonAggressive !== !!b.nonAggressive) {
     return a.nonAggressive ? 1 : -1;
   }
   if (a.name !== b.name) {
