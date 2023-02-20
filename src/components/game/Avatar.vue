@@ -27,6 +27,12 @@
         <div class="body">
           <div class="arm-anchor left">
             <div
+              class="shoulder-wear"
+              :style="
+                avatarAssetsStyles(`equipment/chest`, [128, 0], [128, 90])
+              "
+            />
+            <div
               class="forearm"
               :style="avatarAssetsStyles(`body_parts_v2`, [0, 0], [31, 42])"
             />
@@ -50,19 +56,28 @@
               class="foot"
               :style="avatarAssetsStyles(`body_parts_v2`, [0, 123], [32, 27])"
             />
+            <div
+              class="foot-wear"
+              :style="avatarAssetsStyles(`equipment/boots`, [0, 0], [90, 100])"
+            />
           </div>
           <div
             class="torso"
             :style="avatarAssetsStyles(`body_parts_v2`, [64, 122], [59, 67])"
+          >
+            <div
+              class="chest-wear"
+              :style="avatarAssetsStyles(`equipment/chest`, [0, 0], [128, 188])"
+            />
+          </div>
+          <div
+            class="head-wear"
+            :style="avatarAssetsStyles(`equipment/head`, [0, 0], [512, 512])"
           />
           <div class="head-anchor">
             <div
               class="face"
               :style="avatarAssetsStyles(`body_parts_v2`, [64, 0], [115, 122])"
-            />
-            <div
-              class="head-wear"
-              :style="avatarAssetsStyles(`equipment/head`, [0, 0], [512, 512])"
             />
             <div
               class="eyes"
@@ -106,11 +121,27 @@
               class="foot"
               :style="avatarAssetsStyles(`body_parts_v2`, [32, 123], [32, 27])"
             />
+            <div
+              class="foot-wear"
+              :style="avatarAssetsStyles(`equipment/boots`, [0, 0], [90, 100])"
+            />
           </div>
           <div class="arm-anchor right">
             <div
+              class="shoulder-wear"
+              :style="
+                avatarAssetsStyles(`equipment/chest`, [128, 0], [128, 90])
+              "
+            />
+            <div
               class="forearm"
               :style="avatarAssetsStyles(`body_parts_v2`, [31, 0], [31, 42])"
+            />
+            <div
+              class="hand-wear"
+              :style="
+                avatarAssetsStyles(`equipment/gloves`, [90, 0], [90, 100])
+              "
             />
             <div
               v-if="!headOnly"
@@ -153,7 +184,10 @@ const MOUTHS = {
 };
 
 const imageSizes = {
+  "equipment/chest": [256, 188],
   "equipment/head": [512, 512],
+  "equipment/gloves": [180, 100],
+  "equipment/boots": [180, 100],
   body_parts_v2: [185, 195],
   "eye/all_brows": [110, 560],
   "eye/all_eyes": [110, 560],
@@ -208,9 +242,13 @@ export default {
     gloomy: false,
     feelingPain: 0,
     loading: true,
+    refresh: 0,
   }),
 
   subscriptions() {
+    // setInterval(() => {
+    //   this.refresh++;
+    // }, 1000);
     return {
       self: Rx.combineLatest(
         this.$stream("creature"),
@@ -472,7 +510,8 @@ export default {
       }
 
       const style = {
-        "background-image": "url(" + avatarAssets[asset] + ")",
+        "background-image":
+          "url(" + avatarAssets[asset] + `?${this.refresh}` + ")",
       };
       this.registerImageToLoad(avatarAssets[asset]);
       if (offsetX !== undefined) {
@@ -575,23 +614,23 @@ $avatar-bg-color: beige;
   .body {
     @include position(80, 180, #{$avatar-size-units});
 
+    .head-wear {
+      @include size(460, 460, #{$avatar-size-units});
+      @include position(-209, -235, #{$avatar-size-units});
+      z-index: 20;
+    }
     .head-anchor {
       @include size(100, 100, #{$avatar-size-units});
       @include position(-33, -105, #{$avatar-size-units});
       transform-origin: calc(60 * #{$avatar-size-units})
         calc(105 * #{$avatar-size-units});
-      z-index: 1;
+      z-index: 8;
 
       .face {
         @include size(113, 120, #{$avatar-size-units});
         @include bodyPart();
         @include position(2, 0, #{$avatar-size-units});
         z-index: -1;
-      }
-      .head-wear {
-        @include size(460, 460, #{$avatar-size-units});
-        @include position(-175, -130, #{$avatar-size-units});
-        z-index: 5;
       }
       .ear {
         @include bodyPart();
@@ -626,6 +665,14 @@ $avatar-bg-color: beige;
         transform-origin: calc(30 * #{$avatar-size-units})
           calc(10 * #{$avatar-size-units});
 
+        .shoulder-wear {
+          $size: 84;
+          @include size($size, 45 * $size / 64, #{$avatar-size-units});
+          @include position(-18, -10, #{$avatar-size-units});
+          z-index: 5;
+          transform: rotate(-47deg);
+        }
+
         .forearm {
           @include size(29, 40, #{$avatar-size-units});
           @include position(13, 6, #{$avatar-size-units});
@@ -643,10 +690,25 @@ $avatar-bg-color: beige;
         }
       }
       &.right {
-        z-index: 2;
+        z-index: 12;
         @include position(-25, 0, #{$avatar-size-units});
         transform-origin: calc(35 * #{$avatar-size-units})
           calc(15 * #{$avatar-size-units});
+
+        .shoulder-wear {
+          $size: 84;
+          @include size($size, 45 * $size / 64, #{$avatar-size-units});
+          @include position(-15, -10, #{$avatar-size-units});
+          z-index: 5;
+          transform: rotate(-22deg);
+        }
+        .hand-wear {
+          $size: 65;
+          @include size($size, 100 * $size / 90, #{$avatar-size-units});
+          @include position(-1, 12, #{$avatar-size-units});
+          z-index: 8;
+          transform: rotate(-5deg);
+        }
 
         .forearm {
           @include size(29, 40, #{$avatar-size-units});
@@ -678,6 +740,13 @@ $avatar-bg-color: beige;
           @include position(18, 30, #{$avatar-size-units});
           @include bodyPart();
         }
+
+        .foot-wear {
+          $size: 65;
+          @include size($size, 100 * $size / 90, #{$avatar-size-units});
+          @include position(3, 5, #{$avatar-size-units});
+          z-index: 2;
+        }
       }
 
       &.right {
@@ -696,12 +765,27 @@ $avatar-bg-color: beige;
           @include position(12, 30, #{$avatar-size-units});
           @include bodyPart();
         }
+
+        .foot-wear {
+          $size: 65;
+          @include size($size, 100 * $size / 90, #{$avatar-size-units});
+          @include position(-2, 5, #{$avatar-size-units});
+          z-index: 2;
+        }
       }
     }
 
     .torso {
       @include size(57, 65, #{$avatar-size-units});
       @include bodyPart();
+
+      .chest-wear {
+        $size: 90;
+        @include size($size, calc(188 * $size / 128), #{$avatar-size-units});
+        @include position(-15, -10, #{$avatar-size-units});
+        background-repeat: no-repeat;
+        z-index: 5;
+      }
     }
 
     .skin-color {
