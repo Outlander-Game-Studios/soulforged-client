@@ -60,7 +60,7 @@ $disabled-color: #ccc;
       background: $color;
       @include fill();
       opacity: 0.15;
-      z-index: 10;
+      z-index: 30;
       margin: $shadow-size;
       box-shadow: 0 0 $shadow-size $color;
     }

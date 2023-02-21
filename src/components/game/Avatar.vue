@@ -46,6 +46,10 @@
               class="fingers"
               :style="avatarAssetsStyles(`body_parts_v2`, [0, 42], [26, 24])"
             />
+            <div
+              class="hand-wear"
+              :style="avatarAssetsStyles(`equipment/gloves`, [0, 0], [90, 100])"
+            />
           </div>
           <div class="leg-anchor left" v-if="!headOnly">
             <div
@@ -99,7 +103,7 @@
                 )
               "
             />
-            <div class="hair" :style="avatarAssetsStyles(`hair`)" />
+            <div class="hair" :style="avatarAssetsStylesForHair" />
             <div
               class="mouth"
               :style="
@@ -242,13 +246,13 @@ export default {
     gloomy: false,
     feelingPain: 0,
     loading: true,
-    refresh: 0,
   }),
 
+  created() {
+    this.$avatarAssetsStylesCache = {};
+  },
+
   subscriptions() {
-    // setInterval(() => {
-    //   this.refresh++;
-    // }, 1000);
     return {
       self: Rx.combineLatest(
         this.$stream("creature"),
@@ -459,6 +463,28 @@ export default {
 
       return "idle";
     },
+
+    actualAvatarAssets() {
+      return this.chatHead
+        ? this.chatHeadAssets
+        : this.avatar
+        ? this.avatar.avatarAssets
+        : this.avatarAssets;
+    },
+
+    avatarAssetsStylesForHair() {
+      const avatarAssets = this.actualAvatarAssets;
+      let style = this.avatarAssetsStyles("hair");
+      if (avatarAssets && avatarAssets[`equipment/head/mask`]) {
+        style = {
+          ...style,
+          "mask-size": "110% auto",
+          ["-webkit-mask-image"]: `url(${avatarAssets[`equipment/head/mask`]})`,
+          ["mask-image"]: `url(${avatarAssets[`equipment/head/mask`]})`,
+        };
+      }
+      return style;
+    },
   },
 
   methods: {
@@ -499,39 +525,36 @@ export default {
     },
 
     avatarAssetsStyles(asset, [offsetX, offsetY] = [], [sizeX, sizeY] = []) {
-      const avatarAssets = this.chatHead
-        ? this.chatHeadAssets
-        : this.avatar
-        ? this.avatar.avatarAssets
-        : this.avatarAssets;
-
+      const avatarAssets = this.actualAvatarAssets;
       if (!avatarAssets || !avatarAssets[asset]) {
         return;
       }
-
-      const style = {
-        "background-image":
-          "url(" + avatarAssets[asset] + `?${this.refresh}` + ")",
-      };
-      this.registerImageToLoad(avatarAssets[asset]);
-      if (offsetX !== undefined) {
-        if (!imageSizes[asset]) {
-          throw new Error("No size specified: " + asset);
+      const key = `${asset}:${avatarAssets[asset]}:${offsetX}-${offsetY}:${sizeX}-${sizeY}`;
+      if (!this.$avatarAssetsStylesCache[key]) {
+        const style = {
+          "background-image": "url(" + avatarAssets[asset] + ")",
+        };
+        this.registerImageToLoad(avatarAssets[asset]);
+        if (offsetX !== undefined) {
+          if (!imageSizes[asset]) {
+            throw new Error("No size specified: " + asset);
+          }
+          const [imageSizeX, imageSizeY] = imageSizes[asset];
+          style["background-position-x"] = `${
+            (100 * offsetX) / (imageSizeX - sizeX)
+          }%`;
+          style["background-position-y"] = `${
+            (100 * offsetY) / (imageSizeY - sizeY)
+          }%`;
+          style["background-size"] = `${(imageSizeX / sizeX) * 100}% ${
+            (imageSizeY / sizeY) * 100
+          }%`;
+        } else {
+          style["background-size"] = "100%";
         }
-        const [imageSizeX, imageSizeY] = imageSizes[asset];
-        style["background-position-x"] = `${
-          (100 * offsetX) / (imageSizeX - sizeX)
-        }%`;
-        style["background-position-y"] = `${
-          (100 * offsetY) / (imageSizeY - sizeY)
-        }%`;
-        style["background-size"] = `${(imageSizeX / sizeX) * 100}% ${
-          (imageSizeY / sizeY) * 100
-        }%`;
-      } else {
-        style["background-size"] = "100%";
+        this.$avatarAssetsStylesCache[key] = style;
       }
-      return style;
+      return this.$avatarAssetsStylesCache[key];
     },
 
     repeatingAnimation(
@@ -667,10 +690,16 @@ $avatar-bg-color: beige;
 
         .shoulder-wear {
           $size: 84;
-          @include size($size, 45 * $size / 64, #{$avatar-size-units});
+          @include size($size, calc(45 * $size / 64), #{$avatar-size-units});
           @include position(-18, -10, #{$avatar-size-units});
           z-index: 5;
           transform: rotate(-47deg);
+        }
+        .hand-wear {
+          $size: 65;
+          @include size($size, calc(100 * $size / 90), #{$avatar-size-units});
+          @include position(-3, 12, #{$avatar-size-units});
+          transform: rotate(-5deg);
         }
 
         .forearm {
@@ -697,14 +726,14 @@ $avatar-bg-color: beige;
 
         .shoulder-wear {
           $size: 84;
-          @include size($size, 45 * $size / 64, #{$avatar-size-units});
+          @include size($size, calc(45 * $size / 64), #{$avatar-size-units});
           @include position(-15, -10, #{$avatar-size-units});
           z-index: 5;
           transform: rotate(-22deg);
         }
         .hand-wear {
           $size: 65;
-          @include size($size, 100 * $size / 90, #{$avatar-size-units});
+          @include size($size, calc(100 * $size / 90), #{$avatar-size-units});
           @include position(-1, 12, #{$avatar-size-units});
           z-index: 8;
           transform: rotate(-5deg);
@@ -743,9 +772,8 @@ $avatar-bg-color: beige;
 
         .foot-wear {
           $size: 65;
-          @include size($size, 100 * $size / 90, #{$avatar-size-units});
-          @include position(3, 5, #{$avatar-size-units});
-          z-index: 2;
+          @include size($size, calc(100 * $size / 90), #{$avatar-size-units});
+          @include position(2, 5, #{$avatar-size-units});
         }
       }
 
@@ -768,7 +796,7 @@ $avatar-bg-color: beige;
 
         .foot-wear {
           $size: 65;
-          @include size($size, 100 * $size / 90, #{$avatar-size-units});
+          @include size($size, calc(100 * $size / 90), #{$avatar-size-units});
           @include position(-2, 5, #{$avatar-size-units});
           z-index: 2;
         }

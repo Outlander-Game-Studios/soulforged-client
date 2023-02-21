@@ -25,7 +25,12 @@
           <Vertical>
             <Vertical>
               <div class="creature-icon-wrapper">
-                <CreatureIcon :creature="creature" size="large" />
+                <Avatar
+                  v-if="creature.avatar"
+                  :creature="creature"
+                  size="large"
+                />
+                <CreatureIcon v-else :creature="creature" size="large" />
               </div>
               <div v-if="creature.nextMove">
                 <Vertical>
