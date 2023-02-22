@@ -64,7 +64,11 @@ export default window.OperationRedecorate = {
     itemFilter() {
       const slotName = this.home.decorations[this.replacingSlot].slotName;
       return (item) => {
-        return item.decorSlots && item.decorSlots.includes(slotName);
+        return (
+          item.decorSlots &&
+          item.decorSlots.includes(slotName) &&
+          !item.isRuined
+        );
       };
     },
 

@@ -17,24 +17,24 @@
       <!-- DUPLICATION -->
       <Vertical tight>
         <div v-if="!loadedCreatures.length" class="empty-text">None</div>
-        <ListItem
-          v-for="creature in loadedCreatures"
-          :key="creature.id"
-          :lazyLoad="() => getCreatureDetailsStream(creature)"
-        >
-          <template v-slot:icon="{ lazyData: creatureDetails }">
-            <CreatureIcon :creature="creatureDetails" />
-          </template>
-          <template v-slot:title="{ lazyData: creatureDetails }">
-            <RichText :value="creatureDetails.name" />
-          </template>
-          <template v-slot:subtitle="{ lazyData: creatureDetails }">
-            <Effects row :effects="creatureDetails.effects" :size="3" />
-          </template>
-          <template v-slot:buttons="{ lazyData: creatureDetails }">
-            <Button @click="addInvitee(creature)">Invite</Button>
-          </template>
-        </ListItem>
+        <div v-for="creature in loadedCreatures" :key="creature.id">
+          <div v-if="!names.includes(creature.name)">
+            <ListItem>
+              <template v-slot:icon>
+                <CreatureIcon :creature="creature" />
+              </template>
+              <template v-slot:title>
+                <RichText :value="creature.name" />
+              </template>
+              <template v-slot:subtitle>
+                <Effects row :effects="creature.effects" :size="3" />
+              </template>
+              <template v-slot:buttons>
+                <Button @click="addInvitee(creature)">Invite</Button>
+              </template>
+            </ListItem>
+          </div>
+        </div>
       </Vertical>
     </Vertical>
     <LoadingPlaceholder v-else />
@@ -61,7 +61,9 @@ export default window.OperationManageInvites = {
       GameService.getRootEntityStream()
     )
       .map(([ids, mainEntity]) => ids.filter((id) => id !== mainEntity.id))
-      .switchMap((ids) => GameService.getEntitiesStream(ids))
+      .switchMap((ids) =>
+        GameService.getEntitiesStream(ids, ENTITY_VARIANTS.DETAILS)
+      )
       .map((loadedCreatures) =>
         loadedCreatures
           .filter((c) => !c.dead && !c.hostile && c.avatar)

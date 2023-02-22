@@ -89,6 +89,7 @@
                 @input="updateItemValue(parameter, $event)"
                 :includeNone="false"
                 :size="5"
+                withText
               />
             </div>
             <div v-else>Missing implementation: {{ parameter }}</div>

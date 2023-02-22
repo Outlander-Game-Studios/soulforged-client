@@ -10,7 +10,10 @@
       <slot name="label" />
     </div>
     <div class="flex-grow" v-if="flex"></div>
-    <div class="value" :class="{ invalid: invalid, 'no-label': !label }">
+    <div
+      class="value"
+      :class="{ invalid: invalid, good: good, bad: bad, 'no-label': !label }"
+    >
       <slot />
       <slot name="value" />
     </div>
@@ -26,6 +29,8 @@ export default {
     flex: { type: Boolean, default: false },
     wrap: { type: Boolean, default: false },
     invalid: { type: Boolean, default: false },
+    good: { type: Boolean, default: false },
+    bad: { type: Boolean, default: false },
   },
 };
 </script>
@@ -75,8 +80,12 @@ export default {
   }
 
   .value {
-    &.invalid {
+    &.invalid,
+    &.bad {
       @include text-bad();
+    }
+    &.good {
+      @include text-good();
     }
 
     &.no-label {

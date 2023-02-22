@@ -79,38 +79,7 @@
       </HorizontalCenter>
     </Spaced>
     <Header>Combat</Header>
-    <Spaced>
-      <Vertical>
-        <Header alt2>
-          Abilities
-          <Help title="Abilities">
-            <HelpAttackStats />
-          </Help>
-        </Header>
-        <div>
-          <CombatMoves noSpacing showDetailsOnClick wrap />
-        </div>
-        <Header alt2>
-          Defense
-          <Help title="Defense">
-            <HelpDefenseStats />
-          </Help>
-        </Header>
-        <div>
-          <LabeledValue label="Defense rating">
-            {{ mainEntity.combatStats.defense }}
-          </LabeledValue>
-          <LabeledValue
-            v-for="armor in mainEntity.combatStats.armor"
-            :label="armor.label"
-            :icon="armor.icon"
-            :key="armor.label"
-          >
-            {{ armor.value }}
-          </LabeledValue>
-        </div>
-      </Vertical>
-    </Spaced>
+    <MainEntityKnowledgeLevelInfo noHeader />
     <Header id="effects-section">Effects</Header>
     <Effects :effects="mainEntity.effects" />
     <Effects :effects="mainEntity.environment" />
@@ -127,14 +96,13 @@
 </template>
 
 <script>
-import CombatMoves from "../CombatMoves";
 export default {
   data: () => ({
     showStatDetails: false,
     showAllSkills: false,
   }),
 
-  components: { CombatMoves },
+  components: {},
   subscriptions() {
     const mainEntityStream = GameService.getRootEntityStream();
 

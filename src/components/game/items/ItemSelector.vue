@@ -41,36 +41,46 @@
       </div>
       <slot name="extras" />
     </Vertical>
-    <HorizontalWrap v-else tight>
-      <div class="item-button" @click="selectedItem(null)" v-if="includeNone">
-        <ItemIcon :size="size" :icon="crossIcon" />
-      </div>
-      <div
-        v-if="filteredInventory.length > 0"
-        v-for="(item, idx) in filteredInventory"
-        :key="idx"
-        class="item-button"
-        :class="{ selected: internalValue && internalValue.id === item.id }"
-        @click="selectedItem(item)"
-      >
-        <ItemIcon
-          :size="size"
-          :icon="item.icon"
-          :amount="item.amount"
-          :quality="item.quality"
-          :condition="item.durabilityStage"
-          :isEquipped="equipmentMap && equipmentMap[item.id]"
-        />
-      </div>
-      <slot name="extras" />
-    </HorizontalWrap>
+    <Vertical v-else>
+      <LabeledValue v-if="withText" label="Selected">
+        <RichText v-if="internalValue" :value="internalValue.name" />
+        <Description v-else warning inline> None </Description>
+      </LabeledValue>
+      <HorizontalWrap tight>
+        <div class="item-button" @click="selectedItem(null)" v-if="includeNone">
+          <ItemIcon :size="size" :icon="crossIcon" />
+        </div>
+        <div
+          v-if="filteredInventory.length > 0"
+          v-for="(item, idx) in filteredInventory"
+          :key="idx"
+          class="item-button"
+          :class="{ selected: internalValue && internalValue.id === item.id }"
+          @click="selectedItem(item)"
+        >
+          <ItemIcon
+            :size="size"
+            :icon="item.icon"
+            :amount="item.amount"
+            :quality="item.quality"
+            :condition="item.durabilityStage"
+            :isEquipped="equipmentMap && equipmentMap[item.id]"
+          />
+        </div>
+        <slot name="extras" />
+      </HorizontalWrap>
+    </Vertical>
   </div>
 </template>
 
 <script>
 import crossIcon from "../../../assets/ui/cartoon/icons/cross.jpg";
+import LabeledValue from "../../interface/LabeledValue";
+import RichText from "../RichText";
+import Vertical from "../../layouts/Vertical";
 
 export default {
+  components: { Vertical, RichText, LabeledValue },
   props: {
     size: {
       default: 8,
@@ -82,6 +92,10 @@ export default {
       default: () => () => true,
     },
     includeNone: {
+      type: Boolean,
+      default: true,
+    },
+    withText: {
       type: Boolean,
       default: true,
     },

@@ -1,7 +1,12 @@
 <template>
   <div
     class="description-container"
-    :class="{ pre: pre, prominent: prominent, warning: warning }"
+    :class="{
+      pre: pre,
+      prominent: prominent,
+      warning: warning,
+      inline: inline,
+    }"
   >
     <slot></slot>
   </div>
@@ -17,6 +22,9 @@ export default {
       type: Boolean,
     },
     pre: {
+      type: Boolean,
+    },
+    inline: {
       type: Boolean,
     },
   },
@@ -40,9 +48,18 @@ export default {
     color: #222;
   }
   &.warning {
+    font-size: 100%;
     font-style: normal;
     text-align: center;
     @include text-outline(#492000, #ffbb4f);
+
+    &.inline {
+      display: inline-block;
+    }
+  }
+
+  &.inline {
+    display: inline-block;
   }
 
   em {
