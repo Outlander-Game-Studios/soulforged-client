@@ -98,12 +98,16 @@ export default window.OperationSentry = {
   computed: {
     exportValue() {
       function formatExportDate(number) {
-        return new Date(number)
-          .toLocaleString("en-GB", {
-            timeZone: "Europe/London",
-            timeZoneName: "shortOffset",
-          })
-          .replace(/,/g, "");
+        try {
+          return new Date(number)
+            .toLocaleString("en-GB", {
+              timeZone: "Europe/London",
+              timeZoneName: "shortOffset",
+            })
+            .replace(/,/g, "");
+        } catch (e) {
+          return new Date(number).toString();
+        }
       }
       return this.logsSortedAndFiltered
         .map((row) =>
