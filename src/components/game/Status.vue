@@ -7,6 +7,7 @@
       v-if="showDetails"
       :creatureId="myCreature.id"
       @close="showDetails = false"
+      @action="showDetails = false"
     />
     <div class="info-container-wrapper">
       <div class="info-container">

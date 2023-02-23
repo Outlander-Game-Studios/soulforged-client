@@ -43,6 +43,21 @@ global.DAYS_OF_WEEK = [
   "Friday",
   "Saturday",
 ];
+global.DAYS_OF_WEEK_SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+global.MONTHS_SHORT = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
 global.PLAY_URL = "https://play.soulforged.net";
 
@@ -125,6 +140,21 @@ global.EFFECTS = {
     HIDE: 1,
     PERCENT: 2,
   },
+};
+
+global.SENTRY_LIMIT = 30;
+global.SENTRY_EVENT_TYPE = {
+  MOVEMENT: "m",
+  COMMENCE_OPERATION: "o",
+  ITEM_DROP: "-",
+  ITEM_PICKUP: "+",
+};
+
+global.SENTRY_EVENT_LABEL = {
+  MOVEMENT: "Movement",
+  COMMENCE_OPERATION: "Actions",
+  ITEM_DROP: "Item drop",
+  ITEM_PICKUP: "Item pickup",
 };
 
 global.NAMING_RULES = [
