@@ -68,7 +68,7 @@
       title="Export log"
     >
       <Vertical>
-        <textarea :value="exportValue"> </textarea>
+        <textarea :value="exportValue" readonly> </textarea>
       </Vertical>
     </Modal>
   </div>
