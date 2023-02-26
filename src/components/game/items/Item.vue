@@ -145,7 +145,7 @@
             <div v-if="dataWithDetails.description">
               <hr />
               <Description>
-                <RichText :value="dataWithDetails.description" />
+                <RichText :value="dataWithDetails.description" html />
               </Description>
             </div>
           </Vertical>
