@@ -200,6 +200,9 @@ export default {
 
   computed: {
     relatedStatsSorted() {
+      if (!this.skillDetails || !this.skillDetails.relatedStats) {
+        return [];
+      }
       return [...this.skillDetails.relatedStats].sort();
     },
     speedClass() {
