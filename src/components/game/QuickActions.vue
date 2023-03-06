@@ -202,6 +202,14 @@
                 <RichText :value="action.label" />
               </Radio>
             </div>
+            <Header>Label</Header>
+            <div>
+              <Input
+                v-model="newActionLabel"
+                :maxLength="32"
+                :placeholder="selectedAction ? selectedAction.label : ''"
+              />
+            </div>
           </template>
           <HorizontalCenter>
             <Button
@@ -220,14 +228,13 @@
 <script>
 import unknownImg from "../../assets/ui/cartoon/icons/unknown_nobg.png";
 import isEqual from "lodash/isEqual.js";
-import RichText from "./RichText";
 
 export default {
-  components: { RichText },
   data: () => ({
     showDetails: false,
     settings: false,
     adding: false,
+    newActionLabel: "",
     QUICK_ACTIONS_LIMIT,
     selectedItem: null,
     selectedActionId: null,
@@ -280,6 +287,14 @@ export default {
     };
   },
 
+  computed: {
+    selectedAction() {
+      return this.selectedItemActions?.find(
+        (a) => a.actionId === this.selectedActionId
+      );
+    },
+  },
+
   created() {
     this.handler = this.handleResize.bind(this);
     window.addEventListener("resize", this.handler);
@@ -322,6 +337,7 @@ export default {
 
     startAdding() {
       this.adding = true;
+      this.newActionLabel = "";
       this.selectedItem = null;
       this.selectedActionId = null;
       this.specificInstance = false;
@@ -334,7 +350,7 @@ export default {
       );
       const newQuickAction = {
         actionId: action.actionId,
-        label: action.label,
+        label: this.newActionLabel || action.label,
       };
       if (this.specificInstance) {
         newQuickAction.itemId = this.selectedItem.id;

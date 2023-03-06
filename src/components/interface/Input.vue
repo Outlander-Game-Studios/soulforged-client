@@ -12,6 +12,9 @@
         @keydown="onKeypress($event)"
       />
     </Container>
+    <div v-if="maxLength && localValue.length > maxLength" class="error-text">
+      Value needs to be shorter than {{ maxLength }} characters.
+    </div>
     <Slider
       v-if="type === 'number' && max !== null"
       v-model="localValue"
@@ -38,6 +41,7 @@ export default {
     max: {
       default: null,
     },
+    maxLength: {},
     step: {
       type: Number,
       default: 1,
