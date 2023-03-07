@@ -4,72 +4,78 @@
     <div v-if="!filteredInventory.length" class="empty-text">
       Nothing to select from
     </div>
-    <Vertical v-if="$scopedSlots.default">
-      <ListItem :iconSrc="crossIcon" flexible v-if="includeNone">
-        <template v-slot:title> </template>
-        <template v-slot:subtitle> </template>
-        <template v-slot:buttons>
-          <Button @click="selectedItem(null)">Select none</Button>
-        </template>
-      </ListItem>
-      <div
-        v-if="filteredInventory.length > 0"
-        v-for="(item, idx) in filteredInventory"
-        :key="idx"
-      >
-        <ListItem :iconSrc="item.icon" flexible>
-          <template v-slot:icon>
+    <template v-else>
+      <Vertical v-if="$scopedSlots.default">
+        <ListItem :iconSrc="crossIcon" flexible v-if="includeNone">
+          <template v-slot:title> </template>
+          <template v-slot:subtitle> </template>
+          <template v-slot:buttons>
+            <Button @click="selectedItem(null)">Select none</Button>
+          </template>
+        </ListItem>
+        <div
+          v-if="filteredInventory.length > 0"
+          v-for="(item, idx) in filteredInventory"
+          :key="idx"
+        >
+          <ListItem :iconSrc="item.icon" flexible>
+            <template v-slot:icon>
+              <ItemIcon
+                :size="6"
+                :icon="item.icon"
+                :amount="item.amount"
+                :quality="item.quality"
+                :condition="item.durabilityStage"
+                :isEquipped="equipmentMap && equipmentMap[item.id]"
+              />
+            </template>
+            <template v-slot:title>
+              <RichText :value="item.name" />
+            </template>
+            <template v-slot:subtitle>
+              <slot :item="item" />
+            </template>
+            <template v-slot:buttons>
+              <Button @click="selectedItem(item)">Select</Button>
+            </template>
+          </ListItem>
+        </div>
+        <slot name="extras" />
+      </Vertical>
+      <Vertical v-else>
+        <LabeledValue v-if="withText" label="Selected">
+          <RichText v-if="internalValue" :value="internalValue.name" />
+          <Description v-else warning inline> None </Description>
+        </LabeledValue>
+        <HorizontalWrap tight>
+          <div
+            class="item-button"
+            @click="selectedItem(null)"
+            v-if="includeNone"
+          >
+            <ItemIcon :size="size" :icon="crossIcon" />
+          </div>
+          <div
+            v-if="filteredInventory.length > 0"
+            v-for="(item, idx) in filteredInventory"
+            :key="idx"
+            class="item-button"
+            :class="{ selected: internalValue && internalValue.id === item.id }"
+            @click="selectedItem(item)"
+          >
             <ItemIcon
-              :size="6"
+              :size="size"
               :icon="item.icon"
               :amount="item.amount"
               :quality="item.quality"
               :condition="item.durabilityStage"
               :isEquipped="equipmentMap && equipmentMap[item.id]"
             />
-          </template>
-          <template v-slot:title>
-            <RichText :value="item.name" />
-          </template>
-          <template v-slot:subtitle>
-            <slot :item="item" />
-          </template>
-          <template v-slot:buttons>
-            <Button @click="selectedItem(item)">Select</Button>
-          </template>
-        </ListItem>
-      </div>
-      <slot name="extras" />
-    </Vertical>
-    <Vertical v-else>
-      <LabeledValue v-if="withText" label="Selected">
-        <RichText v-if="internalValue" :value="internalValue.name" />
-        <Description v-else warning inline> None </Description>
-      </LabeledValue>
-      <HorizontalWrap tight>
-        <div class="item-button" @click="selectedItem(null)" v-if="includeNone">
-          <ItemIcon :size="size" :icon="crossIcon" />
-        </div>
-        <div
-          v-if="filteredInventory.length > 0"
-          v-for="(item, idx) in filteredInventory"
-          :key="idx"
-          class="item-button"
-          :class="{ selected: internalValue && internalValue.id === item.id }"
-          @click="selectedItem(item)"
-        >
-          <ItemIcon
-            :size="size"
-            :icon="item.icon"
-            :amount="item.amount"
-            :quality="item.quality"
-            :condition="item.durabilityStage"
-            :isEquipped="equipmentMap && equipmentMap[item.id]"
-          />
-        </div>
-        <slot name="extras" />
-      </HorizontalWrap>
-    </Vertical>
+          </div>
+          <slot name="extras" />
+        </HorizontalWrap>
+      </Vertical>
+    </template>
   </div>
 </template>
 
@@ -90,6 +96,10 @@ export default {
     },
     filter: {
       default: () => () => true,
+    },
+    autoSelect: {
+      type: Boolean,
+      default: false,
     },
     includeNone: {
       type: Boolean,
@@ -133,6 +143,8 @@ export default {
             if (item) {
               this.selectedItem(item);
             }
+          } else if (this.autoSelect) {
+            this.selectedItem(inventory.filter(this.filter).first());
           }
         }),
     };

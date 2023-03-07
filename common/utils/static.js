@@ -22,6 +22,7 @@ global.CONSTRUCT_RESOLUTION = 100;
 global.ENTITY_VARIANTS = {
   BASE: "n",
   DETAILS: "d",
+  ACTIONING: "a",
   SELF: "s",
   CHAT_HEAD: "c",
   TRADE: "t",
