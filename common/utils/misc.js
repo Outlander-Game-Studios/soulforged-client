@@ -110,7 +110,7 @@ function pluralize(word) {
     case endsWith("ch"):
     case endsWith("x"):
       return `${word}es`;
-    case endsWith("y"):
+    case endsWith("y") && !endsWith("ay"):
       return `${word.slice(0, word.length - 1)}ies`;
     default:
       return `${word}s`;

@@ -1,6 +1,6 @@
 <template>
   <div class="horizontal-wrap wrapper">
-    <div class="horizontal-wrap main" :class="{ tight: tight }">
+    <div class="horizontal-wrap main" :class="{ tight: tight, fill: fill }">
       <slot></slot>
     </div>
   </div>
@@ -13,6 +13,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    fill: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>
@@ -22,6 +26,13 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+
+  &.fill {
+    > * {
+      display: flex;
+      flex-grow: 1;
+    }
+  }
 
   &:not(.tight) {
     margin-bottom: -1rem;

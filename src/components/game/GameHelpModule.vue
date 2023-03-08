@@ -40,6 +40,9 @@
         <Button class="menu-button" @click="selectOption('credits')">
           Game Credits
         </Button>
+        <Button class="menu-button" @click="selectOption('statistics')">
+          Server Statistics
+        </Button>
         <Button class="menu-button" @click="selectOption('settings')">
           Settings
         </Button>
@@ -313,6 +316,9 @@ export default {
 
     selectOption(option) {
       switch (option) {
+        case "statistics":
+          window.open("#/stats", "_blank");
+          return;
         case "changelog":
           this.showChangelog = true;
           return;
