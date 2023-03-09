@@ -41,6 +41,7 @@ mockEntity(
     actions: [],
     location: mockEntityId("location"),
     avatar: mockEntityId("avatar"),
+    environment: [],
     effects: [
       effects.woundCut,
       effects.wouldBruise,

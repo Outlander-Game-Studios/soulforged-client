@@ -48,6 +48,7 @@
       @close="selectingToolType = null"
     >
       <Vertical class="select-tool">
+        <Header>Items</Header>
         <ItemSelector
           :filter="itemToolsFilter(selectingToolType)"
           @selected="selectItemTool(selectingToolType, $event)"
@@ -58,6 +59,7 @@
             </LabeledValue>
           </template>
         </ItemSelector>
+        <Header>Structures</Header>
         <StructureSelector
           :includeEmpty="false"
           :filter="structureToolsFilter(selectingToolType)"

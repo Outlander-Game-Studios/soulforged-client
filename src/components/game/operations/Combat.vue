@@ -1389,7 +1389,7 @@ $side-position: 1rem;
   top: calc(0.8rem - $size / 2);
   left: 50%;
   margin-left: calc($size / -2);
-  z-index: 3;
+  z-index: 11;
 
   .marker {
     position: absolute;

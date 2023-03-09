@@ -105,7 +105,7 @@ mockEntity("shop", () => ({
   maxListings: 5,
   buyListings: [
     {
-      listingId: 1,
+      id: 1,
       item: {
         name: `{code:1:Stone}`,
         icon: pebbleIcon,
@@ -115,7 +115,7 @@ mockEntity("shop", () => ({
       essence: 30,
     },
     {
-      listingId: 2,
+      id: 2,
       item: {
         name: `{code:1:Hammer}`,
         icon: stoneHammerIcon,
@@ -128,7 +128,7 @@ mockEntity("shop", () => ({
   ],
   sellListings: [
     {
-      listingId: 1,
+      id: 1,
       item: {
         name: `{code:1:Bark Rope}`,
         icon: barkRopeIcon,

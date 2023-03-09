@@ -71,6 +71,7 @@ mockEntity("trade", () => ({
   me: {
     who: mockEntityId("mainEntity"),
     essence: 3000,
+    holdings: [],
     items: [
       {
         name: "{code:1:FloorDecor}",
@@ -94,6 +95,7 @@ mockEntity("trade", () => ({
   them: {
     who: mockEntityId("mainEntity2"),
     essence: 20000000000,
+    holdings: [],
     items: [
       {
         name: "{code:1:Knife}",
