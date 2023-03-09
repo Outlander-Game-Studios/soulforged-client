@@ -218,6 +218,7 @@ export default {
   flex-grow: 1;
   font-size: 75%;
   height: 2.6rem !important;
+  overflow: hidden !important;
 }
 
 .set-essence-icon {
