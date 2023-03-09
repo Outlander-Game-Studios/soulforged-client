@@ -46,6 +46,7 @@ export default {
 
       const loaded = document.querySelector(`#${jsId}`);
       if (loaded) {
+        this.component = componentName;
         return;
       }
       const fnName = `loaded_${jsId}`;

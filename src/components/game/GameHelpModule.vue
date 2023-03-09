@@ -26,14 +26,6 @@
         >
           Collections
         </Button>
-        <Button
-          class="menu-button"
-          @click="selectOption('changelog')"
-          v-if="isInGame"
-        >
-          Changelog
-          <div v-if="newVersion" class="new-version button" />
-        </Button>
         <Button @click="openNewWindow(DISCORD_INVITE_URL)">
           Join Discord
         </Button>
@@ -41,7 +33,8 @@
           Game Credits
         </Button>
         <Button class="menu-button" @click="selectOption('statistics')">
-          Server Statistics
+          Server Info
+          <div v-if="newVersion" class="new-version button" />
         </Button>
         <Button class="menu-button" @click="selectOption('settings')">
           Settings
@@ -145,12 +138,6 @@
     >
       <div class="help-indicator-text">Click here for additional help</div>
     </ExplanationIndicator>
-    <Modal v-if="showChangelog" dialog large @close="showChangelog = false">
-      <template v-slot:title> Changelog </template>
-      <template v-slot:contents>
-        <Changelog />
-      </template>
-    </Modal>
     <Modal v-if="option === 'logout'" dialog @close="option = null">
       <template v-slot:title> Log out </template>
       <template v-slot:contents>
@@ -211,7 +198,6 @@ import menuIcon from "../../assets/ui/cartoon/icons/menu.png";
 export default {
   data: () => ({
     menuIcon,
-    showChangelog: false,
     showCollections: false,
     showCoreConcepts: false,
     showCredits: false,
@@ -271,7 +257,11 @@ export default {
       newVersion: Rx.combineLatest(
         GameService.getVersionStream(),
         GameService.getLastViewedVersionStream()
-      ).map(([version, lastVersion]) => version !== lastVersion),
+      ).map(
+        ([version, lastVersion]) =>
+          version.split(".").slice(0, 2).join(".") !==
+          lastVersion.split(".").slice(0, 2).join(".")
+      ),
       openMilestones: ControlsService.getControlEventStream(
         "openMilestones"
       ).tap(([data]) => {
@@ -317,10 +307,7 @@ export default {
     selectOption(option) {
       switch (option) {
         case "statistics":
-          window.open("#/stats", "_blank");
-          return;
-        case "changelog":
-          this.showChangelog = true;
+          window.location = "#/stats";
           return;
         case "collections":
           this.$refs.trigger.close();

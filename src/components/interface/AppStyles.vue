@@ -93,6 +93,12 @@ body {
     height: 0;
   }
 }
+.max-100 {
+  max-height: 100%;
+}
+.overflow-auto {
+  overflow: auto;
+}
 
 .empty-text {
   text-align: center;

@@ -46,7 +46,7 @@
       </div>
       <HorizontalFill>
         <Button @click="purging = true" type="reject">Erase</Button>
-        <Button @click="exporting = true">Export</Button>
+        <Button @click="startExport()">Export</Button>
       </HorizontalFill>
       <div></div>
     </Vertical>
@@ -156,6 +156,13 @@ export default window.OperationSentry = {
   },
 
   methods: {
+    startExport() {
+      if (!this.logs.length) {
+        ToastError("No entries to export");
+        return;
+      }
+      this.exporting = true;
+    },
     stripInfo(text) {
       return GameService.stripRichText(text).replace(/<\/?em>/g, "");
     },

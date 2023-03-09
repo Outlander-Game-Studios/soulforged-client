@@ -1,42 +1,44 @@
 <template>
-  <div>
-    <LoadingPlaceholder v-if="!versionsSinceLast" />
-    <HorizontalFill v-else>
-      <Vertical>
-        <LoadingPlaceholder v-if="!versionsDetails" />
-        <Vertical
-          v-for="(versionChangelog, versionNumber) in versionsDetails"
-          :key="versionNumber"
-        >
-          <Header small> Version {{ versionNumber }} </Header>
-          <div>
-            <div
-              v-for="(items, category) in versionChangelog.changes"
-              :key="category"
-              class="item"
-            >
-              <div v-for="(text, idx) in items" :key="idx">
-                <span class="symbol" :class="category" />
-                <RichText class="change-text" :value="text" />
-              </div>
+  <LoadingPlaceholder v-if="!versionsSinceLast" />
+  <div v-else-if="true" class="top-container">
+    <div class="column">
+      <LoadingPlaceholder v-if="!versionsDetails" />
+      <Vertical
+        v-for="(versionChangelog, versionNumber) in versionsDetails"
+        :key="versionNumber"
+      >
+        <Header small alt2> Version {{ versionNumber }} </Header>
+        <Spaced>
+          <div
+            v-for="(items, category) in versionChangelog.changes"
+            :key="category"
+            class="item"
+          >
+            <div v-for="(text, idx) in items" :key="idx">
+              <span class="symbol" :class="category" />
+              <RichText class="change-text" :value="text" />
             </div>
           </div>
-        </Vertical>
+        </Spaced>
       </Vertical>
-      <Vertical>
-        <Header small>Versions</Header>
-        <Vertical class="version-selector">
-          <Button
-            v-for="version in versions"
-            :key="version"
-            @click="showSpecific(version)"
-          >
-            {{ version }}
-          </Button>
-        </Vertical>
+    </div>
+    <div class="column versions">
+      <Vertical class="version-selector">
+        <Header small alt2>Versions</Header>
+        <Button
+          v-for="version in versions"
+          :key="version"
+          @click="showSpecific(version)"
+        >
+          {{ version }}
+        </Button>
       </Vertical>
-    </HorizontalFill>
+    </div>
   </div>
+  <HorizontalFill v-else>
+    <Vertical class="text-column flex-grow" flex> </Vertical>
+    <Vertical class="version-column"> </Vertical>
+  </HorizontalFill>
 </template>
 
 <script>
@@ -51,6 +53,52 @@ export default {
   data: () => ({
     showVersion: null,
     showSinceLast: true,
+    spam: `Added a new statistics screen that shows some information about player
+      count and server uptime.Added a new statistics screen that shows some
+      information about player count and server uptime.Added a new statistics
+      screen that shows some information about player count and server
+      uptime.Added a new statistics screen that shows some information about
+      player count and server uptime.Added a new statistics screen that shows
+      some information about player count and server uptime.Added a new
+      statistics screen that shows some information about player count and
+      server uptime.Added a new statistics screen that shows some information
+      about player count and server uptime.Added a new statistics screen that
+      shows some information about player count and server uptime.Added a new
+      statistics screen that shows some information about player count and
+      server uptime.Added a new statistics screen that shows some information
+      about player count and server uptime.Added a new statistics screen that
+      shows some information about player count and server uptime.Added a new
+      statistics screen that shows some information about player count and
+      server uptime.Added a new statistics screen that shows some information
+      about player count and server uptime.Added a new statistics screen that
+      shows some information about player count and server uptime.Added a new
+      statistics screen that shows some information about player count and
+      server uptime.Added a new statistics screen that shows some information
+      about player count and server uptime.Added a new statistics screen that
+      shows some information about player count and server uptime.Added a new
+      statistics screen that shows some information about player count and
+      server uptime.Added a new statistics screen that shows some information
+      about player count and server uptime.Added a new statistics screen that
+      shows some information about player count and server uptime.Added a new
+      statistics screen that shows some information about player count and
+      server uptime.Added a new statistics screen that shows some information
+      about player count and server uptime.Added a new statistics screen that
+      shows some information about player count and server uptime.Added a new
+      statistics screen that shows some information about player count and
+      server uptime.Added a new statistics screen that shows some information
+      about player count and server uptime.Added a new statistics screen that
+      shows some information about player count and server uptime.Added a new
+      statistics screen that shows some information about player count and
+      server uptime.Added a new statistics screen that shows some information
+      about player count and server uptime.Added a new statistics screen that
+      shows some information about player count and server uptime.Added a new
+      statistics screen that shows some information about player count and
+      server uptime.Added a new statistics screen that shows some information
+      about player count and server uptime.Added a new statistics screen that
+      shows some information about player count and server uptime.Added a new
+      statistics screen that shows some information about player count and
+      server uptime.Added a new statistics screen that shows some information
+      about player count and server uptime.`,
   }),
 
   subscriptions() {
@@ -140,9 +188,19 @@ export default {
   font-style: italic;
 }
 
-.version-selector {
-  overflow: auto;
-  max-height: 40rem;
-  padding-bottom: 1rem;
+.top-container {
+  display: flex;
+  max-height: 100%;
+
+  .column {
+    flex-grow: 1;
+    overflow: auto;
+
+    &.versions {
+      width: 15rem;
+      max-width: 15rem;
+      min-width: 15rem;
+    }
+  }
 }
 </style>

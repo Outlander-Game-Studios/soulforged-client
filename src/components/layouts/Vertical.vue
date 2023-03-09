@@ -24,6 +24,10 @@ export default {
 <style scoped lang="scss">
 .vertical-wrapper.flex {
   display: flex;
+
+  .vertical.main {
+    flex-grow: 1;
+  }
 }
 
 .vertical.main {
