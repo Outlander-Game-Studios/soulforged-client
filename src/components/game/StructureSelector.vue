@@ -1,5 +1,11 @@
 <template>
-  <div v-if="filteredStructures && filteredStructures.length > 0">
+  <div
+    v-if="!filteredStructures || filteredStructures.length === 0"
+    class="empty-text"
+  >
+    Nothing to select from
+  </div>
+  <div v-else>
     <Vertical v-if="$scopedSlots.default">
       <div
         v-if="filteredStructures.length > 0"
@@ -28,30 +34,49 @@
         </ListItem>
       </div>
     </Vertical>
-    <HorizontalWrap v-else tight>
-      <div v-if="includeEmpty" class="item-button" @click="selectedItem(null)">
-        <ItemIcon :size="size" />
-      </div>
-      <div
-        v-for="(structure, idx) in filteredStructures"
-        :key="idx"
-        class="item-button"
-        @click="selectedStructure(structure)"
-      >
-        <Icon :size="size" :src="structure.icon" />
-      </div>
-    </HorizontalWrap>
+    <Vertical v-else>
+      <LabeledValue v-if="withText" label="Selected">
+        <RichText v-if="internalValue" :value="internalValue.name" />
+        <Description v-else warning inline> None </Description>
+      </LabeledValue>
+      <HorizontalWrap tight>
+        <div
+          v-if="includeEmpty"
+          class="item-button"
+          @click="selectedItem(null)"
+        >
+          <ItemIcon :size="size" />
+        </div>
+        <div
+          v-for="(structure, idx) in filteredStructures"
+          :key="idx"
+          class="item-button"
+          @click="selectedStructure(structure)"
+          :class="{
+            selected: internalValue && internalValue.id === structure.id,
+          }"
+        >
+          <Icon :size="size" :src="structure.icon" />
+        </div>
+      </HorizontalWrap>
+    </Vertical>
   </div>
 </template>
 
 <script>
+import Vertical from "../layouts/Vertical";
 export default {
+  components: { Vertical },
   props: {
     includeEmpty: {
       default: true,
     },
     inventory: {
       type: Array,
+    },
+    withText: {
+      type: Boolean,
+      default: false,
     },
     filter: {
       default: () => () => true,
@@ -61,6 +86,10 @@ export default {
       default: 8,
     },
   },
+
+  data: () => ({
+    internalValue: null,
+  }),
 
   subscriptions() {
     return {
@@ -79,6 +108,7 @@ export default {
 
   methods: {
     selectedStructure(structure) {
+      this.internalValue = structure;
       this.$emit("selected", structure);
       this.$emit("input", structure);
     },
@@ -91,5 +121,12 @@ export default {
 
 .item-button {
   @include interactive();
+
+  &.selected {
+    @include filter(
+      saturate(1.1) brightness(1.5) drop-shadow(0.2rem 0.2rem 0.2rem black)
+    );
+    z-index: 3;
+  }
 }
 </style>

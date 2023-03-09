@@ -58,60 +58,122 @@
         <CurrencyDisplay :value="tradeSideData.essence" :flipped="mySide" />
       </Container>
     </HorizontalFill>
-    <div class="items">
-      <div v-for="(item, idx) in tradeSideData.items" :key="idx">
+    <div class="spacer" />
+    <Vertical>
+      <Horizontal tight>
+        <Header small class="flex-grow"> Items </Header>
         <Actions
-          v-if="mySide"
           :target="trade"
-          actionId="removeItem"
-          :parameterValues="{ itemIdentifier: item.identifier }"
+          actionId="addItem"
           :disabled="!trade.canUpdate"
+          v-if="mySide"
         >
-          <template v-slot:removeItem>
+          <template v-slot:addItem>
+            <Icon
+              class="add-item-icon interactive"
+              :class="{ disabled: !trade.canUpdate }"
+              :src="plusIcon"
+              :size="3.2"
+              backgroundType="alt"
+            />
+          </template>
+        </Actions>
+      </Horizontal>
+      <div v-if="!tradeSideData.items.length" class="empty-text small">
+        None
+      </div>
+      <div v-else class="items">
+        <div v-for="(item, idx) in tradeSideData.items" :key="idx">
+          <Actions
+            v-if="mySide"
+            :target="trade"
+            actionId="removeItem"
+            :parameterValues="{ itemIdentifier: item.identifier }"
+            :disabled="!trade.canUpdate"
+          >
+            <template v-slot:removeItem>
+              <ItemIcon
+                :icon="item.icon"
+                :amount="item.amount"
+                :condition="item.durabilityStage"
+                :quality="item.quality"
+                :class="{ interactive: trade.canUpdate }"
+                :size="4.5"
+              />
+            </template>
+          </Actions>
+          <div v-else>
             <ItemIcon
               :icon="item.icon"
               :amount="item.amount"
               :condition="item.durabilityStage"
               :quality="item.quality"
-              :class="{ interactive: trade.canUpdate }"
               :size="4.5"
+            />
+          </div>
+        </div>
+      </div>
+      <Horizontal tight>
+        <Header small class="flex-grow"> Buildings </Header>
+        <Actions
+          :target="trade"
+          actionId="addHolding"
+          :disabled="!trade.canUpdate"
+          v-if="mySide"
+        >
+          <template v-slot:addHolding>
+            <Icon
+              class="add-item-icon interactive"
+              :class="{ disabled: !trade.canUpdate }"
+              :src="plusIcon"
+              :size="3.2"
+              backgroundType="alt"
             />
           </template>
         </Actions>
-        <div v-else>
-          <ItemIcon
-            :icon="item.icon"
-            :amount="item.amount"
-            :condition="item.durabilityStage"
-            :quality="item.quality"
-            :size="4.5"
-          />
+      </Horizontal>
+      <div v-if="!tradeSideData.holdings.length" class="empty-text small">
+        None
+      </div>
+      <div v-else class="items">
+        <div v-for="(holding, idx) in tradeSideData.holdings" :key="idx">
+          <Actions
+            v-if="mySide"
+            :target="trade"
+            actionId="removeHolding"
+            :parameterValues="{ buildingId: holding.id }"
+            :disabled="!trade.canUpdate"
+          >
+            <template v-slot:removeHolding>
+              <StructureIcon
+                :structure="holding"
+                :class="{ interactive: trade.canUpdate }"
+                :size="4.5"
+              />
+            </template>
+          </Actions>
+          <div v-else>
+            <StructureIcon
+              :structure="holding"
+              :class="{ interactive: trade.canUpdate }"
+              :size="4.5"
+            />
+          </div>
         </div>
       </div>
-      <Actions
-        :target="trade"
-        actionId="addItem"
-        :disabled="!trade.canUpdate"
-        v-if="mySide"
-      >
-        <template v-slot:addItem>
-          <Icon
-            class="add-item-icon interactive"
-            :class="{ disabled: !trade.canUpdate }"
-            :src="plusIcon"
-            :size="4.5"
-            backgroundType="alt"
-          />
-        </template>
-      </Actions>
-    </div>
+    </Vertical>
   </div>
 </template>
 
 <script>
 import plusIcon from "../../assets/ui/cartoon/icons/plus_nobg.png";
+import StructureIcon from "./StructureIcon";
+import Vertical from "../layouts/Vertical";
+import HorizontalFill from "../layouts/HorizontalFill";
+import Description from "../interface/Description";
 
 export default {
+  components: { Description, HorizontalFill, Vertical, StructureIcon },
   props: {
     trade: {},
     tradeSide: {},
@@ -183,7 +245,7 @@ export default {
   }
 
   .items {
-    padding: 1.5rem 0.5rem 0.5rem;
+    padding: 0rem 0rem 0.5rem;
     display: flex;
     flex-wrap: wrap;
   }
@@ -228,5 +290,9 @@ export default {
 
 .absent {
   opacity: 0.4;
+}
+
+.spacer {
+  height: 1rem;
 }
 </style>

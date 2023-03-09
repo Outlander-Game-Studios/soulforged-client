@@ -52,7 +52,7 @@ mockEntity("trade", () => ({
     },
     {
       actionId: "addItem",
-      label: "Add Item",
+      label: "Add to Trade",
       parameters: [params.item, params.amount],
     },
     {

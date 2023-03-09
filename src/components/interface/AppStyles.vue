@@ -104,6 +104,11 @@ body {
   text-align: center;
   padding: 1rem;
   font-style: italic;
+
+  &.small {
+    padding: 0.5rem;
+    font-size: 80%;
+  }
 }
 
 .important-text {

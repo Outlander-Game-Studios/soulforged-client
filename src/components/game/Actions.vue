@@ -92,6 +92,15 @@
                 withText
               />
             </div>
+            <div v-else-if="parameter.type === 'holding'">
+              <StructureSelector
+                :includeEmpty="false"
+                :filter="holdingsFilter"
+                @selected="updateStructureValue(parameter, $event)"
+                :size="5"
+                withText
+              />
+            </div>
             <div v-else>Missing implementation: {{ parameter }}</div>
           </div>
           <Button
@@ -110,9 +119,10 @@
 <script>
 import exclamationIcon from "../../assets/ui/cartoon/icons/exclamation.png";
 import LoadingPlaceholder from "../interface/LoadingPlaceholder";
+import StructureSelector from "./StructureSelector";
 
 export default {
-  components: { LoadingPlaceholder },
+  components: { StructureSelector, LoadingPlaceholder },
   props: {
     target: Object,
     vertical: {
@@ -141,6 +151,9 @@ export default {
       parameters: {},
       currentAction: null,
       performing: null,
+      holdingsFilter: (building) => {
+        return building.own;
+      },
     };
   },
 
@@ -212,6 +225,12 @@ export default {
   },
 
   methods: {
+    updateStructureValue(parameter, structure) {
+      this.parameters = {
+        ...this.parameters,
+        [parameter.paramId]: structure.id,
+      };
+    },
     updateItemValue(parameter, value) {
       this.parameters = {
         ...this.parameters,
