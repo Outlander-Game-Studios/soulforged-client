@@ -12,7 +12,6 @@
       :headOnly="true"
       :size="size"
       :noFrame="noFrame"
-      :text="internalCreature.number"
       :noSleep="noSleep"
     />
     <Icon

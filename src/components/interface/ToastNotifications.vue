@@ -34,17 +34,38 @@
         </Container>
       </div>
     </div>
+    <div
+      v-if="toasts.length"
+      class="list-item-wrapper removal-all"
+      :class="{ removing: !someValid }"
+    >
+      <div class="list-item-inner-wrapper" @click="removingAllToasts()">
+        <Container
+          class="notification-container"
+          :borderSize="1"
+          borderType="alt"
+        >
+          <Horizontal tight>
+            <div class="remove-all-label">Dismiss All</div>
+            <CloseButton :size="5" static />
+          </Horizontal>
+        </Container>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import exclamationIcon from "../../assets/ui/cartoon/icons/exclamation.png";
 import okIcon from "../../assets/ui/cartoon/icons/tick_green.jpg";
+import CloseButton from "./CloseButton";
+import HorizontalFill from "../layouts/HorizontalFill";
 
 const toastStream = new Rx.Subject();
 let toastId = 0;
 
 export default {
+  components: { HorizontalFill, CloseButton },
   props: {
     hideDelay: {
       default: 6000,
@@ -53,6 +74,7 @@ export default {
 
   data: () => ({
     toasts: [],
+    someValid: false,
   }),
 
   subscriptions() {
@@ -75,6 +97,7 @@ export default {
 
   methods: {
     addToast(toast) {
+      this.someValid = true;
       toastId++;
       this.toasts.unshift({
         ...toast,
@@ -92,6 +115,10 @@ export default {
       }, this.hideDelay);
     },
 
+    removingAllToasts() {
+      this.toasts.forEach((toast) => this.removingToast(toast.toastId));
+    },
+
     removingToast(toastId) {
       const toast = this.toasts.find((toast) => toast.toastId === toastId);
       if (!toast || toast.removing) {
@@ -101,6 +128,8 @@ export default {
       setTimeout(() => {
         this.removeToast(toastId);
       }, 2500);
+
+      this.someValid = this.toasts.some((toast) => !toast.removing);
     },
 
     removeToast(toastId) {
@@ -228,6 +257,12 @@ $shiftOut: 50rem;
     @include interactive();
     min-height: $height;
   }
+
+  &.removal-all {
+    .list-item-inner-wrapper {
+      min-height: auto;
+    }
+  }
 }
 .toast-title {
   padding: 0.25rem 0 0;
@@ -241,5 +276,10 @@ $shiftOut: 50rem;
 .notification-container,
 .notification-list-item {
   overflow: hidden;
+}
+
+.remove-all-label {
+  white-space: nowrap;
+  padding: 1.4rem 2rem;
 }
 </style>
