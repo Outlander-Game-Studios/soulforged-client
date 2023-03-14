@@ -143,7 +143,6 @@ export const ControlsService = (window.ControlsService = {
             null,
             null,
             () => {
-              ToastError(`Item is gone`);
               ControlsService.triggerControlEvent("draggingInventory", null);
             }
           )
