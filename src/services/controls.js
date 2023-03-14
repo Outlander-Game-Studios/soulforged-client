@@ -139,7 +139,14 @@ export const ControlsService = (window.ControlsService = {
       draggedItemStream = ControlsService.getControlEventStream("draggingItem")
         .map(([item]) => item)
         .switchMap((item) =>
-          GameService.getEntityStream(item.id, ENTITY_VARIANTS.BASE, true)
+          GameService.getEntityStream(item.id, ENTITY_VARIANTS.BASE, true).tap(
+            null,
+            null,
+            () => {
+              ToastError(`Item is gone`);
+              ControlsService.triggerControlEvent("draggingInventory", null);
+            }
+          )
         )
         .shareReplay(1);
     }

@@ -287,7 +287,7 @@
                 <div class="name">
                   {{ MODIFIER_NAMES[type] }}
                 </div>
-                <div>
+                <div class="star-container">
                   <StarRating :value="value" :max="4" :size="1.5" />
                 </div>
               </div>
@@ -789,15 +789,20 @@ export default window.OperationFarming = {
   .modifiers {
     display: flex;
     flex-wrap: wrap;
-    max-width: 32rem;
-    justify-content: space-between;
+    max-width: min(90vw, 44rem);
+    justify-content: space-around;
     padding-top: 2rem;
 
     .modifier {
       padding-left: 0.5rem;
       padding-right: 0.5rem;
       padding-bottom: 2rem;
-      width: 6.5rem;
+      width: 9.5rem;
+
+      .star-container {
+        width: 7rem;
+        margin: 0 auto;
+      }
     }
 
     .name {

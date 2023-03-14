@@ -707,6 +707,9 @@ export const GameService = (window.GameService = {
   },
 
   unloadEntity(payloadId) {
+    if (entityStreams[payloadId]) {
+      entityStreams[payloadId].complete();
+    }
     delete entityStreams[payloadId];
     delete entityStreamsObservable[payloadId];
     GameService.request(REQUEST_CODES.ENTITY_UNSUB, { payloadId });

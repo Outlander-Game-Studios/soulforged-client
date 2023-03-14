@@ -26,6 +26,10 @@ export const SoundService = (window.SoundService = {
   currentMusic: [],
   SOUNDS,
 
+  log(...messages) {
+    console.log(`<sound>`, ...messages);
+  },
+
   initialize() {
     try {
       const storedSettings = Object.assign(
@@ -42,27 +46,28 @@ export const SoundService = (window.SoundService = {
 
     window.onfocus = function () {
       SoundService.focused = true;
-      SoundService.currentMusic.forEach((currentMusic) => {
-        if (
-          currentMusic.playing() &&
-          !SoundService.getSoundInBackgroundEnabled()
-        ) {
-          currentMusic.fade(0, SoundService.getMusicVolume(), 300);
-        }
-      });
+      if (!SoundService.getSoundInBackgroundEnabled()) {
+        SoundService.log(`Background mode off: play music.`);
+        SoundService.currentMusic.forEach((currentMusic) => {
+          if (currentMusic.playing()) {
+            currentMusic.fade(0, SoundService.getMusicVolume(), 300);
+          }
+        });
+      }
     };
     window.onblur = function () {
       SoundService.focused = false;
-      SoundService.currentMusic.forEach((currentMusic) => {
-        if (
-          currentMusic.playing() &&
-          !SoundService.getSoundInBackgroundEnabled()
-        ) {
-          currentMusic.fade(SoundService.getMusicVolume(), 0, 300);
-        }
-      });
+      if (!SoundService.getSoundInBackgroundEnabled()) {
+        SoundService.log(`Background mode on: muting music.`);
+        SoundService.currentMusic.forEach((currentMusic) => {
+          if (currentMusic.playing()) {
+            currentMusic.fade(SoundService.getMusicVolume(), 0, 300);
+          }
+        });
+      }
     };
     SoundService.focused = ControlsService.isGameFocused();
+    SoundService.log(`Initialized. Focus: ${SoundService.focused}`);
   },
 
   getVolume() {
@@ -186,14 +191,16 @@ export const SoundService = (window.SoundService = {
     });
     howl.on("play", () => {
       if (SoundService.focused || SoundService.getSoundInBackgroundEnabled()) {
+        SoundService.log(`Playing ${musicFile}`);
         howl.fade(0, this.getMusicVolume(), 1000);
       } else {
+        SoundService.log(`Playing ${musicFile} (muted)`);
         howl.volume(0);
       }
     });
-    howl.play();
 
     this.currentMusic.push(howl);
+    howl.play();
   },
 
   stopMusic(musicFile) {
