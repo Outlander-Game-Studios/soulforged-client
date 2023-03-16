@@ -158,7 +158,7 @@ export default {
           : GameService.getEntityStream(
               creatureId,
               ENTITY_VARIANTS.DETAILS
-            ).map((c) => c.name)
+            ).map((c) => c?.name)
       ),
       mobInfo: creatureStream
         .filter((creature) => !!creature && creature.hostile)

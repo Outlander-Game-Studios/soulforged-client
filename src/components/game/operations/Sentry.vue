@@ -42,7 +42,7 @@
         <div class="empty-text" v-if="!logs.length">No entries</div>
       </div>
       <div class="big-warning" v-if="operation.context.overflow">
-        {{ operation.context.overflow }} messages lost due to limit
+        {{ operation.context.overflow }} event lost due to limit
       </div>
       <HorizontalFill>
         <Button @click="purging = true" type="reject">Erase</Button>
@@ -113,6 +113,7 @@ export default window.OperationSentry = {
         .map((row) =>
           [
             this.stripInfo(row.text),
+            row.count,
             formatExportDate(row.first),
             formatExportDate(row.last),
           ].join(",")

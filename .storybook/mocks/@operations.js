@@ -144,8 +144,11 @@ export const operations = {
     },
     context: {
       farmId: mockEntityId("farm"),
-      tools: [],
+      tools: ["Hammering"],
       action: -1,
+      toolsSelected: {
+        Hammering: {},
+      },
     },
   },
   viewRoadsign: {

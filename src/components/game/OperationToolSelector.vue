@@ -1,6 +1,19 @@
 <template>
-  <div class="operation-tool-selector">
-    <div v-if="operation.context.tools.length" class="outer-container">
+  <div class="operation-tool-selector" v-if="operation.context.tools.length">
+    <Horizontal v-if="iconOnly" tight>
+      <ItemIcon
+        v-for="toolType in operation.context.tools"
+        :key="toolType"
+        class="interactive"
+        @click="mouseClickSelect(toolType)"
+        :icon="operation.context.toolsSelected[toolType].icon"
+        :quality="operation.context.toolsSelected[toolType].quality"
+        :condition="operation.context.toolsSelected[toolType].durabilityStage"
+        :topRightText="topRightText"
+        :size="size"
+      />
+    </Horizontal>
+    <div v-else class="outer-container">
       <Header alt2 class="tools-header">Tools</Header>
       <HorizontalFill
         v-for="toolType in operation.context.tools"
@@ -17,7 +30,7 @@
               :condition="
                 operation.context.toolsSelected[toolType].durabilityStage
               "
-              :size="4"
+              :size="size"
             />
             <div class="tool-name">
               <div>
@@ -78,10 +91,21 @@
 
 <script>
 import buttonClickSound from "../../assets/sounds/button-click.ogg";
+import Horizontal from "../layouts/Horizontal";
+import Controls from "./Controls";
 
 export default {
+  components: { Horizontal },
   props: {
     operation: {},
+    iconOnly: {
+      type: Boolean,
+      default: false,
+    },
+    size: {
+      default: 4,
+    },
+    topRightText: {},
   },
 
   data: () => ({

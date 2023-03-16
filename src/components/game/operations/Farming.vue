@@ -45,10 +45,22 @@
         <div>
           <HorizontalCenter>
             <Vertical>
-              <Header alt2 class="flex-grow">
+              <Container
+                borderType="alt3"
+                class="flex-grow quick-tool-container"
+              >
                 <div class="current-action-box">
                   <div class="flex-grow action-name">
-                    {{ ACTION_NAMES[currentAction] }}
+                    <div class="quick-action-label">
+                      {{ ACTION_NAMES[currentAction] }}
+                    </div>
+                    <SkillInfoDisplay
+                      v-if="operation.context.skillInfo"
+                      :skillData="{
+                        successChance:
+                          operation.context.skillInfo.successChance,
+                      }"
+                    />
                   </div>
                   <div
                     v-if="currentAction === FARMING_ACTIONS.PLANT"
@@ -60,6 +72,7 @@
                       @input="selectSeed($event)"
                       :size="4"
                       compact
+                      topRightText="Seed"
                     />
                   </div>
                   <div
@@ -72,13 +85,24 @@
                       @input="selectLiquid($event)"
                       :size="4"
                       compact
+                      topRightText="Liquid"
+                    />
+                  </div>
+                  <div
+                    v-if="operation.context.tools.length"
+                    class="tool-selector-icon"
+                  >
+                    <OperationToolSelector
+                      :operation="operation"
+                      iconOnly
+                      topRightText="Tool"
                     />
                   </div>
                   <Button v-if="showActionOptions" @click="configureAction()">
-                    Options
+                    Info
                   </Button>
                 </div>
-              </Header>
+              </Container>
               <Horizontal>
                 <Icon
                   :src="ICONS.NONE"
@@ -210,7 +234,6 @@
     <Modal v-if="removingPlant" dialog @close="removingPlant = false">
       <template v-slot:title> Remove plant </template>
       <template v-slot:contents>
-        <APBar />
         <div class="empty-text">
           Are you sure you want to remove the plant?<br />
           The crop yield will be lost completely.
@@ -221,31 +244,43 @@
       </template>
     </Modal>
     <Modal v-if="configuring" dialog large @close="configuring = false">
-      <template v-slot:title> Options </template>
+      <template v-slot:title> Info </template>
       <template v-slot:contents>
         <Vertical>
-          <APBar />
-          <OperationToolSelector :operation="operation" />
-          <template v-if="currentAction === FARMING_ACTIONS.USE_LIQUID">
-            <Header alt2>Liquid</Header>
-            <FieldItemSelector
-              :itemFilter="liquidFilter"
-              :value="operation.context.liquidId"
-              @input="selectLiquid($event)"
-            />
-          </template>
-          <template v-if="currentAction === FARMING_ACTIONS.PLANT">
-            <Header alt2>Seed</Header>
-            <FieldItemSelector
-              :itemFilter="seedFilter"
-              :value="operation.context.seedId"
-              @input="selectSeed($event)"
-            />
+          <APBar v-if="!!currentAPCost" />
+          <Description prominent>
+            {{ ACTION_DESCRIPTION[currentAction] }}
+          </Description>
+          <HorizontalFill>
+            <OperationToolSelector :operation="operation" class="not-flex" />
+            <div
+              v-if="currentAction === FARMING_ACTIONS.USE_LIQUID"
+              class="selector-container"
+            >
+              <Header alt2 small>Liquid</Header>
+              <FieldItemSelector
+                :itemFilter="liquidFilter"
+                :value="operation.context.liquidId"
+                @input="selectLiquid($event)"
+                :size="5"
+              />
+            </div>
+            <div
+              v-if="currentAction === FARMING_ACTIONS.PLANT"
+              class="selector-container"
+            >
+              <Header alt2 small>Seed</Header>
+              <FieldItemSelector
+                :itemFilter="seedFilter"
+                :value="operation.context.seedId"
+                @input="selectSeed($event)"
+                :size="5"
+              />
+            </div>
+          </HorizontalFill>
+          <Spaced>
             <SkillInfoDisplay :operation="operation" />
-          </template>
-          <HorizontalCenter>
-            <Button @click="configuring = false"> Close </Button>
-          </HorizontalCenter>
+          </Spaced>
         </Vertical>
       </template>
     </Modal>
@@ -331,6 +366,20 @@ const ACTION_NAMES = {
   [FARMING_ACTIONS.USE_LIQUID]: "Use liquid",
 };
 
+const ACTION_DESCRIPTION = {
+  [FARMING_ACTIONS.NONE]:
+    "Inspect a plot to display more information about that plot and plant that might be there.",
+  [FARMING_ACTIONS.UPROOT]:
+    "Forcibly remove the plant from a plot. This will destroy any produce this plant could yield.",
+  [FARMING_ACTIONS.PLANT]:
+    "Place the selected seed onto a plot. The difficulty depends on the type of seed select.",
+  [FARMING_ACTIONS.HARVEST]:
+    "Harvest the plant from a plot. Only fully grown plants can be harvested.",
+  [FARMING_ACTIONS.WEEDOUT]: "Remove the weeds from a plot.",
+  [FARMING_ACTIONS.USE_LIQUID]:
+    "Add liquid to a plot, increasing its watering level.",
+};
+
 const MODIFIER_NAMES = {
   ground: "Ground",
   climate: "Environment",
@@ -366,6 +415,7 @@ export default window.OperationFarming = {
     seedFilter: (item) => item.category === 350,
     ICONS: {},
     ACTION_NAMES,
+    ACTION_DESCRIPTION,
     FARMING_ACTIONS,
     MODIFIER_NAMES,
   }),
@@ -383,6 +433,7 @@ export default window.OperationFarming = {
       .map((farm) => farm.plots)
       .switchMap((ids) => GameService.getEntitiesStream(ids));
     return {
+      currentAPCost: ControlsService.getConsideredAPStream(),
       initAction: this.$stream("operation").tap((operation) => {
         this.currentAction = operation.context.action;
       }),
@@ -405,11 +456,12 @@ export default window.OperationFarming = {
 
   computed: {
     showActionOptions() {
-      return [
-        FARMING_ACTIONS.PLANT,
-        FARMING_ACTIONS.USE_LIQUID,
-        FARMING_ACTIONS.HARVEST,
-      ].includes(this.currentAction);
+      return true;
+      // return [
+      //   FARMING_ACTIONS.PLANT,
+      //   FARMING_ACTIONS.USE_LIQUID,
+      //   FARMING_ACTIONS.HARVEST,
+      // ].includes(this.currentAction);
     },
 
     viewDetails() {
@@ -670,11 +722,11 @@ export default window.OperationFarming = {
     flex-direction: row;
     display: flex;
   }
-
-  .quick-item {
-    padding-top: 0.4rem;
-    padding-right: 0.4rem;
-  }
+}
+.quick-item,
+.tool-selector-icon {
+  padding-top: 0.4rem;
+  padding-right: 0.4rem;
 }
 .farm-plots {
   $plant-height: 16.5rem;
@@ -753,17 +805,28 @@ export default window.OperationFarming = {
 
 .action {
   padding: 0.3rem;
+  @include filter(saturate(1.8) brightness(1.2));
 
   &:not(.selected) {
+    opacity: 0.66;
     @include interactive();
-    @include filter(brightness(0.4));
+    @include filter(brightness(0.7));
   }
 }
 
 .action-name {
   text-align: left;
-  line-height: 4.8rem;
   padding-left: 2rem;
+  font-size: 65%;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  height: 4.5rem;
+
+  .quick-action-label {
+    font-size: 200%;
+    @include text-outline();
+  }
 }
 
 .text-none {
@@ -836,7 +899,17 @@ export default window.OperationFarming = {
   }
 }
 
+.not-flex {
+  display: block !important;
+}
 .current-action-box {
   display: flex;
+}
+.selector-container {
+  min-width: 20rem;
+  margin: 0 auto;
+}
+.quick-tool-container {
+  padding: 0.25rem;
 }
 </style>

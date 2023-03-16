@@ -13,18 +13,18 @@
         :data-code="part.code"
         @click="startNaming(part, $event)"
         >{{ displayName(part) }}</span
-      ><span
-        v-else-if="part.type === TYPES.EFFECT"
-        class="effect-part"
-        @click="showInfo(part, $event)"
-      >
-        <Icon
-          :src="part.icon"
-          :size="2"
-          backgroundType="severity-0"
-          :text="{ bottomRight: getStacks(part) }" /><RichText
-          nonInteractive
-          :value="part.name" /></span
+      ><span v-else-if="part.type === TYPES.EFFECT">
+        <div v-if="part.options.fullView" class="full-view-effect">
+          <Effects :effects="[getEffectInfo(part)]" />
+        </div>
+        <span v-else class="effect-part" @click="showInfo(part, $event)">
+          <Icon
+            :src="part.icon"
+            :size="2"
+            backgroundType="severity-0"
+            :text="{ bottomRight: getStacks(part) }"
+          /><RichText nonInteractive :value="part.name" />
+        </span> </span
     ></template>
     <Modal v-if="effectInfo" dialog @close="effectInfo = null">
       <template v-slot:title> Effect </template>
@@ -108,6 +108,8 @@ import exclamationIcon from "../../assets/ui/cartoon/icons/exclamation.png";
 import namingOpenSound from "../../assets/sounds/naming-open.ogg";
 import namingCloseSound from "../../assets/sounds/naming-close.ogg";
 import Effects from "./Effects";
+import ListItem from "../interface/ListItem";
+import Vertical from "../layouts/Vertical";
 
 const TYPES = {
   TEXT: 1,
@@ -116,7 +118,7 @@ const TYPES = {
 };
 
 export default {
-  components: { Effects },
+  components: { Vertical, ListItem, Effects },
   props: {
     value: {},
     html: {
@@ -174,12 +176,13 @@ export default {
           return result;
         });
         if (second) {
-          const [name, icon, effectPayload] = second.split("﹃");
+          const [name, icon, effectPayload, options] = second.split("﹃");
           result.push({
             type: TYPES.EFFECT,
             name,
             icon,
             effectPayload,
+            options: JSON.parse(options),
           });
         }
         return result;
@@ -213,11 +216,14 @@ export default {
       return part.text;
     },
 
-    showInfo(part, $event) {
-      this.effectInfo = {
+    getEffectInfo(part) {
+      return {
         ...part,
         ...JSON.parse(part.effectPayload),
       };
+    },
+    showInfo(part, $event) {
+      this.effectInfo = this.getEffectInfo(part);
     },
 
     startNaming(part, $event) {
@@ -349,5 +355,10 @@ export default {
   > .icon-wrapper {
     margin-right: 0.3em;
   }
+}
+
+.full-view-effect {
+  display: inline-block;
+  text-align: left;
 }
 </style>

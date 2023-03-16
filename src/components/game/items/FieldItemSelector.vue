@@ -22,6 +22,7 @@
       :amount="selectedItem && selectedItem.amount"
       :quality="selectedItem && selectedItem.quality"
       :condition="selectedItem && selectedItem.durabilityStage"
+      :topRightText="topRightText"
       class="interactive"
       @click="selectingItem = true"
     >
@@ -29,7 +30,7 @@
     <ListItem v-else>
       <template v-slot:icon>
         <ItemIcon
-          :size="6"
+          :size="size"
           :icon="selectedItem && selectedItem.icon"
           :amount="selectedItem && selectedItem.amount"
           :quality="selectedItem && selectedItem.quality"
@@ -64,6 +65,7 @@ export default {
       required: true,
     },
     value: {},
+    topRightText: {},
   },
 
   data: () => ({
