@@ -157,7 +157,13 @@ export default {
         .filter((tradeIds) => !!tradeIds)
         .switchMap((tradeIds) => GameService.getEntitiesStream(tradeIds))
         .map((trades) =>
-          trades.some((trade) => trade.canAccept && !trade.me.accepted)
+          trades.some(
+            (trade) =>
+              !trade.cancelled &&
+              !trade.completed &&
+              trade.canAccept &&
+              !trade.me.accepted
+          )
         ),
       closePanel: ControlsService.getControlEventStream("closePanel").tap(
         () => {
