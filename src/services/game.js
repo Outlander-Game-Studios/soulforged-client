@@ -545,6 +545,9 @@ export const GameService = (window.GameService = {
       }
       return false;
     }
+    function getKey({ itemId, publicId, actionId }) {
+      return itemId ? `i_${itemId}:${actionId}` : `p_${publicId}:${actionId}`;
+    }
     return Rx.combineLatest(
       quickActionsStream,
       inventoryStream,
@@ -553,8 +556,7 @@ export const GameService = (window.GameService = {
       .debounceTime(50)
       .map(([quickActions, inventoryItems, structures]) => {
         const quickActionsMap = quickActions.toObject(
-          ({ itemId, publicId, actionId }) =>
-            itemId ? `i_${itemId}:${actionId}` : `p_${publicId}:${actionId}`,
+          getKey,
           (quickAction) => ({ ...quickAction })
         );
         [...inventoryItems, ...structures].forEach((entity) => {
@@ -573,15 +575,10 @@ export const GameService = (window.GameService = {
             }
           });
         });
-        return Object.values(quickActionsMap).map(
-          ({ itemId, publicId, entity, actionId, label }) => ({
-            item: entity,
-            itemId,
-            publicId,
-            actionId,
-            label,
-          })
-        );
+        return quickActions.map((quickAction) => ({
+          item: quickActionsMap[getKey(quickAction)]?.entity,
+          ...quickAction,
+        }));
       })
       .shareReplay(1);
   },
