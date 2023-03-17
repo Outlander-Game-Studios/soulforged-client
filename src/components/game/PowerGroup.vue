@@ -1,6 +1,6 @@
 <template>
   <div class="relative">
-    <Header> Power Group: {{ powerGroup.name }} </Header>
+    <Header veryLarge> Power Group: {{ powerGroup.name }} </Header>
     <Container borderType="base" backgroundType="alt3">
       <div class="instructions">
         You can select only one power from this group

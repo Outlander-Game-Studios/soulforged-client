@@ -8,6 +8,7 @@
       flex: flex,
       small: small,
       large: large,
+      'very-large': veryLarge,
     }"
     @click="mouseClick()"
   >
@@ -29,6 +30,10 @@ export default {
       default: false,
     },
     large: {
+      type: Boolean,
+      default: false,
+    },
+    veryLarge: {
       type: Boolean,
       default: false,
     },
@@ -86,6 +91,12 @@ export default {
     font-size: 1.75rem;
   }
   &.large {
+    font-size: 2.5rem;
+    .header-content {
+      padding: 0.3rem 1rem;
+    }
+  }
+  &.very-large {
     font-size: 4rem;
     .header-content {
       padding: 0 1.5rem;

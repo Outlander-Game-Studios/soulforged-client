@@ -340,9 +340,11 @@
           <Spaced>
             <Vertical>
               <HorizontalCenter>
-                <Header large v-if="operation.lost">You lost the fight!</Header>
-                <Header large v-else-if="operation.fled">You fled.</Header>
-                <Header large v-else>Victory!</Header>
+                <Header veryLarge v-if="operation.lost"
+                  >You lost the fight!</Header
+                >
+                <Header veryLarge v-else-if="operation.fled">You fled.</Header>
+                <Header veryLarge v-else>Victory!</Header>
               </HorizontalCenter>
               <HorizontalCenter>
                 <Button @click="cancel()">Finish</Button>

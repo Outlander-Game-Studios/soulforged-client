@@ -1,53 +1,60 @@
 <template>
   <Container borderType="alt3">
     <Spaced :small="small">
-      <ListItem class="craft-list-item" flexible titleClass="wrap">
-        <template v-slot:icon>
-          <Icon
-            class="power-icon"
-            :src="power.icon"
-            backgroundType="severity--3"
-            :size="small ? 4 : 6"
-          />
-        </template>
-        <template v-slot:title>
-          <RichText :value="power.name" />
-        </template>
-        <template v-slot:subtitle>
-          <div class="power-description">
-            <DisplayImpacts :impacts="power.impacts" />
-            <DisplayImpacts :impacts="power.description" />
-            <LabeledValue
-              v-if="power.requiredPowers.length"
-              label="Requires having"
-            >
-              <span
-                v-for="powerName in power.requiredPowers"
-                class="required-power"
-                :class="{ pass: purchasedPowers[powerName] }"
-              >
-                {{ powerName }}
-              </span>
-            </LabeledValue>
-          </div>
-        </template>
-        <template v-slot:buttons>
+      <Vertical>
+        <Horizontal>
+          <Header large alt class="flex-grow"
+            ><RichText :value="power.name"
+          /></Header>
           <Button
             @click="$emit('purchasingPower')"
             v-if="$listeners.purchasingPower"
           >
             <div class="purchase-button">
-              <CurrencyDisplay :value="power.price" />
+              <CurrencyDisplay :value="power.price" short />
             </div>
           </Button>
-        </template>
-      </ListItem>
+        </Horizontal>
+        <ListItem class="craft-list-item" flexible titleClass="wrap">
+          <template v-slot:icon>
+            <Icon
+              class="power-icon"
+              :src="power.icon"
+              backgroundType="severity--3"
+              :size="small ? 4 : 6"
+            />
+          </template>
+          <template v-slot:title>
+            <div class="power-description">
+              <DisplayImpacts :impacts="power.impacts" />
+              <DisplayImpacts :impacts="power.description" />
+              <LabeledValue
+                v-if="power.requiredPowers.length"
+                label="Requires having"
+              >
+                <span
+                  v-for="powerName in power.requiredPowers"
+                  class="required-power"
+                  :class="{ pass: purchasedPowers[powerName] }"
+                >
+                  {{ powerName }}
+                </span>
+              </LabeledValue>
+            </div>
+          </template>
+          <template v-slot:subtitle></template>
+          <template v-slot:buttons> </template>
+        </ListItem>
+      </Vertical>
     </Spaced>
   </Container>
 </template>
 
 <script>
+import Horizontal from "../layouts/Horizontal";
+import Vertical from "../layouts/Vertical";
 export default {
+  components: { Vertical, Horizontal },
   props: {
     small: {
       type: Boolean,
