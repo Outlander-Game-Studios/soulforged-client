@@ -28,7 +28,9 @@ export default {
                 newValue > 1 === i.value > 1 ? i.good : !i.good;
             } else {
               const newValue = +i.value + +acc[i.name].value;
-              acc[i.name].value = `${newValue >= 0 ? "+" : ""}${newValue}`;
+              acc[i.name].value = `${newValue >= 0 ? "+" : ""}${
+                Math.round(100 * newValue) / 100
+              }`;
               acc[i.name].good =
                 newValue > 0 === i.value > 0 ? i.good : !i.good;
             }

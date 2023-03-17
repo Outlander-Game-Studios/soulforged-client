@@ -121,7 +121,6 @@ export default window.OperationSentry = {
         .join("\n");
     },
     sortIndicator() {
-      console.log(this.exportValue);
       const indicators = {
         info: "",
         first: "",
@@ -184,6 +183,9 @@ export default window.OperationSentry = {
       }
     },
     toggleFilter(type, value) {
+      if (value === this.operation.context.typeFilters[type]) {
+        return;
+      }
       GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
         updateType: "setFilter",
         type,
