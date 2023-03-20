@@ -18,7 +18,7 @@ const entities = {
     icon: avatarIcon,
     effects: [
       {
-        name: "Content",
+        name: "Mood: Content",
         icon: moodUpIcon,
         severity: 0,
         impacts: [],
@@ -47,7 +47,7 @@ const entities = {
     icon: wolfIcon,
     effects: [
       {
-        name: "Content",
+        name: "Mood: Content",
         icon: moodUpIcon,
         severity: 0,
         impacts: [],
@@ -68,7 +68,7 @@ const entities = {
     icon: wolfIcon,
     effects: [
       {
-        name: "Content",
+        name: "Mood: Content",
         icon: moodUpIcon,
         severity: 0,
         impacts: [],

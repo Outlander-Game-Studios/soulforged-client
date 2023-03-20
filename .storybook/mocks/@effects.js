@@ -70,7 +70,7 @@ export const effects = {
     ],
   },
   moodOk: {
-    name: "Content",
+    name: "Mood: Content",
     icon: moodUpIcon,
     order: 0,
     severity: 0,
