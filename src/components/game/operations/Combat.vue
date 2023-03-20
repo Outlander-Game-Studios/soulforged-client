@@ -881,7 +881,7 @@ export default window.OperationCombat = {
         const target = this.displayedCreatures[
           this.damagePresentation.defenderId
         ];
-        offsetX = (target.hostile ? -1 : 1) * 9.8;
+        offsetX = (target && target.hostile ? -1 : 1) * 9.8;
       }
       return {
         left: `calc(${positioning.current.x}% + ${offsetX}rem)`,

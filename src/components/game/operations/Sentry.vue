@@ -8,7 +8,7 @@
         <Checkbox
           v-for="(filter, label) in FILTERS"
           @input="toggleFilter(filter, $event)"
-          v-model="operation.context.typeFilters[filter]"
+          :value="operation.context.typeFilters[filter]"
         >
           {{ label }}
         </Checkbox>

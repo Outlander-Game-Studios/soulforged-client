@@ -143,7 +143,7 @@ global.EFFECTS = {
   },
 };
 
-global.SENTRY_LIMIT = 30;
+global.SENTRY_LIMIT = 50;
 global.SENTRY_EVENT_TYPE = {
   MOVEMENT: "m",
   COMMENCE_OPERATION: "o",
