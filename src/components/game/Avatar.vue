@@ -414,16 +414,16 @@ export default {
           return;
         }
         const smiling = {
-          Cheerful: true,
-          Overjoyed: true,
-          Ecstatic: true,
+          "Mood: Cheerful": true,
+          "Mood: Overjoyed": true,
+          "Mood: Ecstatic": true,
         };
 
         this.happy = this.hasBuff((b) => smiling[b.name]);
-        this.slightlySad = this.hasBuff("Slightly Sad");
-        this.sad = this.hasBuff("Sad");
-        this.verySad = this.hasBuff("Very Sad");
-        this.gloomy = this.hasBuff("Gloomy");
+        this.slightlySad = this.hasBuff("Mood: Slightly Sad");
+        this.sad = this.hasBuff("Mood: Sad");
+        this.verySad = this.hasBuff("Mood: Very Sad");
+        this.gloomy = this.hasBuff("Mood: Gloomy");
 
         this.tired = this.verySad || this.gloomy;
 
