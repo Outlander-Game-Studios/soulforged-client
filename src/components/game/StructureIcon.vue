@@ -1,7 +1,7 @@
 <template>
   <ItemIcon
     v-if="structure"
-    @click="mouseClick($event)"
+    v-on="$listeners.click ? { click: () => $emit('click', $event) } : {}"
     :icon="structure.icon"
     :size="size"
     :condition="structure.condition"
@@ -30,14 +30,6 @@ export default {
   },
 
   data: () => ({}),
-
-  methods: {
-    mouseClick($event) {
-      if (!!this.$listeners.click) {
-        this.$emit("click", $event);
-      }
-    },
-  },
 };
 </script>
 

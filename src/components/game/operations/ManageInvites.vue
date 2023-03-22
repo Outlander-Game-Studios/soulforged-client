@@ -18,7 +18,7 @@
       <Vertical tight>
         <div v-if="!loadedCreatures.length" class="empty-text">None</div>
         <div v-for="creature in loadedCreatures" :key="creature.id">
-          <div v-if="!names.includes(creature.name)">
+          <div v-if="!namesMap[creature.name]">
             <ListItem>
               <template v-slot:icon>
                 <CreatureIcon :creature="creature" />
@@ -30,7 +30,9 @@
                 <Effects row :effects="creature.effects" :size="3" />
               </template>
               <template v-slot:buttons>
-                <Button @click="addInvitee(creature)">Invite</Button>
+                <Button @click="addInvitee(creature)">{{
+                  currentNamesMap[creature.name] ? "Update name" : "Invite"
+                }}</Button>
               </template>
             </ListItem>
           </div>
@@ -78,6 +80,15 @@ export default window.OperationManageInvites = {
   computed: {
     names() {
       return this.operation.context.current.sort();
+    },
+    namesMap() {
+      return this.names.toObject();
+    },
+    currentNamesMap() {
+      return this.names
+        .map((name) => name.match(/\((.*)\)/)?.[1])
+        .filter((name) => !!name)
+        .toObject();
     },
   },
 

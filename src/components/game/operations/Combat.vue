@@ -90,11 +90,20 @@
               <Header alt2>Select move to auto-resolve combat with</Header>
               <HorizontalCenter>
                 <CombatMoves
-                  @selected="triggerAutoResolve($event)"
+                  @selected="autoResolveMove = $event"
+                  :selectedMoveId="autoResolveMove"
                   wrap
                   autoResolveOnly
                   noSpacing
                 />
+              </HorizontalCenter>
+              <HorizontalCenter>
+                <Button
+                  @click="triggerAutoResolve(autoResolveMove)"
+                  :disabled="!autoResolveMove"
+                >
+                  Confirm
+                </Button>
               </HorizontalCenter>
             </Vertical>
           </div>
@@ -553,6 +562,7 @@ export default window.OperationCombat = {
   data: () => ({
     AUTO_RESOLVE_TURNS,
     SWAP_COOLDOWN,
+    autoResolveMove: null,
     skipping: false,
     targetting: false,
     selectingWeapon: false,

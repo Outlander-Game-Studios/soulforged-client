@@ -59,7 +59,12 @@
           <ListItem v-for="(quickAction, idx) in quickActions" :key="idx">
             <template v-slot:icon>
               <Icon v-if="!quickAction.item" :src="unknownImg" :size="6" />
-              <Item v-else :size="6" :data="quickAction.item" />
+              <Item
+                v-else-if="isItem(quickAction.item)"
+                :size="6"
+                :data="quickAction.item"
+              />
+              <StructureIcon v-else :size="6" :structure="quickAction.item" />
             </template>
             <template v-slot:title>
               <RichText :value="quickAction.label" />
@@ -228,8 +233,10 @@
 <script>
 import unknownImg from "../../assets/ui/cartoon/icons/unknown_nobg.png";
 import isEqual from "lodash/isEqual.js";
+import StructureIcon from "./StructureIcon";
 
 export default {
+  components: { StructureIcon },
   data: () => ({
     showDetails: false,
     settings: false,
@@ -305,6 +312,10 @@ export default {
   },
 
   methods: {
+    isItem(item) {
+      return item.actions.some((a) => a.actionId === "drop");
+    },
+
     toggleCollapse() {
       LocalStorageService.setItem("quickActionsCollapsed", !this.collapsed);
     },
