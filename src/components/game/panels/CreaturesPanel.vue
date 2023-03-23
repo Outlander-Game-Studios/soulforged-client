@@ -145,6 +145,7 @@ export default {
         nonAggro: creature.nonAggressive,
         icon: creature.icon,
         dead: creature.dead,
+        eliteIcon: creature.eliteIcon,
         ...extras,
       });
     },

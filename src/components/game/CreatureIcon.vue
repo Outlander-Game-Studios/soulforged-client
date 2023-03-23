@@ -28,6 +28,9 @@
       class="move-indicator"
       :moveData="internalCreature.nextMove"
     />
+    <div class="elite-icon" v-if="creature.eliteIcon">
+      <img :src="creature.eliteIcon" />
+    </div>
     <div
       v-if="!!internalCreature.operationInfo && !noOperation"
       class="operation-indicator"
@@ -197,5 +200,15 @@ export default {
   position: absolute;
   top: calc(100% - 2.5rem);
   left: -1.5rem;
+}
+
+.elite-icon {
+  img {
+    width: 32%;
+    height: auto;
+    position: absolute;
+    top: 11%;
+    left: 9%;
+  }
 }
 </style>
