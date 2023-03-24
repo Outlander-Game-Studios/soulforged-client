@@ -22,11 +22,13 @@ const random = {
   },
 
   chance(percentage, times = 1, precision = 1, seed = null) {
-    if (percentage >= 100) {
-      return true;
-    }
-    if (percentage <= 0) {
-      return false;
+    if (!global.testUtils) {
+      if (percentage >= 100) {
+        return true;
+      }
+      if (percentage <= 0) {
+        return false;
+      }
     }
     const multiplier = Math.pow(10, precision);
     const chance = 100 - Math.pow((100 - percentage) / 100, times) * 100;
