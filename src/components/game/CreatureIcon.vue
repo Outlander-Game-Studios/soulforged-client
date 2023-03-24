@@ -28,8 +28,8 @@
       class="move-indicator"
       :moveData="internalCreature.nextMove"
     />
-    <div class="elite-icon" v-if="creature.eliteIcon">
-      <img :src="creature.eliteIcon" />
+    <div class="elite-icon" v-if="internalCreature.eliteIcon">
+      <img :src="internalCreature.eliteIcon" />
     </div>
     <div
       v-if="!!internalCreature.operationInfo && !noOperation"
