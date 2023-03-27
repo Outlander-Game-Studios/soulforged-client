@@ -565,7 +565,7 @@ export default {
     font-size: 70%;
     top: 0.5rem;
     left: 0.75rem;
-    z-index: 10;
+    z-index: 30;
   }
 }
 </style>
