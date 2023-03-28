@@ -1,7 +1,7 @@
 <template>
   <ItemIcon
     v-if="structure"
-    v-on="$listeners.click ? { click: () => $emit('click', $event) } : {}"
+    v-on="$listeners.click ? { click: ($event) => $emit('click', $event) } : {}"
     :icon="structure.icon"
     :size="size"
     :condition="structure.condition"

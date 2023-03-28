@@ -8,6 +8,7 @@ global.BACKGROUNDS = [
   "self",
   "danger",
   "danger-low",
+  "severity--5",
   "severity--4",
   "severity--3",
   "severity--2",
