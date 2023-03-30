@@ -247,7 +247,7 @@
             <GameHelpModule />
           </div>
           <div
-            v-if="bigText"
+            v-for="bigText in bigTexts"
             class="big-text"
             :class="bigText.cssClass"
             :style="bigText.style"
@@ -507,6 +507,7 @@ import fleeIcon from "../operation-assets/flee.png";
 import targetIcon from "../operation-assets/target.png";
 import turnIcon from "../operation-assets/combat-turn.png";
 import promptSound from "../../../assets/sounds/prompt2.ogg";
+import omit from "lodash/omit.js";
 
 const BIG_TEXT_CLASS = {
   DEFAULT: "default",
@@ -578,7 +579,7 @@ export default window.OperationCombat = {
     combatEffectFilter,
     timeMax: 8000,
     timeRemaining: null,
-    bigText: null,
+    bigTexts: {},
     selectedMoveId: null,
     skipConfirm: true,
     showMobInfoDetails: null,
@@ -637,6 +638,16 @@ export default window.OperationCombat = {
         this.timeRemaining = combat.timeLeft;
         this.timeMax = Math.max(this.timeMax, this.timeRemaining || 0);
       }),
+      ownFleeProgress: Rx.combineLatest(
+        combatStream,
+        GameService.getRootEntityStream().pluck("id").distinctUntilChanged()
+      )
+        .map(([combat, mainEntityId]) => combat.fleeing[mainEntityId] || 0)
+        .tap((fleeProgress) => {
+          if (fleeProgress > this.ownFleeProgress) {
+            this.displayBigText(`Fleeing progress ${fleeProgress}%`);
+          }
+        }),
       currentMove: this.$stream("operation")
         .pluck("context", "currentMoveId")
         .switchMap((moveId) =>
@@ -742,31 +753,34 @@ export default window.OperationCombat = {
     },
 
     displayBigText(text, cssClass = BIG_TEXT_CLASS.DEFAULT) {
-      if (this.bigText) {
-        clearInterval(this.bigText.interval);
-      }
       const duration = 1500;
       const resolution = 100;
       const interval = ControlsService.setAnimationInterval(() => {
-        this.bigText.stage = this.bigText.stage += 1;
-        if (this.bigText.stage >= resolution) {
-          clearInterval(this.bigText.interval);
-          this.bigText = null;
+        nextBigText.stage = nextBigText.stage += 1;
+        if (nextBigText.stage >= resolution) {
+          clearInterval(nextBigText.interval);
+          this.bigTexts = omit(this.bigTexts, nextBigText.id);
         } else {
-          const step = this.bigText.stage / resolution;
-          this.bigText.style = {
+          const step = nextBigText.stage / resolution;
+          nextBigText.style = {
             opacity: 2 - step * 2,
             fontSize: `${200 + 100 * (1 - step)}%`,
-            marginBottom: `${5 * step}rem`,
+            marginBottom: `${15 * step}rem`,
           };
         }
       }, duration / resolution);
-      this.bigText = {
+      const id = new Date().getTime();
+      const nextBigText = {
+        id,
         text,
         cssClass,
         interval,
         style: {},
         stage: 0,
+      };
+      this.bigTexts = {
+        ...this.bigTexts,
+        [id]: nextBigText,
       };
     },
 
