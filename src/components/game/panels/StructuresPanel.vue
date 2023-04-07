@@ -291,6 +291,7 @@ export default {
         presence: structure.presence,
         operational: structure.operational,
         condition: structure.condition,
+        ruin: structure.ruin,
       });
     },
   },

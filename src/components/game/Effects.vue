@@ -86,7 +86,10 @@ export default {
         .sort((a, b) => {
           const orderDelta = a.order - b.order;
           if (orderDelta === 0) {
-            return (b.severity || 0) - (a.severity || 0);
+            return (
+              (b.severity || 0) - (a.severity || 0) ||
+              compareStrings(a.name, b.name)
+            );
           }
           return orderDelta;
         });
