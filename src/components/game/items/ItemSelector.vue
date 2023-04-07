@@ -114,6 +114,9 @@ export default {
       default: false,
     },
     label: {},
+    itemVariant: {
+      default: ENTITY_VARIANTS.BASE,
+    },
   },
 
   data: () => ({
@@ -127,26 +130,33 @@ export default {
     return {
       itemSorter: GameService.getItemSorterStream(),
       equipmentMap: GameService.getEquipmentMapStream(),
-      playerInventory: this.$stream("includeLocation")
-        .switchMap((includeLocation) => {
-          const entityStream = GameService.getInventoryStream(rootEntityStream);
-          return includeLocation
-            ? Rx.combineLatest(
-                entityStream,
-                GameService.getInventoryStream(locationStream)
-              ).map(([character, location]) => [...character, ...location])
-            : entityStream;
-        })
-        .tap((inventory) => {
-          if (this.internalValue) {
-            const item = inventory.find((i) => i.id === this.internalValue.id);
-            if (item) {
-              this.selectedItem(item);
+      playerInventory: this.$stream("itemVariant").switchMap((itemVariant) =>
+        this.$stream("includeLocation")
+          .switchMap((includeLocation) => {
+            const entityStream = GameService.getInventoryStream(
+              rootEntityStream,
+              itemVariant
+            );
+            return includeLocation
+              ? Rx.combineLatest(
+                  entityStream,
+                  GameService.getInventoryStream(locationStream, itemVariant)
+                ).map(([character, location]) => [...character, ...location])
+              : entityStream;
+          })
+          .tap((inventory) => {
+            if (this.internalValue) {
+              const item = inventory.find(
+                (i) => i.id === this.internalValue.id
+              );
+              if (item) {
+                this.selectedItem(item);
+              }
+            } else if (this.autoSelect) {
+              this.selectedItem(inventory.filter(this.filter).first());
             }
-          } else if (this.autoSelect) {
-            this.selectedItem(inventory.filter(this.filter).first());
-          }
-        }),
+          })
+      ),
     };
   },
 

@@ -114,6 +114,7 @@ export default {
 @import "../../utils";
 
 button {
+  font-size: 2rem;
   @include interactive();
   padding: 0;
   border: 0;
@@ -156,7 +157,6 @@ button {
 
   .content {
     position: relative;
-    font-size: 2rem;
     padding: 0.25rem 0.5rem;
     color: #eee;
     border-width: 1rem;

@@ -24,8 +24,16 @@
           <ItemSelector
             :filter="itemWeaponFilter()"
             @selected="selectWeapon($event)"
+            :itemVariant="ENTITY_VARIANTS.DETAILS"
           >
-            <template v-slot="{ item }"> </template>
+            <template v-slot="{ item }">
+              <CombatMoves
+                class="item-combat-moves"
+                showDetailsOnClick
+                wrap
+                :moves="item.combatMoves"
+              />
+            </template>
           </ItemSelector>
         </div>
       </Modal>
@@ -317,10 +325,14 @@
                 >
                   <Vertical>
                     <Header alt2 small>
-                      Abilities
-                      <div class="skip-confirm">
-                        <Checkbox v-model="skipConfirm">Skip confirm</Checkbox>
-                      </div>
+                      <Horizontal tight>
+                        <div class="flex-grow">Abilities</div>
+                        <div class="skip-confirm">
+                          <Checkbox v-model="skipConfirm"
+                            >Skip confirm</Checkbox
+                          >
+                        </div>
+                      </Horizontal>
                     </Header>
                     <CombatMoves
                       class="flex-grow"
@@ -563,6 +575,7 @@ export default window.OperationCombat = {
   data: () => ({
     AUTO_RESOLVE_TURNS,
     SWAP_COOLDOWN,
+    ENTITY_VARIANTS,
     autoResolveMove: null,
     skipping: false,
     targetting: false,
@@ -814,7 +827,10 @@ export default window.OperationCombat = {
     },
 
     itemOffhandFilter() {
-      return (item) => item.actions.some((a) => a.actionId === "equip_Offhand");
+      return (item) =>
+        item.actions.some((a) =>
+          ["equip_Offhand", "un_equip_Offhand"].includes(a.actionId)
+        );
     },
     selectOffhand(item) {
       if (!item) {
@@ -824,6 +840,10 @@ export default window.OperationCombat = {
           });
         }
       } else {
+        if (item.actions.some((a) => a.actionId === "un_equip_Offhand")) {
+          ToastError("Already equipped");
+          return;
+        }
         GameService.performAction(item, { actionId: "equip_Offhand" });
       }
       this.selectingOffhand = false;
@@ -831,7 +851,10 @@ export default window.OperationCombat = {
     },
 
     itemWeaponFilter() {
-      return (item) => item.actions.some((a) => a.actionId === "equip_Weapon");
+      return (item) =>
+        item.actions.some((a) =>
+          ["equip_Weapon", "un_equip_Weapon"].includes(a.actionId)
+        );
     },
     selectWeapon(item) {
       if (!item) {
@@ -841,6 +864,10 @@ export default window.OperationCombat = {
           });
         }
       } else {
+        if (item.actions.some((a) => a.actionId === "un_equip_Weapon")) {
+          ToastError("Already equipped");
+          return;
+        }
         GameService.performAction(item, { actionId: "equip_Weapon" });
       }
       this.selectingWeapon = false;
@@ -1494,9 +1521,11 @@ $side-position: 1rem;
 }
 
 .skip-confirm {
-  position: absolute;
-  right: 0.75rem;
-  top: -0.2rem;
+  overflow: visible;
+  position: relative;
+  height: 0;
+  top: -0.7rem;
+  padding-left: 1rem;
 }
 
 .move-info {
@@ -1543,5 +1572,9 @@ em {
   position: absolute;
   top: 0;
   right: 0;
+}
+
+.item-combat-moves {
+  font-size: 0.6rem !important;
 }
 </style>

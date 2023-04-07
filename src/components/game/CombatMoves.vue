@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="combat-moves">
     <Modal v-if="showingMoveId" dialog large @close="showingMoveId = null">
       <template v-slot:title>{{ showingMove.name }}</template>
       <template v-slot:contents>
@@ -14,7 +14,7 @@
     >
       <div
         v-for="move in groupedMoves"
-        class="move-button"
+        class="move-button-wrapper"
         v-if="
           (!!move || !noSpacing) &&
           (!autoResolveOnly || (!move.count && !move.cooldownMax))
@@ -26,7 +26,11 @@
         }"
       >
         <template v-if="!!move">
-          <Button @click="selectMove(move.moveId)" noPadding>
+          <Button
+            class="move-button"
+            @click="selectMove(move.moveId)"
+            noPadding
+          >
             <div
               v-if="currentMove && currentMove === move.moveId"
               class="current-move"
@@ -34,11 +38,11 @@
             />
             <div class="move-icon-wrapper">
               <img class="move-icon" :src="move.icon" />
-            </div>
-            <div class="count-text" v-if="move.count">{{ move.count }}</div>
-            <div class="move-text">{{ move.name }}</div>
-            <div class="hotkey-text" v-if="hotkeysEnabled">
-              {{ hotkeys[move.moveId] }}
+              <div class="count-text" v-if="move.count">{{ move.count }}</div>
+              <div class="move-text">{{ move.name }}</div>
+              <div class="hotkey-text" v-if="hotkeysEnabled">
+                {{ hotkeys[move.moveId] }}
+              </div>
             </div>
           </Button>
           <div
@@ -215,16 +219,24 @@ export default {
 <style scoped lang="scss">
 @import "../../utils.scss";
 
+.combat-moves {
+  font-size: 1rem;
+}
+
 .wrapper-component {
   margin-bottom: -0.3rem;
 }
 
-.move-button {
+.move-button-wrapper {
   position: relative;
   display: flex;
-  $size: 6rem;
+  $size: 5em;
   margin-right: 0.3rem;
   margin-bottom: 0.3rem;
+
+  .move-button {
+    font-size: 1em;
+  }
 
   &.selected {
     @include filter(brightness(1.5));
@@ -237,11 +249,12 @@ export default {
       &::before {
         content: "";
         position: absolute;
-        top: -1rem;
-        left: -1rem;
-        border-radius: 0.6rem;
-        height: $size + 1rem;
-        width: $size + 1rem;
+        $expand: 2rem;
+        top: calc(-1 * $expand / 2);
+        left: calc(-1 * $expand / 2);
+        border-radius: 1.2rem;
+        height: calc($size + $expand);
+        width: calc($size + $expand);
         background: rgba(0, 0, 0, 0.6);
         z-index: 2;
       }
@@ -249,25 +262,25 @@ export default {
   }
 
   .move-icon-wrapper {
-    $wrapperSize: $size - 1rem;
-    height: $wrapperSize;
-    width: $wrapperSize;
+    height: $size;
+    width: $size;
   }
 
   .move-icon {
     position: absolute;
-    top: -0.5rem;
-    left: -0.5rem;
+    $expand: 0.8rem;
+    top: calc(-1 * $expand / 2);
+    left: calc(-1 * $expand / 2);
     border-radius: 0.6rem;
-    height: $size;
-    width: $size;
+    height: calc($size + $expand);
+    width: calc($size + $expand);
     vertical-align: bottom;
   }
   .hotkey-text {
     position: absolute;
-    top: -0.5rem;
-    left: 0;
-    font-size: 110%;
+    top: -0.2em;
+    left: 0.1em;
+    font-size: 2.3em;
     padding-top: 0.2rem;
     z-index: 3;
   }
@@ -275,17 +288,16 @@ export default {
     position: absolute;
     top: -0.5rem;
     right: 0;
-    font-size: 90%;
+    font-size: 1.8em;
     padding-top: 0.2rem;
     z-index: 3;
   }
   .move-text {
     position: absolute;
-    left: -0.5rem;
     bottom: -0.5rem;
-    width: 6rem;
+    width: 100%;
     padding-top: 0.2rem;
-    font-size: 60%;
+    font-size: 1.2em;
     overflow: hidden;
     text-overflow: ellipsis;
     z-index: 3;
@@ -313,7 +325,7 @@ export default {
   .cooldown-text {
     position: absolute;
     @include text-outline();
-    font-size: 125%;
+    font-size: 2.5em;
     text-align: center;
     height: 100%;
     width: 100%;

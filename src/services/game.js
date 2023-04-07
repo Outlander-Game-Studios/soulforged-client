@@ -594,11 +594,11 @@ export const GameService = (window.GameService = {
       );
   },
 
-  getInventoryStream(inventoryEntity) {
+  getInventoryStream(inventoryEntity, itemVariant) {
     return inventoryEntity
       .map((entity) => entity?.inventory)
       .distinctUntilChanged(null, JSON.stringify)
-      .switchMap((ids) => GameService.getEntitiesStream(ids))
+      .switchMap((ids) => GameService.getEntitiesStream(ids, itemVariant))
       .map((items) => items.filter((item) => !!item));
   },
 
