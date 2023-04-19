@@ -590,7 +590,7 @@ export default window.OperationCombat = {
     ATTACK_OUTCOMES: global.ATTACK_OUTCOMES,
     nonCombatEffectFilter,
     combatEffectFilter,
-    timeMax: 8000,
+    timeMax: PLAYER_TURN_TIMER * IN_MILISECONDS,
     timeRemaining: null,
     bigTexts: {},
     selectedMoveId: null,
@@ -649,7 +649,6 @@ export default window.OperationCombat = {
     return {
       combat: combatStream.tap((combat) => {
         this.timeRemaining = combat.timeLeft;
-        this.timeMax = Math.max(this.timeMax, this.timeRemaining || 0);
       }),
       ownFleeProgress: Rx.combineLatest(
         combatStream,

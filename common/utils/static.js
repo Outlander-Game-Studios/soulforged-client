@@ -34,6 +34,7 @@ global.SHOP_LISTING_SIDES = {
 };
 
 global.PING_FREQUENCY = 1000;
+global.PLAYER_TURN_TIMER = 60 * SECONDS;
 
 global.DAYS_OF_WEEK = [
   "Sunday",
