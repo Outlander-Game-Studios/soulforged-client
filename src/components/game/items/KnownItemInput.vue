@@ -33,6 +33,9 @@
             @input="queueSearchItems()"
           />
           <LoadingPlaceholder v-if="!results" />
+          <div v-else-if="!search" class="empty-text">
+            Enter search text to see results
+          </div>
           <div v-else-if="!results.length" class="empty-text">No results</div>
           <ListItem
             v-else
@@ -166,6 +169,12 @@ export default {
       this.selectedResult = null;
       this.results = null;
       clearTimeout(this.searchTimeout);
+
+      if (!this.search) {
+        this.results = [];
+        return;
+      }
+
       this.searchTimeout = setTimeout(() => {
         this.searchItems();
       }, 800);
