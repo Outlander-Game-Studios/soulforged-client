@@ -1,6 +1,7 @@
 <template>
   <div v-if="decorationSlots && decorationSlots.length">
-    <Header>Decorations</Header>
+    <Header>Decorations <span v-if="!home.isResting">(ignored)</span></Header>
+    <Actions :target="home" actionId="switchRest" />
     <template v-for="(slot, idx) in decorationSlots">
       <Header alt2> {{ slot.slotName }} </Header>
       <ListItem v-if="slot.item" :iconSrc="slot.item.icon" flexible>
