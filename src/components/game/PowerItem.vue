@@ -45,22 +45,25 @@
           <template v-slot:subtitle></template>
           <template v-slot:buttons> </template>
         </ListItem>
+        <CurrencyDisplay
+          v-if="basePrice"
+          label="Base cost"
+          :value="basePrice"
+        />
       </Vertical>
     </Spaced>
   </Container>
 </template>
 
 <script>
-import Horizontal from "../layouts/Horizontal";
-import Vertical from "../layouts/Vertical";
 export default {
-  components: { Vertical, Horizontal },
   props: {
     small: {
       type: Boolean,
     },
     power: {},
     purchasedPowers: {},
+    basePrice: {},
   },
 };
 </script>

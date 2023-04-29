@@ -297,7 +297,7 @@ export default {
     bottom: -0.5rem;
     width: 100%;
     padding-top: 0.2rem;
-    font-size: 1.2em;
+    font-size: 1.05em;
     overflow: hidden;
     text-overflow: ellipsis;
     z-index: 3;

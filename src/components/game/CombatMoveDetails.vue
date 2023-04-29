@@ -9,6 +9,13 @@
       </div>
       <Vertical>
         <div>
+          <LabeledValue v-if="!moveDetails.stopsFleeing">
+            Useable while fleeing
+            <Help title="Useable while fleeing">
+              Using this ability while fleeing does not reset the fleeing
+              progress.
+            </Help>
+          </LabeledValue>
           <LabeledValue v-if="moveDetails.isCounter">
             Used as counter
           </LabeledValue>

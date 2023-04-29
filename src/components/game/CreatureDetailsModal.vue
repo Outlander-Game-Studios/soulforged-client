@@ -89,7 +89,7 @@
                 </Vertical>
               </div>
               <Actions :target="creature" @action="$emit('action')" />
-              <div>
+              <div class="creature-effects">
                 <Effects :effects="creature.effects" :filter="combatEffects" />
                 <Effects :effects="creature.tracks" />
                 <Effects
@@ -217,5 +217,9 @@ export default {
 
 .target-text {
   font-weight: bold;
+}
+
+.creature-effects {
+  max-width: 40rem;
 }
 </style>

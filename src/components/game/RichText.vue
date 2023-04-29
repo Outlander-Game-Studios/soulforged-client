@@ -351,6 +351,7 @@ export default {
   text-decoration: underline dashed;
   text-underline-offset: 0.1rem;
   text-decoration-thickness: 0.06em;
+  margin-left: 0.25rem;
 
   > .icon-wrapper {
     margin-right: 0.3em;
