@@ -1,23 +1,25 @@
 <template>
   <div>
-    <component v-if="craft" :is="wrap ? 'HorizontalWrap' : 'Horizontal'" tight>
-      <ItemIcon
-        v-for="(material, idx) in craft.materials"
-        :key="'in' + idx"
-        :icon="material.itemDef.icon"
-        :size="size"
-        :class="{ interactive: !nonInteractive }"
-        @click="showCrafts(material)"
-      >
-        <template #amount>
-          <ItemCountNeeded
-            v-if="includeInventory"
-            :needed="material.amount * finalAmount"
-            :publicId="material.publicId"
-          />
-          <div v-else>{{ material.amount * finalAmount }}</div>
-        </template>
-      </ItemIcon>
+    <Horizontal v-if="craft">
+      <component :is="wrap ? 'HorizontalWrap' : 'Horizontal'" tight>
+        <ItemIcon
+          v-for="(material, idx) in craft.materials"
+          :key="'in' + idx"
+          :icon="material.itemDef.icon"
+          :size="size"
+          :class="{ interactive: !nonInteractive }"
+          @click="showCrafts(material)"
+        >
+          <template #amount>
+            <ItemCountNeeded
+              v-if="includeInventory"
+              :needed="material.amount * finalAmount"
+              :publicId="material.publicId"
+            />
+            <div v-else>{{ material.amount * finalAmount }}</div>
+          </template>
+        </ItemIcon>
+      </component>
       <div
         class="arrow"
         :style="{
@@ -28,28 +30,30 @@
       >
         ➭
       </div>
-      <ItemCollectAnimation
-        v-for="(produce, idx) in craft.produce"
-        :ref="'produce_' + produce.publicId"
-        :key="'produce_' + produce.publicId"
-        :icon="produce.itemDef.icon"
-        :size="size"
-        :class="{ interactive: !nonInteractive }"
-        @click="showCrafts(produce)"
-      >
-        <template #amount>
-          <div class="amount">
-            <ItemCountNeeded
-              v-if="includeInventory"
-              :needed="produce.amount * finalAmount"
-              :publicId="produce.publicId"
-              noFlash
-            />
-            <div v-else>{{ produce.amount * finalAmount }}</div>
-          </div>
-        </template>
-      </ItemCollectAnimation>
-    </component>
+      <component :is="wrap ? 'HorizontalWrap' : 'Horizontal'" tight>
+        <ItemCollectAnimation
+          v-for="(produce, idx) in craft.produce"
+          :ref="'produce_' + produce.publicId"
+          :key="'produce_' + produce.publicId"
+          :icon="produce.itemDef.icon"
+          :size="size"
+          :class="{ interactive: !nonInteractive }"
+          @click="showCrafts(produce)"
+        >
+          <template #amount>
+            <div class="amount">
+              <ItemCountNeeded
+                v-if="includeInventory"
+                :needed="produce.amount * finalAmount"
+                :publicId="produce.publicId"
+                noFlash
+              />
+              <div v-else>{{ produce.amount * finalAmount }}</div>
+            </div>
+          </template>
+        </ItemCollectAnimation>
+      </component>
+    </Horizontal>
     <LoadingPlaceholder v-else />
     <Modal
       dialog
