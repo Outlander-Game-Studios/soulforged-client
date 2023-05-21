@@ -68,6 +68,7 @@ export default {
 
   .actions-container {
     position: fixed;
+    z-index: 1;
 
     @media (orientation: landscape) {
       bottom: 0;
