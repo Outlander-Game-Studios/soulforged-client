@@ -152,7 +152,7 @@
                   </LabeledValue>
                 </div>
                 <div v-if="showDetailsInfo.climateInsulation">
-                  <Header alt2>Environment protections</Header>
+                  <Header alt2>Environment protections (when inside)</Header>
                   <LabeledValue
                     v-for="(value, label) in showDetailsInfo.climateInsulation"
                     :key="label"
