@@ -9,6 +9,11 @@
       </div>
       <Vertical>
         <div>
+          <LabeledValue label="Odds of landing a hit" v-if="odds !== undefined">
+            <span :class="'odds-color-' + (ODDS_CLASS[odds] || odds)">
+              {{ ODDS_TEXT[odds] }}
+            </span>
+          </LabeledValue>
           <LabeledValue v-if="!moveDetails.stopsFleeing">
             Useable while fleeing
             <Help title="Useable while fleeing">
@@ -83,9 +88,28 @@
 <script>
 export default {
   props: {
+    odds: {},
     moveDetails: {},
     noIcon: { type: Boolean },
   },
+
+  data: () => ({
+    ODDS_CLASS: {
+      "n/a": "n-a",
+    },
+    ODDS_TEXT: {
+      "n/a": "Self-applied",
+      4: "Excellent",
+      3: "Great",
+      2: "Good",
+      1: "Fine",
+      0: "Average",
+      "-1": "Poor",
+      "-2": "Bad",
+      "-3": "Awful",
+      "-4": "Abysmal",
+    },
+  }),
 };
 </script>
 
@@ -106,5 +130,36 @@ hr:first-child,
 hr:last-child,
 hr + hr {
   display: none;
+}
+
+.odds-color-n-a {
+  @include text-outline(#102679, #3b79d9);
+}
+.odds-color-4 {
+  @include text-outline(#022902, green);
+}
+.odds-color-3 {
+  @include text-outline(#062f06, #29a429);
+}
+.odds-color-2 {
+  @include text-outline(#093209, limegreen);
+}
+.odds-color-1 {
+  @include text-outline(#182200, #93e838);
+}
+.odds-color-0 {
+  @include text-outline(#181800, yellow);
+}
+.odds-color--1 {
+  @include text-outline(#322200, orange);
+}
+.odds-color--2 {
+  @include text-outline(#541111, red);
+}
+.odds-color--3 {
+  @include text-outline(#520b0b, #de2222);
+}
+.odds-color--4 {
+  @include text-outline(#4f0808, firebrick);
 }
 </style>

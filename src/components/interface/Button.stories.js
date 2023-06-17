@@ -37,6 +37,58 @@ export const styles = () => ({
 </div>`,
 });
 
+export const colored = () => ({
+  methods: {
+    onClick() {
+      alert("button clicked");
+    },
+  },
+  template: `
+<div>
+  <Spaced>
+    <Button @click="onClick" color="blue">Blue</Button>
+    <Button @click="onClick" color="blue" class="active">Blue</Button>
+  </Spaced>
+  <Spaced>
+    <Button @click="onClick" color="green3">Green 3</Button>
+    <Button @click="onClick" color="green3" class="active">Green 3</Button>
+  </Spaced>
+  <Spaced>
+    <Button @click="onClick" color="green2">Green 2</Button>
+    <Button @click="onClick" color="green2" class="active">Green 2</Button>
+  </Spaced>
+  <Spaced>
+    <Button @click="onClick" color="green1">Green 1</Button>
+    <Button @click="onClick" color="green1" class="active">Green 1</Button>
+  </Spaced>
+  <Spaced>
+    <Button @click="onClick" color="green0">Green 0</Button>
+    <Button @click="onClick" color="green0" class="active">Green 0</Button>
+  </Spaced>
+  <Spaced>
+    <Button @click="onClick" color="yellow">Yellow</Button>
+    <Button @click="onClick" color="yellow" class="active">Yellow</Button>
+  </Spaced>
+  <Spaced>
+    <Button @click="onClick" color="orange">Orange</Button>
+    <Button @click="onClick" color="orange" class="active">Orange</Button>
+  </Spaced>
+  <Spaced>
+    <Button @click="onClick" color="red1">Red 1</Button>
+    <Button @click="onClick" color="red1" class="active">Red 1</Button>
+  </Spaced>
+  <Spaced>
+    <Button @click="onClick" color="red2">Red 2</Button>
+    <Button @click="onClick" color="red2" class="active">Red 2</Button>
+  </Spaced>
+  <Spaced>
+    <Button @click="onClick" color="red3">Red 3</Button>
+    <Button @click="onClick" color="red3" class="active">Red 3</Button>
+  </Spaced>
+ 
+</div>`,
+});
+
 export const processing = () => ({
   data: () => ({
     processing: new Promise(() => {}),

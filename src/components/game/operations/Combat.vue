@@ -137,7 +137,11 @@
                   {{ selectedMove.name }}
                 </Header>
                 <Spaced>
-                  <CombatMoveDetails :moveDetails="selectedMove" noIcon />
+                  <CombatMoveDetails
+                    :moveDetails="selectedMove"
+                    noIcon
+                    :odds="moveOdds[selectedMoveId]"
+                  />
                 </Spaced>
                 <Button @click="selectMove(selectedMoveId)" reactToEnter
                   >Perform</Button
@@ -339,6 +343,7 @@
                       :currentMove="operation.context.currentMoveId"
                       @selected="selectMove($event)"
                       wrap
+                      :odds="moveOdds"
                       :selectedMoveId="selectedMoveId"
                     />
                   </Vertical>
@@ -678,6 +683,7 @@ export default window.OperationCombat = {
               true
             )
       ),
+      moveOdds: this.fetchCombatMovesOdds(),
       loot: combatStream
         .pluck("loot")
         .switchMap((ids) => GameService.getEntitiesStream(ids)),
@@ -701,6 +707,7 @@ export default window.OperationCombat = {
         .tap((ownTurn) => {
           if (ownTurn && !this.combat.autoResolving) {
             this.displayBigText("Your turn!", BIG_TEXT_CLASS.NEUTRAL);
+            this.fetchCombatMovesOdds();
             SoundService.playSound(promptSound);
           }
         }),
@@ -752,6 +759,14 @@ export default window.OperationCombat = {
   },
 
   methods: {
+    fetchCombatMovesOdds() {
+      return GameService.getInfoStream(
+        "Human",
+        { type: "combatMovesOdds" },
+        true
+      );
+    },
+
     initiateTimerCountdown() {
       const resolution = 50;
       this.timerInterval = setInterval(() => {
@@ -804,6 +819,7 @@ export default window.OperationCombat = {
         }).then((result) => {
           if (result && result.ok) {
             this.targetting = false;
+            this.fetchCombatMovesOdds();
           } else {
             ToastError(result.message);
           }
@@ -1536,8 +1552,10 @@ $side-position: 1rem;
   bottom: 2.75rem;
   left: 0.25rem;
   height: auto !important;
-  max-height: calc(100% - 2.5rem) !important;
+  max-height: calc(100% - 4.5rem) !important;
   z-index: 20;
+  display: flex;
+  flex-direction: column;
 }
 
 .gained-text {

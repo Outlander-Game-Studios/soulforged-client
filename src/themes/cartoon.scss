@@ -7,6 +7,47 @@ $backgroundAlt3Url: url(ui-asset("/backgrounds/ui_panel_paper_inset_bg.png"));
   @include border-background(26);
   background-image: url(ui-asset("/buttons/button.png"));
   border-image-source: url(ui-asset("/buttons/button.png"));
+
+  &.color-green3 {
+    background-image: url(ui-asset("/buttons/button-green3.png"));
+    border-image-source: url(ui-asset("/buttons/button-green3.png"));
+  }
+  &.color-green2 {
+    background-image: url(ui-asset("/buttons/button-green2.png"));
+    border-image-source: url(ui-asset("/buttons/button-green2.png"));
+  }
+  &.color-green1 {
+    background-image: url(ui-asset("/buttons/button-green1.png"));
+    border-image-source: url(ui-asset("/buttons/button-green1.png"));
+  }
+  &.color-green0 {
+    background-image: url(ui-asset("/buttons/button-green0.png"));
+    border-image-source: url(ui-asset("/buttons/button-green0.png"));
+  }
+  &.color-yellow {
+    background-image: url(ui-asset("/buttons/button-yellow.png"));
+    border-image-source: url(ui-asset("/buttons/button-yellow.png"));
+  }
+  &.color-orange {
+    background-image: url(ui-asset("/buttons/button-orange.png"));
+    border-image-source: url(ui-asset("/buttons/button-orange.png"));
+  }
+  &.color-red1 {
+    background-image: url(ui-asset("/buttons/button-red1.png"));
+    border-image-source: url(ui-asset("/buttons/button-red1.png"));
+  }
+  &.color-red2 {
+    background-image: url(ui-asset("/buttons/button-red2.png"));
+    border-image-source: url(ui-asset("/buttons/button-red2.png"));
+  }
+  &.color-red3 {
+    background-image: url(ui-asset("/buttons/button-red3.png"));
+    border-image-source: url(ui-asset("/buttons/button-red3.png"));
+  }
+  &.color-blue {
+    background-image: url(ui-asset("/buttons/button-blue.png"));
+    border-image-source: url(ui-asset("/buttons/button-blue.png"));
+  }
 }
 
 @mixin theme-button-pressed() {

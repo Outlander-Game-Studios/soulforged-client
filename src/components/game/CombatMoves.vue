@@ -22,7 +22,6 @@
         :class="{
           'flex-grow': !move,
           'miss-req': move && move.missingReq,
-          selected: move && selectedMoveId === move.moveId,
         }"
       >
         <template v-if="!!move">
@@ -30,11 +29,12 @@
             class="move-button"
             @click="selectMove(move.moveId)"
             noPadding
+            :color="odds && ODDS_COLORS[odds[move.moveId]]"
           >
             <div
-              v-if="currentMove && currentMove === move.moveId"
+              v-if="move && selectedMoveId === move.moveId"
               class="current-move"
-              :class="{ active: currentMoveActive }"
+              :class="{ active: !!selectedMoveId }"
             />
             <div class="move-icon-wrapper">
               <img class="move-icon" :src="move.icon" />
@@ -56,7 +56,7 @@
               }"
             />
             <div class="cooldown-text">
-              {{ min(move.cooldown, move.cooldownMax) }}
+              {{ move.cooldown }}
             </div>
           </div>
         </template>
@@ -89,10 +89,23 @@ export default {
     },
     selectedMoveId: {},
     moves: {},
+    odds: {},
   },
 
   data: () => ({
     showingMoveId: false,
+    ODDS_COLORS: {
+      "n/a": "blue",
+      4: "green3",
+      3: "green2",
+      2: "green1",
+      1: "green0",
+      0: "yellow",
+      "-1": "orange",
+      "-2": "red1",
+      "-3": "red2",
+      "-4": "red3",
+    },
   }),
 
   subscriptions() {
@@ -268,7 +281,7 @@ export default {
 
   .move-icon {
     position: absolute;
-    $expand: 0.8rem;
+    $expand: 0.6rem;
     top: calc(-1 * $expand / 2);
     left: calc(-1 * $expand / 2);
     border-radius: 0.6rem;
@@ -313,6 +326,7 @@ export default {
   z-index: 4;
   border-radius: 1rem;
   overflow: hidden;
+  pointer-events: none;
 
   .cooldown-fill {
     position: absolute;
@@ -340,7 +354,7 @@ export default {
   width: $size;
   height: $size;
   position: absolute;
-  z-index: 3;
+  z-index: 5;
   top: -0.5rem;
   left: 50%;
   margin-top: calc($size / -2);

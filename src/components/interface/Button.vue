@@ -11,7 +11,7 @@
       'type-' + type,
     ]"
   >
-    <div class="content">
+    <div class="content" :class="'color-' + color">
       <div class="text">
         <slot></slot>
       </div>
@@ -46,6 +46,9 @@ export default {
     },
     noPadding: {
       type: Boolean,
+    },
+    color: {
+      type: String,
     },
   },
 
