@@ -143,9 +143,13 @@
                     :odds="moveOdds[selectedMoveId]"
                   />
                 </Spaced>
-                <Button @click="selectMove(selectedMoveId)" reactToEnter
-                  >Perform</Button
-                >
+                <Spaced>
+                  <HorizontalFill>
+                    <Button @click="selectMove(selectedMoveId)" reactToEnter>
+                      Perform
+                    </Button>
+                  </HorizontalFill>
+                </Spaced>
               </Vertical>
             </Container>
           </div>
