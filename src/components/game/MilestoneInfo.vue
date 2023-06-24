@@ -48,7 +48,7 @@ export default {
     },
     tracked() {
       GameService.getInfoStream(
-        "Milestones",
+        "Human",
         {
           type: "setMilestoneTracker",
           track: this.tracked ? this.milestoneInfo.key : null,
