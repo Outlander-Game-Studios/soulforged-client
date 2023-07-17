@@ -356,6 +356,7 @@ import harvestIcon from "../operation-assets/farm_harvest.jpg";
 import uprootIcon from "../operation-assets/farm_uproot.jpg";
 import weedoutIcon from "../operation-assets/farm_weedout.jpg";
 import inspectIcon from "../operation-assets/farm_lookup.jpg";
+import farmingWater from "../../../assets/sounds/farming-water.ogg";
 
 const ACTION_NAMES = {
   [FARMING_ACTIONS.NONE]: "Inspect",
@@ -585,9 +586,7 @@ export default window.OperationFarming = {
           }
           break;
         default:
-          this.selectPlot(idx).then(() => {
-            this.commence();
-          });
+          this.commence({ plotIdx: idx });
       }
     },
 
@@ -603,14 +602,17 @@ export default window.OperationFarming = {
       });
     },
 
-    commence() {
+    commence(params = {}) {
       if (this.currentAction === FARMING_ACTIONS.HARVEST) {
         this.harvestingProcessing = true;
       }
-      return GameService.request(REQUEST_CODES.COMMENCE_OPERATION).then(
+      return GameService.request(REQUEST_CODES.COMMENCE_OPERATION, params).then(
         (response) => {
           if (response && response.statusChanges) {
             ToastNotify(response.statusChanges);
+          }
+          if (this.currentAction === FARMING_ACTIONS.USE_LIQUID && !response) {
+            SoundService.playSound(farmingWater);
           }
           if (this.currentAction === FARMING_ACTIONS.HARVEST) {
             if (response.modifiers) {

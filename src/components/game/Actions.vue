@@ -17,6 +17,7 @@
           v-else
           @click="startAction(action)"
           :disabled="disabled"
+          :processing="performingActionId === action.actionId"
           class="action-button"
           :class="action.actionId"
         >
@@ -144,19 +145,17 @@ export default {
     customActionHandler: {},
   },
 
-  data() {
-    return {
-      calculatingAp: false,
-      selectedItem: null,
-      parameters: {},
-      currentAction: null,
-      performing: null,
-      holdingsFilter: (building) => {
-        return building.own;
-      },
-    };
-  },
-
+  data: () => ({
+    performingActionId: null,
+    calculatingAp: false,
+    selectedItem: null,
+    parameters: {},
+    currentAction: null,
+    performing: null,
+    holdingsFilter: (building) => {
+      return building.own;
+    },
+  }),
   subscriptions() {
     return {
       actionPoints: Rx.combineLatest(
@@ -289,11 +288,13 @@ export default {
         JSON.stringify(action),
         JSON.stringify(parameters)
       );
+      this.performingActionId = action.actionId;
       this.performing = GameService.performAction(
         this.target,
         action,
         parameters
       ).then((response) => {
+        this.performingActionId = null;
         if (response && response.ok) {
           this.closeActionDialog();
           this.$emit("action", { action, result: response.result });
