@@ -234,6 +234,7 @@
 import unknownImg from "../../assets/ui/cartoon/icons/unknown_nobg.png";
 import isEqual from "lodash/isEqual.js";
 import StructureIcon from "./StructureIcon";
+import pageSound from "../../assets/sounds/page.mp3";
 
 export default {
   components: { StructureIcon },
@@ -334,6 +335,7 @@ export default {
     openSettings() {
       this.settings = true;
       GameService.checkQuickActions();
+      SoundService.playSound(pageSound);
     },
 
     triggerQuickAction(validQuickAction, max = false) {

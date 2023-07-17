@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import buttonClickSound from "../../assets/sounds/button-click.ogg";
+import buttonClickSound from "../../assets/sounds/button-click.mp3";
 
 export default {
   props: {

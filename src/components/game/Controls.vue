@@ -108,8 +108,8 @@ import craftIcon from "../../assets/ui/cartoon/icons/tabs/craft.png";
 import researchIcon from "../../assets/ui/cartoon/icons/tabs/research.png";
 import chatIcon from "../../assets/ui/cartoon/icons/tabs/chat.png";
 import tradeIcon from "../../assets/ui/cartoon/icons/tabs/trade.png";
-import pageSound from "../../assets/sounds/page.ogg";
-import pageCloseSound from "../../assets/sounds/page-close.ogg";
+import pageSound from "../../assets/sounds/page.mp3";
+import pageCloseSound from "../../assets/sounds/page-close.mp3";
 
 export default {
   data: () => ({

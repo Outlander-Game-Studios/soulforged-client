@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import buttonClickSound from "../../assets/sounds/button-click.ogg";
+import buttonClickSound from "../../assets/sounds/button-click.mp3";
 import Horizontal from "../layouts/Horizontal";
 import Controls from "./Controls";
 

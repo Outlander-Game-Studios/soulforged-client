@@ -39,7 +39,8 @@
 </template>
 
 <script>
-import fanfareSound from "../../assets/sounds/fanfare.ogg";
+import fanfareSound from "../../assets/sounds/fanfare.mp3";
+import pageSound from "../../assets/sounds/page.mp3";
 
 window.MILESTONES_IDX = 1;
 
@@ -105,6 +106,7 @@ export default {
 
   methods: {
     showMilestoneDetails() {
+      SoundService.playSound(pageSound);
       this.showDetails = true;
     },
     showMilestones() {

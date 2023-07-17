@@ -1,6 +1,6 @@
 <template>
   <div class="controls-sticky" v-if="mainEntity">
-    <div class="avatar interactive" @click="showDetails = true">
+    <div class="avatar interactive" @click="clickAvatar()">
       <Avatar :creature="myCreature" :headOnly="true" size="large" />
     </div>
     <CreatureDetailsModal
@@ -53,6 +53,8 @@
 </template>
 
 <script>
+import pageSound from "../../assets/sounds/page.mp3";
+
 export default {
   data: () => ({
     showDetails: false,
@@ -67,6 +69,11 @@ export default {
   },
 
   methods: {
+    clickAvatar() {
+      this.showDetails = true;
+      SoundService.playSound(pageSound);
+    },
+
     confirmNameChanged() {
       GameService.request(REQUEST_CODES.CONFIRM_NAME_CHANGE);
     },

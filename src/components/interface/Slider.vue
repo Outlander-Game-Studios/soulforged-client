@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import sliderSound from "../../assets/sounds/slider.ogg";
+import sliderSound from "../../assets/sounds/slider.mp3";
 
 export default {
   props: {

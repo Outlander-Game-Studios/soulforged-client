@@ -27,7 +27,7 @@ import durabilityBorder1 from "../../../assets/ui/cartoon/borders/item-durabilit
 import durabilityBorder2 from "../../../assets/ui/cartoon/borders/item-durability-2.jpg";
 import durabilityBorder3 from "../../../assets/ui/cartoon/borders/item-durability-3.jpg";
 import { formatNumber } from "../../../../common/utils/misc.js";
-import iconClickSound from "../../../assets/sounds/icon-click.ogg";
+import iconClickSound from "../../../assets/sounds/icon-click.mp3";
 
 const durabilityBorder = [
   durabilityBorder0,

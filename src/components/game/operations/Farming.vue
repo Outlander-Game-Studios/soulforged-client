@@ -356,7 +356,7 @@ import harvestIcon from "../operation-assets/farm_harvest.jpg";
 import uprootIcon from "../operation-assets/farm_uproot.jpg";
 import weedoutIcon from "../operation-assets/farm_weedout.jpg";
 import inspectIcon from "../operation-assets/farm_lookup.jpg";
-import farmingWater from "../../../assets/sounds/farming-water.ogg";
+import farmingWater from "../../../assets/sounds/farming-water.mp3";
 
 const ACTION_NAMES = {
   [FARMING_ACTIONS.NONE]: "Inspect",

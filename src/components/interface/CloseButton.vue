@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import closeSound from "../../assets/sounds/close.ogg";
+import closeSound from "../../assets/sounds/close.mp3";
 
 export default {
   props: {

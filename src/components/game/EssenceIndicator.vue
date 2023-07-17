@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import pageSound from "../../assets/sounds/page.ogg";
+import pageSound from "../../assets/sounds/page.mp3";
 
 export default {
   data: () => ({

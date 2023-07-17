@@ -1,9 +1,9 @@
 import { Howl, Howler } from "howler";
 import "./controls.js";
-import buttonSound from "../assets/sounds/button-click.ogg";
-import travelSound from "../assets/sounds/travel.ogg";
-import errorSound from "../assets/sounds/notification-error.ogg";
-import notificationSound from "../assets/sounds/notification.ogg";
+import buttonSound from "../assets/sounds/button-click.mp3";
+import travelSound from "../assets/sounds/travel.mp3";
+import errorSound from "../assets/sounds/notification-error.mp3";
+import notificationSound from "../assets/sounds/notification.mp3";
 
 const lastNotification = {};
 const soundSettings = {

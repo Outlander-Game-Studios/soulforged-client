@@ -527,7 +527,7 @@
 import fleeIcon from "../operation-assets/flee.png";
 import targetIcon from "../operation-assets/target.png";
 import turnIcon from "../operation-assets/combat-turn.png";
-import promptSound from "../../../assets/sounds/prompt2.ogg";
+import promptSound from "../../../assets/sounds/prompt2.mp3";
 import omit from "lodash/omit.js";
 
 const BIG_TEXT_CLASS = {

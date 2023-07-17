@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import helpSound from "../../assets/sounds/help.ogg";
+import helpSound from "../../assets/sounds/help.mp3";
 
 export default {
   props: {

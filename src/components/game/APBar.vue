@@ -52,8 +52,8 @@
 </template>
 
 <script>
-import pageSound from "../../assets/sounds/page.ogg";
-import promptSound from "../../assets/sounds/prompt2.ogg";
+import pageSound from "../../assets/sounds/page.mp3";
+import promptSound from "../../assets/sounds/prompt2.mp3";
 import Countdown from "../interface/Countdown";
 
 export default {

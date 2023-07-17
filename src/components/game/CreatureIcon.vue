@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import iconClickSound from "../../assets/sounds/icon-click.ogg";
+import iconClickSound from "../../assets/sounds/icon-click.mp3";
 
 export default {
   props: {

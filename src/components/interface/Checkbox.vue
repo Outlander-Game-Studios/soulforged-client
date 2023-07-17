@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import checkboxSound from "../../assets/sounds/checkbox.ogg";
+import checkboxSound from "../../assets/sounds/checkbox.mp3";
 
 export default {
   props: {

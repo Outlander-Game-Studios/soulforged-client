@@ -105,8 +105,8 @@
 
 <script>
 import exclamationIcon from "../../assets/ui/cartoon/icons/exclamation.png";
-import namingOpenSound from "../../assets/sounds/naming-open.ogg";
-import namingCloseSound from "../../assets/sounds/naming-close.ogg";
+import namingOpenSound from "../../assets/sounds/naming-open.mp3";
+import namingCloseSound from "../../assets/sounds/naming-close.mp3";
 import Effects from "./Effects";
 import ListItem from "../interface/ListItem";
 import Vertical from "../layouts/Vertical";
