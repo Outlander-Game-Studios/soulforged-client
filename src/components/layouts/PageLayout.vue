@@ -98,7 +98,7 @@ export default {
       height: 100%;
       background-size: cover;
       background-position: center center;
-      filter: blur(0.05rem) saturate(0.8) brightness(1.3) contrast(0.7);
+      filter: blur(0.05rem) saturate(0.95) brightness(1.1) contrast(0.9);
     }
   }
 
