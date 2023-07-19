@@ -12,6 +12,7 @@ import {
   tap,
   first,
   map,
+  scan,
   filter,
   switchMap,
   pluck,
@@ -45,6 +46,7 @@ global.Rx = Rx;
 Observable.prototype.tap = usePipe(tap);
 Observable.prototype.first = usePipe(first);
 Observable.prototype.map = usePipe(map);
+Observable.prototype.scan = usePipe(scan);
 Observable.prototype.filter = usePipe(filter);
 Observable.prototype.switchMap = usePipe(switchMap);
 Observable.prototype.pluck = usePipe(pluck);

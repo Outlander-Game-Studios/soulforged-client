@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div class="combat-container" v-if="combat">
+    <div
+      class="combat-container"
+      v-if="combat"
+      :style="{ '--anim-speed': ANIMATION_SPEED }"
+    >
       <CreatureDetailsModal
         :creatureId="selectedCreatureId"
         @close="selectedCreatureId = null"
@@ -117,7 +121,7 @@
           </div>
         </template>
       </Modal>
-      <template v-if="inBattle">
+      <template v-if="inBattle || inBattleDebounced">
         <div class="main-area">
           <Button
             v-if="combat.canAutoResolve"
@@ -170,7 +174,7 @@
                 <div
                   class="marker current-turn"
                   :style="turnIconStyle"
-                  v-if="combat.creatureTurn === creature.id"
+                  v-if="currentCreatureId === creature.id"
                 />
               </div>
               <div class="effects-wrapper">
@@ -279,9 +283,16 @@
           />
         </div>
         <div>
-          <Container borderSize="0.5" class="effects-container">
-            <Effects row :effects="mainEntity.effects" :size="4" />
-          </Container>
+          <Horizontal tight>
+            <Container borderSize="0.5" class="effects-container flex-grow">
+              <Effects row :effects="mainEntity.effects" :size="4" />
+            </Container>
+            <Button
+              class="animation-speed-button"
+              @click="switchAnimationSpeed()"
+              >{{ selectedAnimationSpeed.button }}</Button
+            >
+          </Horizontal>
         </div>
         <div class="relative">
           <div class="targetting-overlay" v-if="targetting">
@@ -370,9 +381,9 @@
           <Spaced>
             <Vertical>
               <HorizontalCenter>
-                <Header veryLarge v-if="operation.lost"
-                  >You lost the fight!</Header
-                >
+                <Header veryLarge v-if="operation.lost">
+                  You lost the fight!
+                </Header>
                 <Header veryLarge v-else-if="operation.fled">You fled.</Header>
                 <Header veryLarge v-else>Victory!</Header>
               </HorizontalCenter>
@@ -538,6 +549,12 @@ const BIG_TEXT_CLASS = {
   POOR: "poor",
   BAD: "bad",
 };
+const ANIMATION_SPEEDS = [
+  { speed: 0.2, text: "Very Slow", button: ">" },
+  { speed: 0.6, text: "Slow", button: ">>" },
+  { speed: 1, text: "Normal", button: ">>>" },
+  { speed: 2, text: "Fast", button: ">>>>" },
+];
 
 const positions = [
   [75, 50],
@@ -582,6 +599,9 @@ export default window.OperationCombat = {
   },
 
   data: () => ({
+    ANIMATION_SPEED: 1,
+    ANIMATION_SPEEDS,
+    selectedAnimationSpeed: ANIMATION_SPEEDS.first(),
     AUTO_RESOLVE_TURNS,
     SWAP_COOLDOWN,
     ENTITY_VARIANTS,
@@ -605,6 +625,7 @@ export default window.OperationCombat = {
     selectedMoveId: null,
     skipConfirm: true,
     showMobInfoDetails: null,
+    creatureStatesByDamagesId: {},
   }),
 
   watch: {
@@ -617,9 +638,17 @@ export default window.OperationCombat = {
   },
 
   computed: {
+    currentCreatureId() {
+      return (
+        this.damagePresentation?.actingCreatureId || this.combat?.creatureTurn
+      );
+    },
     inBattle() {
       return (
-        !this.combat.finished && !this.operation.fled && !this.operation.lost
+        !!this.damagePresentation ||
+        (!this.combat?.finished &&
+          !this.operation?.fled &&
+          !this.operation.lost)
       );
     },
     fleeIconStyle() {
@@ -676,6 +705,7 @@ export default window.OperationCombat = {
             entity?.combatStats?.moves?.find((m) => m.moveId === moveId)
           )
         ),
+      inBattleDebounced: this.$stream("inBattle").debounceTime(1000),
       selectedMove: this.$stream("selectedMoveId").switchMap((selectedMoveId) =>
         !selectedMoveId
           ? Rx.Observable.of(null)
@@ -703,26 +733,28 @@ export default window.OperationCombat = {
           this.queueDamages(damages);
         }),
       ownTurn: Rx.combineLatest(
-        combatStream.pluck("creatureTurn").distinctUntilChanged(),
-        GameService.getRootEntityStream().pluck("id")
+        this.$stream("currentCreatureId").distinctUntilChanged(),
+        GameService.getRootEntityStream().pluck("id").distinctUntilChanged()
       )
         .map(([creatureId, ownId]) => creatureId === ownId)
         .distinctUntilChanged()
         .tap((ownTurn) => {
+          clearTimeout(this.turnAnnouceTimeout);
           if (ownTurn && !this.combat.autoResolving) {
-            this.displayBigText("Your turn!", BIG_TEXT_CLASS.NEUTRAL);
-            this.fetchCombatMovesOdds();
-            SoundService.playSound(promptSound);
+            this.turnAnnouceTimeout = setTimeout(() => {
+              this.displayBigText("Your turn!", BIG_TEXT_CLASS.NEUTRAL);
+              this.fetchCombatMovesOdds();
+              SoundService.playSound(promptSound);
+            }, 100);
           }
         }),
       creatures: creaturesStream
         .tap((creatures) => {
           creatures.forEach((creature) => {
-            this.$set(this.displayedCreatures, creature.id, creature);
-          });
-        })
-        .map((creatures) => {
-          creatures.forEach((creature) => {
+            const displayed = this.displayedCreatures[creature.id];
+            if (!displayed || displayed.damagesId === creature.damagesId) {
+              this.$set(this.displayedCreatures, creature.id, creature);
+            }
             if (!this.creaturePositions[creature.id]) {
               const positionIdx = creature.hostile
                 ? this.hostilePositionsTaken++
@@ -744,7 +776,16 @@ export default window.OperationCombat = {
               });
               return creature;
             }
+            if (!this.creatureStatesByDamagesId[creature.id]) {
+              this.creatureStatesByDamagesId[creature.id] = {};
+            }
+            const { damagesId } = creature;
+            if (damagesId !== undefined) {
+              this.creatureStatesByDamagesId[creature.id][damagesId] = creature;
+            }
           });
+        })
+        .map((creatures) => {
           return creatures.toObject((creature) => creature.id);
         }),
     };
@@ -755,6 +796,9 @@ export default window.OperationCombat = {
     this.updateConsideredAP();
     this.initiateTimerCountdown();
     this.skipConfirm = LocalStorageService.getItem("combat-skipConfirm", true);
+    this.setAnimationSpeed(
+      LocalStorageService.getItem("combat-animationSpeed", 1)
+    );
   },
 
   beforeDestroy() {
@@ -763,6 +807,23 @@ export default window.OperationCombat = {
   },
 
   methods: {
+    setAnimationSpeed(speedValue) {
+      this.ANIMATION_SPEED = speedValue;
+      this.selectedAnimationSpeed = ANIMATION_SPEEDS.find(
+        (option) => option.speed === speedValue
+      );
+      LocalStorageService.setItem("combat-animationSpeed", speedValue);
+    },
+
+    switchAnimationSpeed() {
+      const target =
+        ANIMATION_SPEEDS.find(
+          (option) => option.speed > this.ANIMATION_SPEED
+        ) || ANIMATION_SPEEDS.first();
+      this.setAnimationSpeed(target.speed);
+      this.displayBigText(`Animation speed: ${target.text}`);
+    },
+
     fetchCombatMovesOdds() {
       return GameService.getInfoStream(
         "Human",
@@ -951,7 +1012,7 @@ export default window.OperationCombat = {
         const target = this.displayedCreatures[
           this.damagePresentation.defenderId
         ];
-        offsetX = (target && target.hostile ? -1 : 1) * 9.8;
+        offsetX = (target && target.hostile ? -1 : 1) * 12.8;
       }
       return {
         left: `calc(${positioning.current.x}% + ${offsetX}rem)`,
@@ -1017,16 +1078,17 @@ export default window.OperationCombat = {
       };
       this.creaturePositions[defenderId].stance = STANCES.DEFENDING;
       // update creature position
-      await wait(100);
+      await wait(100 / this.ANIMATION_SPEED);
     },
     async attackDefender(damages) {
+      const attackerId = damages.attackerId;
+      const defenderId = damages.defenderId;
       // update creature position
       if (!damages.attackerDamageDealt) {
+        this.updateCreatureState(defenderId, damages.damagesId);
         return;
       }
       for (const attackerDamageDealt of damages.attackerDamageDealt) {
-        const attackerId = damages.attackerId;
-        const defenderId = damages.defenderId;
         if (damages.resultInfo) {
           this.displayBigText(damages.resultInfo.text, damages.resultInfo.type);
         }
@@ -1034,41 +1096,43 @@ export default window.OperationCombat = {
           !this.creaturePositions[attackerId] ||
           !this.creaturePositions[attackerId]
         ) {
+          this.updateCreatureState(defenderId, damages.damagesId);
           return;
         }
         this.creaturePositions[attackerId].animation = null;
         this.creaturePositions[defenderId].animation = null;
-        await wait(50);
+        await wait(50 / this.ANIMATION_SPEED);
         this.creaturePositions[attackerId].animation = ANIMATIONS.ATTACKING;
         this.creaturePositions[defenderId].animation = ANIMATIONS.BEING_HIT;
         this.addFloatingCombatText(defenderId, attackerDamageDealt);
-        this.updateCreatureState(defenderId);
-        await wait(150);
+        this.updateCreatureState(defenderId, damages.damagesId);
+        await wait(150 / this.ANIMATION_SPEED);
       }
     },
     async defenderRetaliates(damages) {
+      const attackerId = damages.attackerId;
+      const defenderId = damages.defenderId;
       if (!damages.defenderDamageDealt) {
+        this.updateCreatureState(attackerId, damages.damagesId);
         return;
       }
       for (const defenderDamageDealt of damages.defenderDamageDealt) {
-        const attackerId = damages.attackerId;
-        const defenderId = damages.defenderId;
         if (
           !this.creaturePositions[attackerId] ||
-          !this.creaturePositions[attackerId] ||
-          !damages.defenderDamageDealt
+          !this.creaturePositions[attackerId]
         ) {
+          this.updateCreatureState(attackerId, damages.damagesId);
           return;
         }
         this.creaturePositions[attackerId].animation = null;
         this.creaturePositions[defenderId].animation = null;
-        await wait(50);
+        await wait(50 / this.ANIMATION_SPEED);
         this.creaturePositions[attackerId].animation = ANIMATIONS.BEING_HIT;
         this.creaturePositions[defenderId].animation = ANIMATIONS.ATTACKING;
         this.addFloatingCombatText(attackerId, defenderDamageDealt);
-        this.updateCreatureState(attackerId);
+        this.updateCreatureState(attackerId, damages.damagesId);
         // update creature position
-        await wait(150);
+        await wait(150 / this.ANIMATION_SPEED);
       }
     },
     async attackerGoesBack(damages) {
@@ -1088,7 +1152,7 @@ export default window.OperationCombat = {
         ...this.creaturePositions[attackerId].initial,
       };
       // update creature position
-      await wait(100);
+      await wait(100 / this.ANIMATION_SPEED);
     },
 
     addFloatingCombatText(creatureId, damageInfo) {
@@ -1117,11 +1181,29 @@ export default window.OperationCombat = {
       ControlsService.updateConsideredAP(this.operation.context.unitCost);
     },
 
-    updateCreatureState(creatureId) {
-      if (this.creatures[creatureId]) {
-        this.displayedCreatures[creatureId] = this.creatures[creatureId];
+    updateCreatureState(creatureId, damagesId) {
+      if (!creatureId) {
+        return;
+      }
+      const creatureStates = this.creatureStatesByDamagesId[creatureId] || {};
+      const availableStates = Object.keys(creatureStates).map((dId) => +dId);
+
+      const bestFittingDamagesIds = availableStates.reduce(
+        (acc, dId) => (dId <= damagesId && dId > acc ? dId : acc),
+        0
+      );
+      availableStates.forEach((dId) => {
+        if (dId < bestFittingDamagesIds) {
+          delete creatureStates[dId];
+        }
+      });
+      const syncedState = creatureStates?.[bestFittingDamagesIds];
+      if (syncedState) {
+        this.$set(this.displayedCreatures, creatureId, syncedState);
       } else {
-        // TODO: no longer in combat. Do something?
+        const error = `Missing state for ${creatureId} at damagesId ${damagesId}, available ${availableStates}`;
+        GameService.reportClientSideError(error);
+        console.error(error);
       }
     },
   },
@@ -1283,7 +1365,7 @@ $effects-size: 6rem;
 }
 
 .creature {
-  transition: all 0.2s ease-in;
+  transition: all calc(0.1s / var(--anim-speed)) ease-in;
   transition-property: left, top, z-index;
 
   @include iOSOnly() {
@@ -1597,5 +1679,9 @@ em {
 
 .item-combat-moves {
   font-size: 0.6rem !important;
+}
+
+.animation-speed-button {
+  width: 8rem;
 }
 </style>
