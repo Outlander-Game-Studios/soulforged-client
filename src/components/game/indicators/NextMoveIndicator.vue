@@ -1,7 +1,9 @@
 <template>
-  <div v-if="moveData">
-    <Icon :src="moveData.icon" :size="4" round />
-  </div>
+  <transition name="fade">
+    <div v-if="moveData" :key="moveData.icon">
+      <Icon :src="moveData.icon" :size="4" round />
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -12,7 +14,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.test {
-}
-</style>
+<style scoped lang="scss"></style>

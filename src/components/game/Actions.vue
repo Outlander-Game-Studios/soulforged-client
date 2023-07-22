@@ -283,11 +283,6 @@ export default {
       if (this.customActionHandler) {
         return this.customActionHandler(action, parameters);
       }
-      console.log(
-        "Perform action",
-        JSON.stringify(action),
-        JSON.stringify(parameters)
-      );
       this.performingActionId = action.actionId;
       this.performing = GameService.performAction(
         this.target,

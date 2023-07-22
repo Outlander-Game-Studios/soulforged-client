@@ -991,7 +991,7 @@ export default window.OperationCombat = {
       return {
         left: `calc(${positioning.current.x}% + ${offsetX}rem)`,
         top: `${positioning.current.y}%`,
-        zIndex: positioning.current.y,
+        zIndex: (creature.hostile ? 100 : 0) + positioning.current.y,
       };
     },
 
