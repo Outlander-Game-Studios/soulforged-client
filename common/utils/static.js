@@ -35,6 +35,12 @@ global.SHOP_LISTING_SIDES = {
 
 global.PING_FREQUENCY = 1000;
 global.PLAYER_TURN_TIMER = 60 * SECONDS;
+global.COMBAT_FRAMES = {
+  APPROACH: "a",
+  STRIKE: "s",
+  RETURN: "r",
+  GENERAL: "g",
+};
 
 global.DAYS_OF_WEEK = [
   "Sunday",
@@ -100,6 +106,7 @@ global.REQUEST_CODES = {
   CHAT_GET_LAST_READ: "<lc",
   SEARCH_KNOWN_ITEMS: "?i",
   CHARACTER_COUNT: "?c",
+  COMBAT_FRAME: "cf",
   REPORT: "!",
   GET_SETTING: "<s",
   SAVE_SETTING: ">s",

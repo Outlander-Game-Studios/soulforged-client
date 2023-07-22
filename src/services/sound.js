@@ -139,12 +139,16 @@ export const SoundService = (window.SoundService = {
   playSound(
     soundFile,
     {
+      preload = false,
       speed = 1,
       unique = null,
       throttle = null,
       volume = this.getSoundVolume(),
     } = {}
   ) {
+    if (!soundFile) {
+      return;
+    }
     if (unique && uniqueSounds[unique]) {
       return;
     }
@@ -166,7 +170,9 @@ export const SoundService = (window.SoundService = {
         }
       },
     });
-    sound.play();
+    if (!preload) {
+      sound.play();
+    }
 
     if (unique) {
       uniqueSounds[unique] = sound;
@@ -176,6 +182,7 @@ export const SoundService = (window.SoundService = {
         }, throttle);
       }
     }
+    return sound;
   },
 
   playMusic(musicFile) {

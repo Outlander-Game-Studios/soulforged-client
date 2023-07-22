@@ -39,75 +39,63 @@ const moveDetailedMock = {
 };
 
 const outcomes = [
-  [
-    {
-      type: ATTACK_OUTCOMES.HIT,
-      hitMultiplier: 0.7,
-      effects: [
-        {
-          icon: bruiseIcon,
-          stacks: 5,
-        },
-        {
-          icon: cutIcon,
-          stacks: 2,
-        },
-        {
-          icon: bruiseIcon,
-          stacks: 5,
-        },
-        {
-          icon: cutIcon,
-          stacks: 2,
-        },
-        {
-          icon: cutIcon,
-          durationTurns: 5,
-        },
-      ],
-    },
-  ],
-  [
-    {
-      type: ATTACK_OUTCOMES.HIT,
-      hitMultiplier: 1,
-      effects: [
-        {
-          icon: bruiseIcon,
-          stacks: 5,
-        },
-      ],
-    },
-  ],
-  [
-    {
-      type: ATTACK_OUTCOMES.HIT,
-      hitMultiplier: 0.3,
-      effects: [],
-    },
-  ],
-  [
-    {
-      type: ATTACK_OUTCOMES.MISS,
-      effects: [],
-    },
-  ],
-  [
-    {
-      type: ATTACK_OUTCOMES.HIT,
-      hitMultiplier: 1,
-      effects: [
-        {
-          icon: bruiseIcon,
-          stacks: 5,
-        },
-      ],
-    },
-    {
-      type: ATTACK_OUTCOMES.MISS,
-      effects: [],
-    },
-  ],
+  {
+    text: "Solid hit!",
+    type: "good",
+    effects: [
+      {
+        icon: bruiseIcon,
+        stacks: 5,
+      },
+      {
+        icon: cutIcon,
+        stacks: 2,
+      },
+      {
+        icon: bruiseIcon,
+        stacks: 5,
+      },
+      {
+        icon: cutIcon,
+        stacks: 2,
+      },
+      {
+        icon: cutIcon,
+        durationTurns: 5,
+      },
+    ],
+  },
+  {
+    text: "Perfect hit!",
+    type: "great",
+    hitMultiplier: 1,
+    effects: [
+      {
+        icon: bruiseIcon,
+        stacks: 5,
+      },
+    ],
+  },
+  {
+    text: "Glancing hit",
+    type: "poor",
+    effects: [],
+  },
+  {
+    text: "Miss",
+    type: "default",
+    effects: [],
+  },
+  {
+    text: "Perfect hit!",
+    type: "great",
+    effects: [
+      {
+        icon: bruiseIcon,
+        stacks: 5,
+      },
+    ],
+  },
 ];
 
 export default {
@@ -271,18 +259,38 @@ export const damageDealt = factory(
         mockEntityId("mob1"),
       ],
     });
-    let damagesId = 0;
     const makeDamages = (from, to) => {
-      damagesId++;
-      storyMocks.modifyEntity("combat", {
-        timeLeft: undefined,
-        damages: {
-          damagesId: damagesId,
-          attackerId: entitiesMocks[from].id,
-          defenderId: entitiesMocks[to].id,
-          attackerDamageDealt: random.randomItem(outcomes),
-          defenderDamageDealt: random.randomItem(outcomes),
+      const fromEntity = entitiesMocks[from];
+      const toEntity = entitiesMocks[to];
+      GameService.getCombatFramesStream().next({
+        type: COMBAT_FRAMES.APPROACH,
+        affects: [fromEntity, toEntity],
+        whoId: fromEntity.id,
+        targetId: toEntity.id,
+      });
+      GameService.getCombatFramesStream().next({
+        type: COMBAT_FRAMES.STRIKE,
+        affects: [fromEntity, toEntity],
+        whoId: fromEntity.id,
+        targetId: toEntity.id,
+        floaties: {
+          [toEntity.id]: random.randomItem(outcomes),
         },
+      });
+      GameService.getCombatFramesStream().next({
+        type: COMBAT_FRAMES.STRIKE,
+        affects: [fromEntity, toEntity],
+        whoId: toEntity.id,
+        targetId: fromEntity.id,
+        floaties: {
+          [fromEntity.id]: random.randomItem(outcomes),
+        },
+      });
+      GameService.getCombatFramesStream().next({
+        type: COMBAT_FRAMES.RETURN,
+        affects: [fromEntity, toEntity],
+        whoId: fromEntity.id,
+        targetId: toEntity.id,
       });
     };
     let last = 0;

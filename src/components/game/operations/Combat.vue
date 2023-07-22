@@ -207,44 +207,35 @@
                 moveIndicator
               />
               <div
-                v-for="floatingCombatText in floatingCombatTexts[creature.id]"
-                :key="floatingCombatText.floatingCombatId"
+                v-for="floatie in floatingCombatTexts[creature.id]"
+                :key="floatie.floatingCombatId"
                 class="floating-combat-text"
               >
-                <HitText
-                  :hitLevel="floatingCombatText.damageInfo.hitMultiplier"
-                />
-                <div
-                  v-if="
-                    floatingCombatText.damageInfo.type === ATTACK_OUTCOMES.MISS
-                  "
-                />
+                <HitText :text="floatie.text" :type="floatie.type" />
                 <div
                   class="no-damage"
-                  v-else-if="!floatingCombatText.damageInfo.effects.length"
+                  v-if="
+                    floatie.effects &&
+                    !floatie.effects.length &&
+                    floatie.effectsCombat &&
+                    !floatie.effectsCombat.length
+                  "
                 >
                   No damage
                 </div>
                 <HorizontalCenter tight v-else>
-                  <div
-                    v-for="(effect, idx) in floatingCombatText.damageInfo
-                      .effects"
-                    :key="idx"
-                  >
+                  <div v-for="(effect, idx) in floatie.effects" :key="idx">
                     <EffectIcon :effect="effect" :size="2.4" />
                   </div>
                 </HorizontalCenter>
                 <HorizontalCenter tight>
                   <div
-                    v-for="(effect, idx) in floatingCombatText.damageInfo
-                      .effectsCombat"
+                    v-for="(effect, idx) in floatie.effectsCombat"
                     :key="idx"
                   >
                     <EffectIcon :effect="effect" :size="2.8" />
                   </div>
                 </HorizontalCenter>
-                <!--              </Container>-->
-                <!--                {{ floatingCombatText.damageInfo }}-->
               </div>
               <div
                 class="flee-indicator"
@@ -304,7 +295,7 @@
           <Container borderType="alt">
             <Spaced>
               <Horizontal>
-                <Vertical :class="{ 'not-your-turn': !timeRemaining }">
+                <Vertical :class="{ 'not-your-turn': !ownTurn }">
                   <Header alt2 small>Weapon</Header>
                   <HorizontalCenter>
                     <Item
@@ -321,7 +312,7 @@
                     />
                   </HorizontalCenter>
                 </Vertical>
-                <Vertical :class="{ 'not-your-turn': !timeRemaining }">
+                <Vertical :class="{ 'not-your-turn': !ownTurn }">
                   <Header alt2 small>Offhand</Header>
                   <HorizontalCenter>
                     <Item
@@ -338,10 +329,7 @@
                     />
                   </HorizontalCenter>
                 </Vertical>
-                <div
-                  class="flex-grow"
-                  :class="{ 'not-your-turn': !timeRemaining }"
-                >
+                <div class="flex-grow" :class="{ 'not-your-turn': !ownTurn }">
                   <Vertical>
                     <Header alt2 small>
                       <Horizontal tight>
@@ -611,8 +599,8 @@ export default window.OperationCombat = {
     selectingWeapon: false,
     selectingOffhand: false,
     creaturePositions: {},
-    damageQueue: [],
-    damagePresentation: null,
+    combatFramesQueue: [],
+    currentCombatFrame: null,
     displayedCreatures: {},
     selectedCreatureId: null,
     floatingCombatTexts: {},
@@ -625,7 +613,6 @@ export default window.OperationCombat = {
     selectedMoveId: null,
     skipConfirm: true,
     showMobInfoDetails: null,
-    creatureStatesByDamagesId: {},
   }),
 
   watch: {
@@ -638,14 +625,9 @@ export default window.OperationCombat = {
   },
 
   computed: {
-    currentCreatureId() {
-      return (
-        this.damagePresentation?.actingCreatureId || this.combat?.creatureTurn
-      );
-    },
     inBattle() {
       return (
-        !!this.damagePresentation ||
+        !!this.currentCombatFrame ||
         (!this.combat?.finished &&
           !this.operation?.fled &&
           !this.operation.lost)
@@ -683,10 +665,20 @@ export default window.OperationCombat = {
       .switchMap((ids) =>
         GameService.getEntitiesStream(ids, ENTITY_VARIANTS.DETAILS)
       );
+    const currentCreatureIdStream = Rx.combineLatest(
+      combatStream,
+      this.$stream("currentCombatFrame")
+    ).map(([combat, currentCombatFrame]) => {
+      return currentCombatFrame?.actingCreatureId || combat?.creatureTurn;
+    });
 
     return {
       combat: combatStream.tap((combat) => {
         this.timeRemaining = combat.timeLeft;
+      }),
+      currentCreatureId: currentCreatureIdStream,
+      combatFrames: GameService.getCombatFramesStream().tap((frame) => {
+        this.queueCombatFrame(frame);
       }),
       ownFleeProgress: Rx.combineLatest(
         combatStream,
@@ -725,34 +717,25 @@ export default window.OperationCombat = {
       backdropImage: GameService.getBackdropStyleStream(),
       weapon: GameService.getWeaponStream(),
       offhand: GameService.getOffhandStream(),
-      damages: combatStream
-        .pluck("damages")
-        .filter((damages) => !!damages)
-        .distinctUntilChanged((prev, curr) => prev.damagesId === curr.damagesId)
-        .tap((damages) => {
-          this.queueDamages(damages);
-        }),
       ownTurn: Rx.combineLatest(
-        this.$stream("currentCreatureId").distinctUntilChanged(),
-        GameService.getRootEntityStream().pluck("id").distinctUntilChanged()
+        currentCreatureIdStream,
+        GameService.getRootEntityStream().pluck("id")
       )
         .map(([creatureId, ownId]) => creatureId === ownId)
         .distinctUntilChanged()
+        .debounceTime(200)
         .tap((ownTurn) => {
-          clearTimeout(this.turnAnnouceTimeout);
           if (ownTurn && !this.combat.autoResolving) {
-            this.turnAnnouceTimeout = setTimeout(() => {
-              this.displayBigText("Your turn!", BIG_TEXT_CLASS.NEUTRAL);
-              this.fetchCombatMovesOdds();
-              SoundService.playSound(promptSound);
-            }, 100);
+            this.displayBigText("Your turn!", BIG_TEXT_CLASS.NEUTRAL);
+            this.fetchCombatMovesOdds();
+            SoundService.playSound(promptSound, { volume: 0.3 });
           }
         }),
       creatures: creaturesStream
         .tap((creatures) => {
           creatures.forEach((creature) => {
             const displayed = this.displayedCreatures[creature.id];
-            if (!displayed || displayed.damagesId === creature.damagesId) {
+            if (!displayed || displayed.operationInfo?.name !== "In Combat") {
               this.$set(this.displayedCreatures, creature.id, creature);
             }
             if (!this.creaturePositions[creature.id]) {
@@ -775,13 +758,6 @@ export default window.OperationCombat = {
                 current: { ...position },
               });
               return creature;
-            }
-            if (!this.creatureStatesByDamagesId[creature.id]) {
-              this.creatureStatesByDamagesId[creature.id] = {};
-            }
-            const { damagesId } = creature;
-            if (damagesId !== undefined) {
-              this.creatureStatesByDamagesId[creature.id][damagesId] = creature;
             }
           });
         })
@@ -1008,10 +984,8 @@ export default window.OperationCombat = {
     creatureStyle(creature) {
       const positioning = this.creaturePositions[creature.id];
       let offsetX = 0;
-      if (this.damagePresentation && positioning.stance === STANCES.ATTACKING) {
-        const target = this.displayedCreatures[
-          this.damagePresentation.defenderId
-        ];
+      if (positioning.stance === STANCES.ATTACKING) {
+        const target = this.displayedCreatures[positioning.approachedId];
         offsetX = (target && target.hostile ? -1 : 1) * 12.8;
       }
       return {
@@ -1023,9 +997,7 @@ export default window.OperationCombat = {
 
     creatureCssClass(creature) {
       const positioning = this.creaturePositions[creature.id];
-      const target =
-        this.damagePresentation &&
-        this.displayedCreatures[this.damagePresentation.defenderId];
+      const target = this.displayedCreatures[positioning.approachedId];
       return {
         hostile: creature.hostile,
         fled: this.combat.fleeing[creature.id] >= 100,
@@ -1044,129 +1016,113 @@ export default window.OperationCombat = {
       };
     },
 
-    queueDamages(damages) {
-      this.damageQueue.push(damages);
-      if (!this.damagePresentation) {
-        this.nextDamages();
+    queueCombatFrame(frame) {
+      this.combatFramesQueue.push(frame);
+      if (!this.currentCombatFrame) {
+        this.nextCombatFrame();
       }
     },
-    async nextDamages() {
-      const damages = this.damageQueue.shift();
-      if (!damages) {
+    async nextCombatFrame() {
+      const frame = this.combatFramesQueue.shift();
+      if (!frame) {
         return;
       }
-      this.damagePresentation = damages;
-      await this.attackerApproaches(damages);
-      await this.attackDefender(damages);
-      await this.defenderRetaliates(damages);
-      await this.attackerGoesBack(damages);
-      this.damagePresentation = null;
-      setTimeout(() => this.nextDamages());
-    },
-    async attackerApproaches(damages) {
-      const attackerId = damages.attackerId;
-      const defenderId = damages.defenderId;
-      if (
-        !this.creaturePositions[attackerId] ||
-        !this.creaturePositions[attackerId]
-      ) {
-        return;
-      }
-      this.creaturePositions[attackerId].stance = STANCES.ATTACKING;
-      this.creaturePositions[attackerId].current = {
-        ...this.creaturePositions[defenderId].initial,
-      };
-      this.creaturePositions[defenderId].stance = STANCES.DEFENDING;
-      // update creature position
-      await wait(100 / this.ANIMATION_SPEED);
-    },
-    async attackDefender(damages) {
-      const attackerId = damages.attackerId;
-      const defenderId = damages.defenderId;
-      // update creature position
-      if (!damages.attackerDamageDealt) {
-        this.updateCreatureState(defenderId, damages.damagesId);
-        return;
-      }
-      for (const attackerDamageDealt of damages.attackerDamageDealt) {
-        if (damages.resultInfo) {
-          this.displayBigText(damages.resultInfo.text, damages.resultInfo.type);
-        }
-        if (
-          !this.creaturePositions[attackerId] ||
-          !this.creaturePositions[attackerId]
-        ) {
-          this.updateCreatureState(defenderId, damages.damagesId);
-          return;
-        }
-        this.creaturePositions[attackerId].animation = null;
-        this.creaturePositions[defenderId].animation = null;
-        await wait(50 / this.ANIMATION_SPEED);
-        this.creaturePositions[attackerId].animation = ANIMATIONS.ATTACKING;
-        this.creaturePositions[defenderId].animation = ANIMATIONS.BEING_HIT;
-        this.addFloatingCombatText(defenderId, attackerDamageDealt);
-        this.updateCreatureState(defenderId, damages.damagesId);
-        await wait(150 / this.ANIMATION_SPEED);
-      }
-    },
-    async defenderRetaliates(damages) {
-      const attackerId = damages.attackerId;
-      const defenderId = damages.defenderId;
-      if (!damages.defenderDamageDealt) {
-        this.updateCreatureState(attackerId, damages.damagesId);
-        return;
-      }
-      for (const defenderDamageDealt of damages.defenderDamageDealt) {
-        if (
-          !this.creaturePositions[attackerId] ||
-          !this.creaturePositions[attackerId]
-        ) {
-          this.updateCreatureState(attackerId, damages.damagesId);
-          return;
-        }
-        this.creaturePositions[attackerId].animation = null;
-        this.creaturePositions[defenderId].animation = null;
-        await wait(50 / this.ANIMATION_SPEED);
-        this.creaturePositions[attackerId].animation = ANIMATIONS.BEING_HIT;
-        this.creaturePositions[defenderId].animation = ANIMATIONS.ATTACKING;
-        this.addFloatingCombatText(attackerId, defenderDamageDealt);
-        this.updateCreatureState(attackerId, damages.damagesId);
-        // update creature position
-        await wait(150 / this.ANIMATION_SPEED);
-      }
-    },
-    async attackerGoesBack(damages) {
-      const attackerId = damages.attackerId;
-      const defenderId = damages.defenderId;
-      if (
-        !this.creaturePositions[attackerId] ||
-        !this.creaturePositions[attackerId]
-      ) {
-        return;
-      }
-      this.creaturePositions[attackerId].animation = null;
-      this.creaturePositions[defenderId].animation = null;
-      this.creaturePositions[attackerId].stance = STANCES.IDLE;
-      this.creaturePositions[defenderId].stance = STANCES.IDLE;
-      this.creaturePositions[attackerId].current = {
-        ...this.creaturePositions[attackerId].initial,
-      };
-      // update creature position
-      await wait(100 / this.ANIMATION_SPEED);
+      this.currentCombatFrame = frame;
+      await this.showcaseCombatFrame(frame);
+      this.currentCombatFrame = null;
+      setTimeout(() => this.nextCombatFrame());
     },
 
-    addFloatingCombatText(creatureId, damageInfo) {
+    async showcaseCombatFrame(frame) {
+      switch (frame.type) {
+        case COMBAT_FRAMES.GENERAL:
+          return await this.showcaseCombatFrameGeneral(frame);
+        case COMBAT_FRAMES.APPROACH:
+          return await this.showcaseCombatFrameApproach(frame);
+        case COMBAT_FRAMES.STRIKE:
+          return await this.showcaseCombatFrameStrike(frame);
+        case COMBAT_FRAMES.RETURN:
+          return await this.showcaseCombatFrameReturn(frame);
+      }
+    },
+
+    async showcaseCombatFrameGeneral(frame) {
+      Object.keys(frame.floaties || {}).forEach((floatieTargetId) => {
+        this.addFloatingCombatText(
+          floatieTargetId,
+          frame.floaties[floatieTargetId]
+        );
+      });
+      this.updateCreaturesStates(frame.affects);
+      SoundService.playSound(frame.sound);
+      await wait(100 / this.ANIMATION_SPEED);
+    },
+    async showcaseCombatFrameApproach(frame) {
+      const { whoId, targetId } = frame;
+      if (!this.creaturePositions[whoId] || !this.creaturePositions[targetId]) {
+        return;
+      }
+      this.creaturePositions[whoId].stance = STANCES.ATTACKING;
+      this.creaturePositions[whoId].approachedId = targetId;
+      this.creaturePositions[whoId].current = {
+        ...this.creaturePositions[targetId].initial,
+      };
+      this.creaturePositions[targetId].stance = STANCES.DEFENDING;
+      // update creature position
+      await wait(100 / this.ANIMATION_SPEED);
+    },
+    async showcaseCombatFrameStrike(frame) {
+      const preloadedSound = SoundService.playSound(frame.sound, {
+        preload: true,
+      });
+      const { whoId, targetId } = frame;
+      if (!this.creaturePositions[whoId] || !this.creaturePositions[whoId]) {
+        return;
+      }
+      this.creaturePositions[whoId].animation = null;
+      this.creaturePositions[targetId].animation = null;
+      await wait(50 / this.ANIMATION_SPEED);
+      this.creaturePositions[whoId].animation = ANIMATIONS.ATTACKING;
+      this.creaturePositions[targetId].animation = ANIMATIONS.BEING_HIT;
+      Object.keys(frame.floaties || {}).forEach((floatieTargetId) => {
+        this.addFloatingCombatText(
+          floatieTargetId,
+          frame.floaties[floatieTargetId]
+        );
+      });
+      preloadedSound?.play();
+      this.updateCreaturesStates(frame.affects);
+      await wait(150 / this.ANIMATION_SPEED);
+    },
+    async showcaseCombatFrameReturn(frame) {
+      const { whoId, targetId } = frame;
+      if (!this.creaturePositions[whoId] || !this.creaturePositions[targetId]) {
+        return;
+      }
+      this.creaturePositions[whoId].animation = null;
+      this.creaturePositions[targetId].animation = null;
+      this.creaturePositions[whoId].stance = STANCES.IDLE;
+      this.creaturePositions[targetId].stance = STANCES.IDLE;
+      this.creaturePositions[whoId].current = {
+        ...this.creaturePositions[whoId].initial,
+      };
+      // update creature position
+      await wait(100 / this.ANIMATION_SPEED);
+      this.creaturePositions[whoId].approachedId = null;
+    },
+
+    addFloatingCombatText(creatureId, floatie) {
       this.floatingCombatId = this.floatingCombatId || 0;
       const currentId = ++this.floatingCombatId;
       this.floatingCombatTexts[creatureId] =
         this.floatingCombatTexts[creatureId] || [];
+      const effects = floatie.effects;
       this.floatingCombatTexts[creatureId].push({
         floatingCombatId: currentId,
-        damageInfo: {
-          ...damageInfo,
-          effects: damageInfo.effects.filter((e) => !e.durationTurns),
-          effectsCombat: damageInfo.effects.filter((e) => !!e.durationTurns),
-        },
+        text: floatie.text,
+        type: floatie.type || "default",
+        effects: effects?.filter((e) => !e.durationTurns),
+        effectsCombat: effects?.filter((e) => !!e.durationTurns),
       });
       setTimeout(() => {
         this.floatingCombatTexts[creatureId].shift();
@@ -1181,30 +1137,11 @@ export default window.OperationCombat = {
       ControlsService.updateConsideredAP(this.operation.context.unitCost);
     },
 
-    updateCreatureState(creatureId, damagesId) {
-      if (!creatureId) {
-        return;
-      }
-      const creatureStates = this.creatureStatesByDamagesId[creatureId] || {};
-      const availableStates = Object.keys(creatureStates).map((dId) => +dId);
-
-      const bestFittingDamagesIds = availableStates.reduce(
-        (acc, dId) => (dId <= damagesId && dId > acc ? dId : acc),
-        0
-      );
-      availableStates.forEach((dId) => {
-        if (dId < bestFittingDamagesIds) {
-          delete creatureStates[dId];
-        }
-      });
-      const syncedState = creatureStates?.[bestFittingDamagesIds];
-      if (syncedState) {
-        this.$set(this.displayedCreatures, creatureId, syncedState);
-      } else {
-        const error = `Missing state for ${creatureId} at damagesId ${damagesId}, available ${availableStates}`;
-        GameService.reportClientSideError(error);
-        console.error(error);
-      }
+    updateCreaturesStates(payloads) {
+      payloads.forEach(this.updateCreatureState.bind(this));
+    },
+    updateCreatureState(creaturePayload) {
+      this.$set(this.displayedCreatures, creaturePayload.id, creaturePayload);
     },
   },
 };
@@ -1336,7 +1273,7 @@ $effects-size: 6rem;
 @keyframes floating-text {
   0% {
     margin-right: 0;
-    margin-top: 3rem;
+    margin-top: 6rem;
     opacity: 1;
   }
   80% {
@@ -1344,14 +1281,14 @@ $effects-size: 6rem;
   }
   100% {
     margin-right: 4rem;
-    margin-top: 6rem;
+    margin-top: 3rem;
     opacity: 0;
   }
 }
 @keyframes floating-text-hostile {
   0% {
     margin-left: 0;
-    margin-top: 3rem;
+    margin-top: 6rem;
     opacity: 1;
   }
   80% {
@@ -1359,7 +1296,7 @@ $effects-size: 6rem;
   }
   100% {
     margin-left: 4rem;
-    margin-top: 6rem;
+    margin-top: 3rem;
     opacity: 0;
   }
 }

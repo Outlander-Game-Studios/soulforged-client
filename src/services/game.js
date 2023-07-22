@@ -11,6 +11,7 @@ const domain = `${window.location.hostname}${
 
 let connected = false;
 let mapUpdateStream;
+let combatFramesStream;
 
 const startupIdStream = new Rx.ReplaySubject(1);
 const resetStream = new Rx.ReplaySubject(1);
@@ -811,6 +812,16 @@ export const GameService = (window.GameService = {
       });
     }
     return mapUpdateStream;
+  },
+
+  getCombatFramesStream() {
+    if (!combatFramesStream) {
+      combatFramesStream = new Rx.Subject();
+      GameService.registerHandler(REQUEST_CODES.COMBAT_FRAME, (frame) => {
+        combatFramesStream.next(frame);
+      });
+    }
+    return combatFramesStream;
   },
 
   registerHandler(update, callback) {

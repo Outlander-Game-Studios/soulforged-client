@@ -351,17 +351,38 @@ export const combatOperationAnimated = factory(
         mockEntityId("mob1"),
       ],
     });
-    let damagesId = 0;
     const makeDamages = (from, to) => {
-      damagesId++;
-      storyMocks.modifyEntity("combat", {
-        damages: {
-          damagesId: damagesId,
-          attackerId: entitiesMocks[from].id,
-          defenderId: entitiesMocks[to].id,
-          attackerDamageDealt: random.randomItem(outcomes),
-          defenderDamageDealt: random.randomItem(outcomes),
+      const fromEntity = entitiesMocks[from];
+      const toEntity = entitiesMocks[to];
+      GameService.getCombatFramesStream().next({
+        type: COMBAT_FRAMES.APPROACH,
+        affects: [fromEntity, toEntity],
+        whoId: fromEntity.id,
+        targetId: toEntity.id,
+      });
+      GameService.getCombatFramesStream().next({
+        type: COMBAT_FRAMES.STRIKE,
+        affects: [fromEntity, toEntity],
+        whoId: fromEntity.id,
+        targetId: toEntity.id,
+        floaties: {
+          [toEntity.id]: random.randomItem(outcomes),
         },
+      });
+      GameService.getCombatFramesStream().next({
+        type: COMBAT_FRAMES.STRIKE,
+        affects: [fromEntity, toEntity],
+        whoId: toEntity.id,
+        targetId: fromEntity.id,
+        floaties: {
+          [fromEntity.id]: random.randomItem(outcomes),
+        },
+      });
+      GameService.getCombatFramesStream().next({
+        type: COMBAT_FRAMES.RETURN,
+        affects: [fromEntity, toEntity],
+        whoId: fromEntity.id,
+        targetId: toEntity.id,
       });
     };
     timeouts.forEach((t) => clearTimeout(t));
