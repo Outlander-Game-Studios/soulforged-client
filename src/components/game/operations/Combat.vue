@@ -625,14 +625,6 @@ export default window.OperationCombat = {
   },
 
   computed: {
-    inBattle() {
-      return (
-        !!this.currentCombatFrame ||
-        (!this.combat?.finished &&
-          !this.operation?.fled &&
-          !this.operation.lost)
-      );
-    },
     fleeIconStyle() {
       return {
         backgroundImage: `url("${GameService.getSecureResource(fleeIcon)}")`,
@@ -671,6 +663,15 @@ export default window.OperationCombat = {
     ).map(([combat, currentCombatFrame]) => {
       return currentCombatFrame?.actingCreatureId || combat?.creatureTurn;
     });
+    const inBattleStream = Rx.combineLatest(
+      combatStream,
+      this.$stream("operation"),
+      this.$stream("currentCombatFrame")
+    ).map(
+      ([combat, operation, currentCombatFrame]) =>
+        !!currentCombatFrame ||
+        (combat && !combat?.finished && !operation?.fled && !operation.lost)
+    );
 
     return {
       combat: combatStream.tap((combat) => {
@@ -680,6 +681,7 @@ export default window.OperationCombat = {
       combatFrames: GameService.getCombatFramesStream().tap((frame) => {
         this.queueCombatFrame(frame);
       }),
+      inBattle: inBattleStream,
       ownFleeProgress: Rx.combineLatest(
         combatStream,
         GameService.getRootEntityStream().pluck("id").distinctUntilChanged()
@@ -697,7 +699,7 @@ export default window.OperationCombat = {
             entity?.combatStats?.moves?.find((m) => m.moveId === moveId)
           )
         ),
-      inBattleDebounced: this.$stream("inBattle").debounceTime(1000),
+      inBattleDebounced: inBattleStream.debounceTime(1000),
       selectedMove: this.$stream("selectedMoveId").switchMap((selectedMoveId) =>
         !selectedMoveId
           ? Rx.Observable.of(null)
