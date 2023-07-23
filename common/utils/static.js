@@ -213,6 +213,7 @@ const letters = "a-zA-Z";
 const digits = "0-9";
 const space = " ";
 const punctuation = "\\-.,!?\"'`‘’“”";
+const extendedPunctuation = ":~()$%&*";
 const extendedLetters =
   "ĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħ" + // Latin Extended-A
   "ĨĩĪīĬĭĮįİıĲĳĴĵĶķĸĹĺĻļĽľĿŀŁłŃńŅņŇňŊŋŌōŎŏŐőŒœ" +
@@ -234,7 +235,7 @@ global.ChatMessageValidator = (message) => {
 
   const allValid = message.match(
     new RegExp(
-      `^[${letters}${extendedLetters}${digits}${space}${punctuation}]+$`
+      `^[${letters}${extendedLetters}${digits}${space}${punctuation}${extendedPunctuation}]+$`
     )
   );
   if (!allValid) {

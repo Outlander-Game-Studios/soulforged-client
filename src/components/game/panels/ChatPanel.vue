@@ -272,23 +272,22 @@ export default {
 
     inputKeypress(event) {
       if (this.emoSelector) {
-        event.preventDefault();
-        if (event.key === ":") {
-          return;
-        }
-        if (event.key === "Escape") {
+        if (event.key === "Escape" || event.key === "Backspace") {
           this.emoSelector = false;
           return;
         }
         const emo = EMOS.find((emo) => emo[1] === event.key.toUpperCase());
         if (emo) {
+          event.preventDefault();
           this.emoSelector = false;
           this.currentEmo = emo;
-          this.errorMsg = null;
+          console.log(this.newMessageText);
+          this.newMessageText = this.newMessageText.substring(
+            0,
+            this.newMessageText.length - 1
+          );
         } else {
-          this.errorMsg = `Invalid emotion, accepted characters: ${EMOS.map(
-            (e) => e[1]
-          ).join(" ")}`;
+          this.emoSelector = false;
         }
         return;
       }
@@ -298,7 +297,6 @@ export default {
       }
       if (event.key === ":") {
         this.emoSelector = true;
-        event.preventDefault();
       }
     },
 
@@ -422,7 +420,7 @@ export default {
     background: #fdd;
     color: #540000;
     margin: 0.5rem;
-    z-index: 25;
+    z-index: 35;
     border-radius: 1rem;
     border: 1px solid #540000;
     font-size: 75%;
