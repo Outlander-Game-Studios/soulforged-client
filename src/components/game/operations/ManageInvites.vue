@@ -4,7 +4,7 @@
     <LoadingPlaceholder v-if="!holding || !loadedCreatures" />
     <Vertical v-else>
       <Header> Manage Invitations <RichText :value="holding.name" /> </Header>
-      <Header alt2> Current </Header>
+      <Header alt2> Current ({{ names.length }}) </Header>
       <div v-if="!names.length" class="empty-text">None</div>
       <Vertical tight v-else>
         <div v-for="name in names" :key="name" class="flex">
