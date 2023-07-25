@@ -666,9 +666,11 @@ export default window.OperationCombat = {
     const inBattleStream = Rx.combineLatest(
       combatStream,
       this.$stream("operation"),
-      this.$stream("currentCombatFrame")
+      this.$stream("currentCombatFrame"),
+      this.$stream("combatFramesQueue")
     ).map(
-      ([combat, operation, currentCombatFrame]) =>
+      ([combat, operation, currentCombatFrame, combatFramesQueue]) =>
+        combatFramesQueue.length ||
         !!currentCombatFrame ||
         (combat && !combat?.finished && !operation?.fled && !operation.lost)
     );
