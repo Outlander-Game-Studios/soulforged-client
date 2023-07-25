@@ -727,7 +727,7 @@ export default window.OperationCombat = {
       )
         .map(([creatureId, ownId]) => creatureId === ownId)
         .distinctUntilChanged()
-        .debounceTime(200)
+        .debounceTime(500)
         .tap((ownTurn) => {
           if (ownTurn && !this.combat.autoResolving) {
             this.displayBigText("Your turn!", BIG_TEXT_CLASS.NEUTRAL);
@@ -1059,7 +1059,7 @@ export default window.OperationCombat = {
       });
       this.updateCreaturesStates(frame.affects);
       SoundService.playSound(frame.sound);
-      await wait(100 / this.ANIMATION_SPEED);
+      await wait(50 / this.ANIMATION_SPEED);
     },
     async showcaseCombatFrameApproach(frame) {
       const { whoId, targetId } = frame;
