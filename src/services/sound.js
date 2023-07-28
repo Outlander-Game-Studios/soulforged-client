@@ -143,7 +143,7 @@ export const SoundService = (window.SoundService = {
       speed = 1,
       unique = null,
       throttle = null,
-      volume = this.getSoundVolume(),
+      volume = 1,
     } = {}
   ) {
     if (!soundFile) {
@@ -157,7 +157,7 @@ export const SoundService = (window.SoundService = {
     const sound = new Howl({
       src: soundFile,
       rate: speed,
-      volume,
+      volume: volume * this.getSoundVolume(),
       onplay: () => {
         const delay = new Date().getTime() - start;
         if (delay > 500) {
