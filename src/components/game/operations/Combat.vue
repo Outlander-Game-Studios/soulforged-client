@@ -723,9 +723,16 @@ export default window.OperationCombat = {
       offhand: GameService.getOffhandStream(),
       ownTurn: Rx.combineLatest(
         currentCreatureIdStream,
-        GameService.getRootEntityStream().pluck("id")
+        GameService.getRootEntityStream().pluck("id"),
+        this.$stream("currentCombatFrame"),
+        this.$stream("combatFramesQueue")
       )
-        .map(([creatureId, ownId]) => creatureId === ownId)
+        .map(
+          ([creatureId, ownId, currentCombatFrame, combatFramesQueue]) =>
+            creatureId === ownId &&
+            !currentCombatFrame &&
+            !combatFramesQueue.length
+        )
         .distinctUntilChanged()
         .debounceTime(500)
         .tap((ownTurn) => {
@@ -1021,6 +1028,12 @@ export default window.OperationCombat = {
     },
 
     queueCombatFrame(frame) {
+      this.id = (this.id || 0) + 1;
+      frame = {
+        id: this.id,
+        ...frame,
+      };
+      console.log("queue frame", frame.id, frame);
       this.combatFramesQueue.push(frame);
       if (!this.currentCombatFrame) {
         this.nextCombatFrame();
@@ -1028,11 +1041,13 @@ export default window.OperationCombat = {
     },
     async nextCombatFrame() {
       const frame = this.combatFramesQueue.shift();
+      console.log("play next frame", frame?.id, frame);
       if (!frame) {
         return;
       }
       this.currentCombatFrame = frame;
       await this.showcaseCombatFrame(frame);
+      console.log("done frame", frame.id, frame);
       this.currentCombatFrame = null;
       setTimeout(() => this.nextCombatFrame());
     },
