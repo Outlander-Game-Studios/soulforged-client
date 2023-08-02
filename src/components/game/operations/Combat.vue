@@ -658,11 +658,15 @@ export default window.OperationCombat = {
         GameService.getEntitiesStream(ids, ENTITY_VARIANTS.DETAILS)
       );
     const currentCreatureIdStream = Rx.combineLatest(
-      combatStream,
-      this.$stream("currentCombatFrame")
-    ).map(([combat, currentCombatFrame]) => {
-      return currentCombatFrame?.actingCreatureId || combat?.creatureTurn;
-    });
+      combatStream.pluck("creatureTurn").distinctUntilChanged(),
+      this.$stream("currentCombatFrame").scan((acc, frame) =>
+        frame?.type === COMBAT_FRAMES.TURN ? frame : acc
+      )
+    )
+      .map(([creatureTurn, currentCombatFrame]) => {
+        return currentCombatFrame?.actingCreatureId || creatureTurn;
+      })
+      .distinctUntilChanged();
     const inBattleStream = Rx.combineLatest(
       combatStream,
       this.$stream("operation"),
@@ -734,7 +738,7 @@ export default window.OperationCombat = {
             !combatFramesQueue.length
         )
         .distinctUntilChanged()
-        .debounceTime(500)
+        .debounceTime(200)
         .tap((ownTurn) => {
           if (ownTurn && !this.combat.autoResolving) {
             this.displayBigText("Your turn!", BIG_TEXT_CLASS.NEUTRAL);
@@ -1028,12 +1032,13 @@ export default window.OperationCombat = {
     },
 
     queueCombatFrame(frame) {
-      this.id = (this.id || 0) + 1;
-      frame = {
-        id: this.id,
-        ...frame,
-      };
-      console.log("queue frame", frame.id, frame);
+      if (this.lastFrameId && frame.frameId < this.lastFrameId) {
+        GameService.reportClientSideError(
+          new Error("Encountered unexpected frame ID")
+        );
+      }
+      this.lastFrameId = frame.frameId;
+      // console.log("queue frame", frame.id, frame);
       this.combatFramesQueue.push(frame);
       if (!this.currentCombatFrame) {
         this.nextCombatFrame();
@@ -1041,19 +1046,21 @@ export default window.OperationCombat = {
     },
     async nextCombatFrame() {
       const frame = this.combatFramesQueue.shift();
-      console.log("play next frame", frame?.id, frame);
+      // console.log("play next frame", frame?.id, frame);
       if (!frame) {
         return;
       }
       this.currentCombatFrame = frame;
       await this.showcaseCombatFrame(frame);
-      console.log("done frame", frame.id, frame);
+      // console.log("done frame", frame.id, frame);
       this.currentCombatFrame = null;
       setTimeout(() => this.nextCombatFrame());
     },
 
     async showcaseCombatFrame(frame) {
       switch (frame.type) {
+        case COMBAT_FRAMES.INFO:
+          return await this.showcaseCombatFrameGeneral(frame, true);
         case COMBAT_FRAMES.GENERAL:
           return await this.showcaseCombatFrameGeneral(frame);
         case COMBAT_FRAMES.APPROACH:
@@ -1065,7 +1072,7 @@ export default window.OperationCombat = {
       }
     },
 
-    async showcaseCombatFrameGeneral(frame) {
+    async showcaseCombatFrameGeneral(frame, noDelay = false) {
       Object.keys(frame.floaties || {}).forEach((floatieTargetId) => {
         this.addFloatingCombatText(
           floatieTargetId,
@@ -1074,7 +1081,9 @@ export default window.OperationCombat = {
       });
       this.updateCreaturesStates(frame.affects);
       SoundService.playSound(frame.sound);
-      await wait(50 / this.ANIMATION_SPEED);
+      if (!noDelay) {
+        await wait(150 / this.ANIMATION_SPEED);
+      }
     },
     async showcaseCombatFrameApproach(frame) {
       const { whoId, targetId } = frame;

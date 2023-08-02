@@ -36,6 +36,8 @@ global.SHOP_LISTING_SIDES = {
 global.PING_FREQUENCY = 1000;
 global.PLAYER_TURN_TIMER = 60 * SECONDS;
 global.COMBAT_FRAMES = {
+  INFO: "i",
+  TURN: "t",
   APPROACH: "a",
   STRIKE: "s",
   RETURN: "r",
