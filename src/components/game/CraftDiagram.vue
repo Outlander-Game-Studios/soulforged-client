@@ -1,7 +1,7 @@
 <template>
   <div>
     <Horizontal v-if="craft">
-      <Button @click="searchInventories()">
+      <Button v-if="showSearchButton" @click="searchInventories()">
         <SearchButtonIcon />
       </Button>
       <component :is="wrap ? 'HorizontalWrap' : 'Horizontal'" tight>
@@ -100,6 +100,10 @@ export default {
   components: { Horizontal },
   props: {
     craft: {},
+    showSearchButton: {
+      type: Boolean,
+      default: false,
+    },
     amount: {
       default: 1,
     },

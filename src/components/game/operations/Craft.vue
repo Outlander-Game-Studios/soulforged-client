@@ -12,6 +12,7 @@
           :size="5"
           ref="diagram"
           includeInventory
+          showSearchButton
           wrap
         />
       </HorizontalCenter>
