@@ -1035,9 +1035,6 @@ export default window.OperationCombat = {
 
     queueCombatFrame(frame) {
       if (this.lastFrameId && frame.frameId !== this.lastFrameId + 1) {
-        GameService.reportClientSideError(
-          new Error("Encountered unexpected frame ID")
-        );
         this.shelvedFrames = this.shelvedFrames || {};
         this.shelvedFrames[frame.frameId] = frame;
         return;
