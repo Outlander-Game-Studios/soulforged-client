@@ -1,12 +1,21 @@
 <template>
   <div>
     <CharacterEquipmentPanel />
-    <Inventory :inventory="playerInventory" includeCrafts includeUnequipDrop>
-      <Header>Inventory</Header>
+    <Inventory
+      :inventory="playerInventory"
+      includeCrafts
+      includeUnequipDrop
+      header="Inventory"
+      searchControlEvent="search-inventory"
+    >
       <CarryCapacityIndicator />
     </Inventory>
-    <Inventory :inventory="locationInventory" includeCrafts>
-      <Header>Location Inventory</Header>
+    <Inventory
+      :inventory="locationInventory"
+      includeCrafts
+      header="Location Inventory"
+      searchControlEvent="search-location-inventory"
+    >
     </Inventory>
   </div>
 </template>

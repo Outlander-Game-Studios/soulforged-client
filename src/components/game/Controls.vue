@@ -55,7 +55,7 @@
             <LocationPanel />
           </div>
         </Tab>
-        <Tab header="Items">
+        <Tab header="Items" ref="inventoryTab">
           <div class="controls-tab-contents small">
             <InventoryPanel />
           </div>
@@ -170,6 +170,11 @@ export default {
           this.$refs.tabs.closeTab();
         }
       ),
+      openInventoryPanel: ControlsService.getControlEventStream(
+        "openPanel-inventory"
+      ).tap(() => {
+        this.$refs.tabs.setActiveByComponent(this.$refs.inventoryTab);
+      }),
       openCharacterPanel: ControlsService.getControlEventStream(
         "openPanel-character-effects"
       ).tap(() => {

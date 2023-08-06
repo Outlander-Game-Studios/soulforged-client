@@ -10,8 +10,11 @@
     <template v-if="location.indoors">
       <DecorationsPanel />
     </template>
-    <Header>Location Inventory</Header>
-    <Inventory :inventory="locationInventory" includeCrafts />
+    <Inventory
+      header="Location Inventory"
+      :inventory="locationInventory"
+      includeCrafts
+    />
   </div>
 </template>
 

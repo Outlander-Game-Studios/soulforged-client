@@ -239,15 +239,15 @@
               </div>
               <div
                 class="flee-indicator"
-                v-if="combat.fleeing[creature.id]"
+                v-if="creature.operationInfo?.fleeing"
                 :key="'flee' + creature.id"
               >
                 <div class="flee-icon" :style="fleeIconStyle"></div>
                 <div
                   class="percentage"
-                  v-if="combat.fleeing[creature.id] < 100"
+                  v-if="creature.operationInfo?.fleeing < 100"
                 >
-                  {{ combat.fleeing[creature.id] }}%
+                  {{ creature.operationInfo?.fleeing }}%
                 </div>
               </div>
             </div>
@@ -1015,7 +1015,9 @@ export default window.OperationCombat = {
       const target = this.displayedCreatures[positioning.approachedId];
       return {
         hostile: creature.hostile,
-        fled: this.combat.fleeing[creature.id] >= 100,
+        fled:
+          !creature.operationInfo?.inCombat ||
+          creature.operationInfo?.fleeing >= 100,
         "from-left":
           (positioning.stance === STANCES.ATTACKING &&
             target &&
@@ -1032,27 +1034,33 @@ export default window.OperationCombat = {
     },
 
     queueCombatFrame(frame) {
-      if (this.lastFrameId && frame.frameId < this.lastFrameId) {
+      if (this.lastFrameId && frame.frameId !== this.lastFrameId + 1) {
         GameService.reportClientSideError(
           new Error("Encountered unexpected frame ID")
         );
+        this.shelvedFrames = this.shelvedFrames || {};
+        this.shelvedFrames[frame.frameId] = frame;
+        return;
       }
       this.lastFrameId = frame.frameId;
-      // console.log("queue frame", frame.id, frame);
       this.combatFramesQueue.push(frame);
-      if (!this.currentCombatFrame) {
-        this.nextCombatFrame();
+      this.nextCombatFrame();
+      const shelvedFrame = this.shelvedFrames?.[frame.frameId + 1];
+      if (shelvedFrame) {
+        delete this.shelvedFrames[frame.frameId + 1];
+        this.queueCombatFrame(shelvedFrame);
       }
     },
     async nextCombatFrame() {
+      if (this.currentCombatFrame) {
+        return;
+      }
       const frame = this.combatFramesQueue.shift();
-      // console.log("play next frame", frame?.id, frame);
       if (!frame) {
         return;
       }
       this.currentCombatFrame = frame;
       await this.showcaseCombatFrame(frame);
-      // console.log("done frame", frame.id, frame);
       this.currentCombatFrame = null;
       setTimeout(() => this.nextCombatFrame());
     },

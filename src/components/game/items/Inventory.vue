@@ -1,16 +1,30 @@
 <template>
   <div class="inventory-wrapper">
+    <Horizontal tight v-if="header">
+      <Header class="flex-grow">{{ header }}</Header>
+      <Button class="search-button" noPadding @click="toggleSearch()">
+        <SearchCancelButtonIcon v-if="searchVisible" />
+        <SearchButtonIcon v-else />
+      </Button>
+    </Horizontal>
     <slot />
+    <div v-show="searchVisible">
+      <Input
+        v-model="textSearch"
+        ref="textSearchInput"
+        placeholder="Search..."
+      />
+    </div>
     <div v-if="!inventory">
       <LoadingPlaceholder :size="5" />
     </div>
     <HorizontalWrap
       tight
-      v-else-if="inventory.length > 0"
+      v-else-if="sortedFilteredInventory.length > 0"
       class="inventory-items"
     >
       <Item
-        v-for="(item, idx) in sortedInventory"
+        v-for="(item, idx) in sortedFilteredInventory"
         class="draggable"
         :ref="'item' + item.id"
         :id="'item' + item.id"
@@ -23,7 +37,8 @@
         :dragSource="_uid"
       />
     </HorizontalWrap>
-    <div v-else class="empty-text">Empty</div>
+    <div v-else-if="!textSearch" class="empty-text">Empty</div>
+    <div v-else class="empty-text">No items matching search</div>
     <div class="droppable-frames" v-if="draggingOther">
       <template v-if="draggingSource !== 'equipmentDrag'">
         <div
@@ -70,9 +85,13 @@
 
 <script>
 import Vue from "vue";
+import Horizontal from "../../layouts/Horizontal";
+import Input from "../../interface/Input";
 
 export default {
+  components: { Input, Horizontal },
   props: {
+    header: {},
     includeCrafts: {
       default: false,
       type: Boolean,
@@ -85,9 +104,29 @@ export default {
       type: Array,
     },
     label: {},
+    searchControlEvent: {},
   },
 
+  data: () => ({
+    textSearch: "",
+    searchVisible: false,
+  }),
+
   computed: {
+    sortedFilteredInventory() {
+      const words = this.textSearch
+        .split("|")
+        .filter((w) => !!w)
+        .map((w) => w.toLowerCase());
+      return this.sortedInventory.filter(
+        (item) =>
+          !this.textSearch ||
+          words.some((w) =>
+            GameService.stripRichText(item.name).toLowerCase().includes(w)
+          )
+      );
+    },
+
     sortedInventory() {
       return [...this.inventory].filter((item) => !!item).sort(this.itemSorter);
     },
@@ -101,6 +140,16 @@ export default {
     const draggedItemStream = ControlsService.getDraggedItemStream();
 
     return {
+      applySearch: this.$stream("searchControlEvent")
+        .switchMap((eventName) =>
+          eventName
+            ? ControlsService.getControlEventStream(eventName)
+            : Rx.Observable.empty()
+        )
+        .tap(([text]) => {
+          this.searchVisible = true;
+          this.textSearch = text;
+        }),
       itemSorter: GameService.getItemSorterStream(),
       equipmentMap: GameService.getEquipmentMapStream(),
       draggingSource: ControlsService.getControlEventStream(
@@ -123,6 +172,16 @@ export default {
   },
 
   methods: {
+    toggleSearch() {
+      this.textSearch = "";
+      this.searchVisible = !this.searchVisible;
+      if (this.searchVisible) {
+        setTimeout(() => {
+          this.$refs.textSearchInput.focus();
+        });
+      }
+    },
+
     onActionDrop($event, selectedActionId) {
       const item = this.draggedItem;
       const action = item.actions.find(

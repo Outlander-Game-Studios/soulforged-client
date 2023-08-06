@@ -1,6 +1,9 @@
 <template>
   <div>
     <Horizontal v-if="craft">
+      <Button @click="searchInventories()">
+        <SearchButtonIcon />
+      </Button>
       <component :is="wrap ? 'HorizontalWrap' : 'Horizontal'" tight>
         <ItemIcon
           v-for="(material, idx) in craft.materials"
@@ -151,6 +154,15 @@ export default {
   },
 
   methods: {
+    searchInventories() {
+      const text = this.craft.materials
+        .map((i) => GameService.stripRichText(i.itemDef.name))
+        .join("|");
+      ControlsService.triggerControlEvent("openPanel-inventory", text);
+      setTimeout(() => {
+        ControlsService.triggerControlEvent("search-location-inventory", text);
+      });
+    },
     actioned() {
       this.showItemCraftsByItem = null;
       this.$emit("action");
