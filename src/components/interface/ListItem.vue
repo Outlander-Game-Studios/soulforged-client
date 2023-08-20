@@ -102,7 +102,8 @@ export default {
   }
 
   .details {
-    margin-left: 1rem;
+    padding-left: 0.4rem;
+    margin-left: 0.6rem;
     margin-right: 1rem;
     flex-grow: 1;
     overflow: hidden;
