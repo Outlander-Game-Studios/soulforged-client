@@ -56,7 +56,7 @@
             selected: internalValue && internalValue.id === structure.id,
           }"
         >
-          <Icon :size="size" :src="structure.icon" />
+          <StructureIcon :size="size" :structure="structure" />
         </div>
       </HorizontalWrap>
     </Vertical>
@@ -65,8 +65,9 @@
 
 <script>
 import Vertical from "../layouts/Vertical";
+import StructureIcon from "./StructureIcon";
 export default {
-  components: { Vertical },
+  components: { StructureIcon, Vertical },
   props: {
     includeEmpty: {
       default: true,

@@ -1376,6 +1376,7 @@ $effects-size: 6rem;
   }
 
   &.fled {
+    pointer-events: none;
     animation: fleeing 2s ease-in;
     animation-fill-mode: forwards;
 

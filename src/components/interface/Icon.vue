@@ -25,13 +25,21 @@
       :customStyle="customStyle"
     >
       <div class="icon" :class="{ flipped: flipped }" :style="iconStyle" />
-      <div v-if="text" class="text bottom-right" :style="textStyle">
+      <div
+        v-if="$slots.textBottomRight || (text && text.bottomRight)"
+        class="text bottom-right"
+        :style="textStyle"
+      >
         <slot name="textBottomRight" />
-        {{ text.bottomRight }}
+        {{ text && text.bottomRight }}
       </div>
-      <div v-if="text" class="text top-right" :style="textStyle">
+      <div
+        v-if="$slots.textTopRight || (text && text.topRight)"
+        class="text top-right"
+        :style="textStyle"
+      >
         <slot name="textTopRight" />
-        {{ text.topRight }}
+        {{ text && text.topRight }}
       </div>
       <slot />
     </Container>
