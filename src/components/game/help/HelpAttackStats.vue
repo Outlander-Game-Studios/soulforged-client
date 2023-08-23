@@ -1,9 +1,9 @@
 <template>
   <span>
     <p>
-      The Abilities section describes your the options you will have when
-      fighting hostile creatures. Most of these abilities will include hit
-      rating and damage bonus and will be based off of a specific skill.
+      The Abilities section describes the options you will have when fighting
+      hostile creatures. Most of these abilities will include hit rating and
+      damage bonus and will be based off of a specific skill.
     </p>
     <p>
       <em>Hit Rating</em> affects your chances of scoring a hit on an enemy.
