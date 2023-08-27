@@ -239,15 +239,15 @@
               </div>
               <div
                 class="flee-indicator"
-                v-if="creature.operationInfo?.fleeing"
+                v-if="creature.operationInfo && creature.operationInfo.fleeing"
                 :key="'flee' + creature.id"
               >
                 <div class="flee-icon" :style="fleeIconStyle"></div>
                 <div
                   class="percentage"
-                  v-if="creature.operationInfo?.fleeing < 100"
+                  v-if="creature.operationInfo && creature.operationInfo.fleeing < 100"
                 >
-                  {{ creature.operationInfo?.fleeing }}%
+                  {{ creature.operationInfo && creature.operationInfo.fleeing }}%
                 </div>
               </div>
             </div>
