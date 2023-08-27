@@ -126,5 +126,6 @@ export default {
   border: 1px solid #000028;
   border-radius: 50%;
   box-shadow: 0.1rem 0.1rem 0.2rem #444;
+  z-index: 1;
 }
 </style>

@@ -10,6 +10,9 @@
     class="structure-icon"
     :class="{ ruin: structure.ruin }"
   >
+    <template v-slot:textTopRight>
+      <slot name="textTopRight"></slot>
+    </template>
     <IndicatorPresence class="presence" v-if="!!structure.presence" />
     <IndicatorConstruction
       class="under-construction"

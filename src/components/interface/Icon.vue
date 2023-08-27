@@ -147,11 +147,13 @@ export default {
     right: 5%;
     bottom: 2%;
     @include text-outline();
+    z-index: 2;
   }
   .top-right {
     right: 5%;
     top: 2%;
     @include text-outline();
+    z-index: 2;
   }
 }
 </style>

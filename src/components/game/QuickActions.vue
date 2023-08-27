@@ -29,21 +29,35 @@
         class="quick-action-container"
         :class="{ collapsed: collapsed }"
       >
-        <Item
-          v-for="(validQuickAction, idx) in validQuickActions"
-          :key="idx"
-          :data="validQuickAction.item"
-          :size="5"
-          class="interactive"
-          @click="triggerQuickAction(validQuickAction)"
-          @longClick="triggerQuickAction(validQuickAction, true)"
-        >
-          <template v-slot:textTopRight>
-            <span class="quick-action-label">
-              <RichText :value="validQuickAction.label" nonInteractive />
-            </span>
-          </template>
-        </Item>
+        <div v-for="(validQuickAction, idx) in validQuickActions" :key="idx">
+          <StructureIcon
+            v-if="validQuickAction.item.operational"
+            :structure="validQuickAction.item"
+            :size="5"
+            class="interactive"
+            @click="triggerQuickAction(validQuickAction)"
+          >
+            <template v-slot:textTopRight>
+              <span class="quick-action-label">
+                <RichText :value="validQuickAction.label" nonInteractive />
+              </span>
+            </template>
+          </StructureIcon>
+          <Item
+            v-else
+            :data="validQuickAction.item"
+            :size="5"
+            class="interactive"
+            @click="triggerQuickAction(validQuickAction)"
+            @longClick="triggerQuickAction(validQuickAction, true)"
+          >
+            <template v-slot:textTopRight>
+              <span class="quick-action-label">
+                <RichText :value="validQuickAction.label" nonInteractive />
+              </span>
+            </template>
+          </Item>
+        </div>
       </div>
     </div>
     <Modal v-if="settings" dialog large @close="settings = false">
