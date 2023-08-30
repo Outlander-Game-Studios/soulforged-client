@@ -12,7 +12,7 @@ global.CLIMATE_TYPES = {
   DARKNESS: "DARKNESS",
 };
 global.WORLD_FOLDER_ASSETS_DUNGEONS = "./";
-global.Dungeon = {
+global.StaticDungeonManager = {
   registerDungeon: () => {},
 };
 global.DungeonStoryTools = {

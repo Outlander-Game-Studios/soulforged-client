@@ -39,6 +39,7 @@
               <CraftDiagram
                 :craft="craft"
                 tight
+                wrap
                 :size="8"
                 @action="actioned()"
               />
