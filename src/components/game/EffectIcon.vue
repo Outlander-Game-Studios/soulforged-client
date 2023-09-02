@@ -69,7 +69,11 @@ export default {
           const values = `${this.effect.level}`.split(".");
           return [values[0], "." + values[1]];
         }
-        return [Math.floor(this.effect.level)];
+        const floored = Math.floor(this.effect.level);
+        if (isNaN(floored)) {
+          return [this.effect.level];
+        }
+        return [floored];
       }
     },
   },
