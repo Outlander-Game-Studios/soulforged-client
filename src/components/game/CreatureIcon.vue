@@ -165,7 +165,7 @@ export default {
     right: -0.1em;
     width: 0.9em;
     height: 0.9em;
-    z-index: 10;
+    z-index: 21;
     background-size: 100% 100%;
     background-repeat: no-repeat;
     overflow: hidden;
