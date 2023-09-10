@@ -228,6 +228,9 @@ export const GameService = (window.GameService = {
   },
 
   getResearchesStream() {
+    this.registerHandler(REQUEST_CODES.RESEARCH_UPDATE, ({ researchId }) => {
+      GameService.getInfoStream("Research", { researchId }, true);
+    });
     return GameService.getKnowledgeBaseStream()
       .pluck("researchesIds")
       .switchMap((researchIds) =>
@@ -240,9 +243,6 @@ export const GameService = (window.GameService = {
             )
       )
       .map((researches) => researches.filter((research) => !!research));
-  },
-  fetchResearchUpdate(researchId) {
-    GameService.getInfoStream("Research", { researchId }, true);
   },
   fetchCraftDetails(craftId, nameOnly = false) {
     return GameService.getInfoStream("Craft", { nameOnly, craftId })

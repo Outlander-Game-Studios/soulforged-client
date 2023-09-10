@@ -94,6 +94,7 @@ global.REQUEST_CODES = {
   RESEARCH: "R",
   RESEARCH_MARK_SEEN: "Rv",
   RESEARCH_MARK_FAV: "R*",
+  RESEARCH_UPDATE: "R^",
   TOAST: "t",
   GET_NAMEABLE: "<n",
   SET_NAMEABLE: ">n",

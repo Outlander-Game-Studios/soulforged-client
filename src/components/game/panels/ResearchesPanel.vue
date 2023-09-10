@@ -180,7 +180,7 @@ export default {
     viewMissed: null,
     discoveryId: null,
     processingFav: false,
-    forceUpdate: false,
+    withDelay: false,
     appliedMaterials: {},
     selectingItem: false,
     itemBeingProcessed: false,
@@ -208,11 +208,10 @@ export default {
         Rx.Observable.merge(
           researchesStream.first(),
           researchesStream.switchMap((researches) => {
-            if (this.forceUpdate) {
-              this.forceUpdate = false;
-              return Rx.Observable.of(researches);
-            } else {
+            if (this.withDelay) {
               return Rx.Observable.of(researches).delay(delay);
+            } else {
+              return Rx.Observable.of(researches);
             }
           })
         ),
@@ -312,8 +311,6 @@ export default {
         if (!research.seen) {
           GameService.request(REQUEST_CODES.RESEARCH_MARK_SEEN, {
             researchId,
-          }).then(() => {
-            GameService.fetchResearchUpdate(researchId);
           });
         }
       }
@@ -330,14 +327,7 @@ export default {
         fav: value,
       })
         .then(() => {
-          GameService.fetchResearchUpdate(researchId);
-          this.forceUpdate = true;
           this.processingFav = false;
-          if (value) {
-            setTimeout(() => {
-              this.scrollToResearch(researchId);
-            }, 80);
-          }
         })
         .catch(() => {
           this.processingFav = false;
@@ -364,6 +354,7 @@ export default {
         return Promise.resolve();
       }
       this.appliedMaterials[key] = true;
+      this.withDelay = true;
       return GameService.request(REQUEST_CODES.RESEARCH, {
         itemId,
         researchId,
@@ -388,9 +379,9 @@ export default {
           },
           selector
         );
-        GameService.fetchResearchUpdate(researchId);
         if (result.completed) {
           ControlsService.setAnimationTimeout(() => {
+            this.withDelay = false;
             this.discoveryId = researchId;
           }, 800);
         }
