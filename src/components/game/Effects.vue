@@ -147,6 +147,10 @@ export default {
   white-space: normal;
 }
 .effect-description {
+  strong {
+    @include text-outline();
+  }
+
   em {
     @include text-bad();
     &.ok {
