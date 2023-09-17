@@ -245,9 +245,14 @@
                 <div class="flee-icon" :style="fleeIconStyle"></div>
                 <div
                   class="percentage"
-                  v-if="creature.operationInfo && creature.operationInfo.fleeing < 100"
+                  v-if="
+                    creature.operationInfo &&
+                    creature.operationInfo.fleeing < 100
+                  "
                 >
-                  {{ creature.operationInfo && creature.operationInfo.fleeing }}%
+                  {{
+                    creature.operationInfo && creature.operationInfo.fleeing
+                  }}%
                 </div>
               </div>
             </div>
@@ -548,19 +553,19 @@ const positions = [
   [75, 50],
   [30, 10],
   [20, 90],
-  [0, 55],
+  [10, 55],
   [100, 5],
   [90, 100],
   [50, 22],
   [90, 30],
   [100, 70],
   [55, 95],
-  [5, 100],
+  [8, 100],
   [45, 40],
   [50, 65],
   [5, 75],
   [85, 85],
-  [10, 33],
+  [15, 33],
   [70, 15],
 ];
 
@@ -1209,7 +1214,7 @@ $effects-size: 6rem;
 .creatures {
   transform: translateZ(0);
   border: 1rem solid transparent;
-  margin: calc($avatar-size / 2 + $effects-size) calc($avatar-size / 2 + 2rem)
+  margin: calc($avatar-size / 2 + $effects-size) calc($avatar-size / 2 + 3rem)
     calc($avatar-size / 2 + 4rem);
   flex-grow: 1;
 }
