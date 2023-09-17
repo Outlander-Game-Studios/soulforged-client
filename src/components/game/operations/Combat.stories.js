@@ -8,6 +8,9 @@ import combatIcon from "./icons/combat.png";
 
 import OperationCombat from "./Combat.vue";
 
+const extrasInCombat = {
+  operationInfo: { inCombat: true },
+};
 const moveDetailedMock = {
   secondary: false,
   moveId: "whack-bdb297b",
@@ -125,12 +128,14 @@ const factory = (
         operationInfo: {
           icon: combatIcon,
           name: "In Combat",
+          inCombat: true,
         },
       });
       storyMocks.modifyEntity("mob1", {
         operationInfo: {
           icon: combatIcon,
           name: "In Combat",
+          inCombat: true,
         },
       });
       storyMocks.operations.start(storyMocks.operations.combat);
@@ -240,9 +245,11 @@ export const manyVsMany = factory(() => {
   storyMocks.modifyEntity("combat", {
     creatures: [
       ...Array.create(5).map(() =>
-        storyMocks.cloneEntityPayloadId("mainEntity")
+        storyMocks.cloneEntityPayloadId("mainEntity", extrasInCombat)
       ),
-      ...Array.create(100).map(() => storyMocks.cloneEntityPayloadId("mob1")),
+      ...Array.create(30).map(() =>
+        storyMocks.cloneEntityPayloadId("mob1", extrasInCombat)
+      ),
     ],
   });
 });
