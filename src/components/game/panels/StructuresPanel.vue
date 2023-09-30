@@ -150,6 +150,32 @@
                     </span>
                     <span v-else>No</span>
                   </LabeledValue>
+                  <LabeledValue
+                    v-if="showDetails.likeable !== undefined"
+                    label="Liked"
+                  >
+                    <span class="text-good"
+                      >+{{ showDetails.likeable["+"] }}</span
+                    >
+                    /
+                    <span class="text-bad"
+                      >-{{ showDetails.likeable["-"] }}</span
+                    >
+                  </LabeledValue>
+                  <LabeledValue
+                    v-if="showDetails.likeable !== undefined"
+                    label="Durability impact"
+                  >
+                    <span
+                      :class="
+                        showDetails.deteriorationSpeed <= 1
+                          ? 'text-good'
+                          : 'text-bad'
+                      "
+                    >
+                      {{ (100 / showDetails.deteriorationSpeed).toFixed(0) }}%
+                    </span>
+                  </LabeledValue>
                 </div>
                 <div v-if="showDetailsInfo.climateInsulation">
                   <Header alt2>Environment protections (when inside)</Header>
