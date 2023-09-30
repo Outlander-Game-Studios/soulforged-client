@@ -223,7 +223,11 @@ const extendedLetters =
   "ŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŦŧŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽžſ" +
   "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ"; // Latin-1 Supplement
 
-global.ChatMessageValidator = (message) => {
+global.ChatMessageValidator = (
+  message,
+  maxLength = MAX_CHAT_LENGTH,
+  allowExtras = ""
+) => {
   message = message.trim();
   const disallowedCharacter = message.match(/[\\/<>]/);
   if (disallowedCharacter) {
@@ -232,13 +236,13 @@ global.ChatMessageValidator = (message) => {
   if (message.length < 1) {
     return "Message must have at least one character.";
   }
-  if (message.length >= MAX_CHAT_LENGTH) {
-    return `Message needs to be shorter than ${MAX_CHAT_LENGTH} characters.`;
+  if (message.length >= maxLength) {
+    return `Message needs to be shorter than ${maxLength} characters.`;
   }
 
   const allValid = message.match(
     new RegExp(
-      `^[${letters}${extendedLetters}${digits}${space}${punctuation}${extendedPunctuation}]+$`
+      `^[${letters}${extendedLetters}${digits}${space}${punctuation}${extendedPunctuation}${allowExtras}]+$`
     )
   );
   if (!allValid) {
