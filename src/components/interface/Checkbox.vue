@@ -45,7 +45,7 @@ export default {
     },
     internalValue: {
       handler() {
-        this.$emit("input", this.internalValue);
+        this.$emit("input", !!this.internalValue);
       },
       immediate: true,
     },

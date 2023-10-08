@@ -25,6 +25,7 @@
       @click="openLocationTab()"
       v-if="myCreature && !small && !location.indoors"
     />
+    <PluginInjection identifier="map-location" :data="{ location }" />
     <div v-for="path in paths" class="path" :style="pathStyle(path)">
       <Actions :target="path" class="action">
         <template v-slot:travel>

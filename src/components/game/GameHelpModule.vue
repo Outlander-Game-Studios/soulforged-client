@@ -32,6 +32,13 @@
         <Button class="menu-button" @click="selectOption('credits')">
           Game Credits
         </Button>
+        <Button
+          class="menu-button"
+          @click="selectOption('plugins')"
+          v-if="allPlugins && allPlugins.length"
+        >
+          Community Plugins
+        </Button>
         <Button class="menu-button" @click="selectOption('statistics')">
           Server Info
           <div v-if="newVersion" class="new-version button" />
@@ -123,6 +130,16 @@
         Close
       </Button>
     </div>
+    <Modal v-if="showPlugins" @close="showPlugins = false">
+      <template v-slot:title>
+        Community Plugins
+
+        <Help title="Effects"><HelpPlugins /></Help>
+      </template>
+      <template v-slot:contents>
+        <PluginSettings />
+      </template>
+    </Modal>
     <Modal v-if="showSettings" dialog @close="showSettings = false">
       <template v-slot:title> Settings </template>
       <template v-slot:contents>
@@ -203,6 +220,7 @@ export default {
     showCredits: false,
     showInterfaceOverview: false,
     showSettings: false,
+    showPlugins: false,
     showHelpIndicator: false,
     option: false,
     loggingOut: false,
@@ -242,6 +260,7 @@ export default {
 
   subscriptions() {
     return {
+      allPlugins: PluginService.getAllPluginsStream(),
       mainEntity: GameService.getRootEntityStream().tap((mainEntity) => {
         if (
           !mainEntity.operation &&
@@ -325,6 +344,9 @@ export default {
           return;
         case "settings":
           this.showSettings = true;
+          return;
+        case "plugins":
+          this.showPlugins = true;
           return;
         default:
           this.option = option;

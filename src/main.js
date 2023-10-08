@@ -10,7 +10,8 @@ import "@/services/game.js";
 import "@/services/sound.js";
 import "@/services/chat.js";
 import "@/services/controls.js";
-import "@/components/.index.js";
+import "@/services/plugin.js";
+import "@/../load-all.js";
 import VueObserveVisibility from "vue-observe-visibility";
 
 try {
