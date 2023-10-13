@@ -9,6 +9,11 @@
       "type": "string"
     },
     {
+      "id": "boop",
+      "name": "Extra Boop",
+      "type": "boolean"
+    },
+    {
       "id": "text2",
       "name": "Extra text 2",
       "type": "string"

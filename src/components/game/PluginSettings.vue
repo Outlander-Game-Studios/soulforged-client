@@ -25,7 +25,11 @@
         <Vertical>
           <div v-for="(setting, idx) in plugin.settings" :key="idx">
             <label>{{ setting.name }}</label>
-            <Input v-model="settingsValues[plugin.id][setting.id]" />
+            <Checkbox
+              v-if="setting.type === 'boolean'"
+              v-model="settingsValues[plugin.id][setting.id]"
+            />
+            <Input v-else v-model="settingsValues[plugin.id][setting.id]" />
           </div>
           <HorizontalCenter>
             <Button @click="saveSettings(plugin)">Save</Button>
