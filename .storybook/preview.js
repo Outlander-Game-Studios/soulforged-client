@@ -20,7 +20,7 @@ import "../src/services/local-storage.mock.js";
 import "../src/services/chat.mock.js";
 import "../src/services/controls.mock.js";
 import "../src/services/sound.mock.js";
-import "../src/services/plugin.js;
+import "../src/services/plugin.js";
 import "../load-all.js";
 import "../common/utils/array-extend.js";
 import "../common/utils/uc-first.js";
