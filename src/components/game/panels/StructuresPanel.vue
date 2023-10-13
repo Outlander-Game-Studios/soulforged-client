@@ -168,12 +168,12 @@
                   >
                     <span
                       :class="
-                        showDetails.deteriorationSpeed <= 1
+                        showDetails.durabilityMultiplier >= 1
                           ? 'text-good'
                           : 'text-bad'
                       "
                     >
-                      {{ (100 / showDetails.deteriorationSpeed).toFixed(0) }}%
+                      {{ (100 * showDetails.durabilityMultiplier).toFixed(0) }}%
                     </span>
                   </LabeledValue>
                 </div>
