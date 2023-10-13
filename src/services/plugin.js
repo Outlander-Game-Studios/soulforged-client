@@ -42,7 +42,9 @@ global.PluginService = {
   },
 
   async togglePlugin(pluginId, value) {
-    return PluginService.updatePluginSettings(pluginId, { enabled: value });
+    return await PluginService.updatePluginSettings(pluginId, {
+      enabled: value,
+    });
   },
 
   async updatePluginSettings(pluginId, settings) {
@@ -54,6 +56,6 @@ global.PluginService = {
         ...settings,
       },
     };
-    ControlsService.saveSetting("plugins", updatedSettings);
+    await ControlsService.saveSetting("plugins", updatedSettings);
   },
 };

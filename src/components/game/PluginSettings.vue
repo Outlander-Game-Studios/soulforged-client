@@ -104,16 +104,27 @@ export default {
       }
     },
 
-    togglePlugin(pluginId, value) {
-      PluginService.togglePlugin(pluginId, value);
+    async togglePlugin(pluginId, value) {
+      if (Boolean(this.pluginSettings?.[pluginId]?.enabled) === value) {
+        return;
+      }
+      try {
+        await PluginService.togglePlugin(pluginId, value);
+      } catch (e) {
+        ToastError("Unexpected error");
+      }
     },
 
-    saveSettings(plugin) {
-      PluginService.updatePluginSettings(
-        plugin.id,
-        this.settingsValues[plugin.id]
-      );
-      this.toggleConfig(plugin);
+    async saveSettings(plugin) {
+      try {
+        await PluginService.updatePluginSettings(
+          plugin.id,
+          this.settingsValues[plugin.id]
+        );
+        this.toggleConfig(plugin);
+      } catch (e) {
+        ToastError("Unexpected error");
+      }
     },
   },
 };

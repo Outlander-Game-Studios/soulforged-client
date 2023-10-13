@@ -1,5 +1,5 @@
 export default {
-  title: "Storyshots detection",
+  title: "Utils/Storyshots detection",
 };
 
 export const storyshotsDetected = () => ({
