@@ -277,9 +277,9 @@ export default {
         GameService.getVersionStream(),
         GameService.getLastViewedVersionStream()
       ).map(
-        ([version, lastVersion]) => version !== lastVersion
-        // version.split(".").slice(0, 2).join(".") !==
-        // lastVersion.split(".").slice(0, 2).join(".")
+        ([version, lastVersion]) =>
+          version.split(".").slice(0, 2).join(".") !==
+          lastVersion.split(".").slice(0, 2).join(".")
       ),
       openMilestones: ControlsService.getControlEventStream(
         "openMilestones"
