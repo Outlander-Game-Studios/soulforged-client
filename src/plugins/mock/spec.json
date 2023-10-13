@@ -1,0 +1,20 @@
+{
+  "name": "Mock Plugin",
+  "author": "Ethnar",
+  "enabled": true,
+  "settings": [
+    {
+      "id": "text",
+      "name": "Extra text",
+      "type": "string"
+    },
+    {
+      "id": "text2",
+      "name": "Extra text 2",
+      "type": "string"
+    }
+  ],
+  "additions": {
+    "map-location": "Box.vue"
+  }
+}

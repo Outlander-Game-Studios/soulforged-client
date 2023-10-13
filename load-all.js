@@ -15,7 +15,6 @@ requireComponents.keys().forEach((fileName) => {
     .split("/")
     .pop()
     .replace(/\.\w+$/, "");
-
   if (components[componentName]) {
     throw new Error(
       `Duplicate component definition found: ${componentName}, found in:\n${fileName}\n${components[componentName]}`
@@ -60,5 +59,4 @@ pluginDefinitions.keys().forEach((fileName) => {
   allPlugins[spec.name] = spec;
 });
 
-console.log(allPlugins);
 global.allPlugins = Object.values(allPlugins);

@@ -4,7 +4,11 @@ module.exports = {
     "../server/**/*.server.stories.@(js|jsx|ts|tsx)",
     "../world/**/*.world.stories.@(js|jsx|ts|tsx)",
   ],
-  addons: ["@storybook/addon-links", "@storybook/preset-scss"],
+  addons: [
+    "@storybook/addon-links",
+    "@storybook/addon-controls",
+    "@storybook/preset-scss",
+  ],
   staticDirs: ["../world/assets/dungeons"],
   webpackFinal: (config) => {
     config.module.rules = [

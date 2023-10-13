@@ -281,7 +281,6 @@ export default {
           event.preventDefault();
           this.emoSelector = false;
           this.currentEmo = emo;
-          console.log(this.newMessageText);
           this.newMessageText = this.newMessageText.substring(
             0,
             this.newMessageText.length - 1

@@ -69,7 +69,6 @@ export default {
   }),
 
   subscriptions() {
-    const allPlugins = PluginService.getDisabledPluginsStream();
     return {
       pluginsEnabled: PluginService.getPlayerEnabledPluginsStream(),
       workingPlugins: PluginService.getWorkingPluginsStream(),
@@ -119,3 +118,14 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+.name {
+  font-size: 120%;
+  font-weight: bold;
+}
+.author {
+  font-size: 80%;
+  color: #666;
+}
+</style>

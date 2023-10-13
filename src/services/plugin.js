@@ -28,7 +28,6 @@ global.PluginService = {
   getPlayerEnabledPluginsStream() {
     return PluginService.getPlayerPluginConfigStream().switchMap(
       (pluginConfig) => {
-        console.log("pluginConfig", JSON.stringify(pluginConfig));
         return PluginService.getWorkingPluginsStream().map((plugins) =>
           plugins.filter((plugin) => pluginConfig[plugin.id]?.enabled)
         );

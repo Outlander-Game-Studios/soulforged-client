@@ -14,7 +14,7 @@ Vue.component("OperationTravel", window.OperationTravel);
 Vue.component("OperationCombat", window.OperationCombat);
 
 export default {
-  title: "Game UI/Page Layout",
+  title: "Screens",
 };
 
 const factory = (onMounted = () => {}, onCreate = () => {}) =>
