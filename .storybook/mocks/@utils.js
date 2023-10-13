@@ -6,6 +6,7 @@ import flatten from "lodash/flatten.js";
 
 const CONTROL_TYPES = {
   string: "text",
+  boolean: "boolean",
 };
 const pluginParamsMap = {};
 const pluginParams = flatten(
