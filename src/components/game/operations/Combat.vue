@@ -361,6 +361,8 @@
                   <HorizontalCenter>
                     <Button noPadding @click="targetting = true">
                       <div class="icon" :style="targetIconStyle" />
+                      <div class="target-hotkey-left">&lt;</div>
+                      <div class="target-hotkey-right">&gt;</div>
                     </Button>
                   </HorizontalCenter>
                 </Vertical>
@@ -795,11 +797,22 @@ export default window.OperationCombat = {
     this.setAnimationSpeed(
       LocalStorageService.getItem("combat-animationSpeed", 1)
     );
+    this.keyPressHandler = ($event) => {
+      const key = $event.key;
+      if(key == "<") {
+        this.targetPreviousEnemy();
+      }
+      else if(key == ">") {
+        this.targetNextEnemy();
+      }
+    };
+    document.addEventListener("keypress", this.keyPressHandler);
   },
 
   beforeDestroy() {
     ControlsService.triggerControlEvent("notificationOffset", false);
     ControlsService.updateConsideredAP(0);
+    document.removeEventListener("keypress", this.keyPressHandler);
   },
 
   methods: {
@@ -874,9 +887,16 @@ export default window.OperationCombat = {
 
     clickedCreature(creature) {
       if (this.targetting) {
+        this.targetCreature(creature.Id);
+      } else {
+        this.selectedCreatureId = creature.id;
+      }
+    },
+
+    targetCreature(creatureId) {
         GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
           updateType: "selectTarget",
-          creatureId: creature.id,
+          creatureId: creatureId,
         }).then((result) => {
           if (result && result.ok) {
             this.targetting = false;
@@ -885,9 +905,36 @@ export default window.OperationCombat = {
             ToastError(result.message);
           }
         });
-      } else {
-        this.selectedCreatureId = creature.id;
+    },
+
+    targetNextEnemy() {
+      var currentTarget = this.operation.context.currentTarget.toString();
+      var creatureIds = Object.keys(this.displayedCreatures);
+      var currentIndex = creatureIds.indexOf(currentTarget);
+      if(currentIndex == -1 ){currentIndex = 0;}
+      for(var i=1; i < creatureIds.length; i++){
+        var creature = this.displayedCreatures[creatureIds[(i+currentIndex)%creatureIds.length]];
+        if(creature.hostile){
+          this.targetCreature(creature.id);
+          return;
+        }
       }
+      ToastError("Could not find next hostile creature");
+    },
+
+    targetPreviousEnemy() {
+      var currentTarget = this.operation.context.currentTarget.toString();
+      var creatureIds = Object.keys(this.displayedCreatures);
+      var currentIndex = creatureIds.indexOf(currentTarget);
+      if(currentIndex == -1 ){currentIndex = 0;}
+      for(var i=-1; i > -creatureIds.length; i--){
+        var creature = this.displayedCreatures[creatureIds[(i+currentIndex)%creatureIds.length+creatureIds.length]];
+        if(creature.hostile){
+          this.targetCreature(creature.id);
+          return;
+        }
+      }
+      ToastError("Could not find previous hostile creature");
     },
 
     lootAll() {
@@ -1618,6 +1665,24 @@ $side-position: 1rem;
   z-index: 20;
   display: flex;
   flex-direction: column;
+}
+
+.target-hotkey-left {
+  font-size: 70%;
+  position: absolute;
+  top: -0.2em;
+  left: 0.1em;
+  padding-top: 0.2rem;
+  z-index: 3;
+}
+
+.target-hotkey-right {
+  font-size: 70%;
+  position: absolute;
+  top: -0.2em;
+  right: 0.1em;
+  padding-top: 0.2rem;
+  z-index: 3;
 }
 
 .gained-text {
