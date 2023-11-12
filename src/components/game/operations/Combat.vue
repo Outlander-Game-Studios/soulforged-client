@@ -935,7 +935,7 @@ export default window.OperationCombat = {
       for (let i = -1; i > -creatureIds.length; i--) {
         const creature = this.displayedCreatures[
           creatureIds[
-            ((i + currentIndex) % creatureIds.length) + creatureIds.length
+            (i + currentIndex + creatureIds.length) % creatureIds.length
           ]
         ];
         if (creature.hostile) {
