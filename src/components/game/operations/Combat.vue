@@ -799,9 +799,9 @@ export default window.OperationCombat = {
     );
     this.keyPressHandler = ($event) => {
       const key = $event.key;
-      if (key == "<") {
+      if (key === "<") {
         this.targetPreviousEnemy();
-      } else if (key == ">") {
+      } else if (key === ">") {
         this.targetNextEnemy();
       }
     };
@@ -886,7 +886,7 @@ export default window.OperationCombat = {
 
     clickedCreature(creature) {
       if (this.targetting) {
-        this.targetCreature(creature.Id);
+        this.targetCreature(creature.id);
       } else {
         this.selectedCreatureId = creature.id;
       }
