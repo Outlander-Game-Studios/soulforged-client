@@ -361,8 +361,8 @@
                   <HorizontalCenter>
                     <Button noPadding @click="targetting = true">
                       <div class="icon" :style="targetIconStyle" />
-                      <div class="target-hotkey-left">&lt;</div>
-                      <div class="target-hotkey-right">&gt;</div>
+                      <div class="target-hotkey left">&larr;</div>
+                      <div class="target-hotkey right">&rarr;</div>
                     </Button>
                   </HorizontalCenter>
                 </Vertical>
@@ -1680,22 +1680,19 @@ $side-position: 1rem;
   flex-direction: column;
 }
 
-.target-hotkey-left {
+.target-hotkey {
   font-size: 70%;
   position: absolute;
   top: -0.2em;
-  left: 0.1em;
   padding-top: 0.2rem;
   z-index: 3;
-}
 
-.target-hotkey-right {
-  font-size: 70%;
-  position: absolute;
-  top: -0.2em;
-  right: 0.1em;
-  padding-top: 0.2rem;
-  z-index: 3;
+  &.left {
+    left: 0.1em;
+  }
+  &.right {
+    right: 0.1em;
+  }
 }
 
 .gained-text {
