@@ -799,10 +799,9 @@ export default window.OperationCombat = {
     );
     this.keyPressHandler = ($event) => {
       const key = $event.key;
-      if(key == "<") {
+      if (key == "<") {
         this.targetPreviousEnemy();
-      }
-      else if(key == ">") {
+      } else if (key == ">") {
         this.targetNextEnemy();
       }
     };
@@ -894,27 +893,31 @@ export default window.OperationCombat = {
     },
 
     targetCreature(creatureId) {
-        GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-          updateType: "selectTarget",
-          creatureId: creatureId,
-        }).then((result) => {
-          if (result && result.ok) {
-            this.targetting = false;
-            this.fetchCombatMovesOdds();
-          } else {
-            ToastError(result.message);
-          }
-        });
+      GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
+        updateType: "selectTarget",
+        creatureId: creatureId,
+      }).then((result) => {
+        if (result && result.ok) {
+          this.targetting = false;
+          this.fetchCombatMovesOdds();
+        } else {
+          ToastError(result.message);
+        }
+      });
     },
 
     targetNextEnemy() {
-      var currentTarget = this.operation.context.currentTarget.toString();
-      var creatureIds = Object.keys(this.displayedCreatures);
-      var currentIndex = creatureIds.indexOf(currentTarget);
-      if(currentIndex == -1 ){currentIndex = 0;}
-      for(var i=1; i < creatureIds.length; i++){
-        var creature = this.displayedCreatures[creatureIds[(i+currentIndex)%creatureIds.length]];
-        if(creature.hostile){
+      const currentTarget = this.operation.context.currentTarget.toString();
+      const creatureIds = Object.keys(this.displayedCreatures);
+      let currentIndex = creatureIds.indexOf(currentTarget);
+      if (currentIndex === -1) {
+        currentIndex = 0;
+      }
+      for (let i = 1; i < creatureIds.length; i++) {
+        const creature = this.displayedCreatures[
+          creatureIds[(i + currentIndex) % creatureIds.length]
+        ];
+        if (creature.hostile) {
           this.targetCreature(creature.id);
           return;
         }
@@ -923,13 +926,19 @@ export default window.OperationCombat = {
     },
 
     targetPreviousEnemy() {
-      var currentTarget = this.operation.context.currentTarget.toString();
-      var creatureIds = Object.keys(this.displayedCreatures);
-      var currentIndex = creatureIds.indexOf(currentTarget);
-      if(currentIndex == -1 ){currentIndex = 0;}
-      for(var i=-1; i > -creatureIds.length; i--){
-        var creature = this.displayedCreatures[creatureIds[(i+currentIndex)%creatureIds.length+creatureIds.length]];
-        if(creature.hostile){
+      const currentTarget = this.operation.context.currentTarget.toString();
+      const creatureIds = Object.keys(this.displayedCreatures);
+      let currentIndex = creatureIds.indexOf(currentTarget);
+      if (currentIndex === -1) {
+        currentIndex = 0;
+      }
+      for (let i = -1; i > -creatureIds.length; i--) {
+        const creature = this.displayedCreatures[
+          creatureIds[
+            ((i + currentIndex) % creatureIds.length) + creatureIds.length
+          ]
+        ];
+        if (creature.hostile) {
           this.targetCreature(creature.id);
           return;
         }
