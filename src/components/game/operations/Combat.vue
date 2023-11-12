@@ -910,44 +910,34 @@ export default window.OperationCombat = {
       });
     },
 
-    targetNextEnemy() {
-      const currentTarget = this.operation.context.currentTarget.toString();
-      const creatureIds = Object.keys(this.displayedCreatures);
-      let currentIndex = creatureIds.indexOf(currentTarget);
-      if (currentIndex === -1) {
-        currentIndex = 0;
-      }
+    findNextHostile(direction) {
+      const currentTarget = this.operation.context.currentTarget;
+      const creatureIds = Object.keys(this.creatures);
+      const currentIndex = creatureIds.indexOf(`${currentTarget}`);
       for (let i = 1; i < creatureIds.length; i++) {
-        const creature = this.displayedCreatures[
-          creatureIds[(i + currentIndex) % creatureIds.length]
-        ];
-        if (creature.hostile) {
+        const indexCandidate =
+          (i * direction + currentIndex + creatureIds.length) %
+          creatureIds.length;
+        const creature = this.creatures[creatureIds[indexCandidate]];
+        if (
+          creature &&
+          creature.hostile &&
+          !creature.dead &&
+          creature.operationInfo?.combatId === this.combat.id
+        ) {
           this.targetCreature(creature.id);
           return;
         }
       }
-      ToastError("Could not find next hostile creature");
+      ToastError("No valid targets");
+    },
+
+    targetNextEnemy() {
+      return this.findNextHostile(+1);
     },
 
     targetPreviousEnemy() {
-      const currentTarget = this.operation.context.currentTarget.toString();
-      const creatureIds = Object.keys(this.displayedCreatures);
-      let currentIndex = creatureIds.indexOf(currentTarget);
-      if (currentIndex === -1) {
-        currentIndex = 0;
-      }
-      for (let i = -1; i > -creatureIds.length; i--) {
-        const creature = this.displayedCreatures[
-          creatureIds[
-            (i + currentIndex + creatureIds.length) % creatureIds.length
-          ]
-        ];
-        if (creature.hostile) {
-          this.targetCreature(creature.id);
-          return;
-        }
-      }
-      ToastError("Could not find previous hostile creature");
+      return this.findNextHostile(-1);
     },
 
     lootAll() {
