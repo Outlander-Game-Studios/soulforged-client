@@ -361,6 +361,8 @@
                   <HorizontalCenter>
                     <Button noPadding @click="targetting = true">
                       <div class="icon" :style="targetIconStyle" />
+                      <div class="target-hotkey left">&larr;</div>
+                      <div class="target-hotkey right">&rarr;</div>
                     </Button>
                   </HorizontalCenter>
                 </Vertical>
@@ -795,14 +797,28 @@ export default window.OperationCombat = {
     this.setAnimationSpeed(
       LocalStorageService.getItem("combat-animationSpeed", 1)
     );
+    document.addEventListener("keydown", this.keyDownHandler);
   },
 
   beforeDestroy() {
     ControlsService.triggerControlEvent("notificationOffset", false);
     ControlsService.updateConsideredAP(0);
+    document.removeEventListener("keydown", this.keyDownHandler);
   },
 
   methods: {
+    keyDownHandler($event) {
+      const { key } = $event;
+      switch (key) {
+        case "ArrowLeft":
+          this.targetPreviousEnemy();
+          break;
+        case "ArrowRight":
+          this.targetNextEnemy();
+          break;
+      }
+    },
+
     setAnimationSpeed(speedValue) {
       this.ANIMATION_SPEED = speedValue;
       this.selectedAnimationSpeed = ANIMATION_SPEEDS.find(
@@ -874,20 +890,54 @@ export default window.OperationCombat = {
 
     clickedCreature(creature) {
       if (this.targetting) {
-        GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-          updateType: "selectTarget",
-          creatureId: creature.id,
-        }).then((result) => {
-          if (result && result.ok) {
-            this.targetting = false;
-            this.fetchCombatMovesOdds();
-          } else {
-            ToastError(result.message);
-          }
-        });
+        this.targetCreature(creature.id);
       } else {
         this.selectedCreatureId = creature.id;
       }
+    },
+
+    targetCreature(creatureId) {
+      GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
+        updateType: "selectTarget",
+        creatureId: creatureId,
+      }).then((result) => {
+        if (result && result.ok) {
+          this.targetting = false;
+          this.fetchCombatMovesOdds();
+        } else {
+          ToastError(result.message);
+        }
+      });
+    },
+
+    findNextHostile(direction) {
+      const currentTarget = this.operation.context.currentTarget;
+      const creatureIds = Object.keys(this.creatures);
+      const currentIndex = creatureIds.indexOf(`${currentTarget}`);
+      for (let i = 1; i < creatureIds.length; i++) {
+        const indexCandidate =
+          (i * direction + currentIndex + creatureIds.length) %
+          creatureIds.length;
+        const creature = this.creatures[creatureIds[indexCandidate]];
+        if (
+          creature &&
+          creature.hostile &&
+          !creature.dead &&
+          creature.operationInfo?.combatId === this.combat.id
+        ) {
+          this.targetCreature(creature.id);
+          return;
+        }
+      }
+      ToastError("No valid targets");
+    },
+
+    targetNextEnemy() {
+      return this.findNextHostile(+1);
+    },
+
+    targetPreviousEnemy() {
+      return this.findNextHostile(-1);
     },
 
     lootAll() {
@@ -1618,6 +1668,21 @@ $side-position: 1rem;
   z-index: 20;
   display: flex;
   flex-direction: column;
+}
+
+.target-hotkey {
+  font-size: 70%;
+  position: absolute;
+  top: -0.2em;
+  padding-top: 0.2rem;
+  z-index: 3;
+
+  &.left {
+    left: 0.1em;
+  }
+  &.right {
+    right: 0.1em;
+  }
 }
 
 .gained-text {
