@@ -797,24 +797,28 @@ export default window.OperationCombat = {
     this.setAnimationSpeed(
       LocalStorageService.getItem("combat-animationSpeed", 1)
     );
-    this.keyPressHandler = ($event) => {
-      const key = $event.key;
-      if (key === "<") {
-        this.targetPreviousEnemy();
-      } else if (key === ">") {
-        this.targetNextEnemy();
-      }
-    };
-    document.addEventListener("keypress", this.keyPressHandler);
+    document.addEventListener("keydown", this.keyDownHandler);
   },
 
   beforeDestroy() {
     ControlsService.triggerControlEvent("notificationOffset", false);
     ControlsService.updateConsideredAP(0);
-    document.removeEventListener("keypress", this.keyPressHandler);
+    document.removeEventListener("keydown", this.keyDownHandler);
   },
 
   methods: {
+    keyDownHandler($event) {
+      const { key } = $event;
+      switch (key) {
+        case "ArrowLeft":
+          this.targetPreviousEnemy();
+          break;
+        case "ArrowRight":
+          this.targetNextEnemy();
+          break;
+      }
+    },
+
     setAnimationSpeed(speedValue) {
       this.ANIMATION_SPEED = speedValue;
       this.selectedAnimationSpeed = ANIMATION_SPEEDS.find(
