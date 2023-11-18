@@ -58,6 +58,7 @@ Currently available UI slots:
 With the scaffolding set up you'll be able to preview your plugin using the storybook module.
 
 To access it you'll need the following:
+* Create an empty folder called `world` in the repository
 * You need to have `NodeJS` version 14
 * You need to have `yarn` package manager installed
 * You need to install project's dependencies by running 
