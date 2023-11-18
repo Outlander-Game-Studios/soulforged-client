@@ -1,0 +1,10 @@
+{
+  "name": "Location ID Display and Download",
+  "author": "Simbu",
+  "enabled": true,
+  "settings": [
+  ],
+  "additions": {
+    "map-location": "Box.vue"
+  }
+}

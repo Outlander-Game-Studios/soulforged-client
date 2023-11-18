@@ -1,7 +1,7 @@
 {
   "name": "Sample Plugin",
   "author": "Ethnar",
-  "enabled": false,
+  "enabled": true,
   "settings": [
     {
       "id": "text",
