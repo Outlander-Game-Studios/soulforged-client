@@ -2,13 +2,7 @@
   <HorizontalCenter>
     <Container>
       <Spaced>{{ location.id }} </Spaced>
-      <Spaced>
-	    <Button
-          @click="ButtonClick()"
-        >
-		Download
-	    </Button>
-	  </Spaced>
+      <Spaced>{{ settings.text }} </Spaced>
     </Container>
   </HorizontalCenter>
 </template>
@@ -18,13 +12,5 @@ export default {
     location: {},
     settings: {},
   },
-  methods: {
-    ButtonClick(){
-	  console.log( this.location)
-	  if(this.location.id && this.location.indoors == undefined){
-	  
-	  }
-	},
-  }
 };
 </script>
