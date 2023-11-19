@@ -1,7 +1,7 @@
 <template>
   <HorizontalCenter>
     <Container>
-      <Spaced> </Spaced>
+      <Spaced><a :href="DownloadLink()" ref="LocationImageDownloadLink" style="display:none" :download="location.id + '.jpg'"></a></Spaced>
       <Spaced>{{ location.id }} </Spaced>
       <Spaced>
         <Button
@@ -25,17 +25,11 @@
       ButtonClick() {
         console.log( this.location )
         if(this.location.id && (this.location.indoors == undefined)) {
-          let fileUrl = GameService.getLocationImgPath(this.location);
-          console.log(fileUrl);
-
-          let fileLink = document.createElement('a');
-          fileLink.href = fileUrl;
-          fileLink.setAttribute('download', this.location.id+ '.jpg');
-
-          document.body.appendChild(fileLink)
-          fileLink.click();
-          document.body.removeChild(fileLink);
+          this.$refs.LocationImageDownloadLink.click()
         }
+      },
+      DownloadLink() {
+        return GameService.getLocationImgPath(this.location);
       }
     },
   };
