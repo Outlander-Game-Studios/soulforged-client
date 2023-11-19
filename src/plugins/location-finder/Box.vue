@@ -1,7 +1,7 @@
 <template>
   <HorizontalCenter>
     <Container>
-      <Spaced><a :href="DownloadLink()" ref="LocationImageDownloadLink" style="display:none" :download="location.id + '.jpg'"></a></Spaced>
+      <Spaced><a :href="DownloadLink" ref="LocationImageDownloadLink" style="display:none" :download="location.id + '.jpg'"></a></Spaced>
       <Spaced>{{ location.id }} </Spaced>
       <Spaced>
         <Button
@@ -28,9 +28,11 @@
           this.$refs.LocationImageDownloadLink.click()
         }
       },
-      DownloadLink() {
-        return GameService.getLocationImgPath(this.location);
-      }
     },
+    computed: {
+	  DownloadLink() {
+        return GameService.getLocationImgPath(this.location);
+      },
+	},
   };
   </script>
