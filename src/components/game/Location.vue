@@ -56,7 +56,7 @@ export default {
 
   data: () => ({
     loading: true,
-    imageUpdate: "",
+    imageUpdate: 0,
   }),
 
   subscriptions() {
@@ -100,9 +100,6 @@ export default {
       location: locationStream,
       paths: pathsStream,
       myCreature: GameService.getMyCreatureStream(),
-      locationImageUpdate: GameService.getMapImageUpdateStream().tap(() => {
-        this.imageUpdate += "?";
-      }),
     };
   },
 
@@ -139,7 +136,9 @@ export default {
 
     getLocationImgPath() {
       const imageUrl =
-        GameService.getLocationImgPath(this.location) + this.imageUpdate;
+        `${GameService.getLocationImgPath(this.location)}?uq=${
+          this.location.mapImageVersion
+        }&refresh=` + this.imageUpdate;
       if (imageUrl && this.lastImageUrl !== imageUrl) {
         this.loadImage(imageUrl);
         this.lastImageUrl = imageUrl;
@@ -160,7 +159,7 @@ export default {
       preloaderImg.addEventListener("error", (...args) => {
         console.error("Error loading location image");
         setTimeout(() => {
-          this.imageUpdate += "?";
+          this.imageUpdate++;
         }, 1000);
       });
     },
