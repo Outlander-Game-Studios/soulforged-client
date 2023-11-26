@@ -90,7 +90,6 @@ global.REQUEST_CODES = {
   ROOT: "@",
   RACES: ":r",
   AVATAR_DATA: ":d",
-  MAP_UPDATE: "m~",
   RESEARCH: "R",
   RESEARCH_MARK_SEEN: "Rv",
   RESEARCH_MARK_FAV: "R*",
