@@ -1,0 +1,10 @@
+{
+  "name": "Resource Logger",
+  "author": "Simbu",
+  "enabled": true,
+  "settings": [
+  ],
+  "additions": {
+    "map-location": "Box.vue"
+  }
+}
