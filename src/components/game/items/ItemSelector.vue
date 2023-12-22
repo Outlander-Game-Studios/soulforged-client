@@ -18,7 +18,7 @@
           v-for="(item, idx) in filteredInventory"
           :key="idx"
         >
-          <ListItem :iconSrc="item.icon" flexible>
+          <ListItem :iconSrc="item.icon">
             <template v-slot:icon>
               <ItemIcon
                 :size="6"
