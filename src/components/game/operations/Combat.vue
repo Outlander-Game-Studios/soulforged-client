@@ -1053,6 +1053,9 @@ export default window.OperationCombat = {
 
     creatureStyle(creature) {
       const positioning = this.creaturePositions[creature.id];
+      if (!positioning) {
+        return {};
+      }
       let offsetX = 0;
       if (positioning.stance === STANCES.ATTACKING) {
         const target = this.displayedCreatures[positioning.approachedId];
@@ -1067,6 +1070,9 @@ export default window.OperationCombat = {
 
     creatureCssClass(creature) {
       const positioning = this.creaturePositions[creature.id];
+      if (!positioning) {
+        return {};
+      }
       const target = this.displayedCreatures[positioning.approachedId];
       return {
         hostile: creature.hostile,
@@ -1196,7 +1202,9 @@ export default window.OperationCombat = {
       };
       // update creature position
       await wait(100 / this.ANIMATION_SPEED);
-      this.creaturePositions[whoId].approachedId = null;
+      if (this.creaturePositions[whoId]) {
+        this.creaturePositions[whoId].approachedId = null;
+      }
     },
 
     addFloatingCombatText(creatureId, floatie) {

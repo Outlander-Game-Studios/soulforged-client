@@ -16,6 +16,7 @@
         <Button
           v-else
           @click="startAction(action)"
+          :key="action.actionId"
           :disabled="disabled"
           :processing="performingActionId === action.actionId"
           class="action-button"

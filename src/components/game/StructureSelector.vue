@@ -12,7 +12,7 @@
         v-for="(structure, idx) in filteredStructures"
         :key="idx"
       >
-        <ListItem :iconSrc="structure.icon" flexible>
+        <ListItem :iconSrc="structure.icon">
           <template v-slot:icon>
             <ItemIcon
               :size="6"
