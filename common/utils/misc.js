@@ -19,8 +19,9 @@ function parseCookies(cookiesString) {
 }
 
 function formatFloatPoint(number, base = 1000, ranges = []) {
+  const sign = Math.sign(number);
   let stage = 0;
-  let float = +number;
+  let float = Math.abs(+number);
   while (float > (950 * base) / 1000 && stage < ranges.length - 1) {
     float = float / base;
     stage += 1;
@@ -34,7 +35,7 @@ function formatFloatPoint(number, base = 1000, ranges = []) {
       float = Math.floor(float);
     }
   }
-  return float + ranges[stage];
+  return sign * float + ranges[stage];
 }
 
 function formatSize(number) {
