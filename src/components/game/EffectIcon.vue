@@ -65,7 +65,10 @@ export default {
         ) {
           return [`${this.effect.level} / ${this.effect.baseLevel}`];
         }
-        if (`${this.effect.level}`.includes(".")) {
+        if (this.effect.level >= 9999) {
+          return [formatNumber(this.effect.level)];
+        }
+        if (`${this.effect.level}`.includes(".") && this.effect.level < 1000) {
           const values = `${this.effect.level}`.split(".");
           return [values[0], "." + values[1]];
         }
