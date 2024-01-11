@@ -64,6 +64,9 @@
 		), //Only log if hostile?
 		locationDetails: locationStream.tap((loc) => {
 			this.dataDict['loc'][loc.id] = {};
+			if(loc["indoors"]) {
+				this.dataDict['loc'][loc.id]["indoors"] = loc["indoors"];
+			}
 			this.dataDict['loc'][loc.id]["spacing"] = loc["spacing"];
 			this.dataDict['loc'][loc.id]["paths"] = loc["paths"];
 			this.dataDict['loc'][loc.id]["creatures"] = loc["creatures"];
