@@ -1,0 +1,15 @@
+{
+  "name": "Resource Logger Auto",
+  "author": "Simbu",
+  "enabled": true,
+  "settings": [
+    {
+      "id": "userName",
+      "name": "User Name",
+      "type": "string"
+    }
+  ],
+  "additions": {
+    "map-location": "Box.vue"
+  }
+}
