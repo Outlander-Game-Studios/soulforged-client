@@ -7,6 +7,11 @@
       "id": "userName",
       "name": "User Name",
       "type": "string"
+    },
+    {
+      "id": "website",
+      "name": "Website Domain",
+      "type": "string"
     }
   ],
   "additions": {

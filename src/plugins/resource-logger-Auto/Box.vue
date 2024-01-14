@@ -2,7 +2,8 @@
   <HorizontalCenter>
     <Container>
       <Spaced>{{ LocationString }}  </Spaced>
-      <Spaced>{{ location.id }} </Spaced> <!--Should add some indicator if resources/inventory not loaded... but of well for now. -->
+      <Spaced>{{ location.id }} </Spaced>
+      <Spaced>{{ FetchErrors }} </Spaced>
     </Container>
   </HorizontalCenter>
 </template>
@@ -15,28 +16,45 @@
     },
     data: function() {
         return {
-            nodeDB: {}
+            nodeDB: {},
+            errorsDict: {error: ""}
         }
     },
     computed: {
       LocationString() {
         return this.nodeDB[this.location.id] ? "You are at " + nodeDB[this.location.id] : "Node not found in database";
       },
+      FetchErrors() {
+        return this.errorsDict["error"] == "" ? "" : "There was an error: " + this.errorsDict["error"];
+      },
     },
     created() {
-        fetch("https://soul-forged-resourcs-map.vercel.app/GetNodeDict",)
-            .then((response) => response.json())
-            .then((json) => this.nodeDB = json);
+        if( this.settings.website == null ) { 
+            this.errorsDict["error"] = "No website entered, check Settings";
+        }
+        else {
+            fetch( this.settings.website + "/GetNodeDict",)
+                .then((response) => response.json())
+                .then((json) => this.nodeDB = json)
+                .catch((error) => this.errorsDict["error"] = error);
+        }
     },
     subscriptions() {
-      function SendDataToServer(sendData) {
-        fetch("https://soul-forged-resourcs-map.vercel.app/SubmitNodeData", {
-            method: "POST",
-            body: JSON.stringify({sendData}),
-            headers: {
-              "Content-type": "application/json; charset=UTF-8"
-            }
-        });
+      function SendDataToServer(sendData, settings, errorsDict) {
+        if( settings.website == null ) { 
+            errorsDict["error"] = "No website entered, check Settings";
+        }
+        else {
+            fetch( settings.website + "/SubmitNodeData", {
+                method: "POST",
+                body: JSON.stringify({sendData}),
+                headers: {
+                  "Content-type": "application/json; charset=UTF-8"
+                }
+            }).catch((error) => {
+                errorsDict["error"] = error;
+            });
+        }
       };
       const operationStream = GameService.getRootEntityStream().pluck("operation");
       const locationStream = GameService.getLocationStream();
@@ -74,7 +92,7 @@
                 }
             });
             SendData["data"] = dataDict;
-            SendDataToServer(SendData);
+            SendDataToServer(SendData, this.settings, this.errorsDict);
         }),
         creatures: creatureStream.tap((creatures) => {
             let SendData = { node: this.location.id, dataType: "Creatures", sender: this.settings.userName};
@@ -100,7 +118,7 @@
             });
             
             SendData["data"] = dataDict;
-            SendDataToServer(SendData);
+            SendDataToServer(SendData, this.settings, this.errorsDict);
         }), //Only log if hostile?
         locationDetails: locationStream.tap((loc) => {
             let SendData = { node: this.location.id, dataType: "Location", sender: this.settings.userName};
@@ -109,7 +127,7 @@
             dataDict["paths"] = loc["paths"];
             dataDict["structures"] = loc["structures"];
             SendData["data"] = dataDict;
-            SendDataToServer(SendData);
+            SendDataToServer(SendData, this.settings, this.errorsDict);
         }),
         resources: resourceStream.tap((resources) => {
             let SendData = { node: this.location.id, dataType: "Resource", sender: this.settings.userName};
@@ -118,7 +136,7 @@
                 dataDict[resource.name] = {icon: resource.icon, density: resource.density };
             });
             SendData["data"] = dataDict;
-            SendDataToServer(SendData);
+            SendDataToServer(SendData, this.settings, this.errorsDict);
         }),
         //paths: pathStream.tap((paths) => {  I am not sure we care about this data any more. I am removing it for now. 
         //    SendData = { node: this.location.id, dataType: "Path", sender: this.settings.userName};
@@ -130,7 +148,7 @@
         operation: operationStream.tap((operation) => {
             if (operation && operation['type'] === 'TravelOperation' && operation.context && operation.context.pathId) {
                 let SendData = { node: this.location.id, dataType: "PathTravelData", sender: this.settings.userName, data: operation['context']};
-                SendDataToServer(SendData);
+                SendDataToServer(SendData, this.settings, this.errorsDict);
             }
         }),
       };
