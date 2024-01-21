@@ -115,7 +115,7 @@ export default {
         let dataDict = {};
         creatures.forEach((cre) => {
           if (dataDict[cre.icon]) {
-            if (dataDict[cre.nonAggressive]) {
+            if (cre.nonAggressive) {
               dataDict[cre.icon]["nonAggressive"] =
                 dataDict[cre.icon]["nonAggressive"] + 1;
             } else {
