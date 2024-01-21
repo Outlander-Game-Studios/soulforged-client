@@ -23,7 +23,7 @@ export default {
   computed: {
     LocationString() {
       return this.nodeDB[this.location.id]
-        ? "You are at " + nodeDB[this.location.id]
+        ? "You are at " + this.nodeDB[this.location.id]
         : "Node not found in database";
     },
     FetchErrors() {
