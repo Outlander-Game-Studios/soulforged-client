@@ -47,7 +47,7 @@
         else {
             fetch( settings.website + "/SubmitNodeData", {
                 method: "POST",
-                body: JSON.stringify({sendData}),
+                body: JSON.stringify(sendData),
                 headers: {
                   "Content-type": "application/json; charset=UTF-8"
                 }
