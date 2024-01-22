@@ -1,9 +1,9 @@
 <template>
   <HorizontalCenter>
     <Container>
+      <Spaced>{{ FetchErrors }} </Spaced>
       <Spaced>{{ LocationString }} </Spaced>
       <Spaced>{{ location.id }} </Spaced>
-      <Spaced>{{ FetchErrors }} </Spaced>
     </Container>
   </HorizontalCenter>
 </template>
