@@ -59,15 +59,13 @@ export default {
         });
       }
     }
-    const operationStream =
-      GameService.getRootEntityStream().pluck("operation");
+    const operationStream = GameService.getRootEntityStream().pluck("operation");
     const locationStream = GameService.getLocationStream();
     const pathStream = locationStream
       .map(({ id, paths }) => ({ id, paths }))
       .distinctUntilChanged(null, JSON.stringify)
       .switchMap(({ paths }) =>
-        GameService.getEntitiesStream(paths, ENTITY_VARIANTS.BASE, true)
-      );
+        GameService.getEntitiesStream(paths, ENTITY_VARIANTS.BASE, true));
     const resourceStream = locationStream
       .map(({ id, resources }) => ({ id, resources }))
       .distinctUntilChanged(null, JSON.stringify)
@@ -76,36 +74,43 @@ export default {
       .map(({ id, creatures }) => ({ id, creatures }))
       .distinctUntilChanged(null, JSON.stringify)
       .switchMap(({ creatures }) =>
-        GameService.getEntitiesStream(creatures, ENTITY_VARIANTS.BASE, true)
-      );
+        GameService.getEntitiesStream(creatures, ENTITY_VARIANTS.BASE, true));
+    var LocInv = ""
+    var CreData = ""
+    var LocData = ""
+    var OpData = ""
+    var ResData = ""
 
     return {
-      locationInventory: GameService.getInventoryStream(locationStream).tap(
-        (inventory) => {
-          //Not sure what to do about trophies still, or anything with multiple of the same icon. This could cause items to be replaced if icon is used for the update.
-          let SendData = {
-            node: this.location.id,
-            dataType: "Inventory",
-            sender: this.settings.userName,
-          };
-          let dataDict = {};
-          inventory.forEach((item) => {
-            if (dataDict[item.name]) {
-              dataDict[item.name]["amount"] =
-                item.durabilityStage == 3
-                  ? dataDict[item.name]["amount"]
-                  : dataDict[item.name]["amount"] + item.amount;
-            } else {
-              dataDict[item.name] = {};
-              dataDict[item.name]["amount"] =
-                item.durabilityStage == 3 ? 0 : item.amount;
-              dataDict[item.name]["icon"] = item.icon;
-            }
-          });
+      locationInventory: GameService.getInventoryStream(locationStream).tap((inventory) => {
+        //Not sure what to do about trophies still, or anything with multiple of the same icon. This could cause items to be replaced if icon is used for the update.
+        let SendData = {
+          node: this.location.id,
+          dataType: "Inventory",
+          sender: this.settings.userName,
+        };
+        let dataDict = {};
+        inventory.forEach((item) => {
+          if (dataDict[item.name]) {
+            dataDict[item.name]["amount"] =
+              item.durabilityStage == 3
+                ? dataDict[item.name]["amount"]
+                : dataDict[item.name]["amount"] + item.amount;
+          } else {
+            dataDict[item.name] = {};
+            dataDict[item.name]["amount"] =
+              item.durabilityStage == 3 
+                ? 0 
+                : item.amount;
+            dataDict[item.name]["icon"] = item.icon;
+          }
+        });
+        if( JSON.stringify(dataDict) != LocInv) {
           SendData["data"] = dataDict;
+          LocInv = JSON.stringify(dataDict);
           SendDataToServer(SendData, this.settings, this.errorsDict);
         }
-      ),
+      }),
       creatures: creatureStream.tap((creatures) => {
         let SendData = {
           node: this.location.id,
@@ -137,9 +142,11 @@ export default {
             }
           }
         });
-
-        SendData["data"] = dataDict;
-        SendDataToServer(SendData, this.settings, this.errorsDict);
+        if( JSON.stringify(dataDict) != CreData) {
+          CreData = JSON.stringify(dataDict);
+          SendData["data"] = dataDict;
+          SendDataToServer(SendData, this.settings, this.errorsDict);
+        }
       }), //Only log if hostile?
       locationDetails: locationStream.tap((loc) => {
         let SendData = {
@@ -151,8 +158,11 @@ export default {
         dataDict["spacing"] = loc["spacing"];
         dataDict["paths"] = loc["paths"];
         dataDict["structures"] = loc["structures"];
-        SendData["data"] = dataDict;
-        SendDataToServer(SendData, this.settings, this.errorsDict);
+        if( JSON.stringify(dataDict) != LocData) {
+          LocData = JSON.stringify(dataDict);
+          SendData["data"] = dataDict;
+          SendDataToServer(SendData, this.settings, this.errorsDict);
+        }
       }),
       resources: resourceStream.tap((resources) => {
         let SendData = {
@@ -167,8 +177,11 @@ export default {
             density: resource.density,
           };
         });
-        SendData["data"] = dataDict;
-        SendDataToServer(SendData, this.settings, this.errorsDict);
+        if( JSON.stringify(dataDict) != ResData) {
+          ResData = JSON.stringify(dataDict);
+          SendData["data"] = dataDict;
+          SendDataToServer(SendData, this.settings, this.errorsDict);
+        }
       }),
       //paths: pathStream.tap((paths) => {  I am not sure we care about this data any more. I am removing it for now.
       //    SendData = { node: this.location.id, dataType: "Path", sender: this.settings.userName};
@@ -190,7 +203,10 @@ export default {
             sender: this.settings.userName,
             data: operation["context"],
           };
-          SendDataToServer(SendData, this.settings, this.errorsDict);
+          if( JSON.stringify(dataDict) != OpData) {
+            OpData = JSON.stringify(dataDict);
+            SendDataToServer(SendData, this.settings, this.errorsDict);
+          }
         }
       }),
     };
