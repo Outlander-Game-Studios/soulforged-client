@@ -105,9 +105,9 @@ export default {
             dataDict[item.name]["icon"] = item.icon;
           }
         });
-        if( JSON.stringify(dataDict) != LocInv) {
-          SendData["data"] = dataDict;
-          LocInv = JSON.stringify(dataDict);
+        SendData["data"] = dataDict;
+        if( JSON.stringify(SendData) != LocInv) {
+          LocInv = JSON.stringify(SendData);
           SendDataToServer(SendData, this.settings, this.errorsDict);
         }
       }),
@@ -142,25 +142,26 @@ export default {
             }
           }
         });
-        if( JSON.stringify(dataDict) != CreData) {
-          CreData = JSON.stringify(dataDict);
-          SendData["data"] = dataDict;
+        SendData["data"] = dataDict;
+        if( JSON.stringify(SendData) != CreData) {
+          CreData = JSON.stringify(SendData);
           SendDataToServer(SendData, this.settings, this.errorsDict);
         }
       }), //Only log if hostile?
       locationDetails: locationStream.tap((loc) => {
         let SendData = {
-          node: this.location.id,
+          node: loc.id,
           dataType: "Location",
           sender: this.settings.userName,
         };
+        this.location.id = loc.id;
         let dataDict = {};
         dataDict["spacing"] = loc["spacing"];
         dataDict["paths"] = loc["paths"];
         dataDict["structures"] = loc["structures"];
-        if( JSON.stringify(dataDict) != LocData) {
-          LocData = JSON.stringify(dataDict);
-          SendData["data"] = dataDict;
+        SendData["data"] = dataDict;
+        if( JSON.stringify(SendData) != LocData) {
+          LocData = JSON.stringify(SendData);
           SendDataToServer(SendData, this.settings, this.errorsDict);
         }
       }),
@@ -177,9 +178,9 @@ export default {
             density: resource.density,
           };
         });
-        if( JSON.stringify(dataDict) != ResData) {
-          ResData = JSON.stringify(dataDict);
-          SendData["data"] = dataDict;
+        SendData["data"] = dataDict;
+        if( JSON.stringify(SendData) != ResData) {
+          ResData = JSON.stringify(SendData);
           SendDataToServer(SendData, this.settings, this.errorsDict);
         }
       }),
@@ -203,8 +204,8 @@ export default {
             sender: this.settings.userName,
             data: operation["context"],
           };
-          if( JSON.stringify(dataDict) != OpData) {
-            OpData = JSON.stringify(dataDict);
+          if( JSON.stringify(SendData) != OpData) {
+            OpData = JSON.stringify(SendData);
             SendDataToServer(SendData, this.settings, this.errorsDict);
           }
         }
