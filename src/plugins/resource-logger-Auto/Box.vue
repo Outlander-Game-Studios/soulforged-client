@@ -133,7 +133,7 @@ export default {
               nonAggressive: 0,
               hostile: cre.hostile,
             };
-            if (dataDict[cre.nonAggressive]) {
+            if (cre.nonAggressive) {
               dataDict[cre.icon]["nonAggressive"] =
                 dataDict[cre.icon]["nonAggressive"] + 1;
             } else {
