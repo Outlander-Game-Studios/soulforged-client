@@ -75,22 +75,29 @@ export default {
       .distinctUntilChanged(null, JSON.stringify)
       .switchMap(({ creatures }) =>
         GameService.getEntitiesStream(creatures, ENTITY_VARIANTS.BASE, true));
-    var LocInv = ""
-    var CreData = ""
-    var LocData = ""
-    var OpData = ""
-    var ResData = ""
+    var LocInv = "";
+    var CreData = "";
+    var LocData = "";
+    var OpData = "";
+    var ResData = "";
+    var LocInvArray = [];
+    var CreDataArray = [];
+    var ResDataArray = [];
+    var currentNodeID = -1;
 
     return {
       locationInventory: GameService.getInventoryStream(locationStream).tap((inventory) => {
         //Not sure what to do about trophies still, or anything with multiple of the same icon. This could cause items to be replaced if icon is used for the update.
         let SendData = {
-          node: this.location.id,
+          node: currentNodeID,
           dataType: "Inventory",
           sender: this.settings.userName,
         };
         let dataDict = {};
-        inventory.forEach((item) => {
+        for (const item of inventory) {
+          if(!LocInvArray.includes(item.id)) {
+              return;
+          }
           if (dataDict[item.name]) {
             dataDict[item.name]["amount"] =
               item.durabilityStage == 3
@@ -104,7 +111,7 @@ export default {
                 : item.amount;
             dataDict[item.name]["icon"] = item.icon;
           }
-        });
+        }
         SendData["data"] = dataDict;
         if( JSON.stringify(SendData) != LocInv) {
           LocInv = JSON.stringify(SendData);
@@ -113,12 +120,15 @@ export default {
       }),
       creatures: creatureStream.tap((creatures) => {
         let SendData = {
-          node: this.location.id,
+          node: currentNodeID,
           dataType: "Creatures",
           sender: this.settings.userName,
         };
         let dataDict = {};
-        creatures.forEach((cre) => {
+        for (const cre of creatures) {
+          if(!CreDataArray.includes(cre.id)) {
+              return;
+          }
           if (dataDict[cre.icon]) {
             if (cre.nonAggressive) {
               dataDict[cre.icon]["nonAggressive"] =
@@ -141,7 +151,7 @@ export default {
                 dataDict[cre.icon]["aggressive"] + 1;
             }
           }
-        });
+        }
         SendData["data"] = dataDict;
         if( JSON.stringify(SendData) != CreData) {
           CreData = JSON.stringify(SendData);
@@ -154,12 +164,15 @@ export default {
           dataType: "Location",
           sender: this.settings.userName,
         };
-        this.location.id = loc.id;
         let dataDict = {};
         dataDict["spacing"] = loc["spacing"];
         dataDict["paths"] = loc["paths"];
         dataDict["structures"] = loc["structures"];
         SendData["data"] = dataDict;
+        currentNodeID = loc.id;
+        LocInvArray = loc["inventory"];
+        CreDataArray = loc["creatures"];
+        ResDataArray = loc["resources"];
         if( JSON.stringify(SendData) != LocData) {
           LocData = JSON.stringify(SendData);
           SendDataToServer(SendData, this.settings, this.errorsDict);
@@ -167,30 +180,26 @@ export default {
       }),
       resources: resourceStream.tap((resources) => {
         let SendData = {
-          node: this.location.id,
+          node: currentNodeID,
           dataType: "Resource",
           sender: this.settings.userName,
         };
         let dataDict = {};
-        resources.forEach((resource) => {
+        for (const resource of resources) {
+          if(!ResDataArray.includes(resource.id)) {
+              return;
+          }
           dataDict[resource.name] = {
             icon: resource.icon,
             density: resource.density,
           };
-        });
+        }
         SendData["data"] = dataDict;
         if( JSON.stringify(SendData) != ResData) {
           ResData = JSON.stringify(SendData);
           SendDataToServer(SendData, this.settings, this.errorsDict);
         }
       }),
-      //paths: pathStream.tap((paths) => {  I am not sure we care about this data any more. I am removing it for now.
-      //    SendData = { node: this.location.id, dataType: "Path", sender: this.settings.userName};
-      //    dataDict = {};
-      //    paths.forEach((path) => {
-      //        dataDict[path.id] = path;
-      //    });
-      //}),
       operation: operationStream.tap((operation) => {
         if (
           operation &&
@@ -199,7 +208,7 @@ export default {
           operation.context.pathId
         ) {
           let SendData = {
-            node: this.location.id,
+            node: currentNodeID,
             dataType: "PathTravelData",
             sender: this.settings.userName,
             data: operation["context"],
