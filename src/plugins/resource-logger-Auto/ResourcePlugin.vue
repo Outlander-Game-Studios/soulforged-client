@@ -164,6 +164,7 @@ export default {
           dataType: "Location",
           sender: this.settings.userName,
         };
+        this.location.id = loc.id;
         let dataDict = {};
         dataDict["spacing"] = loc["spacing"];
         dataDict["paths"] = loc["paths"];
