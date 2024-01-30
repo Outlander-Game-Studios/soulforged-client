@@ -86,7 +86,31 @@ export default {
     var currentNodeID = -1;
 
     return {
+      locationDetails: locationStream.tap((loc) => {
+        let SendData = {
+          node: loc.id,
+          dataType: "Location",
+          sender: this.settings.userName,
+        };
+        this.location.id = loc.id;
+        let dataDict = {};
+        dataDict["spacing"] = loc["spacing"];
+        dataDict["paths"] = loc["paths"];
+        dataDict["structures"] = loc["structures"];
+        SendData["data"] = dataDict;
+        currentNodeID = loc.id;
+        LocInvArray = loc["inventory"];
+        CreDataArray = loc["creatures"];
+        ResDataArray = loc["resources"];
+        if( JSON.stringify(SendData) != LocData) {
+          LocData = JSON.stringify(SendData);
+          SendDataToServer(SendData, this.settings, this.errorsDict);
+        }
+      }),
       locationInventory: GameService.getInventoryStream(locationStream).tap((inventory) => {
+        if(inventory.length != LocInvArray.length) {
+            return;
+        }
         //Not sure what to do about trophies still, or anything with multiple of the same icon. This could cause items to be replaced if icon is used for the update.
         let SendData = {
           node: currentNodeID,
@@ -119,6 +143,9 @@ export default {
         }
       }),
       creatures: creatureStream.tap((creatures) => {
+        if(creatures.length != CreDataArray.length) {
+            return;
+        }
         let SendData = {
           node: currentNodeID,
           dataType: "Creatures",
@@ -157,29 +184,11 @@ export default {
           CreData = JSON.stringify(SendData);
           SendDataToServer(SendData, this.settings, this.errorsDict);
         }
-      }), //Only log if hostile?
-      locationDetails: locationStream.tap((loc) => {
-        let SendData = {
-          node: loc.id,
-          dataType: "Location",
-          sender: this.settings.userName,
-        };
-        this.location.id = loc.id;
-        let dataDict = {};
-        dataDict["spacing"] = loc["spacing"];
-        dataDict["paths"] = loc["paths"];
-        dataDict["structures"] = loc["structures"];
-        SendData["data"] = dataDict;
-        currentNodeID = loc.id;
-        LocInvArray = loc["inventory"];
-        CreDataArray = loc["creatures"];
-        ResDataArray = loc["resources"];
-        if( JSON.stringify(SendData) != LocData) {
-          LocData = JSON.stringify(SendData);
-          SendDataToServer(SendData, this.settings, this.errorsDict);
-        }
       }),
       resources: resourceStream.tap((resources) => {
+        if(resources.length != ResDataArray.length) {
+            return;
+        }
         let SendData = {
           node: currentNodeID,
           dataType: "Resource",
