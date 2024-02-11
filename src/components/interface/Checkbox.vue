@@ -5,6 +5,7 @@
       v-model="internalValue"
       ref="checkbox"
       @click="mouseClick()"
+      autocomplete="off"
     />
     <span class="text"><slot></slot></span>
   </label>
@@ -23,18 +24,6 @@ export default {
     internalValue: null,
     uniqueId: null,
   }),
-
-  mounted() {
-    setTimeout(() => {
-      // workaround for browser "back" navigation
-      if (
-        this.$refs.checkbox &&
-        !!this.$refs.checkbox.checked !== !!this.internalValue
-      ) {
-        this.$refs.checkbox.checked = this.internalValue;
-      }
-    });
-  },
 
   watch: {
     value: {
