@@ -37,7 +37,7 @@ export default {
     if (this.settings.website == null) {
       this.errorsDict["error"] = "No website entered, check Settings";
     } else {
-      fetch(this.settings.website + "/GetNodeDict")
+      fetch(this.settings.website.replace(/\/$/, "") + "/GetNodeDict") //Replace is supposed to remove trailing slash from input.
         .then((response) => response.json())
         .then((json) => (this.nodeDB = json))
         .catch((error) => (this.errorsDict["error"] = error));
@@ -48,7 +48,7 @@ export default {
       if (settings.website == null) {
         errorsDict["error"] = "No website entered, check Settings";
       } else {
-        fetch(settings.website + "/SubmitNodeData", {
+        fetch(settings.website.replace(/\/$/, "") + "/SubmitNodeData", { //Replace is supposed to remove trailing slash from input.
           method: "POST",
           body: JSON.stringify(sendData),
           headers: {
@@ -60,6 +60,8 @@ export default {
       }
     }
     const operationStream = GameService.getRootEntityStream().pluck("operation");
+    const rootStream = GameService.getRootEntityStream(); //Its kinda wierd to pluck operation, but not environment, but environment doesn't have node id within it.
+    //Maybe better to eventually have the rootstream process both instead of being seperate.
     const locationStream = GameService.getLocationStream();
     const pathStream = locationStream
       .map(({ id, paths }) => ({ id, paths }))
@@ -80,6 +82,7 @@ export default {
     var LocData = "";
     var OpData = "";
     var ResData = "";
+    var EnvData = "";
     var LocInvArray = [];
     var CreDataArray = [];
     var ResDataArray = [];
@@ -225,6 +228,23 @@ export default {
           };
           if( JSON.stringify(SendData) != OpData) {
             OpData = JSON.stringify(SendData);
+            SendDataToServer(SendData, this.settings, this.errorsDict);
+          }
+        }
+      }),
+      environment: rootStream.tap((root) => {
+        if (
+          root &&
+          root["environment"]
+        ) {
+          let SendData = {
+            node: root["location"],
+            dataType: "Environment",
+            sender: this.settings.userName,
+            data: root["environment"],
+          };
+          if( JSON.stringify(SendData) != EnvData) {
+            EnvData = JSON.stringify(SendData);
             SendDataToServer(SendData, this.settings, this.errorsDict);
           }
         }
