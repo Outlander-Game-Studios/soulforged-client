@@ -225,9 +225,9 @@ export default {
   }),
 
   subscriptions() {
-    const powersInfoStream = this.$stream("reFetchPowers").switchMap(() =>
-      Rx.fromPromise(GameService.requestPowersInfo())
-    );
+    const powersInfoStream = this.$stream("reFetchPowers")
+      .switchMap(() => Rx.fromPromise(GameService.requestPowersInfo()))
+      .shareReplay(1);
     return {
       purchasedPowers: GameService.getRootEntityStream().map((c) =>
         c.effects.toObject((e) => e.name)
