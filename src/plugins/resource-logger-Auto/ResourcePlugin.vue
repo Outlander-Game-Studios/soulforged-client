@@ -1,6 +1,6 @@
 <template>
   <HorizontalCenter>
-    <Container>
+    <Container v-if = "!settings.hideDisplay">
       <Spaced>{{ FetchErrors }} </Spaced>
       <Spaced>{{ LocationString }} </Spaced>
       <Spaced>{{ location.id }} </Spaced>
