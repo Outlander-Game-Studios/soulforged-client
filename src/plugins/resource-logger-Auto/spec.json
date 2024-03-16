@@ -12,6 +12,11 @@
       "id": "website",
       "name": "Website Domain",
       "type": "string"
+    },
+    {
+      "id": "hideDisplay",
+      "name": "Hide Plugin",
+      "type": "boolean"
     }
   ],
   "additions": {

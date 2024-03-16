@@ -1,6 +1,6 @@
 <template>
   <HorizontalCenter>
-    <Container>
+    <Container v-if = "!settings.hideDisplay">
       <Spaced>{{ FetchErrors }} </Spaced>
       <Spaced>{{ LocationString }} </Spaced>
       <Spaced>{{ location.id }} </Spaced>
@@ -155,11 +155,16 @@ export default {
           sender: this.settings.userName,
         };
         let dataDict = {};
+        let eliteDict = {};
         for (const cre of creatures) {
           if(!CreDataArray.includes(cre.id)) {
               return;
           }
-          if (dataDict[cre.icon]) {
+          if(cre.eliteIcon){
+              eliteDict[cre.id] = cre;
+              continue;
+          }
+          if(dataDict[cre.icon]) {
             if (cre.nonAggressive) {
               dataDict[cre.icon]["nonAggressive"] =
                 dataDict[cre.icon]["nonAggressive"] + 1;
@@ -183,6 +188,7 @@ export default {
           }
         }
         SendData["data"] = dataDict;
+        SendData["elite"] = eliteDict;
         if( JSON.stringify(SendData) != CreData) {
           CreData = JSON.stringify(SendData);
           SendDataToServer(SendData, this.settings, this.errorsDict);
