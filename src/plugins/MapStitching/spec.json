@@ -1,0 +1,20 @@
+{
+  "name": "Map Stitch Image Collector",
+  "author": "Simbu",
+  "enabled": true,
+  "settings": [
+    {
+      "id": "uploadLink",
+      "name": "Upload Link",
+      "type": "string"
+    },
+    {
+      "id": "hashLink",
+      "name": "Hash Link",
+      "type": "string"
+    }
+  ],
+  "additions": {
+    "map-location": "MapStitchCollect.vue"
+  }
+}
