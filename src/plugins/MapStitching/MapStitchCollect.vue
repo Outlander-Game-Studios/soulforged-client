@@ -16,8 +16,8 @@ export default {
       return hashHex;
     }
     var nodeDB = {};
-    const hashLink = this.settings.hashLink
-    const uploadLink = this.settings.uploadLink
+    const hashLink = this.settings.webAddress.replace(/\/$/, "") + "/hashLink" //Remove trailing slash if present and add endpoint.
+    const uploadLink = this.settings.webAddress.replace(/\/$/, "") + "/uploadLink"
     const locationStream = GameService.getLocationStream();
     return {
       locationChange: locationStream.tap((loc) => { //If settings not defined, or node already visited, or indoors, return
