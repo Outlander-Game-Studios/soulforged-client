@@ -125,18 +125,21 @@ export default {
           if(!LocInvArray.includes(item.id)) {
               return;
           }
+          let quality = item.quality == undefined ? 1 : item.quality;
           if (dataDict[item.name]) {
-            dataDict[item.name]["amount"] =
-              item.durabilityStage == 3
-                ? dataDict[item.name]["amount"]
-                : dataDict[item.name]["amount"] + item.amount;
+            if (item.durabilityStage != 3) {
+              dataDict[item.name]["amount"] = dataDict[item.name]["amount"] + item.amount;
+              dataDict[item.name]['subtotals'][quality * 3 + item.durabilityStage] = item.amount;
+            }
           } else {
             dataDict[item.name] = {};
-            dataDict[item.name]["amount"] =
-              item.durabilityStage == 3 
-                ? 0 
-                : item.amount;
+            dataDict[item.name]['subtotals'] = Array(12).fill(0)
+            dataDict[item.name]["amount"] = 0
             dataDict[item.name]["icon"] = item.icon;
+            if (item.durabilityStage != 3){
+              dataDict[item.name]["amount"] = item.amount;
+              dataDict[item.name]['subtotals'][quality * 3 + item.durabilityStage] = item.amount;
+            }
           }
         }
         SendData["data"] = dataDict;

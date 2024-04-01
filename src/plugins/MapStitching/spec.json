@@ -1,0 +1,15 @@
+{
+  "name": "Map Stitch Image Collector",
+  "author": "Simbu",
+  "enabled": true,
+  "settings": [
+    {
+      "id": "webAddress",
+      "name": "Website Address",
+      "type": "string"
+    }
+  ],
+  "additions": {
+    "map-location": "MapStitchCollect.vue"
+  }
+}
