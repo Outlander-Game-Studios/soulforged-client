@@ -21,7 +21,7 @@ export default {
     const locationStream = GameService.getLocationStream();
     return {
       locationChange: locationStream.tap((loc) => { //If settings not defined, or node already visited, or indoors, return
-        if(this.settings.hashLink == undefined || this.settings.uploadLink == undefined || nodeDB[loc.id] || loc['indoors']){
+        if(this.settings.webAddress == undefined || nodeDB[loc.id] || loc['indoors']){
             return;
         }
         nodeDB[loc.id] = true; //Note that we have been at this node now
