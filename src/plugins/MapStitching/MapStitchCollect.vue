@@ -16,12 +16,11 @@ export default {
       return hashHex;
     }
     var nodeDB = {};
-    const hashLink = this.settings.webAddress.replace(/\/$/, "") + "/hashLink" //Remove trailing slash if present and add endpoint.
-    const uploadLink = this.settings.webAddress.replace(/\/$/, "") + "/uploadLink"
+    const webAddress = this.settings.webAddress //this won't work inside the promises, so define a const to use.
     const locationStream = GameService.getLocationStream();
     return {
       locationChange: locationStream.tap((loc) => { //If settings not defined, or node already visited, or indoors, return
-        if(this.settings.webAddress == undefined || nodeDB[loc.id] || loc['indoors']){
+        if(webAddress == undefined || nodeDB[loc.id] || loc['indoors']){
             return;
         }
         nodeDB[loc.id] = true; //Note that we have been at this node now
@@ -35,7 +34,7 @@ export default {
           a.onloadend = function () { //After being read
               let hashPromise = hash(a.result); //Hash the image
               hashPromise.then((hash) => { //Send the hash, and the location id to be checked.
-                  fetch(hashLink, { 
+                  fetch(webAddress.replace(/\/$/, "") + "/hashLink", { //Remove trailing slash if present and add endpoint.
                       method: "POST",
                       body: JSON.stringify({"id" : loc.id, "hash": hash}),
                       headers: {
@@ -46,7 +45,7 @@ export default {
                       if(data == "NEED"){ //If Server needs data
                           let formData = new FormData(); //Prep the image to be sent
                           formData.append("ufile", nodeDB['lastBlob'], loc.id + '.jpg');   
-                          fetch(uploadLink, { //And upload.
+                          fetch(webAddress.replace(/\/$/, "") + "/uploadLink", { //And upload.
                               method: "POST",
                               body: formData
                           })
