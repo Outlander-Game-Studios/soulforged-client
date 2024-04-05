@@ -111,9 +111,6 @@ export default {
         }
       }),
       locationInventory: GameService.getInventoryStream(locationStream).tap((inventory) => {
-        if(inventory.length != LocInvArray.length) {
-            return;
-        }
         //Not sure what to do about trophies still, or anything with multiple of the same icon. This could cause items to be replaced if icon is used for the update.
         let SendData = {
           node: currentNodeID,
@@ -149,9 +146,6 @@ export default {
         }
       }),
       creatures: creatureStream.tap((creatures) => {
-        if(creatures.length != CreDataArray.length) {
-            return;
-        }
         let SendData = {
           node: currentNodeID,
           dataType: "Creatures",
@@ -198,9 +192,6 @@ export default {
         }
       }),
       resources: resourceStream.tap((resources) => {
-        if(resources.length != ResDataArray.length) {
-            return;
-        }
         let SendData = {
           node: currentNodeID,
           dataType: "Resource",
