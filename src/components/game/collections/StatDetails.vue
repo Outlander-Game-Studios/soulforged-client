@@ -19,7 +19,7 @@
     </div>
     <LabeledValue label="Known related skills">
       <span v-if="info.relatedSkills && info.relatedSkills.length">
-        {{ info.relatedSkills.join(", ") }}
+        <RichText :value="info.relatedSkills.join(', ')" />
       </span>
       <span v-else> None </span>
     </LabeledValue>
