@@ -106,6 +106,21 @@
                 @click="selectResearch(research)"
                 :research="research"
               />
+              <Spaced v-if="undiscoveredResearchCounts">
+                <Description>
+                  <HorizontalCenter>
+                    <div>
+                      {{ undiscoveredResearchCounts }} undiscovered researches.
+                    </div>
+                    <Help title="Discovering Researches">
+                      You unlock new researches by interacting with the world,
+                      obtaining new items and increasing your highest ever skill
+                      levels. The exact details on obtaining each specific
+                      research are left for players to find out.
+                    </Help>
+                  </HorizontalCenter>
+                </Description>
+              </Spaced>
             </Vertical>
           </div>
         </Spaced>
@@ -201,6 +216,8 @@ export default {
             inventoryStream.delay(delay)
           ).map((items) => items.filter((item) => !!item).sort(itemSorter))
       ),
+      undiscoveredResearchCounts:
+        GameService.getResearchesCountsStream().pluck("undiscovered"),
       allResearches: researchesStream,
       researches: Rx.combineLatest([
         this.$stream("displayMode"),

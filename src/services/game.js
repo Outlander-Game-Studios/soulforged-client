@@ -243,6 +243,16 @@ export const GameService = (window.GameService = {
       )
       .map((researches) => researches.filter((research) => !!research));
   },
+  getResearchesCountsStream() {
+    return GameService.getKnowledgeBaseStream().map((knowledgeBase) => {
+      const { researchesIds, totalResearchCount } = knowledgeBase;
+      return {
+        total: totalResearchCount,
+        discovered: researchesIds.length,
+        undiscovered: totalResearchCount - researchesIds.length,
+      };
+    });
+  },
   fetchCraftDetails(craftId, nameOnly = false) {
     return GameService.getInfoStream("Craft", { nameOnly, craftId })
       .first()
@@ -446,13 +456,12 @@ export const GameService = (window.GameService = {
           )
       : Rx.Observable.of([]);
 
-    return Rx.combineLatest(
-      locationStructures,
-      pathsStructures
-    ).map(([locationStructures, pathsStructures]) => [
-      ...(locationStructures || []),
-      ...(pathsStructures || []),
-    ]);
+    return Rx.combineLatest(locationStructures, pathsStructures).map(
+      ([locationStructures, pathsStructures]) => [
+        ...(locationStructures || []),
+        ...(pathsStructures || []),
+      ]
+    );
   },
 
   getLocationImgPath(location) {

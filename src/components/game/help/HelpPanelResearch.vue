@@ -6,8 +6,8 @@
     </p>
     <p>
       You unlock new researches by interacting with the world, obtaining new
-      items and gaining skill levels. The exact details on obtaining each
-      specific research are left for players to find out.
+      items and increasing your highest ever skill levels. The exact details on
+      obtaining each specific research are left for players to find out.
     </p>
     <p>
       Each research requires that you spend items to unlock the recipe. Using a
