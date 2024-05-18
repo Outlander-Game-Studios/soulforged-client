@@ -90,7 +90,7 @@
         selector=".controls-sticky .ap-container"
         placement="right"
       >
-        <Help title="Essence"><HelpActionPoints /></Help>
+        <Help title="Action Points"><HelpActionPoints /></Help>
         Action Points
       </ExplanationIndicator>
       <ExplanationIndicator
@@ -98,14 +98,14 @@
         landscapePlacement="right"
         portraitPlacement="top"
       >
-        <Help title="Essence"><HelpYourLocation /></Help>
+        <Help title="Your location"><HelpYourLocation /></Help>
         Your location
       </ExplanationIndicator>
       <ExplanationIndicator
         selector=".controls-sticky .effects-container"
         placement="right"
       >
-        <Help title="Effects"><HelpEffects /></Help>
+        <Help title="Your effects"><HelpEffects /></Help>
         Your effects
       </ExplanationIndicator>
       <ExplanationIndicator
@@ -134,7 +134,7 @@
       <template v-slot:title>
         Community Plugins
 
-        <Help title="Effects"><HelpPlugins /></Help>
+        <Help title="Community Plugins"><HelpPlugins /></Help>
       </template>
       <template v-slot:contents>
         <PluginSettings />
