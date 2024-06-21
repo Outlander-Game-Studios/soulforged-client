@@ -11,7 +11,6 @@
 
 <script>
 import essenceIcon from "../../assets/ui/cartoon/icons/essence.v2.png";
-import "../../../common/utils/index.js";
 
 export default {
   props: {
@@ -57,7 +56,8 @@ export default {
 
   &.inline {
     display: inline-block;
-    > * {
+
+    >* {
       display: inline-block;
       vertical-align: bottom;
     }
@@ -87,9 +87,11 @@ export default {
       margin-left: 0;
       margin-right: 0.3rem;
     }
+
     .label {
       padding: 0 0 0 0.5rem;
     }
+
     flex-direction: row-reverse;
   }
 }

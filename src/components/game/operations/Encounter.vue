@@ -33,7 +33,9 @@
               </div>
               <div class="friendly">
                 <div>
-                  <Container><header>Friendly</header></Container>
+                  <Container>
+                    <header>Friendly</header>
+                  </Container>
                 </div>
                 <div class="creatures-icons">
                   <LoadingPlaceholder v-if="!friendlies" :size="6" />
@@ -41,14 +43,17 @@
                     v-for="(friendly, idx) in friendlies"
                     :key="friendly.id"
                     :creature="friendly"
-                    class="interactive"
+                    class="interactive friendly-creature"
+                    :class="{ ready: friendly.operationInfo?.isReady }"
                     @click="selectedCreatureId = friendly.id"
                   />
                 </div>
               </div>
               <div class="hostile">
                 <div>
-                  <Container><header>Hostile</header></Container>
+                  <Container>
+                    <header>Hostile</header>
+                  </Container>
                 </div>
                 <div class="creatures-icons">
                   <LoadingPlaceholder v-if="!hostiles" :size="6" />
@@ -70,6 +75,14 @@
             Some creatures are engaged in combat, you must wait for it to be
             resolved before you're able to engage
           </div>
+          <HorizontalCenter v-else-if="operation.context.showReady">
+            <Checkbox
+              :value="operation.context.isReady"
+              @input="setReadiness($event)"
+            >
+              Ready
+            </Checkbox>
+          </HorizontalCenter>
           <HorizontalFill
             v-if="
               (!hostiles || hostiles.length) &&
@@ -208,6 +221,10 @@ export default window.OperationEncounter = {
   },
 
   methods: {
+    setReadiness(value) {
+      this.action("setReady", { ready: value });
+    },
+
     commence() {
       GameService.request(REQUEST_CODES.COMMENCE_OPERATION, {
         startEncounter: true,
@@ -216,10 +233,11 @@ export default window.OperationEncounter = {
       });
     },
 
-    action(action) {
+    action(action, params = {}) {
       GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
         updateType: "action",
         action,
+        ...params,
       });
     },
 
@@ -258,20 +276,30 @@ export default window.OperationEncounter = {
   .friendly {
     max-width: 50%;
     flex-grow: 1;
+
     header {
       padding-right: 4rem;
       background: #11af11;
+    }
+
+    .friendly-creature {
+      &:not(.ready) {
+        @include filter(brightness(0.75) saturate(0.5));
+        opacity: 0.5;
+      }
     }
   }
 
   .hostile {
     max-width: 50%;
     flex-grow: 1;
+
     header {
       padding-left: 4rem;
       background: #880000;
       text-align: right;
     }
+
     .creatures-icons {
       justify-content: flex-end;
     }
