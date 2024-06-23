@@ -53,52 +53,6 @@ export default {
   data: () => ({
     showVersion: null,
     showSinceLast: true,
-    spam: `Added a new statistics screen that shows some information about player
-      count and server uptime.Added a new statistics screen that shows some
-      information about player count and server uptime.Added a new statistics
-      screen that shows some information about player count and server
-      uptime.Added a new statistics screen that shows some information about
-      player count and server uptime.Added a new statistics screen that shows
-      some information about player count and server uptime.Added a new
-      statistics screen that shows some information about player count and
-      server uptime.Added a new statistics screen that shows some information
-      about player count and server uptime.Added a new statistics screen that
-      shows some information about player count and server uptime.Added a new
-      statistics screen that shows some information about player count and
-      server uptime.Added a new statistics screen that shows some information
-      about player count and server uptime.Added a new statistics screen that
-      shows some information about player count and server uptime.Added a new
-      statistics screen that shows some information about player count and
-      server uptime.Added a new statistics screen that shows some information
-      about player count and server uptime.Added a new statistics screen that
-      shows some information about player count and server uptime.Added a new
-      statistics screen that shows some information about player count and
-      server uptime.Added a new statistics screen that shows some information
-      about player count and server uptime.Added a new statistics screen that
-      shows some information about player count and server uptime.Added a new
-      statistics screen that shows some information about player count and
-      server uptime.Added a new statistics screen that shows some information
-      about player count and server uptime.Added a new statistics screen that
-      shows some information about player count and server uptime.Added a new
-      statistics screen that shows some information about player count and
-      server uptime.Added a new statistics screen that shows some information
-      about player count and server uptime.Added a new statistics screen that
-      shows some information about player count and server uptime.Added a new
-      statistics screen that shows some information about player count and
-      server uptime.Added a new statistics screen that shows some information
-      about player count and server uptime.Added a new statistics screen that
-      shows some information about player count and server uptime.Added a new
-      statistics screen that shows some information about player count and
-      server uptime.Added a new statistics screen that shows some information
-      about player count and server uptime.Added a new statistics screen that
-      shows some information about player count and server uptime.Added a new
-      statistics screen that shows some information about player count and
-      server uptime.Added a new statistics screen that shows some information
-      about player count and server uptime.Added a new statistics screen that
-      shows some information about player count and server uptime.Added a new
-      statistics screen that shows some information about player count and
-      server uptime.Added a new statistics screen that shows some information
-      about player count and server uptime.`,
   }),
 
   subscriptions() {

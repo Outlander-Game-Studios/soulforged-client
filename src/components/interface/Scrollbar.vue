@@ -1,3 +1,5 @@
+<template></template>
+
 <style lang="scss">
 @import "../../utils";
 
