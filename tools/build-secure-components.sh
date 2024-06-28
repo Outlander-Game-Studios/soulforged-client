@@ -25,7 +25,7 @@ for FILE in $FILES; do
   TEMP=${FILE##*/}
   FILENAME=${TEMP%.vue}
   echo "Building ${FILE}..."
-  ./node_modules/.bin/vue-cli-service build $EXTRA_PARAMS --target lib --dest .data/engine/server/assets/operations/dist/$FILENAME/ $FILE --name index &
+  ./node_modules/.bin/vue-cli-service build $EXTRA_PARAMS --target lib --dest .data/engine/server/assets/operations/dist/$FILENAME/ $FILE --name index
 done
 
-wait
+# wait
