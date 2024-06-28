@@ -1,9 +1,4 @@
-import crypto from "crypto";
-
-const hash = (method) => (string) =>
-  crypto.createHash(method).update(string).digest("hex");
-
-const md5 = hash("md5");
+import { md5 } from "./md5.js";
 
 const sum = (acc, i) => acc + i;
 const multiply = (acc, i) => acc * i;

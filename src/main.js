@@ -84,4 +84,5 @@ try {
 } catch (e) {
   document.getElementById("criticalFailure").innerText =
     e.message + "\n" + e.stack;
+  throw e;
 }

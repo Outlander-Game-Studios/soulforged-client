@@ -2,6 +2,20 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "build-secure-components": "./tools/build-secure-components.sh",
+    "build-secure-components:watch": "./tools/build-secure-components.sh -watch",
+    "build": "yarn vue-cli-service build",
+    "build:watch": "yarn build --watch",
+    "build-all": "npm-run-all --parallel build build-secure-components",
+    "build-all:watch": "npm-run-all --parallel build:watch build-secure-components build-secure-components:watch",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook -o .storybook/dist",
+    "test-storyshots": "npm-run-all build-storybook test-storyshots:run",
+    "test-storyshots:update": "npm-run-all build-storybook test-storyshots:run-update",
+    "test-storyshots:run": "jest storyshots.runner.js --testRegex='.'",
+    "test-storyshots:run-update": "jest storyshots.runner.js --testRegex='.' -u"
+  },
   "dependencies": {
     "core-js": "^3.6.5",
     "howler": "^2.2.3",
@@ -49,12 +63,7 @@
     "last 2 versions",
     "not dead"
   ],
-  "scripts": {
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook -o .storybook/dist",
-    "test-storyshots": "npm-run-all build-storybook test-storyshots:run",
-    "test-storyshots:update": "npm-run-all build-storybook test-storyshots:run-update",
-    "test-storyshots:run": "jest storyshots.runner.js --testRegex='.'",
-    "test-storyshots:run-update": "jest storyshots.runner.js --testRegex='.' -u"
+  "engines": {
+    "node": ">=22.0.0"
   }
 }
