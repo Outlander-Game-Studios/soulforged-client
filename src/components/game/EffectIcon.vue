@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import { formatNumber } from "../../../common/utils/misc.js";
 import iconClickSound from "../../assets/sounds/icon-click.mp3";
 
 export default {
@@ -39,7 +38,7 @@ export default {
   },
 
   methods: {
-    formatNumber,
+    formatNumber: global.formatNumber,
     mouseClick($event) {
       if (!!this.$listeners.click) {
         this.$emit("click", $event);

@@ -93,7 +93,6 @@
 </template>
 
 <script>
-import { formatNumber } from "../../../common/utils/misc.js";
 import Horizontal from "../layouts/Horizontal";
 
 export default {

@@ -26,7 +26,6 @@ import durabilityBorder0 from "../../../assets/ui/cartoon/borders/item-durabilit
 import durabilityBorder1 from "../../../assets/ui/cartoon/borders/item-durability-1.jpg";
 import durabilityBorder2 from "../../../assets/ui/cartoon/borders/item-durability-2.jpg";
 import durabilityBorder3 from "../../../assets/ui/cartoon/borders/item-durability-3.jpg";
-import { formatNumber } from "../../../../common/utils/misc.js";
 import iconClickSound from "../../../assets/sounds/icon-click.mp3";
 
 const durabilityBorder = [
@@ -98,7 +97,7 @@ export default {
   },
 
   methods: {
-    formatNumber,
+    formatNumber: global.formatNumber,
     mouseClick($event) {
       if (!!this.$listeners.click) {
         this.$emit("click", $event);
