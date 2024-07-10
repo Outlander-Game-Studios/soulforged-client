@@ -2,7 +2,7 @@
   <Vertical>
     <Header>Available plugins</Header>
     <LoadingPlaceholder v-if="!pluginsEnabled" />
-    <Container v-else v-for="plugin in workingPlugins">
+    <Container v-else v-for="plugin in workingPlugins" :key="plugin.name">
       <Spaced>
         <Horizontal>
           <div class="flex-grow">
@@ -43,7 +43,7 @@
         <template v-slot:header> Disabled plugins </template>
         <template v-slot:content>
           <Vertical>
-            <Container v-for="plugin in disabledPlugins">
+            <Container v-for="plugin in disabledPlugins" :key="plugin.name">
               <Spaced>
                 <Horizontal>
                   <div class="flex-grow">

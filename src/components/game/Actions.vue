@@ -50,7 +50,7 @@
               :size="3.5"
               v-if="actionPoints && calculatingAp"
             />
-            <APBar v-else-if="actionPoints" />
+            <APBarCurrent v-else-if="actionPoints" />
           </div>
           <div
             v-for="parameter in currentAction.parameters"

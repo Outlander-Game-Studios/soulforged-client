@@ -7,6 +7,7 @@
       <HorizontalWrap>
         <Checkbox
           v-for="(filter, label) in FILTERS"
+          :key="label"
           @input="toggleFilter(filter, $event)"
           :value="operation.context.typeFilters[filter]"
         >

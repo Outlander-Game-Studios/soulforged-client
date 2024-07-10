@@ -247,7 +247,7 @@
       <template v-slot:title> Info </template>
       <template v-slot:contents>
         <Vertical>
-          <APBar v-if="!!currentAPCost" />
+          <APBarCurrent v-if="!!currentAPCost" />
           <Description prominent>
             {{ ACTION_DESCRIPTION[currentAction] }}
           </Description>
@@ -288,7 +288,7 @@
       <template v-slot:title> Cleanup weeds </template>
       <template v-slot:contents>
         <Vertical>
-          <APBar />
+          <APBarCurrent />
           <SkillInfoDisplay :operation="operation" />
           <HorizontalCenter>
             <Button @click="commence()"> Confirm </Button>
@@ -301,7 +301,7 @@
       <template v-slot:contents>
         <Vertical>
           <div v-if="!harvestingProcessing">
-            <APBar />
+            <APBarCurrent />
             <Spaced>
               <SkillInfoDisplay :operation="operation" />
             </Spaced>
