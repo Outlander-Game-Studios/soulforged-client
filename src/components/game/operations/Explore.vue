@@ -1,7 +1,21 @@
 <template>
   <div class="explore-operation">
     <CloseButton class="close-button" @click="cancel()" />
-    <Header>Exploration</Header>
+    <Header>
+      Exploration
+      <Help title="Exploration">
+        You are about to embark on an exploration of a
+        <em>dungeon instance</em>.<br />
+        You party will include anyone who requests to join you and whose
+        requests you will accept.<br />
+        Once embarked only the people you took with you will have access to that
+        <em>instance</em> of the <em>dungeon</em>. No one else, invited or
+        otherwise, will be able to enter.<br />
+        Once inside you will be able to explore the dungeon, attempt to overcome
+        the challenges and help yourself to any loot you may find and carry
+        outside.
+      </Help>
+    </Header>
     <LoadingPlaceholder v-if="!requestingIds || !inviteesIds" />
     <Vertical v-else-if="!isLeading && !amInvited">
       <Spaced>
@@ -59,10 +73,10 @@ export default window.OperationExplore = {
       .map((op) => op.context.leadExplorer)
       .switchMap((id) => GameService.getEntityStream(id));
     const inviteesIdsStream = leadExplorerStream.map(
-      (c) => c.operationInfo.invited
+      (c) => c.operationInfo?.invited || []
     );
     const requestingIdsStream = leadExplorerStream.map(
-      (c) => c.operationInfo.requesting
+      (c) => c.operationInfo?.requesting || []
     );
     return {
       leadExplorer: leadExplorerStream,
