@@ -22,6 +22,15 @@ export default {
     setTimeout(() => {
       this.recalculateFontSizeOverride();
     });
+    setTimeout(() => {
+      this.recalculateFontSizeOverride();
+    }, 50);
+    setTimeout(() => {
+      this.recalculateFontSizeOverride();
+    }, 100);
+    setTimeout(() => {
+      this.recalculateFontSizeOverride();
+    }, 300);
     setInterval(() => {
       this.recalculateFontSizeOverride(true);
     }, 1000);
