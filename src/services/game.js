@@ -844,6 +844,7 @@ export const GameService = (window.GameService = {
       stacktrace: error?.stack,
       userAgent: global.navigator?.userAgent,
     });
+    console.error(error);
   },
 
   triggerExecutor(executorGroup, executor, args = {}) {

@@ -20,8 +20,11 @@ export default {
       fontSizeOriginal = parseInt(window.getComputedStyle(html).fontSize, 10);
     }
     setTimeout(() => {
-      this.handleResize();
+      this.recalculateFontSizeOverride();
     });
+    setInterval(() => {
+      this.recalculateFontSizeOverride(true);
+    }, 1000);
   },
 
   destroyed() {
@@ -30,18 +33,20 @@ export default {
 
   methods: {
     handleResize() {
+      this.recalculateFontSizeOverride();
+    },
+
+    recalculateFontSizeOverride(failsafe = false) {
       fontSizeOverride = fontSizeOverride || fontSizeOriginal;
       let newOverride;
-      const referenceSize = this.$refs.sizeReference?.getBoundingClientRect()
-        .width;
+      const referenceSize =
+        this.$refs.sizeReference?.getBoundingClientRect().width;
       if (!referenceSize) {
         return;
       }
-      const isMacOS = (
-        navigator?.userAgentData?.platform || navigator?.platform
-      )
-        ?.toLowerCase()
-        .includes("mac");
+      const platform =
+        navigator?.userAgentData?.platform || navigator?.platform;
+      const isMacOS = platform?.toLowerCase().includes("mac");
       const devicePixelRatio = window.devicePixelRatio / (isMacOS ? 2 : 1);
       const pixelRatio = ControlsService.isTouchDevice()
         ? 1
@@ -59,7 +64,17 @@ export default {
         if (newOverride > 12) {
           newOverride = newOverride * 0.625;
         }
-        if (newOverride !== fontSizeOverride) {
+        const isChanged = failsafe
+          ? Math.abs(
+              Math.round(10 * newOverride) - Math.round(10 * fontSizeOverride)
+            ) > 1
+          : newOverride !== fontSizeOverride;
+        if (isChanged) {
+          if (failsafe) {
+            GameService.reportClientSideError({
+              message: `Detected invalid scaling ${fontSizeOverride} -> ${newOverride} Agent: ${platform}`,
+            });
+          }
           fontSizeOverride = newOverride;
           window.fontSizeOverride = fontSizeOverride;
           document.querySelector("html").style.fontSize =
