@@ -53,7 +53,6 @@ try {
 
   window.onerror = function (message, source, lineno, colno, error) {
     console.error("Generic JS error.");
-    console.error(error);
     GameService.reportClientSideError({
       message: error.toString(),
       stack: error.stack,
