@@ -79,11 +79,23 @@ export default {
             ) > 1
           : newOverride !== fontSizeOverride;
         if (isChanged) {
+          const data = {
+            referenceSize,
+            screenSize,
+            width,
+            height,
+            targetRatio,
+          };
           if (failsafe) {
+            const lastData = window.lastAutoSizeData || {};
+            const diff = Object.keys(data)
+              .map((p) => `${p}: ${lastData[p]} -> ${data[p]}`)
+              .join("\n");
             GameService.reportClientSideError({
-              message: `Detected invalid scaling ${fontSizeOverride} -> ${newOverride} Agent: ${platform}`,
+              message: `Detected invalid scaling.\nFontSize: ${fontSizeOverride} -> ${newOverride}\nAgent: ${platform}\nData: ${diff}`,
             });
           }
+          window.lastAutoSizeData = data;
           fontSizeOverride = newOverride;
           window.fontSizeOverride = fontSizeOverride;
           document.querySelector("html").style.fontSize =
