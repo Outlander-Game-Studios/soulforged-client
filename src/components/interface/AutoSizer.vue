@@ -97,9 +97,9 @@ export default {
                     : `${p}: ${lastData[p]} -> ${data[p]}`
                 )
                 .join("\n");
-              GameService.reportClientSideError({
-                message: `Detected invalid scaling.\nFontSize: ${fontSizeOverride} -> ${newOverride}\nAgent: ${platform}\nData: ${diff}`,
-              });
+              // GameService.reportClientSideError({
+              //   message: `Detected invalid scaling.\nFontSize: ${fontSizeOverride} -> ${newOverride}\nAgent: ${platform}\nData: ${diff}`,
+              // });
             }
             window.lastAutoSizeData = data;
           } catch (e) {}
