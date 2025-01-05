@@ -86,15 +86,20 @@ export default {
               width,
               height,
               targetRatio,
+              changedTime: new Date().getTime(),
             };
             if (failsafe) {
               const lastData = window.lastAutoSizeData || {};
               const diff = Object.keys(data)
-                .map((p) => `${p}: ${lastData[p]} -> ${data[p]}`)
+                .map((p) =>
+                  p === "changedTime"
+                    ? `${p}: ${(data[p] - lastData[p]) / 1000}s ago`
+                    : `${p}: ${lastData[p]} -> ${data[p]}`
+                )
                 .join("\n");
-              GameService.reportClientSideError({
-                message: `Detected invalid scaling.\nFontSize: ${fontSizeOverride} -> ${newOverride}\nAgent: ${platform}\nData: ${diff}`,
-              });
+              // GameService.reportClientSideError({
+              //   message: `Detected invalid scaling.\nFontSize: ${fontSizeOverride} -> ${newOverride}\nAgent: ${platform}\nData: ${diff}`,
+              // });
             }
             window.lastAutoSizeData = data;
           } catch (e) {}

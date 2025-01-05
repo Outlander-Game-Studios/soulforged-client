@@ -226,7 +226,7 @@
               <Input
                 v-model="newActionLabel"
                 :maxLength="32"
-                :placeholder="selectedAction ? selectedAction.label : ''"
+                :placeholder="newActionDefaultLabel"
               />
             </div>
           </template>
@@ -315,6 +315,12 @@ export default {
         (a) => a.actionId === this.selectedActionId
       );
     },
+    newActionDefaultLabel() {
+      if (this.selectedAction) {
+        return GameService.stripRichText(this.selectedAction.label);
+      }
+      return "";
+    },
   },
 
   created() {
@@ -377,7 +383,7 @@ export default {
       );
       const newQuickAction = {
         actionId: action.actionId,
-        label: this.newActionLabel || action.label,
+        label: this.newActionLabel || this.newActionDefaultLabel,
       };
       if (this.specificInstance) {
         newQuickAction.itemId = this.selectedItem.id;

@@ -679,9 +679,12 @@ export default window.OperationFarming = {
     },
 
     weedStyle(plot) {
-      const base = random.number(1, 1000, plot.id);
-      const x = 50 + 25 * Math.sin(base);
-      const y = 50 + 25 * Math.abs(Math.cos(base));
+      const randomSeed = plot.id;
+      const base = random.number(1, 1000, randomSeed);
+      const xShift = random.number(15, 25, randomSeed);
+      const yShift = random.number(15, 25, randomSeed);
+      const x = 50 + xShift * Math.sin(base) + 10 * Math.sign(Math.sin(base));
+      const y = 50 + yShift * Math.abs(Math.cos(base));
       return {
         top: y + "%",
         left: x + "%",
