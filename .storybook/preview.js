@@ -1,3 +1,4 @@
+console.log("Storybook preview.js is being loaded!");
 import "rxjs";
 import VueRx from "vue-rx";
 import Vue from "vue";

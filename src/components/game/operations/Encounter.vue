@@ -44,7 +44,7 @@
                     :key="friendly.id"
                     :creature="friendly"
                     class="interactive friendly-creature"
-                    :class="{ ready: friendly.operationInfo?.isReady }"
+                    :class="{ ready: (friendly.operationInfo && friendly.operationInfo.isReady) }"
                     @click="selectedCreatureId = friendly.id"
                   />
                 </div>
