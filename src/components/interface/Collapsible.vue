@@ -50,7 +50,6 @@ export default {
   background-image: url(ui-asset('/misc/arrow_right.png'));
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  @include utils.filter-fix();
   transform: rotate(90deg);
   transition: all 0.1s ease-in-out;
   transition-property: filter, transform;

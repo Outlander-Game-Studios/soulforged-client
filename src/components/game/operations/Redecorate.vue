@@ -8,7 +8,7 @@
         includeLocation
       >
         <LabeledValue label="Slots">
-          {{ item.decorSlots && item.decorSlots.join(", ") }}
+          {{ item.decorSlots && item.decorSlots.join(', ') }}
         </LabeledValue>
         <DisplayImpacts :impacts="item.decorImpacts" />
       </ItemSelector>
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-export default window.OperationRedecorate = {
+const OperationRedecorate = {
   props: {
     operation: {},
   },
@@ -56,92 +56,87 @@ export default window.OperationRedecorate = {
 
   watch: {
     operation() {
-      this.updateConsideredAP();
+      this.updateConsideredAP()
     },
   },
 
   computed: {
     itemFilter() {
-      const slotName = this.home.decorations[this.replacingSlot].slotName;
+      const slotName = this.home.decorations[this.replacingSlot].slotName
       return (item) => {
-        return (
-          item.decorSlots &&
-          item.decorSlots.includes(slotName) &&
-          !item.isRuined
-        );
-      };
+        return item.decorSlots && item.decorSlots.includes(slotName) && !item.isRuined
+      }
     },
 
     selectedDecor() {
       if (!this.home || !this.items || !this.operation) {
-        return [];
+        return []
       }
-      let lastSlot = null;
+      let lastSlot = null
       return this.home.decorations.map((slot) => ({
         ...slot,
-        slotName: lastSlot === slot.slotName ? "" : (lastSlot = slot.slotName),
+        slotName: lastSlot === slot.slotName ? '' : (lastSlot = slot.slotName),
         item: this.items[this.operation.context.decor[slot.slotId]],
-      }));
+      }))
     },
   },
 
   subscriptions() {
-    const homeStream = this.$stream("operation").switchMap((operation) =>
-      GameService.getEntityStream(
-        operation.context.home,
-        ENTITY_VARIANTS.DETAILS
-      )
-    );
+    const homeStream = this.$stream('operation').switchMap((operation) =>
+      GameService.getEntityStream(operation.context.home, ENTITY_VARIANTS.DETAILS),
+    )
     return {
       items: GameService.getAllItemsByIdStream(),
       home: homeStream,
-    };
+    }
   },
 
   mounted() {
-    this.updateConsideredAP();
+    this.updateConsideredAP()
   },
 
   beforeDestroy() {
-    ControlsService.updateConsideredAP(0);
+    ControlsService.updateConsideredAP(0)
   },
 
   methods: {
     cancel() {
-      GameService.request(REQUEST_CODES.CANCEL_OPERATION);
+      GameService.request(REQUEST_CODES.CANCEL_OPERATION)
     },
 
     commence() {
-      this.processing = GameService.request(
-        REQUEST_CODES.COMMENCE_OPERATION
-      ).then(({ statusChanges = [] } = {}) => {
-        ToastNotify(statusChanges);
-      });
+      this.processing = GameService.request(REQUEST_CODES.COMMENCE_OPERATION).then(
+        ({ statusChanges = [] } = {}) => {
+          ToastNotify(statusChanges)
+        },
+      )
     },
 
     replaceSlot(slotId) {
-      this.replacingSlot = slotId;
+      this.replacingSlot = slotId
     },
 
     stopReplacing() {
-      this.replacingSlot = null;
+      this.replacingSlot = null
     },
 
     selectedItem(item) {
       GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-        updateType: "selectDecor",
+        updateType: 'selectDecor',
         itemId: item && item.id,
         slotId: this.replacingSlot,
       }).then(() => {
-        this.stopReplacing();
-      });
+        this.stopReplacing()
+      })
     },
 
     updateConsideredAP() {
-      ControlsService.updateConsideredAP(this.operation.context.unitCost);
+      ControlsService.updateConsideredAP(this.operation.context.unitCost)
     },
   },
-};
+}
+window.OperationRedecorate = OperationRedecorate
+export default OperationRedecorate
 </script>
 
 <style scoped lang="scss"></style>

@@ -111,7 +111,7 @@ export default {
     },
 
     hasClick() {
-      return !!this.$listeners.click
+      return !!this.$attrs.onClick
     },
 
     operationIsPng() {
@@ -136,7 +136,7 @@ export default {
 
   methods: {
     mouseClick($event) {
-      if (!!this.$listeners.click) {
+      if (!!this.$attrs.onClick) {
         this.$emit('click', $event)
         SoundService.playSound(iconClickSound)
       }
@@ -185,8 +185,8 @@ export default {
     transition:
       filter 1s linear,
       opacity 1s linear;
-    @include utils.filter(saturate(0) brightness(0.8));
     opacity: 0.4;
+    @include utils.filter(saturate(0) brightness(0.8));
   }
 }
 

@@ -4,24 +4,12 @@
     :class="{ flexible: flexible, 'lazy-load': lazyLoad }"
     v-observe-visibility="onVisibilityChange"
   >
-    <div
-      v-if="(lazyLoad && !loadedData) || (!visible && !flexible)"
-      class="flex-grow"
-    >
+    <div v-if="(lazyLoad && !loadedData) || (!visible && !flexible)" class="flex-grow">
       <LoadingPlaceholder :size="6" />
     </div>
-    <div
-      v-else
-      class="info"
-      :class="{ interactive: hasClick }"
-      @click="$emit('click', $event)"
-    >
+    <div v-else class="info" :class="{ interactive: hasClick }" @click="$emit('click', $event)">
       <div class="icon">
-        <slot
-          v-if="!!$slots.icon || !!$scopedSlots.icon"
-          name="icon"
-          :lazyData="loadedData"
-        />
+        <slot v-if="!!$slots.icon || !!$scopedSlots.icon" name="icon" :lazyData="loadedData" />
         <Icon v-else :src="iconSrc" :size="iconSize" :text="text" />
       </div>
       <div class="details">
@@ -62,29 +50,27 @@ export default {
 
   subscriptions() {
     return {
-      loadedData: this.$stream("visible")
+      loadedData: this.$stream('visible')
         .filter((visible) => !!visible)
         .distinctUntilChanged()
-        .switchMap(() => this.$stream("lazyLoad"))
+        .switchMap(() => this.$stream('lazyLoad'))
         .filter((visible) => !!visible)
-        .switchMap((fn) =>
-          typeof fn === "function" ? fn() : Rx.Observable.of(true)
-        ),
-    };
+        .switchMap((fn) => (typeof fn === 'function' ? fn() : Rx.Observable.of(true))),
+    }
   },
 
   computed: {
     hasClick() {
-      return !!this.$listeners.click;
+      return !!this.$attrs.onClick
     },
   },
 
   methods: {
     onVisibilityChange(isVisible) {
-      this.visible = isVisible;
+      this.visible = isVisible
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">

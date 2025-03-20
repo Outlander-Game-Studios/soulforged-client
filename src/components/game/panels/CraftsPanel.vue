@@ -108,8 +108,8 @@ export default {
 @use '../../../utils.scss';
 
 .craft-filters-wrapper {
-  @include main-tab-extra();
   display: flex;
   justify-content: flex-end;
+  @include utils.main-tab-extra();
 }
 </style>

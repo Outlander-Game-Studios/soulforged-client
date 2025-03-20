@@ -3,10 +3,7 @@
     <CreatureDetailsModal
       :creatureId="showDetailsId"
       @close="showDetailsId = null"
-      @action="
-        showDetailsId = null
-        showingList = false
-      "
+      @action="hideAll()"
     />
     <Header v-if="!hideHeader" class="interactive" @click="showList()">Creatures</Header>
     <LoadingPlaceholder v-if="!loadedCreatures" :size="6" />
@@ -98,11 +95,15 @@ export default {
     },
 
     hasClick() {
-      return !!this.$listeners.click
+      return !!this.$attrs.onClick
     },
   },
 
   methods: {
+    hideAll() {
+      this.showDetailsId = null
+      this.showingList = false
+    },
     onAction({ result: { instant } = {} } = {}) {
       if (!instant) {
         this.showingList = false

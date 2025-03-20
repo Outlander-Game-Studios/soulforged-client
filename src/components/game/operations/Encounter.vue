@@ -119,7 +119,7 @@
 </template>
 
 <script>
-export default window.OperationEncounter = {
+const OperationEncounter = {
   props: {
     operation: {},
   },
@@ -212,6 +212,8 @@ export default window.OperationEncounter = {
     },
   },
 }
+window.OperationEncounter = OperationEncounter
+export default OperationEncounter
 </script>
 
 <style scoped lang="scss">
@@ -246,8 +248,8 @@ export default window.OperationEncounter = {
 
     .friendly-creature {
       &:not(.ready) {
-        @include utils.filter(brightness(0.75) saturate(0.5));
         opacity: 0.5;
+        @include utils.filter(brightness(0.75) saturate(0.5));
       }
     }
   }

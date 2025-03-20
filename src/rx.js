@@ -1,13 +1,4 @@
-import {
-  ReplaySubject,
-  Subject,
-  Observable,
-  combineLatest,
-  from,
-  of,
-  merge,
-  empty,
-} from "rxjs";
+import { ReplaySubject, Subject, Observable, combineLatest, from, of, merge, empty } from 'rxjs'
 import {
   tap,
   first,
@@ -25,7 +16,7 @@ import {
   refCount,
   publishReplay,
   debounceTime,
-} from "rxjs/operators";
+} from 'rxjs/operators'
 
 export const Rx = {
   ReplaySubject,
@@ -33,29 +24,52 @@ export const Rx = {
   combineLatest,
   Observable: { ...Observable, from, of, empty, merge },
   fromPromise: from,
-};
+}
 
 function usePipe(fn) {
   return function (...args) {
-    return this.pipe(fn(...args));
-  };
+    return this.pipe(fn(...args))
+  }
 }
 
-global.Rx = Rx;
+global.Rx = Rx
 
-Observable.prototype.tap = usePipe(tap);
-Observable.prototype.first = usePipe(first);
-Observable.prototype.map = usePipe(map);
-Observable.prototype.scan = usePipe(scan);
-Observable.prototype.filter = usePipe(filter);
-Observable.prototype.switchMap = usePipe(switchMap);
-Observable.prototype.pluck = usePipe(pluck);
-Observable.prototype.startWith = usePipe(startWith);
-Observable.prototype.finalize = usePipe(finalize);
-Observable.prototype.delay = usePipe(delay);
-Observable.prototype.share = usePipe(share);
-Observable.prototype.shareReplay = usePipe(shareReplay);
-Observable.prototype.refCount = usePipe(refCount);
-Observable.prototype.publishReplay = usePipe(publishReplay);
-Observable.prototype.debounceTime = usePipe(debounceTime);
-Observable.prototype.distinctUntilChanged = usePipe(distinctUntilChanged);
+Observable.prototype.tap = usePipe(tap)
+Observable.prototype.first = usePipe(first)
+Observable.prototype.map = usePipe(map)
+Observable.prototype.scan = usePipe(scan)
+Observable.prototype.filter = usePipe(filter)
+Observable.prototype.switchMap = usePipe(switchMap)
+Observable.prototype.pluck = usePipe(pluck)
+Observable.prototype.startWith = usePipe(startWith)
+Observable.prototype.finalize = usePipe(finalize)
+Observable.prototype.delay = usePipe(delay)
+Observable.prototype.share = usePipe(share)
+Observable.prototype.shareReplay = usePipe(shareReplay)
+Observable.prototype.refCount = usePipe(refCount)
+Observable.prototype.publishReplay = usePipe(publishReplay)
+Observable.prototype.debounceTime = usePipe(debounceTime)
+Observable.prototype.distinctUntilChanged = usePipe(distinctUntilChanged)
+
+global.rxComponent = (definition) => {
+  return {
+    ...definition,
+    created() {
+      this.$stream = () => {
+        console.log('TODO')
+        return new Rx.Subject()
+      }
+      const subscriptions = definition.subscriptions.call(this)
+      this._subscriptions = Object.keys(subscriptions).map((key) => {
+        this[key] = undefined
+        return subscriptions[key].subscribe((value) => {
+          this[key] = value
+        })
+      })
+      definition.created?.call(this)
+    },
+    beforeDestroy() {
+      console.log(this._subscriptions)
+    },
+  }
+}

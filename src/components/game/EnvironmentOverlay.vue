@@ -91,13 +91,11 @@ export default {
     }
 
     .shine-1 {
-      @include lens(80vmin, -30);
       background: radial-gradient(closest-side circle at center, #fff9da 0%, transparent 100%);
+      @include lens(80vmin, -30);
     }
 
     .shine-2 {
-      @include lens(40vmin, -30);
-      @include utils.filter(blur(0.4rem));
       background: radial-gradient(
         closest-side circle at center,
         rgb(225, 220, 150) 0%,
@@ -107,32 +105,34 @@ export default {
         rgba(255, 220, 150, 0.1) 75%,
         transparent 99%
       );
+      @include lens(40vmin, -30);
+      @include utils.filter(blur(0.4rem));
     }
 
     .circle-1 {
-      @include lens(28vmin, 30);
-      @include utils.filter(blur(0.5rem));
       background: radial-gradient(
         closest-side circle at center,
         transparent 50%,
         rgba(255, 249, 218, 0.7) 90%,
         transparent 100%
       );
+      @include lens(28vmin, 30);
+      @include utils.filter(blur(0.5rem));
     }
 
     .circle-2 {
+      background: rgba(255, 249, 218, 0.4);
       @include lens(16vmin, 20);
       @include utils.filter(blur(0.2rem));
-      background: rgba(255, 249, 218, 0.4);
     }
 
     .circle-3 {
-      @include lens(10vmin, -18);
       background: radial-gradient(
         closest-side circle at center,
         rgba(255, 249, 218, 0.8) 0%,
         transparent 75%
       );
+      @include lens(10vmin, -18);
     }
   }
 }

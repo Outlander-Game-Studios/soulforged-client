@@ -122,8 +122,8 @@ button {
 
   &.highlighted {
     .content {
-      @include utils.filter(brightness(1.2) saturate(1.2));
       box-shadow: 0 0 0.3rem 0.3rem steelblue;
+      @include utils.filter(brightness(1.2) saturate(1.2));
     }
   }
 

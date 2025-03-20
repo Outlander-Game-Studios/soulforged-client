@@ -39,7 +39,7 @@
 import pageSound from '../../assets/sounds/page.mp3'
 import promptSound from '../../assets/sounds/prompt2.mp3'
 
-export default {
+export default rxComponent({
   data: () => ({
     hideCurrent: false,
     showDetails: false,
@@ -147,7 +147,7 @@ export default {
       this.showDetails = true
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

@@ -150,7 +150,7 @@ const imageSizes = {
   'mouth/all': [250, 3000],
 }
 
-export default {
+export default rxComponent({
   props: {
     text: {},
     chatHead: {},
@@ -198,6 +198,7 @@ export default {
     gloomy: false,
     feelingPain: 0,
     loading: true,
+    animationsTimeouts: [],
   }),
 
   created() {
@@ -229,7 +230,7 @@ export default {
 
   computed: {
     hasClick() {
-      return !!this.$listeners.click
+      return !!this.$attrs.onClick
     },
 
     borderSize() {
@@ -521,7 +522,7 @@ export default {
       return this.creature?.effects?.some(filter)
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

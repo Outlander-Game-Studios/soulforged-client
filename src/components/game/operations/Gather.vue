@@ -59,7 +59,7 @@
 </template>
 
 <script>
-export default window.OperationGather = {
+const OperationGather = {
   props: {
     operation: {},
   },
@@ -157,6 +157,8 @@ export default window.OperationGather = {
     },
   },
 }
+window.OperationGather = OperationGather
+export default OperationGather
 </script>
 
 <style scoped lang="scss">

@@ -351,7 +351,7 @@ const MODIFIER_NAMES = {
   harvestQuality: 'Harvest skill',
 }
 
-export default window.OperationFarming = {
+const OperationFarming = {
   props: {
     operation: {},
   },
@@ -655,6 +655,8 @@ export default window.OperationFarming = {
     },
   },
 }
+window.OperationFarming = OperationFarming
+export default OperationFarming
 </script>
 
 <style scoped lang="scss">

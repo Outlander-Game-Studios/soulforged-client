@@ -12,10 +12,9 @@
         <Header small alt2 v-if="operation.context.isBacktracking">
           Backtrack
           <Help title="Backtrack">
-            Backtracking is travelling to the immediately previous location that
-            your character has been at. This option guarantees that hostile
-            creatures will not engage you when attempting to travel via this
-            path.
+            Backtracking is travelling to the immediately previous location that your character has
+            been at. This option guarantees that hostile creatures will not engage you when
+            attempting to travel via this path.
           </Help>
         </Header>
         <Header small alt2 v-else>Travel</Header>
@@ -26,11 +25,7 @@
           <Horizontal>
             <SkillInfoDisplay :operation="operation" />
             <div v-if="structures && structures.length">
-              <StructuresPanel
-                :structures="structures"
-                flexible
-                :header="false"
-              />
+              <StructuresPanel :structures="structures" flexible :header="false" />
             </div>
           </Horizontal>
           <OperationToolSelector :operation="operation" />
@@ -44,7 +39,7 @@
 </template>
 
 <script>
-export default window.OperationTravel = {
+const OperationTravel = {
   props: {
     operation: {},
   },
@@ -53,34 +48,32 @@ export default window.OperationTravel = {
 
   watch: {
     operation() {
-      this.updateConsideredAP();
+      this.updateConsideredAP()
     },
   },
 
   subscriptions() {
     return {
-      path: this.$stream("operation")
-        .pluck("context")
-        .pluck("pathId")
+      path: this.$stream('operation')
+        .pluck('context')
+        .pluck('pathId')
         .switchMap((pathId) => GameService.getEntityStream(pathId)),
       structures: Rx.combineLatest(
-        this.$stream("operation").pluck("context").pluck("pathId"),
-        GameService.getStructuresIdsStream().switchMap((ids) =>
-          GameService.getEntitiesStream(ids)
-        )
+        this.$stream('operation').pluck('context').pluck('pathId'),
+        GameService.getStructuresIdsStream().switchMap((ids) => GameService.getEntitiesStream(ids)),
       ).map(([pathId, structures]) =>
-        structures.filter((s) => s.pathId === pathId).map((s) => s.id)
+        structures.filter((s) => s.pathId === pathId).map((s) => s.id),
       ),
       mainEntity: GameService.getRootEntityStream(),
-    };
+    }
   },
 
   mounted() {
-    this.updateConsideredAP();
+    this.updateConsideredAP()
   },
 
   beforeDestroy() {
-    ControlsService.updateConsideredAP(0);
+    ControlsService.updateConsideredAP(0)
   },
 
   methods: {
@@ -88,19 +81,21 @@ export default window.OperationTravel = {
       GameService.request(REQUEST_CODES.COMMENCE_OPERATION, {
         locationId: this.mainEntity.location,
       }).then(({ statusChanges = [] } = {}) => {
-        ToastNotify(statusChanges);
-      });
+        ToastNotify(statusChanges)
+      })
     },
 
     cancel() {
-      GameService.request(REQUEST_CODES.CANCEL_OPERATION);
+      GameService.request(REQUEST_CODES.CANCEL_OPERATION)
     },
 
     updateConsideredAP() {
-      ControlsService.updateConsideredAP(this.operation.context.unitCost);
+      ControlsService.updateConsideredAP(this.operation.context.unitCost)
     },
   },
-};
+}
+window.OperationTravel = OperationTravel
+export default OperationTravel
 </script>
 
 <style scoped lang="scss">

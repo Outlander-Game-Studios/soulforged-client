@@ -54,19 +54,20 @@ export default {
 @use '../../utils.scss';
 
 .disconnect-container {
-  @include utils.filter-fix();
   display: flex;
   width: 100%;
   position: fixed;
   z-index: 90009000;
   pointer-events: none;
-  > * {
-    pointer-events: all;
-  }
-
   top: 1rem;
   left: 1rem;
   justify-content: flex-start;
+
+  @include utils.filter-fix();
+
+  > * {
+    pointer-events: all;
+  }
 
   &.stage-1 {
     @media (orientation: landscape) {

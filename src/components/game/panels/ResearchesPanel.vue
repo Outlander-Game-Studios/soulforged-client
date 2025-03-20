@@ -397,7 +397,7 @@ export default {
 }
 
 .item-selection-wrapper {
-  @include main-tab-extra();
+  @include utils.main-tab-extra();
 
   @media (orientation: portrait) {
     &.slide-enter,

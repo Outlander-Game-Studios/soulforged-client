@@ -5,11 +5,11 @@
       <Header>
         Wait
         <Help title="Waiting">
-          Spending Action Points by waiting allows you very fine control of
-          amount of Action Points spent to wait out specific effects.<br />
+          Spending Action Points by waiting allows you very fine control of amount of Action Points
+          spent to wait out specific effects.<br />
           <br />
-          Waiting has <em>no impact</em> on the effects that are applied to your
-          character. It <em>does not</em> speed up recovery in any way.
+          Waiting has <em>no impact</em> on the effects that are applied to your character. It
+          <em>does not</em> speed up recovery in any way.
         </Help>
       </Header>
       <Description> Spend action points without doing anything. </Description>
@@ -28,9 +28,8 @@
           You may want to wait for specific wounds or other effects to wear off.
           <br />
           <br />
-          This interface provides a quick way to do that - simply click the
-          amount of Action Points you want to spend to fill in the input box and
-          then confirm by clicking commence.
+          This interface provides a quick way to do that - simply click the amount of Action Points
+          you want to spend to fill in the input box and then confirm by clicking commence.
         </Help>
       </Header>
       <Vertical tight>
@@ -52,26 +51,20 @@
               >
             </span>
           </div>
-          <div
-            v-else
-            class="click-duration"
-            @click="skipTime(effect.duration[0])"
-          >
+          <div v-else class="click-duration" @click="skipTime(effect.duration[0])">
             {{ effect.duration[0] }} AP
           </div>
         </Horizontal>
       </Vertical>
       <HorizontalCenter>
-        <Button ref="submit" @click="commence()" :processing="processing"
-          >Commence</Button
-        >
+        <Button ref="submit" @click="commence()" :processing="processing">Commence</Button>
       </HorizontalCenter>
     </Vertical>
   </div>
 </template>
 
 <script>
-export default window.OperationWait = {
+const OperationWait = {
   props: {
     operation: {},
   },
@@ -84,10 +77,10 @@ export default window.OperationWait = {
 
   watch: {
     operation() {
-      this.updateConsideredAP();
+      this.updateConsideredAP()
     },
     amount() {
-      this.updateConsideredAP();
+      this.updateConsideredAP()
     },
   },
 
@@ -100,27 +93,23 @@ export default window.OperationWait = {
           .filter((effect) => effect.order !== 5)
           .map((effect) => ({
             ...effect,
-            duration: Array.isArray(effect.duration)
-              ? effect.duration
-              : [effect.duration],
+            duration: Array.isArray(effect.duration) ? effect.duration : [effect.duration],
           }))
           .map((effect) => ({
             ...effect,
             duration:
-              effect.duration[0] === effect.duration[1]
-                ? [effect.duration[0]]
-                : effect.duration,
-          }))
+              effect.duration[0] === effect.duration[1] ? [effect.duration[0]] : effect.duration,
+          })),
       ),
-    };
+    }
   },
 
   mounted() {
-    this.updateConsideredAP();
+    this.updateConsideredAP()
   },
 
   beforeDestroy() {
-    ControlsService.updateConsideredAP(0);
+    ControlsService.updateConsideredAP(0)
   },
 
   methods: {
@@ -128,28 +117,28 @@ export default window.OperationWait = {
       this.processing = GameService.request(REQUEST_CODES.COMMENCE_OPERATION, {
         amount: this.amount,
       }).then(({ amount, statusChanges = [] } = {}) => {
-        this.amount = amount;
-        ToastNotify(statusChanges);
-      });
+        this.amount = amount
+        ToastNotify(statusChanges)
+      })
     },
 
     cancel() {
-      GameService.request(REQUEST_CODES.CANCEL_OPERATION);
+      GameService.request(REQUEST_CODES.CANCEL_OPERATION)
     },
 
     updateConsideredAP() {
-      ControlsService.updateConsideredAP(
-        this.operation.context.unitCost * this.amount
-      );
+      ControlsService.updateConsideredAP(this.operation.context.unitCost * this.amount)
     },
 
     skipTime(seconds) {
-      this.amount = seconds;
-      this.max = Math.max(100, seconds);
-      this.$refs.inputField.focus();
+      this.amount = seconds
+      this.max = Math.max(100, seconds)
+      this.$refs.inputField.focus()
     },
   },
-};
+}
+window.OperationWait = OperationWait
+export default OperationWait
 </script>
 
 <style scoped lang="scss">

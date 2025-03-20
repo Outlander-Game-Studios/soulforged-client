@@ -58,7 +58,7 @@
 </template>
 
 <script>
-export default window.OperationDialogue = {
+const OperationDialogue = {
   props: {
     operation: {},
   },
@@ -109,6 +109,8 @@ export default window.OperationDialogue = {
     },
   },
 }
+window.OperationDialogue = OperationDialogue
+export default OperationDialogue
 </script>
 
 <style scoped lang="scss">

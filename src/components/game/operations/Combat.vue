@@ -499,7 +499,7 @@ const wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, mill
 const nonCombatEffectFilter = (effect) => !effect.durationTurns
 const combatEffectFilter = (effect) => !!effect.durationTurns
 
-export default window.OperationCombat = {
+const OperationCombat = {
   FULLSCREEN: true,
   props: {
     operation: {},
@@ -1114,6 +1114,8 @@ export default window.OperationCombat = {
     },
   },
 }
+window.OperationCombat = OperationCombat
+export default OperationCombat
 </script>
 
 <style scoped lang="scss">
@@ -1274,13 +1276,13 @@ $effects-size: 6rem;
   transition: all calc(0.1s / var(--anim-speed)) ease-in;
   transition-property: left, top, z-index;
 
-  @include iOSOnly() {
-    transition: none;
-  }
-
   margin: calc($avatar-size / -2);
   position: absolute;
   display: inline-block;
+
+  @include utils.iOSOnly() {
+    transition: none;
+  }
 
   .flee-indicator {
     position: absolute;
@@ -1415,7 +1417,7 @@ $side-position: 1rem;
   padding: $padding;
   border-radius: $padding;
 
-  @include iOSOnly() {
+  @include utils.iOSOnly() {
     animation: none;
     margin-left: 1rem;
     margin-top: -3rem;

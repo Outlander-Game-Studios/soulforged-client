@@ -162,13 +162,7 @@
               <StructureIcon :structure="showDetails" :size="11" />
             </div>
           </div>
-          <Actions
-            :target="showDetails"
-            @action="
-              showingList = false
-              showDetailsId = null
-            "
-          />
+          <Actions :target="showDetails" @action="hideAll()" />
         </Vertical>
       </template>
     </Modal>
@@ -245,6 +239,11 @@ export default {
   },
 
   methods: {
+    hideAll() {
+      this.showDetailsId = null
+      this.showingList = false
+    },
+
     hasUtility(utilities) {
       return utilities && Object.keys(utilities).length
     },

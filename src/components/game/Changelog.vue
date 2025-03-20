@@ -94,11 +94,11 @@ export default {
   background-size: 100% 100%;
   background-repeat: no-repeat;
   margin-right: 0.5rem;
+  background-image: url(ui-asset('/emoji/question-mark.svg'));
   @include utils.filter(
     drop-shadow(1px 1px 0 #111) drop-shadow(1px -1px 0 #111) drop-shadow(-1px 1px 0 #111)
       drop-shadow(-1px -1px 0 #111)
   );
-  background-image: url(ui-asset('/emoji/question-mark.svg'));
 
   &.balance {
     background-image: url(ui-asset('/emoji/scales.svg'));

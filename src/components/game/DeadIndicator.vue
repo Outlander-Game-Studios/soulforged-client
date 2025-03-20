@@ -47,7 +47,6 @@ export default {
 @use '../../utils.scss';
 
 .dead-container {
-  @include utils.filter-fix();
   display: flex;
   width: 100%;
   top: 15rem;
@@ -55,6 +54,9 @@ export default {
   position: fixed;
   z-index: 90009000;
   pointer-events: none;
+
+  @include utils.filter-fix();
+
   > * {
     pointer-events: all;
   }

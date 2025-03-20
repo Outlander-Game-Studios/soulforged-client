@@ -16,7 +16,7 @@
 <script>
 import pageSound from '../../assets/sounds/page.mp3'
 
-export default {
+export default rxComponent({
   data: () => ({
     showDialog: false,
   }),
@@ -33,7 +33,7 @@ export default {
       this.showDialog = true
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

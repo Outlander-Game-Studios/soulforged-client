@@ -215,7 +215,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@use './src/utils.scss';
+@use '../../../utils.scss';
 
 .tabs {
   display: flex;

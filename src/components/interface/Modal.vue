@@ -13,7 +13,7 @@
       >
         <div class="modal">
           <Container borderType="alt" :borderSize="1.6">
-            <CloseButton v-if="$listeners.close" class="close" @click="$emit('close')" />
+            <CloseButton v-if="$attrs.onClose" class="close" @click="$emit('close')" />
             <div v-if="$slots.title || title" class="title-wrapper">
               <Header class="title-container" :alt3="specialFrame">
                 <div class="title-contents">
@@ -86,7 +86,7 @@ export default {
 
   methods: {
     backdropMouseClick() {
-      if (!!this.$listeners.close) {
+      if (!!this.$attrs.onClose) {
         SoundService.playSound(closeSound, { speed: 2 })
         this.$emit('close')
       } else {

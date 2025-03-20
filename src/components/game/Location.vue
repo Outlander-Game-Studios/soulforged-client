@@ -165,7 +165,7 @@ export default {
 
     arrowClick(path, $event) {
       SoundService.playSound(SoundService.SOUNDS.TRAVEL)
-      if (this.$listeners.selected) {
+      if (this.$attrs.onSelected) {
         this.$emit('selected', path)
         $event.stopPropagation()
         return
@@ -368,18 +368,18 @@ $transition-time: 120ms;
 
   &.shrink {
     @media (orientation: landscape) {
+      top: 5rem;
+      right: 17rem;
       @include visible-map-style(
         min(var(--app-height) - 22rem, 1 * var(--app-width) - 40rem - 2rem)
       );
-      top: 5rem;
-      right: 17rem;
     }
 
     @media (orientation: portrait) {
+      margin-top: -27rem;
       @include visible-map-style(
         min(var(--app-width) - 5rem, 1 * var(--app-height) - 40rem - 16rem)
       );
-      margin-top: -27rem;
     }
   }
 
@@ -413,7 +413,6 @@ $transition-time: 120ms;
     right: $spacing;
     bottom: $spacing;
     border-radius: 100%;
-    @include utils.filter(blur(0.15rem));
     z-index: 2;
     transform: rotateZ(-30deg);
     background: radial-gradient(
@@ -424,6 +423,7 @@ $transition-time: 120ms;
       rgba(255, 255, 255, 0.7) 84%,
       rgba(255, 255, 255, 0) 100%
     );
+    @include utils.filter(blur(0.15rem));
   }
   &:after {
     content: '';
@@ -433,7 +433,6 @@ $transition-time: 120ms;
     right: $spacing;
     bottom: $spacing;
     border-radius: 100%;
-    @include utils.filter(blur(0.15rem));
     z-index: 2;
     transform: rotateZ(150deg);
     background: radial-gradient(
@@ -444,6 +443,7 @@ $transition-time: 120ms;
       rgba(255, 255, 255, 0.4) 84%,
       rgba(255, 255, 255, 0) 100%
     );
+    @include utils.filter(blur(0.15rem));
   }
 }
 

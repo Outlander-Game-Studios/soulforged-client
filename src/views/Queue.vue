@@ -25,8 +25,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-
 export default {
   data: () => ({
     queuePosition: GameService.queuePosition,

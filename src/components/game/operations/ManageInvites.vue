@@ -31,7 +31,7 @@
               </template>
               <template v-slot:buttons>
                 <Button @click="addInvitee(creature)">{{
-                  currentNamesMap[creature.name] ? "Update name" : "Invite"
+                  currentNamesMap[creature.name] ? 'Update name' : 'Invite'
                 }}</Button>
               </template>
             </ListItem>
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-export default window.OperationManageInvites = {
+const OperationManageInvites = {
   props: {
     operation: {},
   },
@@ -52,74 +52,69 @@ export default window.OperationManageInvites = {
   data: () => ({}),
 
   subscriptions() {
-    const holdingStream = this.$stream("operation").switchMap((operation) =>
-      GameService.getEntityStream(
-        operation.context.holding,
-        ENTITY_VARIANTS.DETAILS
-      )
-    );
+    const holdingStream = this.$stream('operation').switchMap((operation) =>
+      GameService.getEntityStream(operation.context.holding, ENTITY_VARIANTS.DETAILS),
+    )
     const loadedCreaturesStream = Rx.combineLatest(
-      GameService.getLocationStream().pluck("creatures"),
-      GameService.getRootEntityStream()
+      GameService.getLocationStream().pluck('creatures'),
+      GameService.getRootEntityStream(),
     )
       .map(([ids, mainEntity]) => ids.filter((id) => id !== mainEntity.id))
-      .switchMap((ids) =>
-        GameService.getEntitiesStream(ids, ENTITY_VARIANTS.DETAILS)
-      )
+      .switchMap((ids) => GameService.getEntitiesStream(ids, ENTITY_VARIANTS.DETAILS))
       .map((loadedCreatures) =>
-        loadedCreatures
-          .filter((c) => !c.dead && !c.hostile && c.avatar)
-          .sort(creaturesSort)
-      );
+        loadedCreatures.filter((c) => !c.dead && !c.hostile && c.avatar).sort(creaturesSort),
+      )
     return {
       holding: holdingStream,
       loadedCreatures: loadedCreaturesStream,
-    };
+    }
   },
 
   computed: {
     names() {
-      return this.operation.context.current.sort();
+      return this.operation.context.current.sort()
     },
     namesMap() {
-      return this.names.toObject();
+      return this.names.toObject()
     },
     currentNamesMap() {
       return this.names
         .map((name) => name.match(/\((.*)\)/)?.[1])
         .filter((name) => !!name)
-        .toObject();
+        .toObject()
     },
   },
 
   methods: {
     getCreatureDetailsStream(creature) {
-      return GameService.getEntityStream(creature.id, ENTITY_VARIANTS.DETAILS);
+      return GameService.getEntityStream(creature.id, ENTITY_VARIANTS.DETAILS)
     },
 
     cancel() {
-      GameService.request(REQUEST_CODES.CANCEL_OPERATION);
+      GameService.request(REQUEST_CODES.CANCEL_OPERATION)
     },
 
     addInvitee(creature) {
       GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-        updateType: "addInvite",
+        updateType: 'addInvite',
         creatureId: creature.id,
       }).then(() => {
-        GameService.getRootEntityStream(false, true);
-      });
+        GameService.getRootEntityStream(false, true)
+      })
     },
 
     removeInvitee(name) {
       GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-        updateType: "removeInvite",
+        updateType: 'removeInvite',
         name,
       }).then(() => {
-        GameService.getRootEntityStream(false, true);
-      });
+        GameService.getRootEntityStream(false, true)
+      })
     },
   },
-};
+}
+window.OperationManageInvites = OperationManageInvites
+export default OperationManageInvites
 </script>
 
 <style scoped lang="scss"></style>

@@ -172,7 +172,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   data: () => ({
     collecting: false,
     collected: null,
@@ -253,7 +253,7 @@ export default {
         })
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

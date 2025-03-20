@@ -51,7 +51,7 @@
 <script>
 import pageSound from '../../assets/sounds/page.mp3'
 
-export default {
+export default rxComponent({
   data: () => ({
     showDetails: false,
   }),
@@ -93,7 +93,7 @@ export default {
       GameService.performAction(item, action, quickAction.parameters)
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

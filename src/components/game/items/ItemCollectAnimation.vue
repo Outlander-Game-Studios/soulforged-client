@@ -69,7 +69,7 @@ export default {
 
   methods: {
     mouseDown() {
-      if (!!this.$listeners.click) {
+      if (!!this.$attrs.onClick) {
         SoundService.playSound(iconClickSound)
       }
     },

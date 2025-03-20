@@ -135,7 +135,6 @@
 </template>
 
 <script>
-import CombatMoves from '../CombatMoves'
 export default {
   props: {
     data: {},
@@ -170,7 +169,7 @@ export default {
       return bubbleEvents(this.$listeners, ['dragstart', 'dragend', 'touchstart', 'touchend'])
     },
     hasClick() {
-      return !!this.$listeners.click
+      return !!this.$attrs.onClick
     },
   },
 

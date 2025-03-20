@@ -76,8 +76,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-
 export default {
   props: {
     header: {},
@@ -119,7 +117,7 @@ export default {
     },
 
     hasClick() {
-      return !!this.$listeners.click
+      return !!this.$attrs.onClick
     },
   },
 
