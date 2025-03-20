@@ -79,7 +79,6 @@ export default {
   },
 
   beforeUnmount() {
-    console.log('!@#!@#!@#')
     if (this.$refs.modalWrapper) {
       this.$refs.modalWrapper.remove()
     }

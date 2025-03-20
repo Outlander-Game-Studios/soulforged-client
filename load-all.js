@@ -188,6 +188,8 @@ import StructuresPanel from './src/components/game/panels/StructuresPanel.vue'
 import TradePanel from './src/components/game/panels/TradePanel.vue'
 
 export const loadAll = (app) => {
+  console.log('Loading all components')
+
   app.component('Backgrounds', Backgrounds)
   app.component('BorderRound', BorderRound)
   app.component('Container', Container)
