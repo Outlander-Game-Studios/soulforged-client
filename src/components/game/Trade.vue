@@ -45,7 +45,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     trade: {},
   },
@@ -59,7 +59,7 @@ export default {
       errors: this.$stream('trade').pluck('errors'),
     }
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

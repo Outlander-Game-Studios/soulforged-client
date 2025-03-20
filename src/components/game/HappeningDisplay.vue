@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="mainEntity && mainEntity.happening"
-    :key="mainEntity.happening.title"
-  >
+  <div v-if="mainEntity && mainEntity.happening" :key="mainEntity.happening.title">
     <Modal dialog large specialFrame darkBackdrop>
       <template v-slot:title> {{ mainEntity.happening.title }} </template>
       <template v-slot:contents>
@@ -33,21 +30,21 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   subscriptions() {
     return {
       mainEntity: GameService.getRootEntityStream(),
-    };
+    }
   },
 
   methods: {
     selectOption(optionLabel) {
-      GameService.triggerExecutor("Happening", "selectOption", {
+      GameService.triggerExecutor('Happening', 'selectOption', {
         label: optionLabel,
-      });
+      })
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">

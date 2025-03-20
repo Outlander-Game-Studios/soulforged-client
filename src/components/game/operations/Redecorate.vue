@@ -44,7 +44,7 @@
 </template>
 
 <script>
-const OperationRedecorate = {
+const OperationRedecorate = rxComponent({
   props: {
     operation: {},
   },
@@ -134,7 +134,7 @@ const OperationRedecorate = {
       ControlsService.updateConsideredAP(this.operation.context.unitCost)
     },
   },
-}
+})
 window.OperationRedecorate = OperationRedecorate
 export default OperationRedecorate
 </script>

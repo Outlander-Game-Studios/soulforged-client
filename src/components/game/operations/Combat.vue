@@ -499,7 +499,7 @@ const wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, mill
 const nonCombatEffectFilter = (effect) => !effect.durationTurns
 const combatEffectFilter = (effect) => !!effect.durationTurns
 
-const OperationCombat = {
+const OperationCombat = rxComponent({
   FULLSCREEN: true,
   props: {
     operation: {},
@@ -1113,7 +1113,7 @@ const OperationCombat = {
       this.$set(this.displayedCreatures, creaturePayload.id, creaturePayload)
     },
   },
-}
+})
 window.OperationCombat = OperationCombat
 export default OperationCombat
 </script>

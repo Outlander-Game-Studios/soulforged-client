@@ -59,7 +59,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   data: () => ({
     showSettings: {},
     settingsValues: {},
@@ -117,7 +117,7 @@ export default {
       }
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

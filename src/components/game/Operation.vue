@@ -31,7 +31,7 @@
 
 <script>
 const loadedComponents = {}
-export default {
+export default rxComponent({
   data: () => ({
     componentName: null,
     loadedComponents,
@@ -143,7 +143,7 @@ export default {
       document.getElementsByTagName('head')[0].appendChild(link)
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

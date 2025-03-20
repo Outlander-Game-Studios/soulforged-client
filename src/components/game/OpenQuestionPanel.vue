@@ -14,12 +14,9 @@
       <Vertical class="similar-questions">
         <Header>Similar questions</Header>
         <LoadingPlaceholder v-if="loading" />
-        <div class="empty-text" v-else-if="!question">
-          Start typing to see similar questions
-        </div>
+        <div class="empty-text" v-else-if="!question">Start typing to see similar questions</div>
         <div class="empty-text" v-else-if="question.length < minLetters">
-          At least {{ minLetters }} characters are required to search for
-          similar questions
+          At least {{ minLetters }} characters are required to search for similar questions
         </div>
         <div class="empty-text" v-else-if="!similarQuestions.length">
           No similar questions found
@@ -66,7 +63,7 @@
 </template>
 
 <script>
-export default window.OperationDialogue = {
+const OperationDialogue = rxComponent({
   props: {
     operation: {},
   },
@@ -75,42 +72,42 @@ export default window.OperationDialogue = {
     MAX_PENDING_OPEN_QUESTIONS,
     loading: false,
     minLetters: 3,
-    question: "",
+    question: '',
     similarQuestions: [],
     showingSimilarQuestion: null,
   }),
 
   watch: {
     question() {
-      clearTimeout(this.checkSimilarTimeout);
+      clearTimeout(this.checkSimilarTimeout)
       if (this.question.length >= this.minLetters) {
-        this.loading = true;
-        this.similarQuestions = [];
+        this.loading = true
+        this.similarQuestions = []
         this.checkSimilarTimeout = setTimeout(() => {
-          this.checkSimilar();
-        }, 500);
+          this.checkSimilar()
+        }, 500)
       } else {
-        this.loading = false;
+        this.loading = false
       }
     },
   },
 
   subscriptions() {
     return {
-      pendingQuestions: GameService.getInfoStream("OpenQuestion"),
-    };
+      pendingQuestions: GameService.getInfoStream('OpenQuestion'),
+    }
   },
 
   mounted() {
     if (this.operation.context.openQuestions.error) {
-      ToastError(this.operation.context.openQuestions.error);
-      this.$emit("close");
+      ToastError(this.operation.context.openQuestions.error)
+      this.$emit('close')
     }
   },
 
   methods: {
     showSimilarQuestion(similarQuestion) {
-      this.showingSimilarQuestion = similarQuestion;
+      this.showingSimilarQuestion = similarQuestion
     },
 
     submitNewQuestion() {
@@ -118,17 +115,14 @@ export default window.OperationDialogue = {
         text: this.question,
       }).then((response) => {
         if (response?.ok === false) {
-          ToastError(response.message);
+          ToastError(response.message)
         } else {
-          const count = response.count;
-          ToastSuccess(
-            "Question Submitted",
-            `${count} / ${MAX_PENDING_OPEN_QUESTIONS} pending`
-          );
-          GameService.getInfoStream("OpenQuestion", {}, true);
-          this.$emit("close");
+          const count = response.count
+          ToastSuccess('Question Submitted', `${count} / ${MAX_PENDING_OPEN_QUESTIONS} pending`)
+          GameService.getInfoStream('OpenQuestion', {}, true)
+          this.$emit('close')
         }
-      });
+      })
     },
 
     checkSimilar() {
@@ -138,24 +132,26 @@ export default window.OperationDialogue = {
         .then((response) => {
           if (response.throttled) {
             this.checkSimilarTimeout = setTimeout(() => {
-              this.checkSimilar();
-            }, 300);
-            return;
+              this.checkSimilar()
+            }, 300)
+            return
           }
-          this.loading = false;
+          this.loading = false
           if (response?.ok === false) {
-            ToastError(response.message);
+            ToastError(response.message)
           } else {
-            this.similarQuestions = response;
+            this.similarQuestions = response
           }
         })
         .catch((response) => {
-          this.loading = false;
-          ToastError(response);
-        });
+          this.loading = false
+          ToastError(response)
+        })
     },
   },
-};
+})
+window.OperationDialogue = OperationDialogue
+export default OperationDialogue
 </script>
 
 <style scoped lang="scss">

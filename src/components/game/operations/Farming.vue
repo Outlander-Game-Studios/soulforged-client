@@ -351,7 +351,7 @@ const MODIFIER_NAMES = {
   harvestQuality: 'Harvest skill',
 }
 
-const OperationFarming = {
+const OperationFarming = rxComponent({
   props: {
     operation: {},
   },
@@ -654,7 +654,7 @@ const OperationFarming = {
       ControlsService.updateConsideredAP(this.unitCost)
     },
   },
-}
+})
 window.OperationFarming = OperationFarming
 export default OperationFarming
 </script>

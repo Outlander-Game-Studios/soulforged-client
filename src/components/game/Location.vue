@@ -41,7 +41,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     locationOverride: {},
     pathsOverride: {},
@@ -193,7 +193,7 @@ export default {
       ]
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

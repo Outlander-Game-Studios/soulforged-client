@@ -26,11 +26,7 @@
               <RichText :value="resource.name" /> ({{ resource.densityName }})
             </template>
             <template v-slot:buttons>
-              <Actions
-                :target="resource"
-                @action="showingList = false"
-                noWrap
-              />
+              <Actions :target="resource" @action="showingList = false" noWrap />
             </template>
           </ListItem>
         </div>
@@ -48,22 +44,12 @@
             </div>
             <LabeledValue label="Density">
               {{ showDetails.densityName }}
-              <IndicatorResourceDensity
-                class="density"
-                :density="showDetails.density"
-                highRes
-              />
+              <IndicatorResourceDensity class="density" :density="showDetails.density" highRes />
               &nbsp;
               <HelpResourceDensity :resource="showDetails" />
             </LabeledValue>
           </div>
-          <Actions
-            :target="showDetails"
-            @action="
-              showingList = false;
-              showDetails = false;
-            "
-          />
+          <Actions :target="showDetails" @action="hideAll()" />
         </Vertical>
       </template>
     </Modal>
@@ -71,9 +57,7 @@
 </template>
 
 <script>
-import { Rx } from "@/rx.js";
-
-export default {
+export default rxComponent({
   props: {
     resources: {},
   },
@@ -85,27 +69,31 @@ export default {
 
   subscriptions() {
     return {
-      loadedResources: this.$stream("resources")
+      loadedResources: this.$stream('resources')
         .switchMap((ids) => GameService.getEntitiesStream(ids))
         .map((resources) =>
           resources
             .filter((r) => !!r)
             .sort((a, b) => {
               if (a.fight !== b.fight) {
-                return a.fight ? 1 : -1;
+                return a.fight ? 1 : -1
               }
-              return a.id - b.id;
-            })
+              return a.id - b.id
+            }),
         ),
-    };
+    }
   },
 
   methods: {
+    hideAll() {
+      this.showingList = false
+      this.showDetails = false
+    },
     showList() {
-      this.showingList = true;
+      this.showingList = true
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">

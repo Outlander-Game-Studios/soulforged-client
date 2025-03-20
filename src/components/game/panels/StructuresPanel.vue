@@ -170,9 +170,7 @@
 </template>
 
 <script>
-import { Rx } from '@/rx.js'
-
-export default {
+export default rxComponent({
   props: {
     structures: {},
     flexible: {
@@ -275,7 +273,7 @@ export default {
       })
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

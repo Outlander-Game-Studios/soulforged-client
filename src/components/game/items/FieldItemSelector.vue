@@ -1,17 +1,8 @@
 <template>
   <div>
-    <Modal
-      dialog
-      v-if="selectingItem"
-      title="Select item"
-      @close="selectingItem = null"
-    >
+    <Modal dialog v-if="selectingItem" title="Select item" @close="selectingItem = null">
       <div class="select-tool">
-        <ItemSelector
-          :filter="itemFilter"
-          @selected="selectItem($event)"
-          v-slot="{ item }"
-        >
+        <ItemSelector :filter="itemFilter" @selected="selectItem($event)" v-slot="{ item }">
         </ItemSelector>
       </div>
     </Modal>
@@ -53,7 +44,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     compact: {
       type: Boolean,
@@ -73,30 +64,30 @@ export default {
   }),
 
   subscriptions() {
-    const rootEntityStream = GameService.getRootEntityStream();
+    const rootEntityStream = GameService.getRootEntityStream()
     return {
-      playerInventory: GameService.getInventoryStream(
-        rootEntityStream
-      ).map((inventory) => inventory.toObject((item) => item.id)),
-    };
+      playerInventory: GameService.getInventoryStream(rootEntityStream).map((inventory) =>
+        inventory.toObject((item) => item.id),
+      ),
+    }
   },
 
   computed: {
     selectedItem() {
       if (!this.playerInventory) {
-        return null;
+        return null
       }
-      return this.playerInventory[this.value];
+      return this.playerInventory[this.value]
     },
   },
 
   methods: {
     selectItem(item) {
-      this.$emit("input", item && item.id);
-      this.selectingItem = false;
+      this.$emit('input', item && item.id)
+      this.selectingItem = false
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss"></style>

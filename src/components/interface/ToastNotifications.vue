@@ -51,7 +51,7 @@ import okIcon from '../../assets/ui/cartoon/icons/tick_green.jpg'
 const toastStream = new Rx.Subject()
 let toastId = 0
 
-export default {
+export default rxComponent({
   props: {
     hideDelay: {
       default: 6000,
@@ -118,7 +118,7 @@ export default {
       this.toasts = this.toasts.filter((toast) => toast.toastId !== toastId)
     },
   },
-}
+})
 
 const ToastNotify = (toasts) => {
   if (!toasts) {

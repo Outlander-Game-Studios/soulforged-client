@@ -119,7 +119,7 @@
 </template>
 
 <script>
-const OperationEncounter = {
+const OperationEncounter = rxComponent({
   props: {
     operation: {},
   },
@@ -211,7 +211,7 @@ const OperationEncounter = {
       ControlsService.updateConsideredAP(this.operation.context.unitCost)
     },
   },
-}
+})
 window.OperationEncounter = OperationEncounter
 export default OperationEncounter
 </script>

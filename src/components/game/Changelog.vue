@@ -33,7 +33,7 @@
 <script>
 import flatten from 'lodash/flatten.js'
 
-export default {
+export default rxComponent({
   data: () => ({
     showVersion: null,
     showSinceLast: true,
@@ -81,7 +81,7 @@ export default {
       this.showSinceLast = false
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

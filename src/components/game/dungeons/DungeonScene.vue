@@ -30,7 +30,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     location: {},
   },
@@ -117,7 +117,7 @@ export default {
       )
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

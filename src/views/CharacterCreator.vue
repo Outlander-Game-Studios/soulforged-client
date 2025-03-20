@@ -67,7 +67,7 @@
 <script>
 import { Rx } from '@/rx.js'
 
-export default {
+export default rxComponent({
   data: () => ({
     race: 'Human',
     looks: {},
@@ -147,7 +147,7 @@ export default {
         })
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

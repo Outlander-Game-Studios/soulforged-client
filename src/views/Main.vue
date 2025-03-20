@@ -36,7 +36,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   subscriptions() {
     const location = GameService.getLocationStream()
     return {
@@ -45,7 +45,7 @@ export default {
       dead: GameService.getRootEntityStream().map((mainEntity) => mainEntity.dead),
     }
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

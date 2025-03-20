@@ -69,7 +69,7 @@ import unknownImg from '../../assets/ui/cartoon/icons/unknown_nobg.png'
 import crossImg from '../../assets/ui/cartoon/icons/cross_nobg.png'
 import buttonClickSound from '../../assets/sounds/button-click.mp3'
 
-export default {
+export default rxComponent({
   props: {
     research: {},
     animateRewards: {
@@ -130,7 +130,7 @@ export default {
       }
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

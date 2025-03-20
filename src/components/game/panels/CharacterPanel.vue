@@ -86,7 +86,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   data: () => ({
     showStatDetails: false,
     showAllSkills: false,
@@ -121,5 +121,5 @@ export default {
       return this.sortedSkills?.slice(0, 5)
     },
   },
-}
+})
 </script>

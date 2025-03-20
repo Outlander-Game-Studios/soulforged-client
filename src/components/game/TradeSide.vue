@@ -142,7 +142,7 @@
 <script>
 import plusIcon from '../../assets/ui/cartoon/icons/plus_nobg.png'
 
-export default {
+export default rxComponent({
   props: {
     trade: {},
     tradeSide: {},
@@ -178,7 +178,7 @@ export default {
       return creature && this.creaturesAtLocation && this.creaturesAtLocation[creature.id]
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

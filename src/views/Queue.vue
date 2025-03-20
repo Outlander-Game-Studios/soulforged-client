@@ -25,7 +25,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   data: () => ({
     queuePosition: GameService.queuePosition,
   }),
@@ -62,7 +62,7 @@ export default {
         })
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

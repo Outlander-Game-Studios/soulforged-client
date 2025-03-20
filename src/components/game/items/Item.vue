@@ -135,7 +135,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     data: {},
     includeActions: {
@@ -311,7 +311,7 @@ export default {
       })
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

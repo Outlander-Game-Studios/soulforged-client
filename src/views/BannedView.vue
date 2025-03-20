@@ -11,12 +11,10 @@
 
 <script>
 export default {
-  name: "BannedView",
-
-  subscriptions() {},
+  name: 'BannedView',
 
   methods: {},
-};
+}
 </script>
 
 <style scoped lang="scss">

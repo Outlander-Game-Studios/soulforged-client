@@ -59,7 +59,7 @@
 import attackIcon from '../../assets/ui/cartoon/icons/attack2.png'
 import fleeIcon from '../../assets/ui/cartoon/icons/flee2.png'
 
-export default {
+export default rxComponent({
   props: {
     currentMove: {},
     currentMoveActive: {
@@ -201,7 +201,7 @@ export default {
       }
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

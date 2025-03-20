@@ -89,7 +89,7 @@
 </template>
 
 <script>
-const OperationConstruct = {
+const OperationConstruct = rxComponent({
   props: {
     operation: {},
   },
@@ -211,7 +211,7 @@ const OperationConstruct = {
       this.addingMaterial = null
     },
   },
-}
+})
 window.OperationConstruct = OperationConstruct
 export default OperationConstruct
 </script>

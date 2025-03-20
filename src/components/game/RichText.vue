@@ -102,7 +102,7 @@ const TYPES = {
   EFFECT: 3,
 }
 
-export default {
+export default rxComponent({
   props: {
     value: {},
     html: {
@@ -260,7 +260,7 @@ export default {
       })
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

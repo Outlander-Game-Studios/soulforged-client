@@ -14,7 +14,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   name: "DeathView",
 
   subscriptions() {
@@ -120,5 +120,5 @@ export default {
     animation: dead-button-continue 0.6s ease-in-out 1 both;
     animation-delay: 5.7s;
   }
-}
+})
 </style>

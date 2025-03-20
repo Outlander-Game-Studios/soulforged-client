@@ -87,7 +87,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     craft: {},
     showSearchButton: {
@@ -203,7 +203,7 @@ export default {
       return streams.first()
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

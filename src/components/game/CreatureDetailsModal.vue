@@ -109,7 +109,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     creatureId: {},
   },
@@ -163,7 +163,7 @@ export default {
       })
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

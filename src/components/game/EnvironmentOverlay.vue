@@ -15,7 +15,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   subscriptions() {
     return {
       environment: GameService.getRootEntityStream().pluck('environment'),
@@ -30,7 +30,7 @@ export default {
       )
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

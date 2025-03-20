@@ -76,7 +76,7 @@
 <script>
 import crossIcon from '../../../assets/ui/cartoon/icons/cross.jpg'
 
-export default {
+export default rxComponent({
   props: {
     size: {
       default: 8,
@@ -164,7 +164,7 @@ export default {
       this.$emit('input', item)
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

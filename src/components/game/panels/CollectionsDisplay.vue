@@ -51,7 +51,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   data: () => ({
     landscape: false,
     currentCollection: null,
@@ -90,7 +90,7 @@ export default {
         })
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

@@ -45,7 +45,7 @@
 <script>
 import iconClickSound from '../../assets/sounds/icon-click.mp3'
 
-export default {
+export default rxComponent({
   props: {
     creature: {},
     creatureId: {},
@@ -142,7 +142,7 @@ export default {
       }
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

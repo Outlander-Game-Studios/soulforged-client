@@ -157,7 +157,7 @@ const SEVERITY_LABEL = {
   5: 'Grievous',
 }
 
-export default {
+export default rxComponent({
   props: {
     operation: {},
     skillData: {},
@@ -235,7 +235,7 @@ export default {
       return this.internalSkillData?.skillLevel
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

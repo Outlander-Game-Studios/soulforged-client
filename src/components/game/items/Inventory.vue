@@ -76,7 +76,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     header: {},
     includeCrafts: {
@@ -209,7 +209,7 @@ export default {
       }
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

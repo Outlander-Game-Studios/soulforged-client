@@ -220,7 +220,7 @@ import unknownImg from '../../assets/ui/cartoon/icons/unknown_nobg.png'
 import isEqual from 'lodash/isEqual.js'
 import pageSound from '../../assets/sounds/page.mp3'
 
-export default {
+export default rxComponent({
   data: () => ({
     showDetails: false,
     settings: false,
@@ -385,7 +385,7 @@ export default {
       await ControlsService.saveSetting('quickActions', quickActions)
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

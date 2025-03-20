@@ -31,7 +31,7 @@
 <script>
 import connectionIcon from '../../assets/ui/cartoon/icons/connection2.jpg'
 
-export default {
+export default rxComponent({
   data: () => ({
     connectionIcon,
   }),
@@ -47,7 +47,7 @@ export default {
       window.location.reload()
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

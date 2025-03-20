@@ -44,7 +44,7 @@
 </template>
 
 <script>
-const OperationManageInvites = {
+const OperationManageInvites = rxComponent({
   props: {
     operation: {},
   },
@@ -112,7 +112,7 @@ const OperationManageInvites = {
       })
     },
   },
-}
+})
 window.OperationManageInvites = OperationManageInvites
 export default OperationManageInvites
 </script>

@@ -39,7 +39,7 @@
 </template>
 
 <script>
-const OperationTravel = {
+const OperationTravel = rxComponent({
   props: {
     operation: {},
   },
@@ -93,7 +93,7 @@ const OperationTravel = {
       ControlsService.updateConsideredAP(this.operation.context.unitCost)
     },
   },
-}
+})
 window.OperationTravel = OperationTravel
 export default OperationTravel
 </script>

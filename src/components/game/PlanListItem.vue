@@ -36,8 +36,7 @@
                   <Header alt2>Construction materials</Header>
                   <Horizontal tight>
                     <ItemIcon
-                      v-for="(material,
-                      idx) in showDetailsInfo.buildingMaterials"
+                      v-for="(material, idx) in showDetailsInfo.buildingMaterials"
                       :key="'item' + idx"
                       :icon="material.itemDef.icon"
                       :amount="material.amount"
@@ -49,8 +48,7 @@
                   <Header alt2>Average monthly maintenance</Header>
                   <Horizontal tight>
                     <ItemIcon
-                      v-for="(material,
-                      idx) in showDetailsInfo.maintenanceMaterials"
+                      v-for="(material, idx) in showDetailsInfo.maintenanceMaterials"
                       :key="'item' + idx"
                       :icon="material.itemDef.icon"
                       :amount="material.amount"
@@ -75,8 +73,7 @@
                     :key="tool"
                     :label="tool"
                   >
-                    {{ efficiency
-                    }}{{ typeof efficiency === "number" ? "%" : "" }}
+                    {{ efficiency }}{{ typeof efficiency === 'number' ? '%' : '' }}
                   </LabeledValue>
                 </div>
                 <HorizontalCenter>
@@ -98,7 +95,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     plan: {},
   },
@@ -109,26 +106,26 @@ export default {
 
   subscriptions() {
     return {
-      showDetailsInfo: this.$stream("showDetails")
+      showDetailsInfo: this.$stream('showDetails')
         .filter((show) => !!show)
         .switchMap(() =>
-          this.$stream("plan").switchMap((plan) =>
-            GameService.getInfoStream("Building", {
+          this.$stream('plan').switchMap((plan) =>
+            GameService.getInfoStream('Building', {
               publicId: plan.publicId,
-            })
-          )
+            }),
+          ),
         ),
-    };
+    }
   },
 
   methods: {
     startPlan(plan) {
-      this.showDetails = false;
-      this.$emit("action");
+      this.showDetails = false
+      this.$emit('action')
       GameService.request(REQUEST_CODES.ACTION_START_PLAN, {
         planId: plan.planId,
-      });
+      })
     },
   },
-};
+})
 </script>

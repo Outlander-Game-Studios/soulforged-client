@@ -37,7 +37,7 @@
 </template>
 
 <script>
-const OperationCraft = {
+const OperationCraft = rxComponent({
   props: {
     operation: {},
   },
@@ -123,7 +123,7 @@ const OperationCraft = {
       )
     },
   },
-}
+})
 window.OperationCraft = OperationCraft
 export default OperationCraft
 </script>

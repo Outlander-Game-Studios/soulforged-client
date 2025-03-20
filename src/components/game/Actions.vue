@@ -109,7 +109,7 @@
 <script>
 import exclamationIcon from '../../assets/ui/cartoon/icons/exclamation.png'
 
-export default {
+export default rxComponent({
   props: {
     target: Object,
     vertical: {
@@ -288,7 +288,7 @@ export default {
       }
     },
   },
-}
+})
 </script>
 
 <style lang="scss">

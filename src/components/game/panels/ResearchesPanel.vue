@@ -163,7 +163,7 @@
 <script>
 import exclamationIcon from '../../../assets/ui/cartoon/icons/exclamation.png'
 
-export default {
+export default rxComponent({
   data: () => ({
     displayMode: null,
     selectedResearchId: null,
@@ -374,7 +374,7 @@ export default {
       })
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

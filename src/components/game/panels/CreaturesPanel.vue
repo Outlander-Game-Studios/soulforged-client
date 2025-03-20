@@ -56,7 +56,7 @@
 import { Rx } from '@/rx.js'
 import omit from 'lodash/omit.js'
 
-export default {
+export default rxComponent({
   props: {
     header: {},
     creatures: {},
@@ -193,5 +193,5 @@ export default {
       return Object.values(mapped)
     },
   },
-}
+})
 </script>

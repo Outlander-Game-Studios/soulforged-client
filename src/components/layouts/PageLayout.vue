@@ -22,7 +22,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   subscriptions() {
     return {
       location: GameService.getLocationStream(),
@@ -30,7 +30,7 @@ export default {
       fullscreenOperation: ControlsService.getFullscreenOperationStream(),
     }
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

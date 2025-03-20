@@ -57,7 +57,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     includeEmpty: {
       default: true,
@@ -104,7 +104,7 @@ export default {
       this.$emit('input', structure)
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

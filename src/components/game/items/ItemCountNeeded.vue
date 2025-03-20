@@ -7,7 +7,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     needed: {},
     publicId: {},
@@ -36,7 +36,7 @@ export default {
         : this.needed
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

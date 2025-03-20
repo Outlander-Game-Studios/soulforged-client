@@ -21,16 +21,16 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   subscriptions() {
-    const mainEntity = GameService.getRootEntityStream();
-    const location = GameService.getLocationStream();
+    const mainEntity = GameService.getRootEntityStream()
+    const location = GameService.getLocationStream()
     return {
       mainEntity,
       location,
       playerInventory: GameService.getInventoryStream(mainEntity),
       locationInventory: GameService.getInventoryStream(location),
-    };
+    }
   },
-};
+})
 </script>

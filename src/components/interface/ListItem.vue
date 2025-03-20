@@ -28,7 +28,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     subtitleClass: {},
     titleClass: {},
@@ -70,7 +70,7 @@ export default {
       this.visible = isVisible
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

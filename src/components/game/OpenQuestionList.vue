@@ -85,7 +85,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   data: () => ({
     MAX_PENDING_OPEN_QUESTIONS,
     showInfo: false,
@@ -131,7 +131,7 @@ export default {
       })
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

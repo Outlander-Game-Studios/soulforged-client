@@ -107,8 +107,6 @@ export default {
     internalValue: null,
   }),
 
-  subscriptions() {},
-
   computed: {
     durabilityStage() {
       return 3 - this.wornStage

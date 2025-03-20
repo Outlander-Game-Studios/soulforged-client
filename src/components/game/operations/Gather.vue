@@ -59,7 +59,7 @@
 </template>
 
 <script>
-const OperationGather = {
+const OperationGather = rxComponent({
   props: {
     operation: {},
   },
@@ -156,7 +156,7 @@ const OperationGather = {
       }
     },
   },
-}
+})
 window.OperationGather = OperationGather
 export default OperationGather
 </script>

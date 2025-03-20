@@ -22,7 +22,7 @@
 <script>
 import deadIcon from '../../assets/ui/cartoon/icons/dead.jpg'
 
-export default {
+export default rxComponent({
   data: () => ({
     deadIcon,
   }),
@@ -40,7 +40,7 @@ export default {
       })
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

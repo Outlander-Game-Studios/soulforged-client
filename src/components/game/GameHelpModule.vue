@@ -180,7 +180,7 @@
 <script>
 import menuIcon from '../../assets/ui/cartoon/icons/menu.png'
 
-export default {
+export default rxComponent({
   data: () => ({
     menuIcon,
     showCollections: false,
@@ -330,7 +330,7 @@ export default {
       ControlsService.openNewWindow(url)
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

@@ -53,7 +53,7 @@ const SORTING = [
   },
 ]
 
-export default {
+export default rxComponent({
   data: () => ({
     collapsed: true,
     sortOptions: SORTING.map((s) => s.label),
@@ -101,7 +101,7 @@ export default {
       return result
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

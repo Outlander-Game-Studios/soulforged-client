@@ -138,7 +138,7 @@
 <script>
 const EMOS = [':)', ':D', ':(', ':<', ':/', ':O', ':P']
 
-export default {
+export default rxComponent({
   data: () => ({
     errorMsg: null,
     newMessageText: '',
@@ -339,7 +339,7 @@ export default {
       return this.myCreature && this.myCreature.id === message.whoId
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

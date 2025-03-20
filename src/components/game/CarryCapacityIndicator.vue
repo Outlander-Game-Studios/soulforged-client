@@ -38,7 +38,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     modifier: {
       default: 0,
@@ -93,7 +93,7 @@ export default {
       return !!this.carryCapacityFill?.red
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

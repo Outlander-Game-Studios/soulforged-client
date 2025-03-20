@@ -18,11 +18,8 @@
           </LabeledValue>
         </div>
       </div>
-      <LabeledValue
-        label="Related attributes"
-        v-if="info.relatedStats && info.relatedStats.length"
-      >
-        {{ info.relatedStats.join(", ") }}
+      <LabeledValue label="Related attributes" v-if="info.relatedStats && info.relatedStats.length">
+        {{ info.relatedStats.join(', ') }}
       </LabeledValue>
       <div class="clear-both"></div>
       <template v-if="info.explained">
@@ -38,32 +35,32 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     skillName: {},
   },
 
   subscriptions() {
     return {
-      info: this.$stream("skillName").switchMap((skillName) =>
-        GameService.getInfoStream("SKILLS", { skillName: skillName }, true)
+      info: this.$stream('skillName').switchMap((skillName) =>
+        GameService.getInfoStream('SKILLS', { skillName: skillName }, true),
       ),
-    };
+    }
   },
 
   computed: {
     bonusClass() {
       switch (true) {
         case this.info.bonuses > 0:
-          return "text-good";
+          return 'text-good'
         case this.info.bonuses < 0:
-          return "text-bad";
+          return 'text-bad'
         default:
-          return "text-neutral";
+          return 'text-neutral'
       }
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss"></style>

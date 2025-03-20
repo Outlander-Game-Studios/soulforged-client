@@ -64,7 +64,7 @@
 </template>
 
 <script>
-const OperationWait = {
+const OperationWait = rxComponent({
   props: {
     operation: {},
   },
@@ -136,7 +136,7 @@ const OperationWait = {
       this.$refs.inputField.focus()
     },
   },
-}
+})
 window.OperationWait = OperationWait
 export default OperationWait
 </script>

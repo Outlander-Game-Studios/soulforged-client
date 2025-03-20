@@ -46,7 +46,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     noHeader: {
       type: Boolean,
@@ -67,7 +67,7 @@ export default {
       return stealthImpacts.reduce(multiply, 1)
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss"></style>

@@ -58,7 +58,7 @@
 </template>
 
 <script>
-const OperationDialogue = {
+const OperationDialogue = rxComponent({
   props: {
     operation: {},
   },
@@ -108,7 +108,7 @@ const OperationDialogue = {
       return entry.who === this.mainEntity.id
     },
   },
-}
+})
 window.OperationDialogue = OperationDialogue
 export default OperationDialogue
 </script>

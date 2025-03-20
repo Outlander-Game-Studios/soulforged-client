@@ -42,7 +42,7 @@ import pageSound from '../../assets/sounds/page.mp3'
 
 window.MILESTONES_IDX = 1
 
-export default {
+export default rxComponent({
   data: () => ({
     showDetails: false,
     nextObjective: null,
@@ -105,7 +105,7 @@ export default {
       })
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

@@ -42,7 +42,7 @@
 <script>
 import exclamationIcon from '../operation-assets/exclamation.png'
 
-const OperationPlan = {
+const OperationPlan = rxComponent({
   props: {
     operation: {},
   },
@@ -107,7 +107,7 @@ const OperationPlan = {
       ControlsService.updateConsideredAP(this.operation.context.unitCost)
     },
   },
-}
+})
 window.OperationPlan = OperationPlan
 export default OperationPlan
 </script>
