@@ -74,8 +74,9 @@ global.rxComponent = (definition) => {
       definition.created?.call(this)
     },
     beforeUnmount() {
-      console.log('TODO! must clean them up!')
-      console.log(this._subscriptions)
+      Object.values(this._subscriptions).forEach((sub) => {
+        sub.unsubscribe()
+      })
     },
   }
 }
