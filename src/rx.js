@@ -56,7 +56,7 @@ global.rxComponent = (definition) => {
     ...definition,
     created() {
       this.$stream = () => {
-        console.log('TODO')
+        console.log('TODO!')
         return new Rx.Subject()
       }
       const subscriptions = definition.subscriptions.call(this)
@@ -69,6 +69,7 @@ global.rxComponent = (definition) => {
       definition.created?.call(this)
     },
     beforeDestroy() {
+      console.log('TODO!')
       console.log(this._subscriptions)
     },
   }

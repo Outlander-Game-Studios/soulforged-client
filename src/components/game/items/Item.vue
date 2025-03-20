@@ -166,7 +166,7 @@ export default rxComponent({
 
   computed: {
     bubbleEvents() {
-      return bubbleEvents(this.$listeners, ['dragstart', 'dragend', 'touchstart', 'touchend'])
+      return bubbleEvents(this.$attrs, ['onDragstart', 'onDragend', 'onTouchstart', 'onTouchend'])
     },
     hasClick() {
       return !!this.$attrs.onClick

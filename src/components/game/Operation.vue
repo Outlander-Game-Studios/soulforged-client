@@ -127,6 +127,7 @@ export default rxComponent({
       }
       const fnName = `loaded_${jsId}`
       window[fnName] = () => {
+        console.log(`Initializing component ${componentName}: ${window[componentName]}`)
         global.app.component(componentName, window[componentName])
         this.$set(this.loadedComponents, componentName, true)
       }
