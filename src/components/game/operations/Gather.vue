@@ -110,7 +110,7 @@ const OperationGather = rxComponent({
     this.updateConsideredAP()
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.componentDestroyed = true
     ControlsService.updateConsideredAP(0)
   },

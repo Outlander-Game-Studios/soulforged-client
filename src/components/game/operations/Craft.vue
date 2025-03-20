@@ -85,7 +85,7 @@ const OperationCraft = rxComponent({
     this.updateConsideredAP()
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     ControlsService.updateConsideredAP(0)
   },
 

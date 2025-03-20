@@ -166,7 +166,7 @@ export default rxComponent({
             name,
             icon,
             effectPayload,
-            options: JSON.parse(options),
+            options: options ? JSON.parse(options) : {},
           })
         }
         return result

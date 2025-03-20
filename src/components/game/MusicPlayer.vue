@@ -16,7 +16,7 @@ export default rxComponent({
     this.currentMusicsByFile = {}
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.setMusicTracks([])
   },
 

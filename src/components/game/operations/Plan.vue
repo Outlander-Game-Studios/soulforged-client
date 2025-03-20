@@ -72,7 +72,7 @@ const OperationPlan = rxComponent({
     this.updateConsideredAP()
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     ControlsService.updateConsideredAP(0)
   },
 

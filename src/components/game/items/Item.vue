@@ -266,7 +266,7 @@ export default rxComponent({
       document.addEventListener('touchcancel', this.touchCancelHandler)
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
       document.removeEventListener('touchcancel', this.touchCancelHandler)
     },
 

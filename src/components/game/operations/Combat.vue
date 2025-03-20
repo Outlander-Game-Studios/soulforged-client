@@ -662,7 +662,7 @@ const OperationCombat = rxComponent({
           creatures.forEach((creature) => {
             const displayed = this.displayedCreatures[creature.id]
             if (!displayed || displayed.operationInfo?.name !== 'In Combat') {
-              this.$set(this.displayedCreatures, creature.id, creature)
+              this.displayedCreatures[creature.id] = creature
             }
             if (!this.creaturePositions[creature.id]) {
               const positionIdx = creature.hostile
@@ -677,12 +677,12 @@ const OperationCombat = rxComponent({
                   offset * 2,
                 y: pickedPosition[1] - offset * 2,
               }
-              this.$set(this.creaturePositions, creature.id, {
+              this.creaturePositions[creature.id] = {
                 animation: null,
                 stance: STANCES.IDLE,
                 initial: { ...position },
                 current: { ...position },
-              })
+              }
               return creature
             }
           })
@@ -702,7 +702,7 @@ const OperationCombat = rxComponent({
     document.addEventListener('keydown', this.keyDownHandler)
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     ControlsService.triggerControlEvent('notificationOffset', false)
     ControlsService.updateConsideredAP(0)
     document.removeEventListener('keydown', this.keyDownHandler)
@@ -1110,7 +1110,7 @@ const OperationCombat = rxComponent({
       payloads.forEach(this.updateCreatureState.bind(this))
     },
     updateCreatureState(creaturePayload) {
-      this.$set(this.displayedCreatures, creaturePayload.id, creaturePayload)
+      this.displayedCreatures[creaturePayload.id] = creaturePayload
     },
   },
 })

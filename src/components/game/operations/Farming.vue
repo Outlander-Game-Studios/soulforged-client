@@ -475,7 +475,7 @@ const OperationFarming = rxComponent({
     }
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     ControlsService.updateConsideredAP(0)
   },
 

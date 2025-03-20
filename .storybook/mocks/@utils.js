@@ -139,7 +139,7 @@ global.mockComponent = (
         onMounted(this)
       },
 
-      beforeDestroy() {
+      beforeUnmount() {
         onDestroyed(this)
       },
 

@@ -95,7 +95,7 @@ const OperationRedecorate = rxComponent({
     this.updateConsideredAP()
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     ControlsService.updateConsideredAP(0)
   },
 

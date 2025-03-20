@@ -8,49 +8,50 @@
       </template>
     </Modal>
     <component :is="wrap ? 'HorizontalWrap' : 'Horizontal'" tight class="wrapper-component">
-      <div
-        v-for="move in groupedMoves"
-        class="move-button-wrapper"
-        v-if="(!!move || !noSpacing) && (!autoResolveOnly || (!move.count && !move.cooldownMax))"
-        :class="{
-          'flex-grow': !move,
-          'miss-req': move && move.missingReq,
-        }"
-      >
-        <template v-if="!!move">
-          <Button
-            class="move-button"
-            @click="selectMove(move.moveId)"
-            noPadding
-            :color="odds && ODDS_COLORS[odds[move.moveId]]"
-          >
-            <div
-              v-if="move && selectedMoveId === move.moveId"
-              class="current-move"
-              :class="{ active: !!selectedMoveId }"
-            />
-            <div class="move-icon-wrapper">
-              <img class="move-icon" :src="move.icon" />
-              <div class="count-text" v-if="move.count">{{ move.count }}</div>
-              <div class="move-text">{{ move.name }}</div>
-              <div class="hotkey-text" v-if="hotkeysEnabled">
-                {{ hotkeys[move.moveId] }}
+      <template v-for="move in groupedMoves">
+        <div
+          class="move-button-wrapper"
+          v-if="(!!move || !noSpacing) && (!autoResolveOnly || (!move.count && !move.cooldownMax))"
+          :class="{
+            'flex-grow': !move,
+            'miss-req': move && move.missingReq,
+          }"
+        >
+          <template v-if="!!move">
+            <Button
+              class="move-button"
+              @click="selectMove(move.moveId)"
+              noPadding
+              :color="odds && ODDS_COLORS[odds[move.moveId]]"
+            >
+              <div
+                v-if="move && selectedMoveId === move.moveId"
+                class="current-move"
+                :class="{ active: !!selectedMoveId }"
+              />
+              <div class="move-icon-wrapper">
+                <img class="move-icon" :src="move.icon" />
+                <div class="count-text" v-if="move.count">{{ move.count }}</div>
+                <div class="move-text">{{ move.name }}</div>
+                <div class="hotkey-text" v-if="hotkeysEnabled">
+                  {{ hotkeys[move.moveId] }}
+                </div>
+              </div>
+            </Button>
+            <div class="cooldown-overlay" v-if="!showDetailsOnClick && move.cooldown">
+              <div
+                class="cooldown-fill"
+                :style="{
+                  height: (100 * move.cooldown) / move.cooldownMax + '%',
+                }"
+              />
+              <div class="cooldown-text">
+                {{ move.cooldown }}
               </div>
             </div>
-          </Button>
-          <div class="cooldown-overlay" v-if="!showDetailsOnClick && move.cooldown">
-            <div
-              class="cooldown-fill"
-              :style="{
-                height: (100 * move.cooldown) / move.cooldownMax + '%',
-              }"
-            />
-            <div class="cooldown-text">
-              {{ move.cooldown }}
-            </div>
-          </div>
-        </template>
-      </div>
+          </template>
+        </div>
+      </template>
     </component>
   </div>
 </template>
@@ -186,7 +187,7 @@ export default rxComponent({
     document.addEventListener('keypress', this.keyPressHandler)
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener('keypress', this.keyPressHandler)
   },
 

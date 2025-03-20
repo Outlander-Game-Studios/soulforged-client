@@ -155,7 +155,7 @@ const OperationConstruct = rxComponent({
     this.updateConsideredAP()
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     ControlsService.updateConsideredAP(0)
   },
 

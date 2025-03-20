@@ -90,7 +90,7 @@ export default {
     }
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.reactToEnter) {
       boundComponent = null
     }

@@ -1,5 +1,5 @@
 <template>
-  <span v-on="$listeners">
+  <span>
     <div class="help-button" @click="open()" :style="helpButtonStyle" />
     <Modal v-if="showInfo" dialog @close="close()" :title="title">
       <div class="help-contents">

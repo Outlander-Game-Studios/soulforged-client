@@ -77,9 +77,9 @@ export default rxComponent({
   methods: {
     toggleConfig(plugin) {
       const show = !this.showSettings[plugin.id]
-      this.$set(this.showSettings, plugin.id, show)
+      this.showSettings[plugin.id] = show
       if (show) {
-        this.$set(this.settingsValues, plugin.id, this.settingsValues[plugin.id] || {})
+        this.settingsValues[plugin.id] = this.settingsValues[plugin.id] || {}
         plugin.settings.forEach((setting) => {
           let defaultValue
           switch (setting.type) {
@@ -88,11 +88,8 @@ export default rxComponent({
               break
           }
           const currentValue = this.pluginSettings?.[plugin.id]?.[setting.id]
-          this.$set(
-            this.settingsValues[plugin.id],
-            setting.id,
-            currentValue === undefined ? defaultValue : currentValue,
-          )
+          this.settingsValues[plugin.id][setting.id] =
+            currentValue === undefined ? defaultValue : currentValue
         })
       }
     },

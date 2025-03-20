@@ -62,7 +62,7 @@ export default {
     this.animationId = 1
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     clearTimeout(this.cleanupTimeout)
     this.componentDestroyed = true
   },

@@ -55,9 +55,14 @@ global.rxComponent = (definition) => {
   return {
     ...definition,
     created() {
-      this.$stream = () => {
-        console.log('TODO!')
-        return new Rx.Subject()
+      this.$stream = (property) => {
+        const stream = new Rx.ReplaySubject(1)
+        stream.next(this[property])
+        this.$watch(property, (newValue) => {
+          console.log(property, 'set to', newValue)
+          stream.next(newValue)
+        })
+        return stream
       }
       const subscriptions = definition.subscriptions.call(this)
       this._subscriptions = Object.keys(subscriptions).map((key) => {
@@ -68,8 +73,8 @@ global.rxComponent = (definition) => {
       })
       definition.created?.call(this)
     },
-    beforeDestroy() {
-      console.log('TODO!')
+    beforeUnmount() {
+      console.log('TODO! must clean them up!')
       console.log(this._subscriptions)
     },
   }

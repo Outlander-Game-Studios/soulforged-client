@@ -116,7 +116,7 @@ export default rxComponent({
     loadJs(js, componentName) {
       if (!js) {
         // Stories only
-        this.$set(this.loadedComponents, componentName, true)
+        this.loadedComponents[componentName] = true
         return
       }
       const jsId = `js_${md5(js)}`
@@ -129,7 +129,7 @@ export default rxComponent({
       window[fnName] = () => {
         console.log(`Initializing component ${componentName}: ${window[componentName]}`)
         global.app.component(componentName, window[componentName])
-        this.$set(this.loadedComponents, componentName, true)
+        this.loadedComponents[componentName] = true
       }
 
       if (!!window[componentName]) {

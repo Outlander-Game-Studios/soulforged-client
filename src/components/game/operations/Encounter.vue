@@ -177,7 +177,7 @@ const OperationEncounter = rxComponent({
     GameService.checkQuickActions()
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     ControlsService.updateConsideredAP(0)
     GameService.checkQuickActions()
   },

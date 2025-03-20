@@ -199,6 +199,7 @@ export default rxComponent({
     feelingPain: 0,
     loading: true,
     animationsTimeouts: [],
+    images: {},
   }),
 
   created() {
@@ -440,7 +441,6 @@ export default rxComponent({
         LOADED: 2,
       }
 
-      this.images = this.images || {}
       if (this.images[imageUrl] || !imageUrl) {
         return
       }
