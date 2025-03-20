@@ -82,7 +82,8 @@ export const ControlsService = (window.ControlsService = {
   },
 
   isStoryshots() {
-    return !!(window.hasOwnProperty('STORYBOOK_HOOKS_CONTEXT') && !window.__VUE_HOT_MAP__)
+    // currently unused
+    return false
   },
 
   goToCharacterCreator() {
