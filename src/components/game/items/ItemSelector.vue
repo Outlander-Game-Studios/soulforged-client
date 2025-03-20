@@ -168,14 +168,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../../utils.scss';
+@use '../../../utils.scss';
 
 .item-button {
-  @include interactive();
+  @include utils.interactive();
 
   &.selected {
-    @include filter(saturate(1.1) brightness(1.5) drop-shadow(0.2rem 0.2rem 0.2rem black));
     z-index: 3;
+    @include utils.filter(saturate(1.1) brightness(1.5) drop-shadow(0.2rem 0.2rem 0.2rem black));
   }
 }
 </style>

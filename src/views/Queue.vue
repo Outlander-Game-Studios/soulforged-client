@@ -7,9 +7,8 @@
         <Spaced>
           <Vertical>
             <Description class="desc">
-              We are currently experiencing a large number of players trying to
-              access the game. You have been placed in the queue, please keep
-              this window open to stay in the queue.
+              We are currently experiencing a large number of players trying to access the game. You
+              have been placed in the queue, please keep this window open to stay in the queue.
             </Description>
             <div class="place">
               <span class="place-label">
@@ -26,7 +25,7 @@
 </template>
 
 <script>
-import Vue from "vue";
+import Vue from 'vue'
 
 export default {
   data: () => ({
@@ -34,39 +33,42 @@ export default {
   }),
 
   subscriptions() {
-    return {};
+    return {}
   },
 
   created() {
     if (!this.queuePosition) {
-      this.retry();
+      this.retry()
     }
-    setInterval(() => {
-      this.retry();
-    }, 30 * SECONDS * IN_MILISECONDS);
+    setInterval(
+      () => {
+        this.retry()
+      },
+      30 * SECONDS * IN_MILISECONDS,
+    )
   },
 
   methods: {
     retry() {
-      console.log("Retrying...");
-      this.queuePosition = null;
+      console.log('Retrying...')
+      this.queuePosition = null
       GameService.getOpenPromise(true, true)
         .then(() => {
-          console.log("Connected");
-          SoundService.playNotificationSound("login");
-          window.location = "/#/main";
+          console.log('Connected')
+          SoundService.playNotificationSound('login')
+          window.location = '/#/main'
         })
         .catch(() => {
-          console.log("Still in queue", GameService.queuePosition);
-          this.queuePosition = GameService.queuePosition;
-        });
+          console.log('Still in queue', GameService.queuePosition)
+          this.queuePosition = GameService.queuePosition
+        })
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../utils.scss";
+@use '../utils.scss';
 
 .queue-wrapper {
   padding: 3rem;
@@ -74,7 +76,7 @@ export default {
   height: 100%;
   max-height: 100%;
   overflow: auto;
-  background-image: url(ui-asset("/backdrops/main.jpg", "src/"));
+  background-image: url(ui-asset('/backdrops/main.jpg', 'src/'));
   background-size: cover;
   background-position: center center;
   display: flex;

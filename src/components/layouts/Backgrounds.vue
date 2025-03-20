@@ -26,7 +26,7 @@ export default {}
 
 <style lang="scss">
 @use 'sass:map';
-@import '../../utils.scss';
+@use '../../utils.scss';
 
 @mixin effect-sev-background($color, $second: black) {
   background-image: radial-gradient($color, $second);
@@ -48,28 +48,28 @@ export default {}
   background: transparent;
 }
 .background-base {
-  @include theme-background();
+  @include utils.theme-background();
 }
 .background-alt {
-  @include theme-background-alt();
+  @include utils.theme-background-alt();
 }
 .background-alt2 {
-  @include theme-background-alt-2();
+  @include utils.theme-background-alt-2();
 }
 .background-alt3 {
-  @include theme-background-alt-3();
+  @include utils.theme-background-alt-3();
 }
 .background-self {
-  @include theme-background-self();
+  @include utils.theme-background-self();
 }
 .background-danger {
-  @include theme-background-danger();
+  @include utils.theme-background-danger();
 }
 .background-danger-low {
-  @include theme-background-danger-low();
+  @include utils.theme-background-danger-low();
 }
 .background-important {
-  @include theme-background-important();
+  @include utils.theme-background-important();
 }
 .background-severity--5 {
   @include effect-sev-background(#19cb00);

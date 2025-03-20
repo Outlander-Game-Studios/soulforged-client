@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import helpSound from "../../assets/sounds/help.mp3";
+import helpSound from '../../assets/sounds/help.mp3'
 
 export default {
   props: {
@@ -30,25 +30,25 @@ export default {
         ? {
             backgroundImage: `url(${this.icon})`,
           }
-        : {};
+        : {}
     },
   },
 
   methods: {
     open() {
-      SoundService.playSound(helpSound);
-      this.showInfo = true;
-      this.$emit("open");
+      SoundService.playSound(helpSound)
+      this.showInfo = true
+      this.$emit('open')
     },
     close() {
-      this.showInfo = false;
+      this.showInfo = false
     },
   },
-};
+}
 </script>
 
 <style lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .help-button {
   min-width: 1em;
@@ -56,12 +56,12 @@ export default {
   height: 1em;
   display: inline-block;
   vertical-align: bottom;
-  background-image: url(ui-asset("/icons/help.png"));
+  background-image: url(ui-asset('/icons/help.png'));
   background-size: 100% 100%;
   cursor: pointer;
 
   &:hover {
-    @include filter(brightness(1.2));
+    @include utils.filter(brightness(1.2));
   }
 }
 

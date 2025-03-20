@@ -108,7 +108,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../utils.scss';
+@use '../../utils.scss';
 
 .icon-wrapper {
   overflow: hidden;
@@ -143,13 +143,13 @@ export default {
   .bottom-right {
     right: 5%;
     bottom: 2%;
-    @include text-outline();
+    @include utils.text-outline();
     z-index: 2;
   }
   .top-right {
     right: 5%;
     top: 2%;
-    @include text-outline();
+    @include utils.text-outline();
     z-index: 2;
   }
 }

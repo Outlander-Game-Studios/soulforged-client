@@ -16,22 +16,12 @@
         >
           Interface overview
         </Button>
-        <Button class="menu-button" @click="selectOption('core')">
-          Core game concepts
-        </Button>
-        <Button
-          class="menu-button"
-          @click="selectOption('collections')"
-          v-if="isInGame"
-        >
+        <Button class="menu-button" @click="selectOption('core')"> Core game concepts </Button>
+        <Button class="menu-button" @click="selectOption('collections')" v-if="isInGame">
           Collections
         </Button>
-        <Button @click="openNewWindow(DISCORD_INVITE_URL)">
-          Join Discord
-        </Button>
-        <Button class="menu-button" @click="selectOption('credits')">
-          Game Credits
-        </Button>
+        <Button @click="openNewWindow(DISCORD_INVITE_URL)"> Join Discord </Button>
+        <Button class="menu-button" @click="selectOption('credits')"> Game Credits </Button>
         <Button
           class="menu-button"
           @click="selectOption('plugins')"
@@ -43,12 +33,8 @@
           Server Info
           <div v-if="newVersion" class="new-version button" />
         </Button>
-        <Button class="menu-button" @click="selectOption('settings')">
-          Settings
-        </Button>
-        <Button class="menu-button" @click="selectOption('logout')">
-          Log out
-        </Button>
+        <Button class="menu-button" @click="selectOption('settings')"> Settings </Button>
+        <Button class="menu-button" @click="selectOption('logout')"> Log out </Button>
       </Vertical>
     </Help>
     <CollectionsDisplay
@@ -86,10 +72,7 @@
         </Help>
         {{ tabHelper.label }}
       </ExplanationIndicator>
-      <ExplanationIndicator
-        selector=".controls-sticky .ap-container"
-        placement="right"
-      >
+      <ExplanationIndicator selector=".controls-sticky .ap-container" placement="right">
         <Help title="Action Points"><HelpActionPoints /></Help>
         Action Points
       </ExplanationIndicator>
@@ -101,17 +84,11 @@
         <Help title="Your location"><HelpYourLocation /></Help>
         Your location
       </ExplanationIndicator>
-      <ExplanationIndicator
-        selector=".controls-sticky .effects-container"
-        placement="right"
-      >
+      <ExplanationIndicator selector=".controls-sticky .effects-container" placement="right">
         <Help title="Your effects"><HelpEffects /></Help>
         Your effects
       </ExplanationIndicator>
-      <ExplanationIndicator
-        selector=".controls-sticky .currency-value"
-        placement="right"
-      >
+      <ExplanationIndicator selector=".controls-sticky .currency-value" placement="right">
         <Help title="Essence"><HelpEssence /></Help>
         Essence
       </ExplanationIndicator>
@@ -126,9 +103,7 @@
         </Help>
         Travel
       </ExplanationIndicator>
-      <Button @click="closeInterfaceOverview()" class="close-interface-guide">
-        Close
-      </Button>
+      <Button @click="closeInterfaceOverview()" class="close-interface-guide"> Close </Button>
     </div>
     <Modal v-if="showPlugins" @close="showPlugins = false">
       <template v-slot:title>
@@ -169,8 +144,7 @@
             <Button @click="option = null">Stay logged in</Button>
           </HorizontalCenter>
           <Description>
-            If you'd like to completely delete your account and remove the
-            information click
+            If you'd like to completely delete your account and remove the information click
             <a href="#" @click="startDeletion()">here</a>
           </Description>
         </Vertical>
@@ -190,16 +164,10 @@
             </div>
           </div>
           <HorizontalCenter>
-            <Checkbox v-model="confirmDelete">
-              I confirm I want to delete my account
-            </Checkbox>
+            <Checkbox v-model="confirmDelete"> I confirm I want to delete my account </Checkbox>
           </HorizontalCenter>
           <HorizontalCenter>
-            <Button
-              @click="deleteMyAccount()"
-              :processing="loggingOut"
-              :disabled="!confirmDelete"
-            >
+            <Button @click="deleteMyAccount()" :processing="loggingOut" :disabled="!confirmDelete">
               Delete my account
             </Button>
           </HorizontalCenter>
@@ -210,7 +178,7 @@
 </template>
 
 <script>
-import menuIcon from "../../assets/ui/cartoon/icons/menu.png";
+import menuIcon from '../../assets/ui/cartoon/icons/menu.png'
 
 export default {
   data: () => ({
@@ -227,32 +195,32 @@ export default {
     confirmDelete: false,
     tabHelpers: [
       {
-        selector: "location",
-        label: "Location",
+        selector: 'location',
+        label: 'Location',
       },
       {
-        selector: "inventory",
-        label: "Inventory",
+        selector: 'inventory',
+        label: 'Inventory',
       },
       {
-        selector: "character",
-        label: "Character",
+        selector: 'character',
+        label: 'Character',
       },
       {
-        selector: "craft",
-        label: "Crafting",
+        selector: 'craft',
+        label: 'Crafting',
       },
       {
-        selector: "research",
-        label: "Research",
+        selector: 'research',
+        label: 'Research',
       },
       {
-        selector: "trade",
-        label: "Trade",
+        selector: 'trade',
+        label: 'Trade',
       },
       {
-        selector: "chat",
-        label: "Chat",
+        selector: 'chat',
+        label: 'Chat',
       },
     ],
     DISCORD_INVITE_URL,
@@ -262,117 +230,111 @@ export default {
     return {
       allPlugins: PluginService.getAllPluginsStream(),
       mainEntity: GameService.getRootEntityStream().tap((mainEntity) => {
-        if (
-          !mainEntity.operation &&
-          LocalStorageService.getItem("HideHelpIndicator", 0) < 2
-        ) {
-          this.showHelpIndicator = true;
+        if (!mainEntity.operation && LocalStorageService.getItem('HideHelpIndicator', 0) < 2) {
+          this.showHelpIndicator = true
         }
       }),
       isInGame: GameService.getRootEntityStream(),
       isInCombat: GameService.getRootEntityStream()
-        .map((c) => c?.operation?.type === "CombatOperation")
+        .map((c) => c?.operation?.type === 'CombatOperation')
         .distinctUntilChanged(undefined, JSON.stringify),
       newVersion: Rx.combineLatest(
         GameService.getVersionStream(),
-        GameService.getLastViewedVersionStream()
+        GameService.getLastViewedVersionStream(),
       ).map(
         ([version, lastVersion]) =>
-          version.split(".").slice(0, 2).join(".") !==
-          lastVersion.split(".").slice(0, 2).join(".")
+          version.split('.').slice(0, 2).join('.') !== lastVersion.split('.').slice(0, 2).join('.'),
       ),
-      openMilestones: ControlsService.getControlEventStream(
-        "openMilestones"
-      ).tap(([data]) => {
-        this.showCollections = true;
+      openMilestones: ControlsService.getControlEventStream('openMilestones').tap(([data]) => {
+        this.showCollections = true
         setTimeout(() => {
-          this.$refs.collectionsComponent.showCategory(data.categoryIdx);
-        });
+          this.$refs.collectionsComponent.showCategory(data.categoryIdx)
+        })
       }),
-    };
+    }
   },
 
   computed: {
     newPageTarget() {
-      return ControlsService.cordovaLoginAvailable() ? "_system" : "_blank";
+      return ControlsService.cordovaLoginAvailable() ? '_system' : '_blank'
     },
   },
 
   methods: {
     startDeletion() {
-      this.option = "deleteMyAccount";
-      this.confirmDelete = false;
+      this.option = 'deleteMyAccount'
+      this.confirmDelete = false
     },
 
     deleteMyAccount() {
-      this.loggingOut = true;
+      this.loggingOut = true
       GameService.request(REQUEST_CODES.DELETE_MY_ACCOUNT).then(() => {
-        window.location.reload();
-      });
+        window.location.reload()
+      })
     },
 
     logout() {
-      this.loggingOut = true;
+      this.loggingOut = true
       GameService.request(REQUEST_CODES.LOGOUT).then(() => {
-        window.location.reload();
-      });
+        window.location.reload()
+      })
     },
 
     openGameMenu() {
-      this.showHelpIndicator = false;
-      LocalStorageService.setItem("HideHelpIndicator", 2);
+      this.showHelpIndicator = false
+      LocalStorageService.setItem('HideHelpIndicator', 2)
     },
 
     selectOption(option) {
       switch (option) {
-        case "statistics":
-          window.location = "#/stats";
-          return;
-        case "collections":
-          this.$refs.trigger.close();
-          this.showCollections = true;
-          return;
-        case "core":
-          this.showCoreConcepts = true;
-          return;
-        case "credits":
-          this.showCredits = true;
-          return;
-        case "interface":
-          this.$refs.trigger.close();
-          this.showInterfaceOverview = true;
-          return;
-        case "settings":
-          this.showSettings = true;
-          return;
-        case "plugins":
-          this.showPlugins = true;
-          return;
+        case 'statistics':
+          window.location = '#/stats'
+          return
+        case 'collections':
+          this.$refs.trigger.close()
+          this.showCollections = true
+          return
+        case 'core':
+          this.showCoreConcepts = true
+          return
+        case 'credits':
+          this.showCredits = true
+          return
+        case 'interface':
+          this.$refs.trigger.close()
+          this.showInterfaceOverview = true
+          return
+        case 'settings':
+          this.showSettings = true
+          return
+        case 'plugins':
+          this.showPlugins = true
+          return
         default:
-          this.option = option;
-          return;
+          this.option = option
+          return
       }
     },
 
     closeInterfaceOverview() {
-      this.showInterfaceOverview = false;
-      this.$refs.trigger.open();
+      this.showInterfaceOverview = false
+      this.$refs.trigger.open()
     },
 
     closeCollections() {
-      this.showCollections = false;
-      this.$refs.trigger.open();
+      this.showCollections = false
+      this.$refs.trigger.open()
     },
 
     openNewWindow(url) {
-      ControlsService.openNewWindow(url);
+      ControlsService.openNewWindow(url)
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 @keyframes help-indicator {
   0% {
@@ -399,11 +361,11 @@ export default {
 
 .help-trigger {
   font-size: 250%;
-  //@include filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
+  //@include utils.filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
   display: flex;
 }
 .backdrop {
-  @include fill();
+  @include utils.fill();
   position: fixed;
   background-color: rgba(0, 0, 0, 0.55);
   z-index: 450;
@@ -415,7 +377,7 @@ export default {
   right: 0.5rem;
 }
 .button-link {
-  @include text-outline();
+  @include utils.text-outline();
   text-decoration: none;
   position: relative;
 }
@@ -427,7 +389,7 @@ export default {
   width: 3rem;
   height: 6rem;
   pointer-events: none;
-  background-image: url(ui-asset("/icons/exclamation.png"));
+  background-image: url(ui-asset('/icons/exclamation.png'));
   background-size: auto 100%;
   background-position: center center;
   transform: rotate(10deg);

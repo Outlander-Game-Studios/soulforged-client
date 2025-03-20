@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import "./Backgrounds.vue";
+import './Backgrounds.vue'
 
 export default {
   props: {
@@ -28,15 +28,15 @@ export default {
       default: false,
     },
     backgroundType: {
-      default: "base",
+      default: 'base',
       validator: PropValidator.oneOf(global.BACKGROUNDS),
     },
     customStyle: {
       default: () => ({}),
     },
     borderType: {
-      default: "base",
-      validator: PropValidator.oneOf(["none", "base", "alt", "alt2", "alt3"]),
+      default: 'base',
+      validator: PropValidator.oneOf(['none', 'base', 'alt', 'alt2', 'alt3']),
     },
     borderSize: {
       default: 0.75,
@@ -54,12 +54,12 @@ export default {
       default: true,
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@use "sass:map";
-@import "../../utils.scss";
+@use 'sass:map';
+@use '../../utils.scss';
 
 .border-container {
   box-sizing: border-box;
@@ -78,16 +78,16 @@ export default {
     border-color: transparent;
   }
   &.border-base {
-    @include theme-border();
+    @include utils.theme-border();
   }
   &.border-alt {
-    @include theme-border-alt();
+    @include utils.theme-border-alt();
   }
   &.border-alt2 {
-    @include theme-border-alt-2();
+    @include utils.theme-border-alt-2();
   }
   &.border-alt3 {
-    @include theme-border-alt-3();
+    @include utils.theme-border-alt-3();
   }
 
   &:not(.top) {

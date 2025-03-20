@@ -215,13 +215,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../../utils.scss';
+@use '../../../utils.scss';
 
 .inventory-wrapper {
   position: relative;
 }
 
 .inventory-items {
-  @include touch-scroll-space();
+  @include utils.touch-scroll-space();
 }
 </style>

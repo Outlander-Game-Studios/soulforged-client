@@ -292,7 +292,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../utils.scss';
+@use '../../utils.scss';
 
 .action-button-wrapper.disabled {
   pointer-events: none;

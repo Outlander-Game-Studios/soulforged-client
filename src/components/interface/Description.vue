@@ -28,11 +28,11 @@ export default {
       type: Boolean,
     },
   },
-};
+}
 </script>
 
 <style lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .description-container {
   color: #555;
@@ -51,7 +51,7 @@ export default {
     font-size: 100%;
     font-style: normal;
     text-align: center;
-    @include text-outline(#492000, #ffbb4f);
+    @include utils.text-outline(#492000, #ffbb4f);
 
     &.inline {
       display: inline-block;

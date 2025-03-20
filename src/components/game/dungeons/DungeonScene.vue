@@ -121,7 +121,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../../utils.scss';
+@use '../../../utils.scss';
 
 $size-base: min(var(--app-width), var(--app-height) * 2.6);
 $ceiling-height: calc(#{$size-base} * 0.065);
@@ -132,7 +132,7 @@ $floor-height: calc(#{$size-base} * 0.1);
 $total-height: calc(#{$ceiling-height} + #{$backwall-height} + #{$floor-height});
 
 .dungeon-scene-wrapper {
-  @include fill();
+  @include utils.fill();
   background: black;
   display: flex;
   justify-content: center;

@@ -11,16 +11,8 @@
               <Spaced>
                 <Vertical>
                   <Input placeholder="Text search..." v-model="textFilter" />
-                  <Select
-                    label="Skill"
-                    :options="availableSkills"
-                    v-model="skillFilter"
-                  />
-                  <Select
-                    label="Sort"
-                    :options="sortOptions"
-                    v-model="sortOrder"
-                  />
+                  <Select label="Skill" :options="availableSkills" v-model="skillFilter" />
+                  <Select label="Sort" :options="sortOptions" v-model="sortOrder" />
                 </Vertical>
               </Spaced>
             </div>
@@ -33,9 +25,7 @@
       <LoadingPlaceholder />
     </div>
     <div v-else-if="!crafts.length" class="empty-text">None</div>
-    <div v-else-if="!sortedFilteredCrafts.length" class="empty-text">
-      No results found
-    </div>
+    <div v-else-if="!sortedFilteredCrafts.length" class="empty-text">No results found</div>
     <div v-else v-for="craft in sortedFilteredCrafts">
       <CraftListItem :craft="craft" />
     </div>
@@ -43,34 +33,31 @@
 </template>
 
 <script>
-const NO_FILTER = "_";
+const NO_FILTER = '_'
 const SORTING = [
   {
-    label: "Default",
+    label: 'Default',
   },
   {
-    label: "Difficulty",
+    label: 'Difficulty',
     sorter: (a, b) => b.difficulty - a.difficulty,
   },
   {
-    label: "Skill",
+    label: 'Skill',
     sorter: (a, b) => compareStrings(a.skill, b.skill),
   },
   {
-    label: "Name",
+    label: 'Name',
     sorter: (a, b) =>
-      compareStrings(
-        GameService.stripRichText(a.name),
-        GameService.stripRichText(b.name)
-      ),
+      compareStrings(GameService.stripRichText(a.name), GameService.stripRichText(b.name)),
   },
-];
+]
 
 export default {
   data: () => ({
     collapsed: true,
     sortOptions: SORTING.map((s) => s.label),
-    textFilter: "",
+    textFilter: '',
     skillFilter: NO_FILTER,
     sortOrder: 0,
   }),
@@ -78,49 +65,47 @@ export default {
   subscriptions() {
     return {
       crafts: GameService.getCraftsStream(),
-    };
+    }
   },
 
   computed: {
     availableSkills() {
       return {
-        [NO_FILTER]: "Any",
+        [NO_FILTER]: 'Any',
         ...(this.crafts || [])
           .map((c) => c.skill)
           .filter((skill) => !!skill)
           .uniq()
           .sort()
           .toObject(),
-      };
+      }
     },
     sortedFilteredCrafts() {
-      let result = [...this.crafts];
+      let result = [...this.crafts]
       if (!result) {
-        return;
+        return
       }
       if (this.skillFilter !== NO_FILTER) {
-        result = result.filter((craft) => craft.skill === this.skillFilter);
+        result = result.filter((craft) => craft.skill === this.skillFilter)
       }
       if (this.textFilter) {
-        const textFilter = this.textFilter.toLowerCase();
+        const textFilter = this.textFilter.toLowerCase()
         result = result.filter((craft) =>
-          GameService.stripRichText(craft.name)
-            .toLowerCase()
-            .includes(textFilter)
-        );
+          GameService.stripRichText(craft.name).toLowerCase().includes(textFilter),
+        )
       }
-      const { sorter } = SORTING[this.sortOrder];
+      const { sorter } = SORTING[this.sortOrder]
       if (sorter) {
-        result.sort(sorter);
+        result.sort(sorter)
       }
-      return result;
+      return result
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 
 .craft-filters-wrapper {
   @include main-tab-extra();

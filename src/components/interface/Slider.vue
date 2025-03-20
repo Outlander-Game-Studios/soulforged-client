@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import sliderSound from "../../assets/sounds/slider.mp3";
+import sliderSound from '../../assets/sounds/slider.mp3'
 
 export default {
   props: {
@@ -46,19 +46,19 @@ export default {
   watch: {
     value: {
       handler() {
-        this.ensureMinMax();
+        this.ensureMinMax()
       },
       immediate: true,
     },
     min: {
       handler() {
-        this.ensureMinMax();
+        this.ensureMinMax()
       },
       immediate: true,
     },
     max: {
       handler() {
-        this.ensureMinMax();
+        this.ensureMinMax()
       },
       immediate: true,
     },
@@ -66,104 +66,102 @@ export default {
 
   computed: {
     isDisabled() {
-      return this.disabled || this.min >= this.max;
+      return this.disabled || this.min >= this.max
     },
 
     leftPosition() {
-      return (
-        (((this.value || this.min) - this.min) / (this.max - this.min)) * 100
-      );
+      return (((this.value || this.min) - this.min) / (this.max - this.min)) * 100
     },
 
     handleStyle() {
       return {
         left: `${this.leftPosition}%`,
-      };
+      }
     },
   },
 
   methods: {
     ensureMinMax() {
       if (!this.value && this.value !== 0) {
-        return;
+        return
       }
-      const actualValue = Math.limit(this.value, this.min, this.max);
+      const actualValue = Math.limit(this.value, this.min, this.max)
       if (actualValue !== this.value) {
-        this.$emit("input", actualValue);
+        this.$emit('input', actualValue)
       }
     },
     setValueBaseOnPosition(position) {
       if (position === null) {
-        return;
+        return
       }
-      position = position / this.$refs.rail.clientWidth;
-      position = Math.max(0, Math.min(1, position));
-      let value;
+      position = position / this.$refs.rail.clientWidth
+      position = Math.max(0, Math.min(1, position))
+      let value
       if (this.step !== -1) {
-        const stepsCount = (this.max - this.min) / this.step;
-        position = Math.round(position * stepsCount);
-        value = (position * (this.max - this.min)) / stepsCount + this.min;
+        const stepsCount = (this.max - this.min) / this.step
+        position = Math.round(position * stepsCount)
+        value = (position * (this.max - this.min)) / stepsCount + this.min
       } else {
-        value = position * (this.max - this.min) + this.min;
+        value = position * (this.max - this.min) + this.min
       }
       if (this.old === value) {
-        return;
+        return
       }
       SoundService.playSound(sliderSound, {
         speed: 2,
-        unique: "slider",
+        unique: 'slider',
         throttle: 50,
-      });
-      this.old = value;
-      this.$emit("input", value);
+      })
+      this.old = value
+      this.$emit('input', value)
     },
 
     getOffsetX(event) {
       if (!this.$refs.rail) {
-        return null;
+        return null
       }
-      const left = this.$refs.rail.getBoundingClientRect().left;
+      const left = this.$refs.rail.getBoundingClientRect().left
       if (event.clientX) {
-        return event.clientX - left;
+        return event.clientX - left
       }
       if (event.targetTouches && event.targetTouches.length === 1) {
-        return event.targetTouches[0].clientX - left;
+        return event.targetTouches[0].clientX - left
       }
 
-      return null;
+      return null
     },
 
     draggingBackground(event) {
-      this.setValueBaseOnPosition(this.getOffsetX(event));
-      this.startDragging(event);
+      this.setValueBaseOnPosition(this.getOffsetX(event))
+      this.startDragging(event)
     },
 
     startDragging() {
       const mouseMoveHandler = (moveEvent) => {
         if (moveEvent.buttons === 1 || moveEvent.touches) {
-          this.setValueBaseOnPosition(this.getOffsetX(moveEvent));
+          this.setValueBaseOnPosition(this.getOffsetX(moveEvent))
         } else {
-          mouseUpHandler();
+          mouseUpHandler()
         }
-      };
+      }
       const mouseUpHandler = () => {
-        window.removeEventListener("mouseup", mouseUpHandler);
-        window.removeEventListener("touchend", mouseUpHandler);
-        window.removeEventListener("mousemove", mouseMoveHandler);
-        window.removeEventListener("touchmove", mouseMoveHandler);
-      };
-      window.addEventListener("mouseup", mouseUpHandler);
-      window.addEventListener("touchend", mouseUpHandler);
-      window.addEventListener("mousemove", mouseMoveHandler);
-      window.addEventListener("touchmove", mouseMoveHandler);
+        window.removeEventListener('mouseup', mouseUpHandler)
+        window.removeEventListener('touchend', mouseUpHandler)
+        window.removeEventListener('mousemove', mouseMoveHandler)
+        window.removeEventListener('touchmove', mouseMoveHandler)
+      }
+      window.addEventListener('mouseup', mouseUpHandler)
+      window.addEventListener('touchend', mouseUpHandler)
+      window.addEventListener('mousemove', mouseMoveHandler)
+      window.addEventListener('touchmove', mouseMoveHandler)
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@use "sass:map";
-@import "../../utils.scss";
+@use 'sass:map';
+@use '../../utils.scss';
 
 .slider {
   $knob-size: 3rem;
@@ -171,12 +169,12 @@ export default {
   position: relative;
 
   &:hover {
-    @include filter(brightness(1.3));
-    @include filter-fix();
+    @include utils.filter(brightness(1.3));
+    @include utils.filter-fix();
   }
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     left: calc($knob-size / 2);
     right: calc($knob-size / 2);
@@ -192,8 +190,8 @@ export default {
     $rail-height: calc($knob-size / 2);
     box-sizing: border-box;
     margin: calc($knob-size / 4) calc($knob-size / 2);
-    @include fill();
-    @include theme-slider-rail($rail-height);
+    @include utils.fill();
+    @include utils.theme-slider-rail($rail-height);
 
     // workaround for rail cutoff bug
     height: calc(#{$rail-height} + 1px);
@@ -215,11 +213,11 @@ export default {
     height: $knob-size;
     border-radius: 0.1rem;
     z-index: 2;
-    @include theme-slider-knob();
+    @include utils.theme-slider-knob();
   }
 
   &.disabled {
-    @include disabled();
+    @include utils.disabled();
   }
 }
 </style>

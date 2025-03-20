@@ -19,11 +19,11 @@ export default {
       default: false,
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 
 .indicator-resource-density {
   $border: 0.05em;
@@ -98,11 +98,11 @@ export default {
 
   &.use-img {
     display: inline-block;
-    background-image: url(ui-asset("/misc/resource-indicators-s.png", "../"));
+    background-image: url(ui-asset('/misc/resource-indicators-s.png', '../'));
     background-size: 100% 500%;
 
     &.high-res {
-      background-image: url(ui-asset("/misc/resource-indicators.png", "../"));
+      background-image: url(ui-asset('/misc/resource-indicators.png', '../'));
     }
 
     &.density-4 {

@@ -1,18 +1,12 @@
 <template>
   <label class="radio-label" :class="{ disabled: disabled }">
-    <input
-      type="radio"
-      v-model="internalValue"
-      :value="option"
-      ref="radio"
-      @input="select()"
-    />
+    <input type="radio" v-model="internalValue" :value="option" ref="radio" @input="select()" />
     <span class="text"><slot></slot></span>
   </label>
 </template>
 
 <script>
-import checkboxSound from "../../assets/sounds/checkbox.mp3";
+import checkboxSound from '../../assets/sounds/checkbox.mp3'
 
 export default {
   props: {
@@ -29,7 +23,7 @@ export default {
   watch: {
     value: {
       handler() {
-        this.internalValue = this.value;
+        this.internalValue = this.value
       },
       immediate: true,
     },
@@ -40,15 +34,15 @@ export default {
 
   methods: {
     select() {
-      SoundService.playSound(checkboxSound);
-      this.$emit("input", this.option);
+      SoundService.playSound(checkboxSound)
+      this.$emit('input', this.option)
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .radio-label {
   cursor: pointer;
@@ -62,12 +56,12 @@ export default {
   }
 
   &.disabled {
-    @include disabled();
     pointer-events: none;
+    @include utils.disabled();
   }
 }
 
-input[type="radio"] {
+input[type='radio'] {
   $size: 2.5rem;
   appearance: none;
   background-color: transparent;
@@ -87,23 +81,23 @@ input[type="radio"] {
   outline: none;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
-    background-image: url(ui-asset("/misc/radio_off.png"));
+    background-image: url(ui-asset('/misc/radio_off.png'));
     background-size: 100%;
     background-repeat: no-repeat;
   }
 
   &:checked::before {
-    background-image: url(ui-asset("/misc/radio.png"));
+    background-image: url(ui-asset('/misc/radio.png'));
   }
 
   &[disabled]::before {
-    //@include disabled();
+    //@include utils.disabled();
   }
 }
 </style>

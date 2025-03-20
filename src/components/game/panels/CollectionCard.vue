@@ -6,20 +6,12 @@
       faded: cardInfo.faded,
       interactive: cardInfo && cardInfo.collectibleDetails,
     }"
-    @click="
-      showDetails = cardInfo && cardInfo.collectibleDetails ? cardInfo : null
-    "
+    @click="showDetails = cardInfo && cardInfo.collectibleDetails ? cardInfo : null"
   >
     <div v-if="cardInfo && cardInfo.name">
-      <div
-        class="icon"
-        :style="{ backgroundImage: 'url(' + cardInfo.icon + ')' }"
-      />
+      <div class="icon" :style="{ backgroundImage: 'url(' + cardInfo.icon + ')' }" />
       <div class="name">
-        <RichText
-          :value="cardInfo.name"
-          :nonInteractive="!!cardInfo.collectibleDetails"
-        />
+        <RichText :value="cardInfo.name" :nonInteractive="!!cardInfo.collectibleDetails" />
       </div>
       <div class="value" :class="{ stars: cardInfo.style === '3star' }">
         <StarRating
@@ -37,10 +29,7 @@
       <template v-slot:title> <RichText :value="showDetails.name" /> </template>
       <template v-slot:contents>
         <div v-if="showDetails.component">
-          <component
-            :is="showDetails.component"
-            v-bind="showDetails.collectibleDetails"
-          />
+          <component :is="showDetails.component" v-bind="showDetails.collectibleDetails" />
         </div>
         <div v-else>
           {{ showDetails.collectibleDetails }}
@@ -59,18 +48,18 @@ export default {
   data: () => ({
     showDetails: null,
   }),
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 
 .collection-card {
   font-size: calc(0.02 * var(--app-min-size));
   width: 9.5em;
   height: 13.3em;
 
-  background-image: url(ui-asset("/card/face.png", "../"));
+  background-image: url(ui-asset('/card/face.png', '../'));
   background-size: 100% 100%;
 
   position: relative;
@@ -79,7 +68,7 @@ export default {
     opacity: 0.6;
   }
   &.unknown {
-    background-image: url(ui-asset("/card/back.png", "../"));
+    background-image: url(ui-asset('/card/back.png', '../'));
     opacity: 0.2;
   }
 
@@ -113,7 +102,7 @@ export default {
     }
 
     .text-value {
-      @include text-outline();
+      @include utils.text-outline();
     }
   }
 

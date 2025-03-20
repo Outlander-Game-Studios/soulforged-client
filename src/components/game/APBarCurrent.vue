@@ -151,7 +151,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../utils.scss';
+@use '../../utils.scss';
 
 .ap {
   margin-left: auto;

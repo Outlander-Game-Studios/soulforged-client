@@ -3,13 +3,7 @@
     <div v-if="mainEntity && mainEntity.dead" class="dead-container">
       <Container :borderSize="1" borderType="alt" backgroundType="alt2">
         <div class="dead-indicator flex">
-          <Icon
-            round
-            :size="6"
-            :src="deadIcon"
-            backgroundType="alt"
-            class="dead-icon"
-          />
+          <Icon round :size="6" :src="deadIcon" backgroundType="alt" class="dead-icon" />
           <Description>
             <div class="dead-text">
               You died<br />
@@ -26,7 +20,7 @@
 </template>
 
 <script>
-import deadIcon from "../../assets/ui/cartoon/icons/dead.jpg";
+import deadIcon from '../../assets/ui/cartoon/icons/dead.jpg'
 
 export default {
   data: () => ({
@@ -36,24 +30,24 @@ export default {
   subscriptions() {
     return {
       mainEntity: GameService.getRootEntityStream(),
-    };
+    }
   },
 
   methods: {
     onClick() {
       GameService.request(REQUEST_CODES.CONFIRM_DEATH).then(() => {
-        location.reload(true);
-      });
+        location.reload(true)
+      })
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .dead-container {
-  @include filter-fix();
+  @include utils.filter-fix();
   display: flex;
   width: 100%;
   top: 15rem;

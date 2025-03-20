@@ -8,11 +8,7 @@
             :key="selectedResearchId"
             class="item-selection-wrapper"
           >
-            <Container
-              borderType="alt"
-              :borderSize="1.2"
-              class="item-selection"
-            >
+            <Container borderType="alt" :borderSize="1.2" class="item-selection">
               <Header>
                 <RichText :value="selectedResearch.title" />
               </Header>
@@ -28,13 +24,8 @@
               >
                 Favourite
               </Checkbox>
-              <Header alt2>
-                Use items (x{{ selectedResearch.difficulty }})
-              </Header>
-              <HorizontalWrap
-                tight
-                v-if="playerInventory && playerInventory.length > 0"
-              >
+              <Header alt2> Use items (x{{ selectedResearch.difficulty }}) </Header>
+              <HorizontalWrap tight v-if="playerInventory && playerInventory.length > 0">
                 <ItemCollectAnimation
                   v-for="(item, idx) in playerInventory"
                   :ref="'item_' + item.id"
@@ -82,9 +73,7 @@
       </TopZIndex>
       <div class="researches">
         <Header>Research</Header>
-        <Radio v-model="displayMode" option="favourites">
-          Only favourites
-        </Radio>
+        <Radio v-model="displayMode" option="favourites"> Only favourites </Radio>
         <Radio v-model="displayMode" option="wip"> In Progress </Radio>
         <Radio v-model="displayMode" option="completed"> Completed </Radio>
         <Spaced>
@@ -109,14 +98,11 @@
               <Spaced v-if="undiscoveredResearchCounts">
                 <Description>
                   <HorizontalCenter>
-                    <div>
-                      {{ undiscoveredResearchCounts }} undiscovered researches.
-                    </div>
+                    <div>{{ undiscoveredResearchCounts }} undiscovered researches.</div>
                     <Help title="Discovering Researches">
-                      You unlock new researches by interacting with the world,
-                      obtaining new items and increasing your highest ever skill
-                      levels. The exact details on obtaining each specific
-                      research are left for players to find out.
+                      You unlock new researches by interacting with the world, obtaining new items
+                      and increasing your highest ever skill levels. The exact details on obtaining
+                      each specific research are left for players to find out.
                     </Help>
                   </HorizontalCenter>
                 </Description>
@@ -139,11 +125,7 @@
         </ListItem>
       </template>
     </Modal>
-    <Modal
-      dialog
-      v-if="selectingItem && selectedResearch"
-      @close="selectingItem = null"
-    >
+    <Modal dialog v-if="selectingItem && selectedResearch" @close="selectingItem = null">
       <template v-slot:title>
         Use
         <RichText :value="selectingItem.name" />
@@ -152,17 +134,10 @@
       <template v-slot:contents>
         <Vertical>
           <Horizontal>
-            <ItemIcon
-              :icon="selectingItem.icon"
-              :amount="'x' + selectedResearch.difficulty"
-            />
+            <ItemIcon :icon="selectingItem.icon" :amount="'x' + selectedResearch.difficulty" />
             <div>Are you sure you want to use this item?</div>
           </Horizontal>
-          <Button
-            @click="confirmSelectingItem()"
-            :processing="itemBeingProcessed"
-            >Confirm</Button
-          >
+          <Button @click="confirmSelectingItem()" :processing="itemBeingProcessed">Confirm</Button>
         </Vertical>
       </template>
     </Modal>
@@ -186,7 +161,7 @@
 </template>
 
 <script>
-import exclamationIcon from "../../../assets/ui/cartoon/icons/exclamation.png";
+import exclamationIcon from '../../../assets/ui/cartoon/icons/exclamation.png'
 
 export default {
   data: () => ({
@@ -199,66 +174,63 @@ export default {
     appliedMaterials: {},
     selectingItem: false,
     itemBeingProcessed: false,
-    textSearch: "",
+    textSearch: '',
   }),
 
   subscriptions() {
-    const mainEntity = GameService.getRootEntityStream();
-    const delay = 800;
-    const inventoryStream = GameService.getInventoryStream(mainEntity);
-    const researchesStream = GameService.getResearchesStream();
+    const mainEntity = GameService.getRootEntityStream()
+    const delay = 800
+    const inventoryStream = GameService.getInventoryStream(mainEntity)
+    const researchesStream = GameService.getResearchesStream()
 
     return {
-      playerInventory: GameService.getItemSorterStream().switchMap(
-        (itemSorter) =>
-          Rx.Observable.merge(
-            inventoryStream.first(),
-            inventoryStream.delay(delay)
-          ).map((items) => items.filter((item) => !!item).sort(itemSorter))
+      playerInventory: GameService.getItemSorterStream().switchMap((itemSorter) =>
+        Rx.Observable.merge(inventoryStream.first(), inventoryStream.delay(delay)).map((items) =>
+          items.filter((item) => !!item).sort(itemSorter),
+        ),
       ),
-      undiscoveredResearchCounts:
-        GameService.getResearchesCountsStream().pluck("undiscovered"),
+      undiscoveredResearchCounts: GameService.getResearchesCountsStream().pluck('undiscovered'),
       allResearches: researchesStream,
       researches: Rx.combineLatest([
-        this.$stream("displayMode"),
-        this.$stream("textSearch"),
+        this.$stream('displayMode'),
+        this.$stream('textSearch'),
         Rx.Observable.merge(
           researchesStream.first(),
           researchesStream.switchMap((researches) => {
             if (this.withDelay) {
-              return Rx.Observable.of(researches).delay(delay);
+              return Rx.Observable.of(researches).delay(delay)
             } else {
-              return Rx.Observable.of(researches);
+              return Rx.Observable.of(researches)
             }
-          })
+          }),
         ),
       ]).map(([displayMode, textSearch, researches]) =>
         researches
           .filter(
             (r) =>
-              ((displayMode === "completed" && !!r.completed) ||
-                (displayMode === "wip" && !r.completed) ||
-                (displayMode === "favourites" && !!r.fav)) &&
+              ((displayMode === 'completed' && !!r.completed) ||
+                (displayMode === 'wip' && !r.completed) ||
+                (displayMode === 'favourites' && !!r.fav)) &&
               (!textSearch ||
                 GameService.stripRichText(r.title)
                   .toLowerCase()
-                  .includes(textSearch.toLowerCase()))
+                  .includes(textSearch.toLowerCase())),
           )
           .reverse()
           .sort((a, b) => {
             if (a.fav !== b.fav) {
-              return a.fav ? -1 : 1;
+              return a.fav ? -1 : 1
             }
-            return 0;
-          })
+            return 0
+          }),
       ),
       equipmentMap: GameService.getEquipmentMapStream(),
-    };
+    }
   },
 
   watch: {
     displayMode() {
-      LocalStorageService.setItem("ResearchDisplayMode", this.displayMode);
+      LocalStorageService.setItem('ResearchDisplayMode', this.displayMode)
     },
   },
 
@@ -267,23 +239,23 @@ export default {
       const discovery =
         this.discoveryId &&
         this.allResearches &&
-        this.allResearches.find((r) => r.researchId === this.discoveryId);
+        this.allResearches.find((r) => r.researchId === this.discoveryId)
       if (discovery && discovery.completed) {
-        return discovery;
+        return discovery
       }
-      return null;
+      return null
     },
 
     selectedResearch() {
       const research =
         this.selectedResearchId &&
         this.researches &&
-        this.researches.find((r) => r.researchId === this.selectedResearchId);
+        this.researches.find((r) => r.researchId === this.selectedResearchId)
       if (research && research.completed) {
-        this.selectedResearchId = null;
-        return null;
+        this.selectedResearchId = null
+        return null
       }
-      return research;
+      return research
     },
 
     invalidItems() {
@@ -292,86 +264,83 @@ export default {
         ...(this.selectedResearch?.failedItems || []),
       ].toObject(
         (item) => item.publicId,
-        () => true
-      );
+        () => true,
+      )
     },
   },
 
   created() {
-    this.displayMode = LocalStorageService.getItem(
-      "ResearchDisplayMode",
-      "wip"
-    );
+    this.displayMode = LocalStorageService.getItem('ResearchDisplayMode', 'wip')
   },
 
   methods: {
     selectItem(item) {
-      this.selectingItem = item;
+      this.selectingItem = item
     },
 
     confirmSelectingItem() {
-      this.itemBeingProcessed = true;
+      this.itemBeingProcessed = true
       this.applyMaterial({
         itemId: this.selectingItem.id,
       }).then(() => {
-        this.selectingItem = null;
-        this.itemBeingProcessed = false;
-      });
+        this.selectingItem = null
+        this.itemBeingProcessed = false
+      })
     },
 
     selectResearch(research) {
-      const { researchId } = research;
+      const { researchId } = research
       if (this.selectedResearchId === researchId) {
-        this.selectedResearchId = null;
+        this.selectedResearchId = null
       } else if (!research.completed) {
-        this.selectedResearchId = researchId;
+        this.selectedResearchId = researchId
         if (!research.seen) {
           GameService.request(REQUEST_CODES.RESEARCH_MARK_SEEN, {
             researchId,
-          });
+          })
         }
       }
     },
 
     toggleFav(value) {
       if (this.selectedResearch.fav === value) {
-        return;
+        return
       }
-      const researchId = this.selectedResearch.researchId;
-      this.processingFav = true;
+      const researchId = this.selectedResearch.researchId
+      this.processingFav = true
       GameService.request(REQUEST_CODES.RESEARCH_MARK_FAV, {
         researchId: researchId,
         fav: value,
       })
         .then(() => {
-          this.processingFav = false;
+          this.processingFav = false
         })
         .catch(() => {
-          this.processingFav = false;
-        });
+          this.processingFav = false
+        })
     },
 
     scrollToResearch(researchId) {
       document.querySelector(`.research-${researchId}`).scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+        behavior: 'smooth',
+        block: 'start',
+      })
     },
 
     applyMaterial({ itemId }) {
-      const researchId = this.selectedResearchId;
+      const researchId = this.selectedResearchId
       return this.applyMaterialOnce({
         itemId,
         researchId,
-      });
+      })
     },
     applyMaterialOnce({ itemId, researchId }) {
-      const key = `${itemId}:${researchId}`;
+      const key = `${itemId}:${researchId}`
       if (this.appliedMaterials[key]) {
-        return Promise.resolve();
+        return Promise.resolve()
       }
-      this.appliedMaterials[key] = true;
-      this.withDelay = true;
+      this.appliedMaterials[key] = true
+      this.withDelay = true
       return GameService.request(REQUEST_CODES.RESEARCH, {
         itemId,
         researchId,
@@ -379,37 +348,37 @@ export default {
         if (result.ok === false) {
           ToastNotify({
             icon: exclamationIcon,
-            text: "Action Interrupted",
+            text: 'Action Interrupted',
             subtext: result.message,
-          });
-          return;
+          })
+          return
         }
         const selector = result.match
           ? `.research-${researchId} .item-icon.unknown`
-          : `.research-${researchId} .bin-icon`;
-        this.$refs["item_" + itemId].first().apiAddCollected(
+          : `.research-${researchId} .bin-icon`
+        this.$refs['item_' + itemId].first().apiAddCollected(
           {
             results: Array.create(this.selectedResearch.difficulty).map(() => ({
               gain: 1,
               targetSize: 1,
             })),
           },
-          selector
-        );
+          selector,
+        )
         if (result.completed) {
           ControlsService.setAnimationTimeout(() => {
-            this.withDelay = false;
-            this.discoveryId = researchId;
-          }, 800);
+            this.withDelay = false
+            this.discoveryId = researchId
+          }, 800)
         }
-      });
+      })
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 
 .research-panel {
   display: flex;
@@ -449,7 +418,7 @@ export default {
   .item.invalid {
     pointer-events: none;
     z-index: 5;
-    @include filter(saturate(0));
+    @include utils.filter(saturate(0));
   }
   .item-selection {
     overflow: auto;
@@ -458,7 +427,9 @@ export default {
 
   &.slide-enter-active,
   &.slide-leave-active {
-    transition: margin 0.3s, opacity 0.3s;
+    transition:
+      margin 0.3s,
+      opacity 0.3s;
   }
 }
 

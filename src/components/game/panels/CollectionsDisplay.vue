@@ -94,7 +94,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../../utils.scss';
+@use '../../../utils.scss';
 
 .collection-display-wrapper {
   background: #150a03;

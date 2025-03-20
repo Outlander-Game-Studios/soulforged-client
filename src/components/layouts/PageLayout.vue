@@ -28,13 +28,13 @@ export default {
       location: GameService.getLocationStream(),
       backdropImage: GameService.getBackdropStyleStream(),
       fullscreenOperation: ControlsService.getFullscreenOperationStream(),
-    };
+    }
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .page-layout {
   display: flex;
@@ -44,7 +44,7 @@ export default {
   //.actions-container,
   //.status,
   //.controls {
-  //  @include filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
+  //  @include utils.filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
   //}
 
   .status {

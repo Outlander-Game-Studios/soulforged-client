@@ -98,7 +98,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../utils.scss';
+@use '../../utils.scss';
 
 @keyframes fade-in {
   from {
@@ -134,7 +134,7 @@ export default {
   flex-direction: column;
 
   .backdrop {
-    @include fill();
+    @include utils.fill();
     position: fixed;
     background-color: rgba(0, 0, 0, 0.7);
     z-index: 9001;
@@ -182,12 +182,12 @@ export default {
       .border-container {
         &::before {
           content: '';
-          @include fill();
           pointer-events: none;
           border-width: 10rem;
           border-style: solid;
           border-image: url(ui-asset('/borders/mid_bar_frame_single.png')) 200;
           background-size: 100% 100%;
+          @include utils.fill();
         }
       }
     }

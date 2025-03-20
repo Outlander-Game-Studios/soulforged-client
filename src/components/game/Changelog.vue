@@ -85,7 +85,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../utils.scss';
+@use '../../utils.scss';
 
 .symbol {
   display: inline-block;
@@ -94,7 +94,7 @@ export default {
   background-size: 100% 100%;
   background-repeat: no-repeat;
   margin-right: 0.5rem;
-  @include filter(
+  @include utils.filter(
     drop-shadow(1px 1px 0 #111) drop-shadow(1px -1px 0 #111) drop-shadow(-1px 1px 0 #111)
       drop-shadow(-1px -1px 0 #111)
   );

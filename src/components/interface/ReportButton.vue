@@ -15,12 +15,7 @@
           <TextArea v-model="additionalInfo" :disabled="processing" />
           <div class="error-text">{{ error }}</div>
           <HorizontalCenter>
-            <Button
-              type="reset"
-              @click="confirm()"
-              :processing="processing"
-              :disabled="!!error"
-            >
+            <Button type="reset" @click="confirm()" :processing="processing" :disabled="!!error">
               Report
             </Button>
           </HorizontalCenter>
@@ -45,39 +40,39 @@ export default {
 
   data: () => ({
     reporting: false,
-    additionalInfo: "",
+    additionalInfo: '',
     processing: false,
   }),
 
   computed: {
     error() {
-      return ReportCommentValidator(this.additionalInfo);
+      return ReportCommentValidator(this.additionalInfo)
     },
   },
 
   methods: {
     confirm() {
-      this.processing = true;
+      this.processing = true
       GameService.request(REQUEST_CODES.REPORT, {
         type: this.type,
         refId: this.refId,
         additionalInfo: this.additionalInfo,
       }).then((result) => {
-        this.processing = false;
+        this.processing = false
         if (!result || !result.ok) {
-          ToastError("Report failed");
+          ToastError('Report failed')
         } else {
-          ToastSuccess("Your report has been received");
-          this.reporting = false;
+          ToastSuccess('Your report has been received')
+          this.reporting = false
         }
-      });
+      })
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .report-button-wrapper {
   display: inline-block;
@@ -88,12 +83,12 @@ export default {
   width: 1em;
   height: 1em;
   display: inline-block;
-  background-image: url(ui-asset("/icons/report.png"));
+  background-image: url(ui-asset('/icons/report.png'));
   background-size: 100% 100%;
   cursor: pointer;
 
   &:hover {
-    @include filter(brightness(1.2));
+    @include utils.filter(brightness(1.2));
   }
 }
 </style>

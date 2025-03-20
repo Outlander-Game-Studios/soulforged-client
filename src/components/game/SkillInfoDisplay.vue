@@ -239,7 +239,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../utils.scss';
+@use '../../utils.scss';
 
 .efficiency-effects {
   display: inline-block;
@@ -263,22 +263,22 @@ export default {
   letter-spacing: 0.035em;
 
   &.rate-color-0 {
-    @include text-outline(#4f0808, firebrick);
+    @include utils.text-outline(#4f0808, firebrick);
   }
   &.rate-color-1 {
-    @include text-outline(#541111, red);
+    @include utils.text-outline(#541111, red);
   }
   &.rate-color-2 {
-    @include text-outline(#322200, orange);
+    @include utils.text-outline(#322200, orange);
   }
   &.rate-color-3 {
-    @include text-outline(#181800, yellow);
+    @include utils.text-outline(#181800, yellow);
   }
   &.rate-color-4 {
-    @include text-outline(#093209, limegreen);
+    @include utils.text-outline(#093209, limegreen);
   }
   &.rate-color-5 {
-    @include text-outline(#022902, green);
+    @include utils.text-outline(#022902, green);
   }
 }
 </style>

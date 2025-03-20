@@ -16,24 +16,19 @@
         <slot></slot>
       </div>
     </div>
-    <Spinner
-      class="processing-spinner"
-      v-if="processingOn"
-      :size="3"
-      color="white"
-    />
+    <Spinner class="processing-spinner" v-if="processingOn" :size="3" color="white" />
   </button>
 </template>
 
 <script>
-import buttonClickSound from "../../assets/sounds/button-click.mp3";
+import buttonClickSound from '../../assets/sounds/button-click.mp3'
 
-let boundComponent;
-window.addEventListener("keypress", ($event) => {
-  if (($event.key || $event.code) === "Enter" && boundComponent) {
-    boundComponent.click($event);
+let boundComponent
+window.addEventListener('keypress', ($event) => {
+  if (($event.key || $event.code) === 'Enter' && boundComponent) {
+    boundComponent.click($event)
   }
-});
+})
 
 export default {
   props: {
@@ -60,20 +55,20 @@ export default {
     processing: {
       handler(promise) {
         if (!promise) {
-          this.processingOn = false;
-          return;
+          this.processingOn = false
+          return
         }
-        this.processingOn = true;
-        if (typeof promise === "boolean") {
-          this.processingOn = promise;
+        this.processingOn = true
+        if (typeof promise === 'boolean') {
+          this.processingOn = promise
         } else {
           promise
             .then(() => {
-              this.processingOn = false;
+              this.processingOn = false
             })
             .catch(() => {
-              this.processingOn = false;
-            });
+              this.processingOn = false
+            })
         }
       },
       immediate: true,
@@ -82,43 +77,43 @@ export default {
 
   computed: {
     isDisabled() {
-      return this.disabled;
+      return this.disabled
     },
   },
 
   mounted() {
     if (this.reactToEnter) {
       if (boundComponent) {
-        throw new Error("Conflicting global keypress listeners");
+        throw new Error('Conflicting global keypress listeners')
       }
-      boundComponent = this;
+      boundComponent = this
     }
   },
 
   beforeDestroy() {
     if (this.reactToEnter) {
-      boundComponent = null;
+      boundComponent = null
     }
   },
 
   methods: {
     click($event) {
       if (!this.isDisabled) {
-        SoundService.playSound(buttonClickSound);
-        this.$emit("click", $event);
+        SoundService.playSound(buttonClickSound)
+        this.$emit('click', $event)
       }
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@use "sass:map";
-@import "../../utils";
+@use 'sass:map';
+@use '../../utils';
 
 button {
   font-size: 2rem;
-  @include interactive();
+  @include utils.interactive();
   padding: 0;
   border: 0;
   background-color: transparent;
@@ -127,16 +122,16 @@ button {
 
   &.highlighted {
     .content {
-      @include filter(brightness(1.2) saturate(1.2));
+      @include utils.filter(brightness(1.2) saturate(1.2));
       box-shadow: 0 0 0.3rem 0.3rem steelblue;
     }
   }
 
   &.type-accept {
-    @include filter(hue-rotate(70deg));
+    @include utils.filter(hue-rotate(70deg));
   }
   &.type-reject {
-    @include filter(hue-rotate(327deg) saturate(1.5));
+    @include utils.filter(hue-rotate(327deg) saturate(1.5));
   }
 
   &.no-padding {
@@ -146,8 +141,8 @@ button {
   }
 
   &[disabled] {
-    @include disabled();
     pointer-events: none;
+    @include utils.disabled();
   }
 
   &.processing {
@@ -165,8 +160,8 @@ button {
     border-width: 1rem;
     border-style: solid;
     border-radius: 1rem;
-    @include text-outline();
-    @include theme-button();
+    @include utils.text-outline();
+    @include utils.theme-button();
   }
 
   .processing-spinner {
@@ -179,7 +174,7 @@ button {
   &:active,
   &.active {
     .content {
-      @include theme-button-pressed();
+      @include utils.theme-button-pressed();
     }
   }
 }

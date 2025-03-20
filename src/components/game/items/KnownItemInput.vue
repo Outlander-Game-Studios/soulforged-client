@@ -33,16 +33,9 @@
             @input="queueSearchItems()"
           />
           <LoadingPlaceholder v-if="!results" />
-          <div v-else-if="!search" class="empty-text">
-            Enter search text to see results
-          </div>
+          <div v-else-if="!search" class="empty-text">Enter search text to see results</div>
           <div v-else-if="!results.length" class="empty-text">No results</div>
-          <ListItem
-            v-else
-            v-for="result in results"
-            :key="result.publicId"
-            :iconSrc="result.icon"
-          >
+          <ListItem v-else v-for="result in results" :key="result.publicId" :iconSrc="result.icon">
             <template v-slot:title>
               <RichText :value="result.name" />
             </template>
@@ -86,12 +79,7 @@
           </Horizontal>
           <Spaced>
             <HorizontalCenter>
-              <Button
-                @click="confirmItemSelection()"
-                :disabled="!selectedResult"
-              >
-                Confirm
-              </Button>
+              <Button @click="confirmItemSelection()" :disabled="!selectedResult"> Confirm </Button>
             </HorizontalCenter>
           </Spaced>
         </Vertical>
@@ -114,7 +102,7 @@ export default {
     results: [],
     quality: 1,
     wornStage: 3,
-    search: "",
+    search: '',
     selecting: false,
     internalValue: null,
   }),
@@ -123,7 +111,7 @@ export default {
 
   computed: {
     durabilityStage() {
-      return 3 - this.wornStage;
+      return 3 - this.wornStage
     },
   },
 
@@ -131,85 +119,83 @@ export default {
     focusSearch() {
       setTimeout(() => {
         if (this.$refs.itemSearchInput) {
-          this.$refs.itemSearchInput.focus();
+          this.$refs.itemSearchInput.focus()
         }
-      });
+      })
     },
 
     startSelecting() {
-      this.selecting = true;
-      this.focusSearch();
+      this.selecting = true
+      this.focusSearch()
     },
 
     clearResult() {
-      this.selectedResult = null;
-      this.focusSearch();
+      this.selectedResult = null
+      this.focusSearch()
     },
 
     confirmItemSelection() {
       const value = {
         publicId: this.selectedResult.publicId,
-      };
+      }
       if (this.selectedResult.qualityNames) {
-        value.quality = this.quality;
+        value.quality = this.quality
       }
       if (this.selectedResult.durabilityNames) {
-        value.durabilityStage = this.durabilityStage;
+        value.durabilityStage = this.durabilityStage
       }
       this.internalValue = {
         ...value,
         icon: this.selectedResult.icon,
         name: this.selectedResult.name,
-      };
-      this.$emit("input", value);
-      this.selecting = null;
+      }
+      this.$emit('input', value)
+      this.selecting = null
     },
 
     queueSearchItems() {
-      this.selectedResult = null;
-      this.results = null;
-      clearTimeout(this.searchTimeout);
+      this.selectedResult = null
+      this.results = null
+      clearTimeout(this.searchTimeout)
 
       if (!this.search) {
-        this.results = [];
-        return;
+        this.results = []
+        return
       }
 
       this.searchTimeout = setTimeout(() => {
-        this.searchItems();
-      }, 800);
+        this.searchItems()
+      }, 800)
     },
 
     searchItems() {
-      this.selectedResult = null;
-      this.results = null;
+      this.selectedResult = null
+      this.results = null
       GameService.request(REQUEST_CODES.SEARCH_KNOWN_ITEMS, {
         query: this.search,
       }).then((results) => {
-        this.results = results;
-      });
+        this.results = results
+      })
     },
 
     selectedItem(item) {
-      this.internalValue = item;
-      this.$emit("selected", item);
-      this.$emit("input", item);
+      this.internalValue = item
+      this.$emit('selected', item)
+      this.$emit('input', item)
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 
 .item-button {
-  @include interactive();
+  @include utils.interactive();
 
   &.selected {
-    @include filter(
-      saturate(1.1) brightness(1.5) drop-shadow(0.2rem 0.2rem 0.2rem black)
-    );
     z-index: 3;
+    @include utils.filter(saturate(1.1) brightness(1.5) drop-shadow(0.2rem 0.2rem 0.2rem black));
   }
 }
 </style>

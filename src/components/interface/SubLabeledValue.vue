@@ -21,11 +21,11 @@ export default {
     wrap: { type: Boolean, default: false },
     invalid: { type: Boolean, default: false },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .sub-labeled-value {
   padding-left: 2rem;

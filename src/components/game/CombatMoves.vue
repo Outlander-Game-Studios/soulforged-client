@@ -7,18 +7,11 @@
         <CombatMoveDetails v-else :moveDetails="showingMoveDetails" />
       </template>
     </Modal>
-    <component
-      :is="wrap ? 'HorizontalWrap' : 'Horizontal'"
-      tight
-      class="wrapper-component"
-    >
+    <component :is="wrap ? 'HorizontalWrap' : 'Horizontal'" tight class="wrapper-component">
       <div
         v-for="move in groupedMoves"
         class="move-button-wrapper"
-        v-if="
-          (!!move || !noSpacing) &&
-          (!autoResolveOnly || (!move.count && !move.cooldownMax))
-        "
+        v-if="(!!move || !noSpacing) && (!autoResolveOnly || (!move.count && !move.cooldownMax))"
         :class="{
           'flex-grow': !move,
           'miss-req': move && move.missingReq,
@@ -45,10 +38,7 @@
               </div>
             </div>
           </Button>
-          <div
-            class="cooldown-overlay"
-            v-if="!showDetailsOnClick && move.cooldown"
-          >
+          <div class="cooldown-overlay" v-if="!showDetailsOnClick && move.cooldown">
             <div
               class="cooldown-fill"
               :style="{
@@ -66,8 +56,8 @@
 </template>
 
 <script>
-import attackIcon from "../../assets/ui/cartoon/icons/attack2.png";
-import fleeIcon from "../../assets/ui/cartoon/icons/flee2.png";
+import attackIcon from '../../assets/ui/cartoon/icons/attack2.png'
+import fleeIcon from '../../assets/ui/cartoon/icons/flee2.png'
 
 export default {
   props: {
@@ -95,124 +85,109 @@ export default {
   data: () => ({
     showingMoveId: false,
     ODDS_COLORS: {
-      "n/a": "blue",
-      4: "green3",
-      3: "green2",
-      2: "green1",
-      1: "green0",
-      0: "yellow",
-      "-1": "orange",
-      "-2": "red1",
-      "-3": "red2",
-      "-4": "red3",
+      'n/a': 'blue',
+      4: 'green3',
+      3: 'green2',
+      2: 'green1',
+      1: 'green0',
+      0: 'yellow',
+      '-1': 'orange',
+      '-2': 'red1',
+      '-3': 'red2',
+      '-4': 'red3',
     },
   }),
 
   subscriptions() {
-    const movesStream = this.$stream("moves").switchMap((moves) =>
+    const movesStream = this.$stream('moves').switchMap((moves) =>
       moves
         ? Rx.Observable.of(moves)
         : GameService.getRootEntityStream()
             .filter((entity) => entity?.combatStats?.moves)
-            .map((entity) => entity.combatStats.moves)
-    );
+            .map((entity) => entity.combatStats.moves),
+    )
     return {
       loadedMoves: movesStream,
       groupedMoves: movesStream.map((moves) => {
-        const primary = [];
-        const secondary = [];
+        const primary = []
+        const secondary = []
         moves.forEach((move) => {
           if (move.secondary) {
-            secondary.push(move);
+            secondary.push(move)
           } else {
-            primary.push(move);
+            primary.push(move)
           }
-        });
-        return [...primary, null, ...secondary];
+        })
+        return [...primary, null, ...secondary]
       }),
-      showingMoveDetails: this.$stream("showingMove").switchMap((move) => {
+      showingMoveDetails: this.$stream('showingMove').switchMap((move) => {
         if (!move) {
-          return Rx.Observable.of(null);
+          return Rx.Observable.of(null)
         } else if (move.details) {
-          return Rx.Observable.of(move);
+          return Rx.Observable.of(move)
         } else {
           return Rx.Observable.merge(
-            ["loading"],
+            ['loading'],
             GameService.getInfoStream(
-              "CombatMove",
+              'CombatMove',
               {
                 moveId: move.moveId,
               },
-              true
-            )
-          );
+              true,
+            ),
+          )
         }
       }),
-    };
+    }
   },
 
   computed: {
     hotkeysEnabled() {
-      return !this.showDetailsOnClick && !this.autoResolveOnly;
+      return !this.showDetailsOnClick && !this.autoResolveOnly
     },
 
     hotkeys() {
       if (!this.hotkeysEnabled) {
-        return {};
+        return {}
       }
-      const remainingMoves = [...this.groupedMoves];
-      let availableKeys = [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "0",
-        "-",
-        "=",
-      ];
-      const hotkeyMap = {};
+      const remainingMoves = [...this.groupedMoves]
+      let availableKeys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=']
+      const hotkeyMap = {}
       do {
-        const move = remainingMoves.shift();
+        const move = remainingMoves.shift()
         if (move === null) {
-          remainingMoves.reverse();
-          availableKeys = ["p", "o", "i", "u", "y", "t", "r", "e", "w", "q"];
+          remainingMoves.reverse()
+          availableKeys = ['p', 'o', 'i', 'u', 'y', 't', 'r', 'e', 'w', 'q']
         } else {
-          hotkeyMap[move.moveId] = availableKeys.shift();
+          hotkeyMap[move.moveId] = availableKeys.shift()
         }
-      } while (remainingMoves.length);
-      return hotkeyMap;
+      } while (remainingMoves.length)
+      return hotkeyMap
     },
 
     showingMove() {
       if (this.showingMoveId) {
-        return this.loadedMoves.find((m) => m.moveId === this.showingMoveId);
+        return this.loadedMoves.find((m) => m.moveId === this.showingMoveId)
       }
-      return null;
+      return null
     },
   },
 
   mounted() {
     this.keyPressHandler = ($event) => {
       if (this.hotkeysEnabled) {
-        const key = $event.key;
-        const moveId = Object.keys(this.hotkeys).find(
-          (moveId) => this.hotkeys[moveId] === key
-        );
+        const key = $event.key
+        const moveId = Object.keys(this.hotkeys).find((moveId) => this.hotkeys[moveId] === key)
         if (moveId) {
-          this.selectMove(moveId);
+          this.selectMove(moveId)
         }
       }
-    };
-    document.addEventListener("keypress", this.keyPressHandler);
+    }
+    document.addEventListener('keypress', this.keyPressHandler)
   },
 
   beforeDestroy() {
-    document.removeEventListener("keypress", this.keyPressHandler);
+    document.removeEventListener('keypress', this.keyPressHandler)
   },
 
   methods: {
@@ -220,17 +195,17 @@ export default {
 
     selectMove(moveId) {
       if (this.showDetailsOnClick) {
-        this.showingMoveId = moveId;
+        this.showingMoveId = moveId
       } else {
-        this.$emit("selected", moveId);
+        this.$emit('selected', moveId)
       }
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .combat-moves {
   font-size: 1rem;
@@ -252,15 +227,15 @@ export default {
   }
 
   &.selected {
-    @include filter(brightness(1.5));
+    @include utils.filter(brightness(1.5));
   }
 
   &.miss-req {
-    @include filter(saturate(0));
+    @include utils.filter(saturate(0));
 
     .move-icon-wrapper {
       &::before {
-        content: "";
+        content: '';
         position: absolute;
         $expand: 2rem;
         top: calc(-1 * $expand / 2);
@@ -338,7 +313,7 @@ export default {
 
   .cooldown-text {
     position: absolute;
-    @include text-outline();
+    @include utils.text-outline();
     font-size: 2.5em;
     text-align: center;
     height: 100%;
@@ -359,7 +334,7 @@ export default {
   left: 50%;
   margin-top: calc($size / -2);
   margin-left: calc($size / -2);
-  background-image: url(ui-asset("/misc/current-move.png"));
+  background-image: url(ui-asset('/misc/current-move.png'));
   background-size: 100% 100%;
   background-repeat: no-repeat;
 

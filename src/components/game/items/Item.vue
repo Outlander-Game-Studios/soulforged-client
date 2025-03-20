@@ -316,11 +316,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../../utils.scss';
+@use '../../../utils.scss';
 
 .item {
   .main-icon {
-    @include interactive();
+    @include utils.interactive();
   }
 }
 
@@ -331,16 +331,16 @@ export default {
 
   .quality {
     &.quality-0 {
-      @include text-outline(#3a3a3a, #565656);
+      @include utils.text-outline(#3a3a3a, #565656);
     }
     &.quality-1 {
-      @include text-outline(#562e00, #bdb76b);
+      @include utils.text-outline(#562e00, #bdb76b);
     }
     &.quality-2 {
-      @include text-outline(#4f4f4f, #e3e3e3);
+      @include utils.text-outline(#4f4f4f, #e3e3e3);
     }
     &.quality-3 {
-      @include text-outline(#705d00, #ffd700);
+      @include utils.text-outline(#705d00, #ffd700);
     }
   }
 

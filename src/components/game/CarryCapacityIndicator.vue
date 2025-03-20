@@ -97,7 +97,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../utils.scss';
+@use '../../utils.scss';
 
 .text-display {
   display: flex;
@@ -106,7 +106,7 @@ export default {
 
   .numbers {
     font-size: 80%;
-    @include text-outline();
+    @include utils.text-outline();
   }
 
   .icon {
@@ -135,12 +135,12 @@ export default {
 }
 
 .weight-1 {
-  @include text-outline(#363600, yellow);
+  @include utils.text-outline(#363600, yellow);
 }
 .weight-2 {
-  @include text-outline(#412c00, orange);
+  @include utils.text-outline(#412c00, orange);
 }
 .weight-3 {
-  @include text-outline(#460000, red);
+  @include utils.text-outline(#460000, red);
 }
 </style>

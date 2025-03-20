@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import checkboxSound from "../../assets/sounds/checkbox.mp3";
+import checkboxSound from '../../assets/sounds/checkbox.mp3'
 
 export default {
   props: {
@@ -28,13 +28,13 @@ export default {
   watch: {
     value: {
       handler() {
-        this.internalValue = this.value;
+        this.internalValue = this.value
       },
       immediate: true,
     },
     internalValue: {
       handler() {
-        this.$emit("input", !!this.internalValue);
+        this.$emit('input', !!this.internalValue)
       },
       immediate: true,
     },
@@ -42,14 +42,14 @@ export default {
 
   methods: {
     mouseClick() {
-      SoundService.playSound(checkboxSound);
+      SoundService.playSound(checkboxSound)
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .checkbox-label {
   cursor: pointer;
@@ -63,12 +63,12 @@ export default {
   }
 
   &.disabled {
-    @include disabled();
     pointer-events: none;
+    @include utils.disabled();
   }
 }
 
-input[type="checkbox"] {
+input[type='checkbox'] {
   $size: 2.5rem;
   appearance: none;
   background-color: transparent;
@@ -88,23 +88,23 @@ input[type="checkbox"] {
   outline: none;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
-    background-image: url(ui-asset("/misc/checkbox_off.png"));
+    background-image: url(ui-asset('/misc/checkbox_off.png'));
     background-size: 100%;
     background-repeat: no-repeat;
   }
 
   &:checked::before {
-    background-image: url(ui-asset("/misc/checkbox.png"));
+    background-image: url(ui-asset('/misc/checkbox.png'));
   }
 
   &[disabled]::before {
-    //@include disabled();
+    //@include utils.disabled();
   }
 }
 </style>

@@ -17,32 +17,21 @@
           <LabeledValue v-if="!moveDetails.stopsFleeing">
             Useable while fleeing
             <Help title="Useable while fleeing">
-              Using this ability while fleeing does not reset the fleeing
-              progress.
+              Using this ability while fleeing does not reset the fleeing progress.
             </Help>
           </LabeledValue>
-          <LabeledValue v-if="moveDetails.isCounter">
-            Used as counter
-          </LabeledValue>
-          <LabeledValue v-if="moveDetails.triggersCounter">
-            Triggers counter
-          </LabeledValue>
+          <LabeledValue v-if="moveDetails.isCounter"> Used as counter </LabeledValue>
+          <LabeledValue v-if="moveDetails.triggersCounter"> Triggers counter </LabeledValue>
           <LabeledValue label="Cooldown (turns)" v-if="moveDetails.cooldownMax">
             {{ moveDetails.cooldownMax }}
           </LabeledValue>
           <LabeledValue label="Skill" v-if="moveDetails.skill">
             {{ moveDetails.skill }}
           </LabeledValue>
-          <LabeledValue
-            label="Skill level required"
-            v-if="moveDetails.skillLevelRequired"
-          >
+          <LabeledValue label="Skill level required" v-if="moveDetails.skillLevelRequired">
             {{ moveDetails.skillLevelRequired }}
           </LabeledValue>
-          <LabeledValue
-            label="Hit Rating"
-            v-if="moveDetails.hitRating !== undefined"
-          >
+          <LabeledValue label="Hit Rating" v-if="moveDetails.hitRating !== undefined">
             {{ moveDetails.hitRating }}
           </LabeledValue>
           <template v-if="moveDetails.raw">
@@ -50,9 +39,7 @@
               {{ moveDetails.raw.hitRating }}
             </SubLabeledValue>
             <SubLabeledValue label="Skill & Effects">
-              <Plused
-                :value="+moveDetails.hitRating - +moveDetails.raw.hitRating"
-              />
+              <Plused :value="+moveDetails.hitRating - +moveDetails.raw.hitRating" />
             </SubLabeledValue>
           </template>
         </div>
@@ -67,9 +54,7 @@
                 {{ moveDetails.raw.damage[damage] || 0 }}
               </SubLabeledValue>
               <SubLabeledValue label="Attributes & Effects">
-                <Plused
-                  :value="+value - (+moveDetails.raw.damage[damage] || 0)"
-                />
+                <Plused :value="+value - (+moveDetails.raw.damage[damage] || 0)" />
               </SubLabeledValue>
             </template>
           </div>
@@ -78,9 +63,7 @@
     </template>
     <hr />
     <div v-if="moveDetails && moveDetails.description" class="clear-both">
-      <Description pre
-        ><RichText :value="moveDetails.description" html
-      /></Description>
+      <Description pre><RichText :value="moveDetails.description" html /></Description>
     </div>
   </div>
 </template>
@@ -95,29 +78,29 @@ export default {
 
   data: () => ({
     ODDS_CLASS: {
-      "n/a": "n-a",
+      'n/a': 'n-a',
     },
     ODDS_TEXT: {
-      "n/a": "Self-applied",
-      4: "Excellent",
-      3: "Great",
-      2: "Good",
-      1: "Fine",
-      0: "Average",
-      "-1": "Poor",
-      "-2": "Bad",
-      "-3": "Awful",
-      "-4": "Abysmal",
+      'n/a': 'Self-applied',
+      4: 'Excellent',
+      3: 'Great',
+      2: 'Good',
+      1: 'Fine',
+      0: 'Average',
+      '-1': 'Poor',
+      '-2': 'Bad',
+      '-3': 'Awful',
+      '-4': 'Abysmal',
     },
   }),
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .requirement {
-  @include big-warning();
+  @include utils.big-warning();
 }
 
 .details-move-icon {
@@ -133,33 +116,33 @@ hr + hr {
 }
 
 .odds-color-n-a {
-  @include text-outline(#102679, #3b79d9);
+  @include utils.text-outline(#102679, #3b79d9);
 }
 .odds-color-4 {
-  @include text-outline(#022902, green);
+  @include utils.text-outline(#022902, green);
 }
 .odds-color-3 {
-  @include text-outline(#062f06, #29a429);
+  @include utils.text-outline(#062f06, #29a429);
 }
 .odds-color-2 {
-  @include text-outline(#093209, limegreen);
+  @include utils.text-outline(#093209, limegreen);
 }
 .odds-color-1 {
-  @include text-outline(#182200, #93e838);
+  @include utils.text-outline(#182200, #93e838);
 }
 .odds-color-0 {
-  @include text-outline(#181800, yellow);
+  @include utils.text-outline(#181800, yellow);
 }
 .odds-color--1 {
-  @include text-outline(#322200, orange);
+  @include utils.text-outline(#322200, orange);
 }
 .odds-color--2 {
-  @include text-outline(#541111, red);
+  @include utils.text-outline(#541111, red);
 }
 .odds-color--3 {
-  @include text-outline(#520b0b, #de2222);
+  @include utils.text-outline(#520b0b, #de2222);
 }
 .odds-color--4 {
-  @include text-outline(#4f0808, firebrick);
+  @include utils.text-outline(#4f0808, firebrick);
 }
 </style>

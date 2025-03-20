@@ -147,10 +147,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../utils.scss';
+@use '../../utils.scss';
 
 .overlay {
-  //@include filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
+  //@include utils.filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
   display: flex;
 
   &:not(.map-centered) {
@@ -182,7 +182,7 @@ export default {
   max-height: calc(var(--app-height) - 12.5rem) !important;
   max-width: calc(var(--app-width) - 2rem) !important;
 
-  @include FirefoxOnly() {
+  @include utils.FirefoxOnly() {
     overflow-y: scroll !important;
   }
 }

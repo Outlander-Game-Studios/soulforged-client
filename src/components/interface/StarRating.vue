@@ -26,9 +26,9 @@ export default {
     value() {
       if (this.value !== this.shownValue) {
         if (this.animated) {
-          this.queueAdjustValue();
+          this.queueAdjustValue()
         } else {
-          this.shownValue = this.value;
+          this.shownValue = this.value
         }
       }
     },
@@ -36,20 +36,20 @@ export default {
 
   computed: {
     stars() {
-      return Array.create(this.max).map((_, idx) => this.shownValue > idx);
+      return Array.create(this.max).map((_, idx) => this.shownValue > idx)
     },
 
     startStyle() {
       if (this.size) {
         return {
-          width: this.size + "rem",
-          height: this.size + "rem",
-        };
+          width: this.size + 'rem',
+          height: this.size + 'rem',
+        }
       } else {
         return {
-          width: "1em",
-          height: "1em",
-        };
+          width: '1em',
+          height: '1em',
+        }
       }
     },
   },
@@ -57,37 +57,37 @@ export default {
   created() {
     if (this.animated) {
       ControlsService.setAnimationTimeout(() => {
-        this.queueAdjustValue();
-      }, 300);
+        this.queueAdjustValue()
+      }, 300)
     } else {
-      this.shownValue = this.value;
+      this.shownValue = this.value
     }
   },
 
   methods: {
     queueAdjustValue() {
       ControlsService.setAnimationTimeout(() => {
-        this.adjustValue();
-      }, this.delay);
+        this.adjustValue()
+      }, this.delay)
     },
 
     adjustValue() {
       if (this.value === this.shownValue) {
-        return;
+        return
       }
       if (this.value > this.shownValue) {
-        this.shownValue += 1;
+        this.shownValue += 1
       } else {
-        this.shownValue -= 1;
+        this.shownValue -= 1
       }
-      this.queueAdjustValue();
+      this.queueAdjustValue()
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 @keyframes fill-star {
   0% {
@@ -111,11 +111,11 @@ export default {
 
     &:not(.full) {
       opacity: 0.2;
-      background-image: url(ui-asset("/icons/star_empty.png"));
+      background-image: url(ui-asset('/icons/star_empty.png'));
     }
 
     &.full {
-      background-image: url(ui-asset("/icons/star.png"));
+      background-image: url(ui-asset('/icons/star.png'));
     }
   }
 

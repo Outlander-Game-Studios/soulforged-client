@@ -167,7 +167,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../utils.scss';
+@use '../../utils.scss';
 
 .creature-icon-wrapper {
   margin: 0 auto;

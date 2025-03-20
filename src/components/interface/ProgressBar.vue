@@ -109,7 +109,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../utils.scss';
+@use '../../utils.scss';
 
 .container {
   overflow: visible;
@@ -150,7 +150,7 @@ export default {
       background-color: cyan;
     }
 
-    @include theme-progress-bar-fill();
+    @include utils.theme-progress-bar-fill();
   }
 
   .text {

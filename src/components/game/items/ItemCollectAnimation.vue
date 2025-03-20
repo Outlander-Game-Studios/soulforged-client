@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="item-collect-animation"
-    @click="$emit('click')"
-    @mousedown="mouseDown()"
-  >
+  <div class="item-collect-animation" @click="$emit('click')" @mousedown="mouseDown()">
     <TopZIndex v-if="acquireAnimations.length">
       <img
         v-for="acquireAnimation in acquireAnimations"
@@ -35,7 +31,7 @@
 </template>
 
 <script>
-import iconClickSound from "../../../assets/sounds/icon-click.mp3";
+import iconClickSound from '../../../assets/sounds/icon-click.mp3'
 
 export default {
   props: {
@@ -50,12 +46,12 @@ export default {
       default: 5,
     },
     gainPrefix: {
-      default: "+",
+      default: '+',
     },
   },
 
   data: () => ({
-    failPrefix: "",
+    failPrefix: '',
     failures: 0,
     successes: 0,
     producedItems: null,
@@ -63,127 +59,120 @@ export default {
   }),
 
   mounted() {
-    this.animationId = 1;
+    this.animationId = 1
   },
 
   beforeDestroy() {
-    clearTimeout(this.cleanupTimeout);
-    this.componentDestroyed = true;
+    clearTimeout(this.cleanupTimeout)
+    this.componentDestroyed = true
   },
 
   methods: {
     mouseDown() {
       if (!!this.$listeners.click) {
-        SoundService.playSound(iconClickSound);
+        SoundService.playSound(iconClickSound)
       }
     },
 
     apiAddCollected({ results, failPrefix }, selector) {
-      this.failPrefix = failPrefix;
-      const stream = new Rx.ReplaySubject();
-      clearTimeout(this.cleanupTimeout);
+      this.failPrefix = failPrefix
+      const stream = new Rx.ReplaySubject()
+      clearTimeout(this.cleanupTimeout)
       const interval = ControlsService.setAnimationInterval(() => {
         if (this.componentDestroyed) {
-          stream.complete();
-          return clearInterval(interval);
+          stream.complete()
+          return clearInterval(interval)
         }
         if (results.length === 0) {
-          clearInterval(interval);
-          stream.complete();
+          clearInterval(interval)
+          stream.complete()
           this.cleanupTimeout = ControlsService.setAnimationTimeout(() => {
-            this.producedItems = null;
-            this.acquireAnimations = [];
-            this.successes = 0;
-            this.failures = 0;
-          }, 3000);
-          return;
+            this.producedItems = null
+            this.acquireAnimations = []
+            this.successes = 0
+            this.failures = 0
+          }, 3000)
+          return
         }
-        clearTimeout(this.cleanupTimeout);
-        const result = results.shift();
+        clearTimeout(this.cleanupTimeout)
+        const result = results.shift()
         if (result.gain > 0) {
-          this.itemAcquired(0, selector, result);
+          this.itemAcquired(0, selector, result)
         }
         for (let i = 0; i < (result.gain || 0); i++) {
-          this.successes += 1;
+          this.successes += 1
         }
         for (let i = 0; i < (result.loss || 0); i++) {
-          this.failures += 1;
+          this.failures += 1
         }
-        stream.next(results.length);
-      }, 80);
-      return stream;
+        stream.next(results.length)
+      }, 80)
+      return stream
     },
 
-    itemAcquired(
-      delay = 0,
-      selector = ".tab-icon.inventory",
-      { targetSize = 0.3 } = {}
-    ) {
+    itemAcquired(delay = 0, selector = '.tab-icon.inventory', { targetSize = 0.3 } = {}) {
       ControlsService.setAnimationTimeout(() => {
         if (this.componentDestroyed) {
-          return;
+          return
         }
-        const source =
-          this.$refs.icon && this.$refs.icon.$el.querySelector(".icon");
-        const target = document.querySelector(selector);
+        const source = this.$refs.icon && this.$refs.icon.$el.querySelector('.icon')
+        const target = document.querySelector(selector)
         if (!source || !target) {
-          return;
+          return
         }
-        const sourceBoundingRect = source.getBoundingClientRect();
-        const targetBoundingRect = target.getBoundingClientRect();
+        const sourceBoundingRect = source.getBoundingClientRect()
+        const targetBoundingRect = target.getBoundingClientRect()
         const animation = {
           animId: this.animationId++,
           step: 0,
           style: {
-            top: sourceBoundingRect.top + "px",
-            left: sourceBoundingRect.left + "px",
+            top: sourceBoundingRect.top + 'px',
+            left: sourceBoundingRect.left + 'px',
             zIndex: this.animationId + 9000,
-            width: sourceBoundingRect.width + "px",
-            height: sourceBoundingRect.height + "px",
+            width: sourceBoundingRect.width + 'px',
+            height: sourceBoundingRect.height + 'px',
           },
-        };
-        let increase = 1;
+        }
+        let increase = 1
         const interval = ControlsService.setAnimationInterval(() => {
           if (this.componentDestroyed) {
-            return clearInterval(interval);
+            return clearInterval(interval)
           }
-          animation.step += increase;
-          increase *= 1.01;
-          animation.step = Math.min(animation.step, 100);
-          const targetFraction = animation.step / 100;
-          const sourceFraction = 1 - targetFraction;
-          const size = sourceFraction + targetSize * targetFraction;
+          animation.step += increase
+          increase *= 1.01
+          animation.step = Math.min(animation.step, 100)
+          const targetFraction = animation.step / 100
+          const sourceFraction = 1 - targetFraction
+          const size = sourceFraction + targetSize * targetFraction
           animation.style = {
             ...animation.style,
             top:
               Math.round(
                 sourceBoundingRect.top * sourceFraction +
-                  (targetBoundingRect.top + 8) * targetFraction
-              ) + "px",
+                  (targetBoundingRect.top + 8) * targetFraction,
+              ) + 'px',
             left:
               Math.round(
                 sourceBoundingRect.left * sourceFraction +
-                  (targetBoundingRect.left + 8) * targetFraction
-              ) + "px",
-            width: Math.round(sourceBoundingRect.width * size) + "px",
-            height: Math.round(sourceBoundingRect.height * size) + "px",
-          };
-          if (animation.step >= 100) {
-            clearInterval(interval);
-            this.acquireAnimations = this.acquireAnimations.filter(
-              (a) => a !== animation
-            );
+                  (targetBoundingRect.left + 8) * targetFraction,
+              ) + 'px',
+            width: Math.round(sourceBoundingRect.width * size) + 'px',
+            height: Math.round(sourceBoundingRect.height * size) + 'px',
           }
-        }, 10);
-        this.acquireAnimations = [...this.acquireAnimations, animation];
-      }, delay * 20);
+          if (animation.step >= 100) {
+            clearInterval(interval)
+            this.acquireAnimations = this.acquireAnimations.filter((a) => a !== animation)
+          }
+        }, 10)
+        this.acquireAnimations = [...this.acquireAnimations, animation]
+      }, delay * 20)
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 
 @keyframes shift-up {
   0% {
@@ -253,7 +242,7 @@ export default {
   right: 0.2rem;
 
   .indicator-text {
-    @include text-outline(black, limegreen);
+    @include utils.text-outline(black, limegreen);
   }
 }
 
@@ -263,7 +252,7 @@ export default {
   right: 0.2rem;
 
   .indicator-text {
-    @include text-outline(#000000, #ff4c4c);
+    @include utils.text-outline(#000000, #ff4c4c);
   }
 }
 

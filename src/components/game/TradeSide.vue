@@ -182,7 +182,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../utils.scss';
+@use '../../utils.scss';
 
 .trade-side {
   width: 50%;
@@ -234,7 +234,7 @@ export default {
   }
 
   .disabled {
-    @include filter(saturate(0));
+    @include utils.filter(saturate(0));
   }
 }
 

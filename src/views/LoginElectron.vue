@@ -19,7 +19,7 @@
             </div>
             <br />
             <HorizontalCenter>
-              <Button @click="cancel()">{{ error ? "Back" : "Cancel" }}</Button>
+              <Button @click="cancel()">{{ error ? 'Back' : 'Cancel' }}</Button>
             </HorizontalCenter>
           </Spaced>
         </Container>
@@ -32,38 +32,38 @@
 
 <script>
 export default {
-  name: "LoginElectron",
+  name: 'LoginElectron',
 
   data: () => ({
     error: null,
   }),
 
   mounted() {
-    this.initCheck();
+    this.initCheck()
   },
 
   methods: {
     initCheck() {
-      const token = this.$router.currentRoute?.query?.token;
+      const token = this.$router.currentRoute?.query?.token
       if (!token) {
-        return this.handleError("Invalid token");
+        return this.handleError('Invalid token')
       }
-      window.location = `/api/login/electron/wait?token=${token}`;
+      window.location = `/api/login/electron/wait?token=${token}`
     },
 
     handleError(error) {
-      this.error = error;
+      this.error = error
     },
 
     cancel() {
-      window.location = "#/login";
+      window.location = '#/login'
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../utils.scss";
+@use '../utils.scss';
 
 .login-wrapper {
   padding: 3rem;
@@ -71,7 +71,7 @@ export default {
   height: 100%;
   max-height: 100%;
   overflow: auto;
-  background-image: url(ui-asset("/backdrops/main.jpg", "src/"));
+  background-image: url(ui-asset('/backdrops/main.jpg', 'src/'));
   background-size: cover;
   background-position: center center;
   display: flex;
@@ -98,7 +98,7 @@ export default {
 .login-error-text {
   padding: 0.5rem 1.5rem;
   font-size: 125%;
-  @include text-bad();
+  @include utils.text-bad();
 }
 
 .spacer {

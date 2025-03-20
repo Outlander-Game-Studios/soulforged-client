@@ -55,12 +55,7 @@
             </HorizontalWrap>
             <div class="flex-grow"></div>
             <div class="bin-icon">
-              <ItemIcon
-                class="view-missed"
-                :icon="crossImg"
-                :amount="failedCount"
-                quality="dark"
-              />
+              <ItemIcon class="view-missed" :icon="crossImg" :amount="failedCount" quality="dark" />
             </div>
           </Horizontal>
         </div>
@@ -70,9 +65,9 @@
 </template>
 
 <script>
-import unknownImg from "../../assets/ui/cartoon/icons/unknown_nobg.png";
-import crossImg from "../../assets/ui/cartoon/icons/cross_nobg.png";
-import buttonClickSound from "../../assets/sounds/button-click.mp3";
+import unknownImg from '../../assets/ui/cartoon/icons/unknown_nobg.png'
+import crossImg from '../../assets/ui/cartoon/icons/cross_nobg.png'
+import buttonClickSound from '../../assets/sounds/button-click.mp3'
 
 export default {
   props: {
@@ -89,63 +84,57 @@ export default {
 
   subscriptions() {
     const researchStream = this.animateRewards
-      ? this.$stream("research").delay(200)
-      : this.$stream("research");
+      ? this.$stream('research').delay(200)
+      : this.$stream('research')
 
     return {
       rewardCrafts: researchStream
-        .pluck("rewardCraftIds")
+        .pluck('rewardCraftIds')
         .distinctUntilChanged(null, JSON.stringify)
         .switchMap((rewardCraftIds) =>
           GameService.getCraftsStream().map((crafts) =>
-            crafts.filter((c) => (rewardCraftIds || []).includes(c.craftId))
-          )
+            crafts.filter((c) => (rewardCraftIds || []).includes(c.craftId)),
+          ),
         ),
       rewardPlans: researchStream
-        .pluck("rewardPlanIds")
+        .pluck('rewardPlanIds')
         .distinctUntilChanged(null, JSON.stringify)
         .switchMap((rewardPlanIds) =>
           GameService.getPlansStream().map((plans) =>
-            plans.filter((p) => (rewardPlanIds || []).includes(p.planId))
-          )
+            plans.filter((p) => (rewardPlanIds || []).includes(p.planId)),
+          ),
         ),
-      craftsById: GameService.getCraftsStream().map((crafts) =>
-        crafts.toObject((c) => c.craftId)
-      ),
-      plansById: GameService.getPlansStream().map((plans) =>
-        plans.toObject((p) => p.planId)
-      ),
-    };
+      craftsById: GameService.getCraftsStream().map((crafts) => crafts.toObject((c) => c.craftId)),
+      plansById: GameService.getPlansStream().map((plans) => plans.toObject((p) => p.planId)),
+    }
   },
 
   computed: {
     failedCount() {
-      return Object.keys(this.research?.failedItems || {}).length;
+      return Object.keys(this.research?.failedItems || {}).length
     },
 
     items() {
       return [
         ...this.research.passedItems,
-        ...Array.create(
-          this.research?.itemsNeededCount - this.research?.passedItems.length
-        ),
-      ];
+        ...Array.create(this.research?.itemsNeededCount - this.research?.passedItems.length),
+      ]
     },
   },
 
   methods: {
     mouseClick() {
       if (!this.research.completed) {
-        this.$emit("click");
-        SoundService.playSound(buttonClickSound);
+        this.$emit('click')
+        SoundService.playSound(buttonClickSound)
       }
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .research-card {
   position: relative;
@@ -193,7 +182,7 @@ export default {
   height: 3rem;
   right: 1.5rem;
   top: 1.4rem;
-  background-image: url(ui-asset("/icons/star.png"));
+  background-image: url(ui-asset('/icons/star.png'));
   background-size: 100%;
 }
 
@@ -202,7 +191,7 @@ export default {
   z-index: 12;
   right: 0;
   transform: rotate(25deg);
-  @include filter(saturate(1.8));
+  @include utils.filter(saturate(1.8));
 
   .text {
     text-transform: uppercase;
@@ -211,11 +200,11 @@ export default {
     text-align: left;
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       width: 3.8rem;
       height: 3.8rem;
-      background-image: url(ui-asset("/icons/quest_t.png"));
+      background-image: url(ui-asset('/icons/quest_t.png'));
       background-size: 130%;
       background-position: center;
       top: -0.5rem;

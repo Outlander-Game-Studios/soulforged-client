@@ -264,7 +264,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../utils.scss';
+@use '../../utils.scss';
 
 @keyframes underline-shine {
   0% {
@@ -296,7 +296,7 @@ export default {
     }
   }
 
-  @include FirefoxOnly() {
+  @include utils.FirefoxOnly() {
     $offset-ff: 0.2rem;
     text-underline-offset: $offset-ff + 0.05rem !important;
 

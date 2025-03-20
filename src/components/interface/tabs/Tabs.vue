@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="tabs"
-    :class="['placement-' + placement, { 'full-height': fullHeight }]"
-  >
+  <div class="tabs" :class="['placement-' + placement, { 'full-height': fullHeight }]">
     <div class="tab-headers">
       <div
         v-for="(tab, idx) in tabs"
@@ -27,11 +24,7 @@
               {{ tab.header }}
             </div>
             <transition name="fade">
-              <div
-                class="indicator"
-                :class="tab.indicatorStyle"
-                v-if="tab.indicator"
-              >
+              <div class="indicator" :class="tab.indicatorStyle" v-if="tab.indicator">
                 <BorderRound
                   :size="2.2"
                   borderType="tightGlow"
@@ -47,11 +40,7 @@
         </Container>
       </div>
     </div>
-    <div
-      v-show="lastTab"
-      class="tab-contents"
-      :style="{ margin: -borderSize + 'rem' }"
-    >
+    <div v-show="lastTab" class="tab-contents" :style="{ margin: -borderSize + 'rem' }">
       <Container
         class="tab-container"
         :class="{ flex: flex }"
@@ -67,15 +56,15 @@
 
 <script>
 const POSITION = {
-  TOP: "top",
-  LEFT: "left",
-  RIGHT: "right",
-  BOTTOM: "bottom",
-};
+  TOP: 'top',
+  LEFT: 'left',
+  RIGHT: 'right',
+  BOTTOM: 'bottom',
+}
 
 global.Tabs = {
   POSITION,
-};
+}
 export default {
   props: {
     placement: {
@@ -83,7 +72,7 @@ export default {
     },
     rememberTabId: {},
     url: {
-      default: "tab",
+      default: 'tab',
     },
     fullHeight: {
       default: true,
@@ -98,12 +87,12 @@ export default {
       default: 0.5,
     },
     borderType: {
-      default: "base",
-      validator: PropValidator.oneOf(["base", "alt"]),
+      default: 'base',
+      validator: PropValidator.oneOf(['base', 'alt']),
     },
     backgroundType: {
-      default: "base",
-      validator: PropValidator.oneOf(["base", "alt"]),
+      default: 'base',
+      validator: PropValidator.oneOf(['base', 'alt']),
     },
   },
 
@@ -115,61 +104,57 @@ export default {
 
   mounted() {
     if (this.url) {
-      const startingTab = this.$router.currentRoute.query[this.url];
+      const startingTab = this.$router.currentRoute.query[this.url]
       if (startingTab) {
-        const tab =
-          this.tabs.find((tab) => tab.header === startingTab) || this.tabs[0];
-        this.setActive(tab);
+        const tab = this.tabs.find((tab) => tab.header === startingTab) || this.tabs[0]
+        this.setActive(tab)
       }
     }
     if (this.rememberTabId) {
-      const startingTab = localStorage.getItem(
-        `tabsAutoOpen.${this.rememberTabId}`
-      );
+      const startingTab = localStorage.getItem(`tabsAutoOpen.${this.rememberTabId}`)
       if (startingTab) {
-        const tab =
-          this.tabs.find((tab) => tab.tabId === startingTab) || this.tabs[0];
-        this.setActive(tab);
+        const tab = this.tabs.find((tab) => tab.tabId === startingTab) || this.tabs[0]
+        this.setActive(tab)
       }
     }
   },
 
   methods: {
     updateTab(compVm) {
-      const tab = this.tabs.find((t) => t.compVm === compVm);
-      tab.indicator = compVm.indicator;
-      tab.indicatorStyle = compVm.indicatorStyle;
+      const tab = this.tabs.find((t) => t.compVm === compVm)
+      tab.indicator = compVm.indicator
+      tab.indicatorStyle = compVm.indicatorStyle
     },
 
     registerTab(idx, header, setActiveCallback, compVm) {
-      const { title, indicator, indicatorStyle } = compVm;
+      const { title, indicator, indicatorStyle } = compVm
       this.tabs.splice(idx, 0, {
-        tabId: header.replace(/ /g, "_"),
+        tabId: header.replace(/ /g, '_'),
         header: header,
         callback: setActiveCallback,
         title,
         indicator,
         indicatorStyle,
         compVm,
-      });
+      })
       if (!this.lastTab && !this.allowEmpty) {
-        this.lastTab = this.tabs[0];
+        this.lastTab = this.tabs[0]
         if (this.lastTab) {
-          this.lastTab.callback(true);
+          this.lastTab.callback(true)
         }
       }
     },
 
     unregisterTab(header) {
-      const idx = this.tabs.findIndex((t) => t.header === header);
+      const idx = this.tabs.findIndex((t) => t.header === header)
 
       if (idx !== -1) {
-        const needToActivate = this.lastTab === this.tabs[idx];
-        this.tabs.splice(idx, 1);
+        const needToActivate = this.lastTab === this.tabs[idx]
+        this.tabs.splice(idx, 1)
         if (needToActivate) {
-          this.lastTab = this.tabs[0];
+          this.lastTab = this.tabs[0]
           if (this.lastTab) {
-            this.lastTab.callback(true);
+            this.lastTab.callback(true)
           }
         }
       }
@@ -177,60 +162,60 @@ export default {
 
     closeTab() {
       if (this.lastTab) {
-        this.toggleTab(this.lastTab);
+        this.toggleTab(this.lastTab)
       }
     },
 
     toggleTab(tab) {
       if (this.allowEmpty && this.lastTab === tab) {
         if (this.lastTab) {
-          this.lastTab.callback(false);
+          this.lastTab.callback(false)
         }
-        this.lastTab = null;
-        localStorage.setItem(`tabsAutoOpen.${this.rememberTabId}`, null);
+        this.lastTab = null
+        localStorage.setItem(`tabsAutoOpen.${this.rememberTabId}`, null)
         if (this.url) {
           this.$router.push({
             query: { ...(this.$route.query || {}), [this.url]: null },
-          });
+          })
         }
-        this.$emit("change", null);
-        return;
+        this.$emit('change', null)
+        return
       }
-      this.setActive(tab);
+      this.setActive(tab)
     },
 
     setActive(tab) {
       if (this.lastTab) {
-        this.lastTab.callback(false);
+        this.lastTab.callback(false)
       }
-      tab.callback(true);
-      this.lastTab = tab;
+      tab.callback(true)
+      this.lastTab = tab
       if (this.rememberTabId) {
-        localStorage.setItem(`tabsAutoOpen.${this.rememberTabId}`, tab.tabId);
+        localStorage.setItem(`tabsAutoOpen.${this.rememberTabId}`, tab.tabId)
       }
       if (this.url) {
         if (this.$route.query[this.url] !== tab.header) {
           this.$router.push({
             query: { ...(this.$route.query || {}), [this.url]: tab.header },
-          });
+          })
         }
       }
-      this.$emit("change", tab);
+      this.$emit('change', tab)
     },
 
     setActiveByComponent(cmp) {
-      const tab = this.tabs.find((t) => t.header === cmp.header);
+      const tab = this.tabs.find((t) => t.header === cmp.header)
 
       if (tab) {
-        this.setActive(tab);
+        this.setActive(tab)
       }
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "./src/utils.scss";
+@use './src/utils.scss';
 
 .tabs {
   display: flex;
@@ -261,9 +246,9 @@ export default {
         z-index: 2;
       }
 
-      @include interactive();
+      @include utils.interactive();
       //&:not(.active) {
-      //  @include interactive();
+      //  @include utils.interactive();
       //}
 
       .indicator {

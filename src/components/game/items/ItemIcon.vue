@@ -22,18 +22,18 @@
 </template>
 
 <script>
-import durabilityBorder0 from "../../../assets/ui/cartoon/borders/item-durability-0.jpg";
-import durabilityBorder1 from "../../../assets/ui/cartoon/borders/item-durability-1.jpg";
-import durabilityBorder2 from "../../../assets/ui/cartoon/borders/item-durability-2.jpg";
-import durabilityBorder3 from "../../../assets/ui/cartoon/borders/item-durability-3.jpg";
-import iconClickSound from "../../../assets/sounds/icon-click.mp3";
+import durabilityBorder0 from '../../../assets/ui/cartoon/borders/item-durability-0.jpg'
+import durabilityBorder1 from '../../../assets/ui/cartoon/borders/item-durability-1.jpg'
+import durabilityBorder2 from '../../../assets/ui/cartoon/borders/item-durability-2.jpg'
+import durabilityBorder3 from '../../../assets/ui/cartoon/borders/item-durability-3.jpg'
+import iconClickSound from '../../../assets/sounds/icon-click.mp3'
 
 const durabilityBorder = [
   durabilityBorder0,
   durabilityBorder1,
   durabilityBorder2,
   durabilityBorder3,
-];
+]
 
 export default {
   props: {
@@ -59,40 +59,38 @@ export default {
         // 1: "#4f370f",
         // 2: "#a6a6a6",
         // 3: "#BF953F",
-      };
+      }
       const colors = {
-        0: ["#3a3a3a", "#6b6b6b", "#3a3a3a"],
-        1: ["#684135", "#9f8059", "#684135"],
-        2: ["#a6a6a6", "#e3e3e3", "#999999"],
-        3: ["#a18603", "#d9b800", "#a18603"],
-        neutral: ["#ffd195", "#ffedd5", "#ffd195"],
-        bad: ["#731919", "#a63737", "#731919"],
-        good: ["#3a802a", "#56BF3F", "#3a802a"],
-        dark: ["#151515", "#3a3a3a", "#151515"],
-      };
-      const quality = this.quality !== undefined ? this.quality : 1;
-      const color = colors[quality];
-      const durability = this.condition || 0;
+        0: ['#3a3a3a', '#6b6b6b', '#3a3a3a'],
+        1: ['#684135', '#9f8059', '#684135'],
+        2: ['#a6a6a6', '#e3e3e3', '#999999'],
+        3: ['#a18603', '#d9b800', '#a18603'],
+        neutral: ['#ffd195', '#ffedd5', '#ffd195'],
+        bad: ['#731919', '#a63737', '#731919'],
+        good: ['#3a802a', '#56BF3F', '#3a802a'],
+        dark: ['#151515', '#3a3a3a', '#151515'],
+      }
+      const quality = this.quality !== undefined ? this.quality : 1
+      const color = colors[quality]
+      const durability = this.condition || 0
       return {
-        filter: +durability === 3 ? "saturate(0)" : undefined,
-        "border-image-source": `url("${durabilityBorder[durability]}")`,
-        "border-image-slice": 35,
-        "background-image": color
+        filter: +durability === 3 ? 'saturate(0)' : undefined,
+        'border-image-source': `url("${durabilityBorder[durability]}")`,
+        'border-image-slice': 35,
+        'background-image': color
           ? `linear-gradient(120deg,  ${color[1]} 3%, ${color[2]} 100%)`
-          : "none",
-        "background-color": singleColors[quality]
-          ? singleColors[quality]
-          : null,
-        "background-size": "105%",
-        fontSize: this.size / 4 + "rem",
-      };
+          : 'none',
+        'background-color': singleColors[quality] ? singleColors[quality] : null,
+        'background-size': '105%',
+        fontSize: this.size / 4 + 'rem',
+      }
     },
 
     bottomRightText() {
       if (this.amount && Number.isInteger(this.amount)) {
-        return formatNumber(this.amount);
+        return formatNumber(this.amount)
       }
-      return this.amount;
+      return this.amount
     },
   },
 
@@ -100,19 +98,19 @@ export default {
     formatNumber: global.formatNumber,
     mouseClick($event) {
       if (!!this.$listeners.click) {
-        this.$emit("click", $event);
-        SoundService.playSound(iconClickSound);
+        this.$emit('click', $event)
+        SoundService.playSound(iconClickSound)
       }
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 
 .item-icon {
-  @include filter-fix();
+  @include utils.filter-fix();
 }
 
 .is-equipped-indicator {

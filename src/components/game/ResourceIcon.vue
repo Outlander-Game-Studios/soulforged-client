@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import iconClickSound from "../../assets/sounds/icon-click.mp3";
+import iconClickSound from '../../assets/sounds/icon-click.mp3'
 
 export default {
   props: {
@@ -25,16 +25,16 @@ export default {
   methods: {
     mouseClick() {
       if (!!this.$listeners.click) {
-        this.$emit("click");
-        SoundService.playSound(iconClickSound);
+        this.$emit('click')
+        SoundService.playSound(iconClickSound)
       }
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .density {
   position: absolute !important;

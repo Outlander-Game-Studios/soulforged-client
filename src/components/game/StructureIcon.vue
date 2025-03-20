@@ -14,15 +14,12 @@
       <slot name="textTopRight"></slot>
     </template>
     <IndicatorPresence class="presence" v-if="!!structure.presence" />
-    <IndicatorConstruction
-      class="under-construction"
-      v-if="!structure.operational"
-    />
+    <IndicatorConstruction class="under-construction" v-if="!structure.operational" />
   </ItemIcon>
 </template>
 
 <script>
-import iconClickSound from "../../assets/sounds/icon-click.mp3";
+import iconClickSound from '../../assets/sounds/icon-click.mp3'
 
 export default {
   props: {
@@ -33,11 +30,11 @@ export default {
   },
 
   data: () => ({}),
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .presence {
   position: absolute;
@@ -53,6 +50,6 @@ export default {
 }
 
 .ruin {
-  @include filter(saturate(0));
+  @include utils.filter(saturate(0));
 }
 </style>

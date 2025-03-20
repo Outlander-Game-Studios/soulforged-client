@@ -5,7 +5,7 @@ export default {}
 </script>
 
 <style lang="scss">
-@import '../../utils.scss';
+@use '../../utils.scss';
 
 @font-face {
   font-family: Booter;
@@ -44,7 +44,7 @@ body {
 html {
   font-size: 12px;
 
-  @include touch-device() {
+  @include utils.touch-device() {
     cursor: none;
   }
 }
@@ -75,11 +75,11 @@ body {
 }
 
 .interactive {
-  @include interactive();
+  @include utils.interactive();
 }
 .interactive-alt:hover {
   cursor: pointer;
-  @include filter(brightness(1.2));
+  @include utils.filter(brightness(1.2));
 }
 
 .relative {
@@ -230,17 +230,17 @@ label {
 }
 
 .scroll-spacing {
-  @include touch-scroll-space();
+  @include utils.touch-scroll-space();
 }
 
 .text-good {
-  @include text-good();
+  @include utils.text-good();
 }
 .text-neutral {
-  @include text-outline();
+  @include utils.text-outline();
 }
 .text-bad {
-  @include text-bad();
+  @include utils.text-bad();
 }
 
 @keyframes shine {
@@ -258,7 +258,7 @@ label {
 .droppable-frames {
   z-index: 50;
   position: absolute;
-  @include fill();
+  @include utils.fill();
   display: flex;
 
   .droppable {
@@ -268,7 +268,7 @@ label {
     outline: 1px solid black;
     background: rgba(193, 141, 107, 0.8);
     border-radius: 1rem;
-    @include text-outline(black, goldenrod);
+    @include utils.text-outline(black, goldenrod);
     font-size: 125%;
     text-align: center;
     display: flex;
@@ -276,7 +276,7 @@ label {
     justify-content: center;
 
     &:hover {
-      @include filter(saturate(1.2) brightness(1.2));
+      @include utils.filter(saturate(1.2) brightness(1.2));
     }
   }
 }
@@ -305,7 +305,7 @@ label {
 }
 
 .big-warning {
-  @include big-warning();
+  @include utils.big-warning();
 }
 
 .overflow-hidden {

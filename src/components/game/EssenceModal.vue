@@ -257,7 +257,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../utils.scss';
+@use '../../utils.scss';
 
 .purchase-button {
   display: flex;
@@ -290,14 +290,14 @@ export default {
 }
 
 .power-group-label {
-  @include text-outline();
+  @include utils.text-outline();
 }
 .required-power {
   &:not(.pass) {
-    @include text-bad();
+    @include utils.text-bad();
   }
   &.pass {
-    @include text-good();
+    @include utils.text-good();
   }
 }
 </style>

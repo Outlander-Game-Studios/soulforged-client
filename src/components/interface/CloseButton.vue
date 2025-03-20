@@ -1,14 +1,9 @@
 <template>
-  <div
-    class="close"
-    :class="{ static: static }"
-    @click="mouseClick($event)"
-    :style="style"
-  />
+  <div class="close" :class="{ static: static }" @click="mouseClick($event)" :style="style" />
 </template>
 
 <script>
-import closeSound from "../../assets/sounds/close.mp3";
+import closeSound from '../../assets/sounds/close.mp3'
 
 export default {
   props: {
@@ -27,33 +22,33 @@ export default {
         ...(this.static
           ? {}
           : {
-              right: -this.size / 3 + "rem",
-              top: -this.size / 3 + "rem",
+              right: -this.size / 3 + 'rem',
+              top: -this.size / 3 + 'rem',
             }),
-        maxWidth: this.size + "rem",
-        width: this.size + "rem",
-        height: this.size + "rem",
-      };
+        maxWidth: this.size + 'rem',
+        width: this.size + 'rem',
+        height: this.size + 'rem',
+      }
     },
   },
 
   methods: {
     mouseClick($event) {
-      this.$emit("click", $event);
-      SoundService.playSound(closeSound, { speed: 2 });
+      this.$emit('click', $event)
+      SoundService.playSound(closeSound, { speed: 2 })
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .close {
   cursor: pointer;
   position: absolute;
   border-radius: 0.1rem;
-  @include theme-modal-close();
+  @include utils.theme-modal-close();
   z-index: 6;
 
   &.static {
@@ -61,10 +56,10 @@ export default {
   }
 
   &:hover {
-    @include filter(brightness(1.1));
+    @include utils.filter(brightness(1.1));
   }
   &:active {
-    @include theme-modal-close-pressed();
+    @include utils.theme-modal-close-pressed();
   }
 }
 </style>

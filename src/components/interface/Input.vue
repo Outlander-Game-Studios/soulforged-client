@@ -30,10 +30,10 @@
 export default {
   props: {
     value: {
-      default: "",
+      default: '',
     },
     type: {
-      default: "text",
+      default: 'text',
     },
     min: {
       default: 0,
@@ -66,77 +66,73 @@ export default {
   },
 
   data: () => ({
-    localValue: "",
+    localValue: '',
   }),
 
   watch: {
     max() {
-      this.checkNumber();
+      this.checkNumber()
     },
     min() {
-      this.checkNumber();
+      this.checkNumber()
     },
     value: {
       handler(arg) {
-        if (this.type === "number") {
-          this.checkNumber();
+        if (this.type === 'number') {
+          this.checkNumber()
         } else {
-          this.localValue = arg;
+          this.localValue = arg
         }
       },
       immediate: true,
     },
     localValue: {
       handler(arg) {
-        this.$emit("input", arg);
+        this.$emit('input', arg)
       },
     },
   },
 
   mounted() {
     if (this.autoFocus && !ControlsService.isTouchDevice()) {
-      this.focus();
+      this.focus()
     }
   },
 
   methods: {
     onKeypress($event) {
-      this.$emit("keypress", $event);
-      if (($event.key || $event.code) === "Enter") {
-        this.$emit("enter", $event);
+      this.$emit('keypress', $event)
+      if (($event.key || $event.code) === 'Enter') {
+        this.$emit('enter', $event)
       }
     },
 
     onFocus() {
       if (!this.noSelectOnFocus) {
-        this.$refs.main?.select();
+        this.$refs.main?.select()
       }
     },
 
     focus() {
-      this.$refs.main.focus();
+      this.$refs.main.focus()
       setTimeout(() => {
-        this.onFocus();
-      });
+        this.onFocus()
+      })
     },
 
     checkNumber() {
       if (!this.value && this.value !== 0) {
-        return;
+        return
       }
-      this.localValue = Math.limit(
-        +this.value,
-        this.min,
-        this.max === null ? Infinity : this.max
-      );
-      this.$emit("input", this.localValue);
+      this.localValue = Math.limit(+this.value, this.min, this.max === null ? Infinity : this.max)
+      this.$emit('input', this.localValue)
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .input.main {
   font-size: 2rem;
@@ -157,7 +153,7 @@ export default {
 }
 
 .disabled {
-  @include disabled();
   pointer-events: none;
+  @include utils.disabled();
 }
 </style>

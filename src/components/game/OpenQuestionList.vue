@@ -18,12 +18,7 @@
       </template>
       <template v-slot:contents>
         <Vertical>
-          <ListItem
-            flexible
-            v-for="(item, idx) in pendingQuestions"
-            :key="idx"
-            titleClass="wrap"
-          >
+          <ListItem flexible v-for="(item, idx) in pendingQuestions" :key="idx" titleClass="wrap">
             <template v-slot:icon>
               <Icon :src="item.icon" :size="5" />
             </template>
@@ -31,20 +26,13 @@
               {{ item.question }}
             </template>
             <template v-slot:subtitle>
-              <div v-if="item.answer">
-                Answered <span v-if="item.unread">(unread)</span>
-              </div>
+              <div v-if="item.answer">Answered <span v-if="item.unread">(unread)</span></div>
               <Description v-else>Pending</Description>
             </template>
             <template v-slot:buttons>
               <Horizontal>
-                <Button v-if="item.answer" @click="viewAnswer(item)">
-                  View
-                </Button>
-                <Button
-                  v-if="!item.answer || !item.unread"
-                  @click="dismissing = item"
-                >
+                <Button v-if="item.answer" @click="viewAnswer(item)"> View </Button>
+                <Button v-if="!item.answer || !item.unread" @click="dismissing = item">
                   Dismiss
                 </Button>
               </Horizontal>
@@ -63,8 +51,8 @@
         <Vertical>
           <div>{{ dismissing.question }}</div>
           <Description>
-            Are you sure you want to dismiss this question? This will free up a
-            slot for you to ask other questions.
+            Are you sure you want to dismiss this question? This will free up a slot for you to ask
+            other questions.
           </Description>
           <HorizontalCenter>
             <Button @click="dismiss()">Dismiss</Button>
@@ -106,28 +94,26 @@ export default {
   }),
 
   subscriptions() {
-    const questionsStream = GameService.getInfoStream("OpenQuestion");
+    const questionsStream = GameService.getInfoStream('OpenQuestion')
     return {
       pendingQuestions: questionsStream.tap((q) => {
         if (!q.length) {
-          this.showInfo = false;
+          this.showInfo = false
         }
       }),
-      unreadCounter: questionsStream.map(
-        (qs) => qs.filter((q) => q.answer && q.unread).length
-      ),
-    };
+      unreadCounter: questionsStream.map((qs) => qs.filter((q) => q.answer && q.unread).length),
+    }
   },
 
   methods: {
     viewAnswer(question) {
-      this.viewing = question;
+      this.viewing = question
       if (question.unread) {
         GameService.request(REQUEST_CODES.MARK_OPEN_QUESTION_VIEWED, {
           openQuestionId: question.id,
         }).then(() => {
-          GameService.getInfoStream("OpenQuestion", {}, true);
-        });
+          GameService.getInfoStream('OpenQuestion', {}, true)
+        })
       }
     },
 
@@ -136,31 +122,31 @@ export default {
         openQuestionId: this.dismissing.id,
       }).then((response) => {
         if (response?.ok === false) {
-          ToastError(response.message);
+          ToastError(response.message)
         } else {
-          GameService.getInfoStream("OpenQuestion", {}, true);
-          this.viewing = null;
-          this.dismissing = null;
+          GameService.getInfoStream('OpenQuestion', {}, true)
+          this.viewing = null
+          this.dismissing = null
         }
-      });
+      })
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .open-questions-button {
   $size: 5rem;
   width: $size;
   height: $size;
-  background-image: url(ui-asset("/icons/ama.png"));
+  background-image: url(ui-asset('/icons/ama.png'));
   background-size: 100% 100%;
   background-repeat: no-repeat;
   cursor: pointer;
-  @include filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
   margin-bottom: 1rem;
+  @include utils.filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
 
   @media (orientation: portrait) {
     margin-bottom: 0;
@@ -168,7 +154,7 @@ export default {
   }
 
   &:hover {
-    @include filter(drop-shadow(0.3rem 0.3rem 0.3rem black) brightness(1.2));
+    @include utils.filter(drop-shadow(0.3rem 0.3rem 0.3rem black) brightness(1.2));
   }
 }
 

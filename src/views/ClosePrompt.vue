@@ -18,14 +18,14 @@
 
 <script>
 export default {
-  name: "ClosePrompt",
+  name: 'ClosePrompt',
 
   data: () => ({}),
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../utils.scss";
+@use '../utils.scss';
 
 .login-wrapper {
   padding: 3rem;
@@ -33,7 +33,7 @@ export default {
   height: 100%;
   max-height: 100%;
   overflow: auto;
-  background-image: url(ui-asset("/backdrops/main.jpg", "src/"));
+  background-image: url(ui-asset('/backdrops/main.jpg', 'src/'));
   background-size: cover;
   background-position: center center;
   display: flex;
@@ -60,7 +60,7 @@ export default {
 .login-error-text {
   padding: 0.5rem 1.5rem;
   font-size: 125%;
-  @include text-bad();
+  @include utils.text-bad();
 }
 
 .spacer {

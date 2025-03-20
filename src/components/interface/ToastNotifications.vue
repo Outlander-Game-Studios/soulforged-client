@@ -149,7 +149,7 @@ export { ToastNotify, ToastError }
 </script>
 
 <style scoped lang="scss">
-@import '../../utils.scss';
+@use '../../utils.scss';
 
 $height: 7rem;
 
@@ -236,7 +236,7 @@ $shiftOut: 50rem;
   }
 
   .list-item-inner-wrapper {
-    @include interactive();
+    @include utils.interactive();
     min-height: $height;
   }
 

@@ -389,7 +389,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../utils.scss';
+@use '../../utils.scss';
 
 $height: 5rem;
 $icon-height: 2.5rem;
@@ -452,7 +452,7 @@ $border-size: 0.35rem;
 
   &:hover {
     cursor: pointer;
-    @include filter(brightness(1.2) saturate(1.2));
+    @include utils.filter(brightness(1.2) saturate(1.2));
   }
 }
 
@@ -466,11 +466,11 @@ $border-size: 0.35rem;
   transform: rotate(180deg);
   transition: all 0.1s ease-in-out;
   transition-property: filter, transform;
-  @include filter(drop-shadow(0.05em -0.05em 0.05em black));
+  @include utils.filter(drop-shadow(0.05em -0.05em 0.05em black));
 
   &.collapsed {
     transform: rotate(0deg);
-    @include filter(drop-shadow(0.1em 0.05em 0.05em black));
+    @include utils.filter(drop-shadow(0.1em 0.05em 0.05em black));
   }
 }
 </style>

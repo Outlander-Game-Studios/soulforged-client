@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import essenceIcon from "../../assets/ui/cartoon/icons/essence.v2.png";
+import essenceIcon from '../../assets/ui/cartoon/icons/essence.v2.png'
 
 export default {
   props: {
@@ -35,17 +35,17 @@ export default {
     formatNumber: global.formatNumber,
     largeNumber: (number) =>
       `${number}`
-        .split("")
+        .split('')
         .reverse()
-        .map((d, idx) => (idx % 3 === 2 ? " " + d : d))
+        .map((d, idx) => (idx % 3 === 2 ? ' ' + d : d))
         .reverse()
-        .join(""),
+        .join(''),
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .currency-value {
   flex-grow: 1;
@@ -57,7 +57,7 @@ export default {
   &.inline {
     display: inline-block;
 
-    >* {
+    > * {
       display: inline-block;
       vertical-align: bottom;
     }
@@ -69,12 +69,12 @@ export default {
   }
 
   .value {
-    @include text-outline(black, #cedfff);
+    @include utils.text-outline(black, #cedfff);
     white-space: nowrap;
   }
 
   .negative {
-    @include text-bad();
+    @include utils.text-bad();
   }
 
   img {

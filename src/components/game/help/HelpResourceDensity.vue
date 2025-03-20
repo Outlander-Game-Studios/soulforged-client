@@ -2,8 +2,8 @@
   <span>
     <Help title="Density">
       <div class="density-help">
-        The density of the resource indicates <em>amount</em> of the resource is
-        available and the <em>speed of gathering</em> that resource.<br />
+        The density of the resource indicates <em>amount</em> of the resource is available and the
+        <em>speed of gathering</em> that resource.<br />
         <LabeledValue label="Current density">
           {{ ucFirst(resource.densityName) }}
           <IndicatorResourceDensity :density="resource.density" highRes />
@@ -25,9 +25,9 @@ export default {
   methods: {
     ucFirst,
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 </style>
