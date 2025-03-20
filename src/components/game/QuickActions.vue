@@ -4,11 +4,7 @@
       <div class="flex">
         <Container :borderSize="0.35">
           <LoadingPlaceholder v-if="!quickActions" :size="3" />
-          <div
-            v-else
-            class="settings-button interactive"
-            @click="openSettings()"
-          >
+          <div v-else class="settings-button interactive" @click="openSettings()">
             <div class="settings-icon"></div>
           </div>
         </Container>
@@ -73,21 +69,14 @@
           <ListItem v-for="(quickAction, idx) in quickActions" :key="idx">
             <template v-slot:icon>
               <Icon v-if="!quickAction.item" :src="unknownImg" :size="6" />
-              <Item
-                v-else-if="isItem(quickAction.item)"
-                :size="6"
-                :data="quickAction.item"
-              />
+              <Item v-else-if="isItem(quickAction.item)" :size="6" :data="quickAction.item" />
               <StructureIcon v-else :size="6" :structure="quickAction.item" />
             </template>
             <template v-slot:title>
               <RichText :value="quickAction.label" />
             </template>
             <template v-slot:subtitle>
-              <RichText
-                v-if="quickAction.item"
-                :value="quickAction.item.name"
-              />
+              <RichText v-if="quickAction.item" :value="quickAction.item.name" />
               <span v-else>Missing</span>
               <span v-if="!!quickAction.itemId"> (specific one)</span>
             </template>
@@ -100,10 +89,7 @@
                   @click="moveDown(idx)"
                   >▼</Button
                 >
-                <Button
-                  class="order-arrow"
-                  :class="{ no: idx === 0 }"
-                  @click="moveUp(idx)"
+                <Button class="order-arrow" :class="{ no: idx === 0 }" @click="moveUp(idx)"
                   >▲</Button
                 >
               </Horizontal>
@@ -114,27 +100,18 @@
             {{ QUICK_ACTIONS_LIMIT }}
           </Description>
           <HorizontalCenter>
-            <Button
-              @click="startAdding()"
-              :disabled="quickActions.length >= QUICK_ACTIONS_LIMIT"
-            >
+            <Button @click="startAdding()" :disabled="quickActions.length >= QUICK_ACTIONS_LIMIT">
               Add quick action
             </Button>
           </HorizontalCenter>
           <Description>
-            <em>Tip:</em> Pressing and holding your cursor over a Quick
-            Action<br />
+            <em>Tip:</em> Pressing and holding your cursor over a Quick Action<br />
             will apply to maximum possible amount of the item.
           </Description>
         </Vertical>
       </template>
     </Modal>
-    <Modal
-      v-if="addingSelectingItem"
-      dialog
-      large
-      @close="addingSelectingItem = false"
-    >
+    <Modal v-if="addingSelectingItem" dialog large @close="addingSelectingItem = false">
       <template v-slot:title> Select Item or Structure </template>
       <template v-slot:contents>
         <Vertical>
@@ -198,16 +175,13 @@
           <template v-if="selectedItem">
             <Header>Options</Header>
             <Horizontal>
-              <Checkbox v-model="specificInstance">
-                Only this specific one
-              </Checkbox>
+              <Checkbox v-model="specificInstance"> Only this specific one </Checkbox>
               <Help title="Specific item or structure">
-                By selecting this option the quick action will only apply to
-                this specific piece of item or building you selected.
+                By selecting this option the quick action will only apply to this specific piece of
+                item or building you selected.
                 <br />
-                Leaving this unchecked means that any item or structure of the
-                selected type will be used automatically, preferring the highest
-                quality and lowest durability.
+                Leaving this unchecked means that any item or structure of the selected type will be
+                used automatically, preferring the highest quality and lowest durability.
               </Help>
             </Horizontal>
             <Header>Select Action</Header>
@@ -231,10 +205,7 @@
             </div>
           </template>
           <HorizontalCenter>
-            <Button
-              :disabled="!selectedItem || !selectedActionId"
-              @click="addQuickAction"
-            >
+            <Button :disabled="!selectedItem || !selectedActionId" @click="addQuickAction">
               Add Quick Action
             </Button>
           </HorizontalCenter>
@@ -245,18 +216,16 @@
 </template>
 
 <script>
-import unknownImg from "../../assets/ui/cartoon/icons/unknown_nobg.png";
-import isEqual from "lodash/isEqual.js";
-import StructureIcon from "./StructureIcon";
-import pageSound from "../../assets/sounds/page.mp3";
+import unknownImg from '../../assets/ui/cartoon/icons/unknown_nobg.png'
+import isEqual from 'lodash/isEqual.js'
+import pageSound from '../../assets/sounds/page.mp3'
 
 export default {
-  components: { StructureIcon },
   data: () => ({
     showDetails: false,
     settings: false,
     adding: false,
-    newActionLabel: "",
+    newActionLabel: '',
     QUICK_ACTIONS_LIMIT,
     selectedItem: null,
     selectedActionId: null,
@@ -280,160 +249,147 @@ export default {
   // },
 
   subscriptions() {
-    const quickActionsStream = GameService.getQuickActionsStream();
+    const quickActionsStream = GameService.getQuickActionsStream()
     return {
-      collapsed: LocalStorageService.getItemStream(
-        "quickActionsCollapsed",
-        false
-      ),
-      selectedItemActions: this.$stream("selectedItem")
+      collapsed: LocalStorageService.getItemStream('quickActionsCollapsed', false),
+      selectedItemActions: this.$stream('selectedItem')
         .filter((item) => !!item)
         .map((item) => item.id)
-        .switchMap((id) =>
-          GameService.getEntityStream(id, ENTITY_VARIANTS.BASE, true)
-        )
-        .pluck("actions"),
+        .switchMap((id) => GameService.getEntityStream(id, ENTITY_VARIANTS.BASE, true))
+        .pluck('actions'),
       quickActions: quickActionsStream.tap(() => {
         setTimeout(() => {
-          this.checkExpandVisibility();
-        });
+          this.checkExpandVisibility()
+        })
       }),
       validQuickActions: quickActionsStream.map((quickActions) =>
         quickActions.filter(
           (quick) =>
             !!quick &&
             !!quick.item &&
-            quick.item.actions.some((a) => a.actionId === quick.actionId)
-        )
+            quick.item.actions.some((a) => a.actionId === quick.actionId),
+        ),
       ),
-    };
+    }
   },
 
   computed: {
     selectedAction() {
-      return this.selectedItemActions?.find(
-        (a) => a.actionId === this.selectedActionId
-      );
+      return this.selectedItemActions?.find((a) => a.actionId === this.selectedActionId)
     },
     newActionDefaultLabel() {
       if (this.selectedAction) {
-        return GameService.stripRichText(this.selectedAction.label);
+        return GameService.stripRichText(this.selectedAction.label)
       }
-      return "";
+      return ''
     },
   },
 
   created() {
-    this.handler = this.handleResize.bind(this);
-    window.addEventListener("resize", this.handler);
+    this.handler = this.handleResize.bind(this)
+    window.addEventListener('resize', this.handler)
   },
 
   destroyed() {
-    window.removeEventListener("resize", this.handler);
+    window.removeEventListener('resize', this.handler)
   },
 
   methods: {
     isItem(item) {
-      return item.actions.some((a) => a.actionId === "drop");
+      return item.actions.some((a) => a.actionId === 'drop')
     },
 
     toggleCollapse() {
-      LocalStorageService.setItem("quickActionsCollapsed", !this.collapsed);
+      LocalStorageService.setItem('quickActionsCollapsed', !this.collapsed)
     },
 
     handleResize() {
-      this.checkExpandVisibility();
+      this.checkExpandVisibility()
     },
 
     checkExpandVisibility() {
       this.showCollapseControls =
         this.$refs.quickActionContainer &&
-        this.$refs.quickActionContainer.scrollWidth >
-          this.$refs.quickActionContainer.clientWidth;
+        this.$refs.quickActionContainer.scrollWidth > this.$refs.quickActionContainer.clientWidth
     },
 
     openSettings() {
-      this.settings = true;
-      GameService.checkQuickActions();
-      SoundService.playSound(pageSound);
+      this.settings = true
+      GameService.checkQuickActions()
+      SoundService.playSound(pageSound)
     },
 
     triggerQuickAction(validQuickAction, max = false) {
-      const item = validQuickAction.item;
-      const action = item.actions.find(
-        ({ actionId }) => actionId === validQuickAction.actionId
-      );
+      const item = validQuickAction.item
+      const action = item.actions.find(({ actionId }) => actionId === validQuickAction.actionId)
       GameService.performAction(item, action, {
         amount: max ? item.amount || 1 : 1,
-      });
+      })
     },
 
     startAdding() {
-      this.adding = true;
-      this.newActionLabel = "";
-      this.selectedItem = null;
-      this.selectedActionId = null;
-      this.specificInstance = false;
+      this.adding = true
+      this.newActionLabel = ''
+      this.selectedItem = null
+      this.selectedActionId = null
+      this.specificInstance = false
     },
 
     async addQuickAction() {
-      const quickActions = await ControlsService.getSetting("quickActions", []);
+      const quickActions = await ControlsService.getSetting('quickActions', [])
       const action = this.selectedItemActions.find(
-        ({ actionId }) => actionId === this.selectedActionId
-      );
+        ({ actionId }) => actionId === this.selectedActionId,
+      )
       const newQuickAction = {
         actionId: action.actionId,
         label: this.newActionLabel || this.newActionDefaultLabel,
-      };
+      }
       if (this.specificInstance) {
-        newQuickAction.itemId = this.selectedItem.id;
+        newQuickAction.itemId = this.selectedItem.id
       } else {
-        newQuickAction.publicId = this.selectedItem.publicId;
+        newQuickAction.publicId = this.selectedItem.publicId
       }
       if (quickActions.some((action) => isEqual(action, newQuickAction))) {
-        ToastError("This action is already added");
-        return;
+        ToastError('This action is already added')
+        return
       }
-      ControlsService.saveSetting("quickActions", [
-        ...quickActions,
-        newQuickAction,
-      ])
+      ControlsService.saveSetting('quickActions', [...quickActions, newQuickAction])
         .then(() => {
-          this.adding = false;
-          this.selectedItem = null;
-          this.selectedActionId = null;
+          this.adding = false
+          this.selectedItem = null
+          this.selectedActionId = null
         })
         .catch((error) => {
-          ToastError(error);
-        });
+          ToastError(error)
+        })
     },
 
     async removeQuickAction(idx) {
-      const quickActions = await ControlsService.getSetting("quickActions", []);
-      quickActions.splice(idx, 1);
-      await ControlsService.saveSetting("quickActions", quickActions);
+      const quickActions = await ControlsService.getSetting('quickActions', [])
+      quickActions.splice(idx, 1)
+      await ControlsService.saveSetting('quickActions', quickActions)
     },
 
     async moveDown(idx) {
-      const quickActions = await ControlsService.getSetting("quickActions", []);
-      const old = quickActions[idx + 1];
-      quickActions[idx + 1] = quickActions[idx];
-      quickActions[idx] = old;
-      await ControlsService.saveSetting("quickActions", quickActions);
+      const quickActions = await ControlsService.getSetting('quickActions', [])
+      const old = quickActions[idx + 1]
+      quickActions[idx + 1] = quickActions[idx]
+      quickActions[idx] = old
+      await ControlsService.saveSetting('quickActions', quickActions)
     },
     async moveUp(idx) {
-      const quickActions = await ControlsService.getSetting("quickActions", []);
-      const old = quickActions[idx - 1];
-      quickActions[idx - 1] = quickActions[idx];
-      quickActions[idx] = old;
-      await ControlsService.saveSetting("quickActions", quickActions);
+      const quickActions = await ControlsService.getSetting('quickActions', [])
+      const old = quickActions[idx - 1]
+      quickActions[idx - 1] = quickActions[idx]
+      quickActions[idx] = old
+      await ControlsService.saveSetting('quickActions', quickActions)
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@import '../../utils.scss';
 
 $height: 5rem;
 $icon-height: 2.5rem;
@@ -459,7 +415,7 @@ $border-size: 0.35rem;
 .settings-icon {
   width: $icon-height;
   height: $icon-height;
-  background-image: url(ui-asset("/icons/quick-actions.png"));
+  background-image: url(ui-asset('/icons/quick-actions.png'));
   background-size: 100% 100%;
   background-repeat: no-repeat;
   transform: rotate(0deg);
@@ -504,7 +460,7 @@ $border-size: 0.35rem;
   margin: 0.35rem;
   width: 1.4rem;
   height: 1.4rem;
-  background-image: url(ui-asset("/misc/arrow_right.png"));
+  background-image: url(ui-asset('/misc/arrow_right.png'));
   background-size: 100% 100%;
   background-repeat: no-repeat;
   transform: rotate(180deg);

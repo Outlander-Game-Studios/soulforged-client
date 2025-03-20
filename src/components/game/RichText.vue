@@ -43,16 +43,8 @@
           <LoadingPlaceholder v-if="!namingInfo" />
           <Vertical v-else>
             <div>
-              <Icon
-                v-if="namingInfo.icon"
-                class="icon"
-                :src="namingInfo.icon"
-              />
-              <Input
-                v-model="selectedName"
-                @enter="$refs.submit.click()"
-                autoFocus
-              />
+              <Icon v-if="namingInfo.icon" class="icon" :src="namingInfo.icon" />
+              <Input v-model="selectedName" @enter="$refs.submit.click()" autoFocus />
               <div class="error-text">{{ error }}</div>
               <HorizontalCenter>
                 <Button
@@ -72,17 +64,13 @@
               <Header>
                 Names by other players
                 <Help title="Other names">
-                  List of names that other players chose to assign. Numbers next
-                  to the names indicate how many players opted to use each
-                  name.<br />
+                  List of names that other players chose to assign. Numbers next to the names
+                  indicate how many players opted to use each name.<br />
                   <br />
-                  You can click any of the names listed there to use that name
-                  yourself.
+                  You can click any of the names listed there to use that name yourself.
                 </Help>
               </Header>
-              <div class="empty-text" v-if="!namingInfo.otherNames.length">
-                None
-              </div>
+              <div class="empty-text" v-if="!namingInfo.otherNames.length">None</div>
               <Spaced>
                 <Header
                   v-for="otherName in namingInfo.otherNames"
@@ -104,21 +92,17 @@
 </template>
 
 <script>
-import exclamationIcon from "../../assets/ui/cartoon/icons/exclamation.png";
-import namingOpenSound from "../../assets/sounds/naming-open.mp3";
-import namingCloseSound from "../../assets/sounds/naming-close.mp3";
-import Effects from "./Effects";
-import ListItem from "../interface/ListItem";
-import Vertical from "../layouts/Vertical";
+import exclamationIcon from '../../assets/ui/cartoon/icons/exclamation.png'
+import namingOpenSound from '../../assets/sounds/naming-open.mp3'
+import namingCloseSound from '../../assets/sounds/naming-close.mp3'
 
 const TYPES = {
   TEXT: 1,
   NAME: 2,
   EFFECT: 3,
-};
+}
 
 export default {
-  components: { Vertical, ListItem, Effects },
   props: {
     value: {},
     html: {
@@ -132,7 +116,7 @@ export default {
   data: () => ({
     TYPES,
     isNaming: null,
-    selectedName: "",
+    selectedName: '',
     namingInfo: null,
     processing: null,
     effectInfo: null,
@@ -141,59 +125,57 @@ export default {
   subscriptions() {
     return {
       nameOverrides: GameService.getNameOverrideStream(),
-    };
+    }
   },
 
   computed: {
     parts() {
       if (!this.value) {
-        return [];
+        return []
       }
       function divvyUp(value, open, close, callback) {
         return `${value}`.split(close).reduce((acc, part) => {
-          const [first, second = ""] = part.split(open);
-          const results = callback(first, second);
-          return [...acc, ...results];
-        }, []);
+          const [first, second = ''] = part.split(open)
+          const results = callback(first, second)
+          return [...acc, ...results]
+        }, [])
       }
 
-      return divvyUp(this.value, "〚", "〛", (first, second) => {
-        const result = divvyUp(first, "{", "}", (first, second) => {
-          const result = [];
+      return divvyUp(this.value, '〚', '〛', (first, second) => {
+        const result = divvyUp(first, '{', '}', (first, second) => {
+          const result = []
           result.push({
             type: TYPES.TEXT,
             text: first,
-          });
+          })
           if (second) {
-            const [code, named, current] = second.split(":");
+            const [code, named, current] = second.split(':')
             result.push({
               type: TYPES.NAME,
               code,
               named: +named,
               text: current,
-            });
+            })
           }
-          return result;
-        });
+          return result
+        })
         if (second) {
-          const [name, icon, effectPayload, options] = second.split("﹃");
+          const [name, icon, effectPayload, options] = second.split('﹃')
           result.push({
             type: TYPES.EFFECT,
             name,
             icon,
             effectPayload,
             options: JSON.parse(options),
-          });
+          })
         }
-        return result;
-      });
+        return result
+      })
     },
     error() {
-      const failedCheck = NAMING_RULES.find(
-        ({ regex }) => !regex.test(this.selectedName)
-      );
+      const failedCheck = NAMING_RULES.find(({ regex }) => !regex.test(this.selectedName))
       if (failedCheck) {
-        return failedCheck.message;
+        return failedCheck.message
       }
     },
   },
@@ -201,40 +183,39 @@ export default {
   methods: {
     getStacks(part) {
       if (part.effectPayload) {
-        const parsed = JSON.parse(part.effectPayload);
+        const parsed = JSON.parse(part.effectPayload)
         if (parsed.stacks !== undefined) {
-          return parsed.stacks;
+          return parsed.stacks
         }
       }
-      return "";
+      return ''
     },
 
     displayName(part) {
       if (part.code && this.nameOverrides[part.code]) {
-        return this.nameOverrides[part.code];
+        return this.nameOverrides[part.code]
       }
-      return part.text;
+      return part.text
     },
 
     getEffectInfo(part) {
       return {
         ...part,
         ...JSON.parse(part.effectPayload),
-      };
+      }
     },
     showInfo(part, $event) {
-      this.effectInfo = this.getEffectInfo(part);
+      this.effectInfo = this.getEffectInfo(part)
     },
 
     startNaming(part, $event) {
       if (!part.code || this.nonInteractive) {
-        return;
+        return
       }
-      $event.stopPropagation();
-      this.isNaming = part;
-      SoundService.playSound(namingOpenSound);
-      this.selectedName =
-        this.nameOverrides[part.code] || (part.named ? part.text : "");
+      $event.stopPropagation()
+      this.isNaming = part
+      SoundService.playSound(namingOpenSound)
+      this.selectedName = this.nameOverrides[part.code] || (part.named ? part.text : '')
       GameService.request(REQUEST_CODES.GET_NAMEABLE, {
         nameId: part.code,
       }).then((result) => {
@@ -247,43 +228,43 @@ export default {
               count: result.otherNames[name],
             }))
             .sort((a, b) => {
-              return b.count - a.count;
+              return b.count - a.count
             }),
-        };
-      });
+        }
+      })
     },
 
     useExisting(name) {
-      this.selectedName = name;
-      this.saveName();
+      this.selectedName = name
+      this.saveName()
     },
 
     saveName() {
-      const code = this.isNaming.code;
-      const selectedName = this.selectedName;
+      const code = this.isNaming.code
+      const selectedName = this.selectedName
       this.processing = GameService.request(REQUEST_CODES.SET_NAMEABLE, {
         nameId: code,
         name: selectedName,
       }).then((result) => {
         if (result.ok) {
-          this.isNaming = null;
-          SoundService.playSound(namingCloseSound);
-          GameService.setNameOverride(code, selectedName);
+          this.isNaming = null
+          SoundService.playSound(namingCloseSound)
+          GameService.setNameOverride(code, selectedName)
         } else {
           ToastNotify({
             icon: exclamationIcon,
-            text: "Invalid name",
-            subtext: result.message || "Unexpected error",
-          });
+            text: 'Invalid name',
+            subtext: result.message || 'Unexpected error',
+          })
         }
-      });
+      })
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@import '../../utils.scss';
 
 @keyframes underline-shine {
   0% {

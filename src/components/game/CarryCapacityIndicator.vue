@@ -1,15 +1,8 @@
 <template>
   <div v-if="carryCapacity">
-    <ProgressBar
-      :fills="carryCapacityFill"
-      @click="showDetails = true"
-      class="interactive"
-    >
+    <ProgressBar :fills="carryCapacityFill" @click="showDetails = true" class="interactive">
       <div class="text-display">
-        <div
-          class="icon"
-          :class="{ yellow: isYellow, orange: isOrange, red: isRed }"
-        />
+        <div class="icon" :class="{ yellow: isYellow, orange: isOrange, red: isRed }" />
         <div class="flex-grow" />
         <div class="numbers">
           {{ carryCapacity.current }} / {{ carryCapacity.thresholds.last() }}
@@ -38,19 +31,14 @@
           </span>
         </LabeledValue>
         <hr />
-        <Description>
-          Carry capacity is determined by your Strength attribute
-        </Description>
+        <Description> Carry capacity is determined by your Strength attribute </Description>
       </template>
     </Modal>
   </div>
 </template>
 
 <script>
-import Description from "../interface/Description";
-import LabeledValue from "../interface/LabeledValue";
 export default {
-  components: { LabeledValue, Description },
   props: {
     modifier: {
       default: 0,
@@ -63,53 +51,53 @@ export default {
 
   subscriptions() {
     const carryCapacityStream = Rx.combineLatest(
-      GameService.getRootEntityStream().pluck("carryCapacity"),
-      this.$stream("modifier")
+      GameService.getRootEntityStream().pluck('carryCapacity'),
+      this.$stream('modifier'),
     )
       .filter(([carryCapacity]) => !!carryCapacity)
       .map(([carryCapacity, modifier]) => ({
         ...carryCapacity,
         current: Math.round(100 * (carryCapacity.current + modifier)) / 100,
-      }));
+      }))
     return {
       carryCapacity: carryCapacityStream,
       carryCapacityFill: carryCapacityStream.map(({ thresholds, current }) => {
-        const max = thresholds.last();
+        const max = thresholds.last()
         if (current > max) {
           return {
             red: 100,
-          };
+          }
         }
-        const colors = ["green", "yellow", "orange"];
-        let soFar = 0;
+        const colors = ['green', 'yellow', 'orange']
+        let soFar = 0
         return thresholds.toObject(
           (threshold, idx) => colors[idx],
           (threshold) => {
-            const value = Math.min(threshold, current) - soFar;
-            soFar += value;
-            return (100 * value) / max;
-          }
-        );
+            const value = Math.min(threshold, current) - soFar
+            soFar += value
+            return (100 * value) / max
+          },
+        )
       }),
-    };
+    }
   },
 
   computed: {
     isYellow() {
-      return !!this.carryCapacityFill?.yellow;
+      return !!this.carryCapacityFill?.yellow
     },
     isOrange() {
-      return !!this.carryCapacityFill?.orange;
+      return !!this.carryCapacityFill?.orange
     },
     isRed() {
-      return !!this.carryCapacityFill?.red;
+      return !!this.carryCapacityFill?.red
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@import '../../utils.scss';
 
 .text-display {
   display: flex;

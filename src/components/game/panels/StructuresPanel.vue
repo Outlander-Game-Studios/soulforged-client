@@ -1,8 +1,6 @@
 <template>
   <div>
-    <Header class="interactive" @click="showList()" v-if="header">
-      Structures
-    </Header>
+    <Header class="interactive" @click="showList()" v-if="header"> Structures </Header>
     <LoadingPlaceholder v-if="!loadedStructures" :size="6" />
     <div v-else-if="!loadedStructures.length" class="empty-text">None</div>
     <HorizontalWrap v-else tight class="scroll-spacing">
@@ -19,9 +17,7 @@
       <template v-slot:title> Structures </template>
       <template v-slot:contents>
         <LoadingPlaceholder v-if="!filteredStructures" />
-        <div v-else-if="!filteredStructures.length" class="empty-text">
-          None
-        </div>
+        <div v-else-if="!filteredStructures.length" class="empty-text">None</div>
         <template v-else>
           <div v-for="structure in filteredStructures" :key="structure.id">
             <ListItem
@@ -37,12 +33,7 @@
               </template>
               <template v-slot:subtitle="{ lazyData: structureDetails }">
                 <Horizontal tight>
-                  <template
-                    v-if="
-                      structureDetails.materials &&
-                      structureDetails.materials.length
-                    "
-                  >
+                  <template v-if="structureDetails.materials && structureDetails.materials.length">
                     <ItemIcon
                       v-for="(material, idx) in structureDetails.materials"
                       :key="'material' + idx"
@@ -52,15 +43,11 @@
                     />
                   </template>
                   <template v-else>
-                    <div
-                      class="progress-bar-wrapper"
-                      v-if="!structureDetails.operational"
-                    >
+                    <div class="progress-bar-wrapper" v-if="!structureDetails.operational">
                       <ProgressBar
                         :size="3"
                         :current="
-                          (100 * structureDetails.constructionProgress) /
-                          CONSTRUCT_RESOLUTION
+                          (100 * structureDetails.constructionProgress) / CONSTRUCT_RESOLUTION
                         "
                         color="green"
                       />
@@ -69,11 +56,7 @@
                 </Horizontal>
               </template>
               <template v-slot:buttons="{ lazyData: structureDetails }">
-                <Actions
-                  :target="structureDetails"
-                  @action="showingList = false"
-                  noWrap
-                />
+                <Actions :target="structureDetails" @action="showingList = false" noWrap />
               </template>
             </ListItem>
           </div>
@@ -96,9 +79,9 @@
               <Header alt2 v-if="showDetails.name.includes(permanentOwner)">
                 {{ permanentOwner }} Ownership will never expire
                 <Help title="Ownership will never expire">
-                  The owner of this building last died before the update
-                  enabling auto-abandoning structures was introduced. Because of
-                  this their buildings will not be automatically abandoned.
+                  The owner of this building last died before the update enabling auto-abandoning
+                  structures was introduced. Because of this their buildings will not be
+                  automatically abandoned.
                 </Help>
                 {{ permanentOwner }}
               </Header>
@@ -123,10 +106,7 @@
                 <Header alt2>Construction progress</Header>
                 <ProgressBar
                   :size="3"
-                  :current="
-                    (100 * showDetails.constructionProgress) /
-                    CONSTRUCT_RESOLUTION
-                  "
+                  :current="(100 * showDetails.constructionProgress) / CONSTRUCT_RESOLUTION"
                   color="green"
                 />
               </div>
@@ -141,38 +121,17 @@
                   >
                     {{ value }}
                   </LabeledValue>
-                  <LabeledValue
-                    v-if="showDetails.presence !== undefined"
-                    label="Someone inside"
-                  >
-                    <span v-if="showDetails.presence">
-                      Yes <IndicatorPresence />
-                    </span>
+                  <LabeledValue v-if="showDetails.presence !== undefined" label="Someone inside">
+                    <span v-if="showDetails.presence"> Yes <IndicatorPresence /> </span>
                     <span v-else>No</span>
                   </LabeledValue>
-                  <LabeledValue
-                    v-if="showDetails.likeable !== undefined"
-                    label="Liked"
-                  >
-                    <span class="text-good"
-                      >+{{ showDetails.likeable["+"] }}</span
-                    >
+                  <LabeledValue v-if="showDetails.likeable !== undefined" label="Liked">
+                    <span class="text-good">+{{ showDetails.likeable['+'] }}</span>
                     /
-                    <span class="text-bad"
-                      >-{{ showDetails.likeable["-"] }}</span
-                    >
+                    <span class="text-bad">-{{ showDetails.likeable['-'] }}</span>
                   </LabeledValue>
-                  <LabeledValue
-                    v-if="showDetails.likeable !== undefined"
-                    label="Durability impact"
-                  >
-                    <span
-                      :class="
-                        showDetails.durabilityMultiplier >= 1
-                          ? 'text-good'
-                          : 'text-bad'
-                      "
-                    >
+                  <LabeledValue v-if="showDetails.likeable !== undefined" label="Durability impact">
+                    <span :class="showDetails.durabilityMultiplier >= 1 ? 'text-good' : 'text-bad'">
                       {{ (100 * showDetails.durabilityMultiplier).toFixed(0) }}%
                     </span>
                   </LabeledValue>
@@ -206,8 +165,8 @@
           <Actions
             :target="showDetails"
             @action="
-              showingList = false;
-              showDetailsId = null;
+              showingList = false
+              showDetailsId = null
             "
           />
         </Vertical>
@@ -217,11 +176,9 @@
 </template>
 
 <script>
-import { Rx } from "@/rx.js";
-import IndicatorPresence from "../indicators/IndicatorPresence";
+import { Rx } from '@/rx.js'
 
 export default {
-  components: { IndicatorPresence },
   props: {
     structures: {},
     flexible: {
@@ -237,76 +194,74 @@ export default {
     CONSTRUCT_RESOLUTION,
     showDetailsId: false,
     showingList: false,
-    skull: " ☠️",
-    permanentOwner: "📜",
+    skull: ' ☠️',
+    permanentOwner: '📜',
   }),
 
   subscriptions() {
     return {
-      showDetails: this.$stream("showDetailsId").switchMap((showDetailsId) =>
+      showDetails: this.$stream('showDetailsId').switchMap((showDetailsId) =>
         showDetailsId
           ? GameService.getEntityStream(showDetailsId, ENTITY_VARIANTS.DETAILS)
-          : Rx.Observable.of(null)
+          : Rx.Observable.of(null),
       ),
-      showDetailsInfo: this.$stream("showDetailsId").switchMap(
-        (showDetailsId) =>
-          showDetailsId
-            ? GameService.getInfoStream("Structure", {
-                instanceId: showDetailsId,
-              })
-            : Rx.Observable.of(null)
+      showDetailsInfo: this.$stream('showDetailsId').switchMap((showDetailsId) =>
+        showDetailsId
+          ? GameService.getInfoStream('Structure', {
+              instanceId: showDetailsId,
+            })
+          : Rx.Observable.of(null),
       ),
-      loadedStructures: this.$stream("structures")
+      loadedStructures: this.$stream('structures')
         .switchMap((ids) => GameService.getEntitiesStream(ids))
         .map((structures) => [...structures].sort(structureSorter)),
-    };
+    }
   },
 
   computed: {
     stackedStructures() {
       const mapped = this.loadedStructures.reduce((acc, structure) => {
-        const structureId = this.getStructureId(structure);
+        const structureId = this.getStructureId(structure)
         if (!acc[structureId]) {
           acc[structureId] = {
             ...structure,
             number: 0,
             stackId: structureId,
-          };
+          }
         }
-        acc[structureId].number += 1;
-        return acc;
-      }, {});
+        acc[structureId].number += 1
+        return acc
+      }, {})
 
-      return Object.values(mapped);
+      return Object.values(mapped)
     },
 
     filteredStructures() {
       return this.loadedStructures?.filter(
         (structure) =>
-          this.showingList === true ||
-          this.getStructureId(structure) === this.showingList
-      );
+          this.showingList === true || this.getStructureId(structure) === this.showingList,
+      )
     },
   },
 
   methods: {
     hasUtility(utilities) {
-      return utilities && Object.keys(utilities).length;
+      return utilities && Object.keys(utilities).length
     },
 
     getStructureDetailsStream(structure) {
-      return GameService.getEntityStream(structure.id, ENTITY_VARIANTS.DETAILS);
+      return GameService.getEntityStream(structure.id, ENTITY_VARIANTS.DETAILS)
     },
 
     showList(stackedStructure) {
       if (stackedStructure) {
         if (stackedStructure.number === 1) {
-          this.showDetailsId = stackedStructure.id;
+          this.showDetailsId = stackedStructure.id
         } else {
-          this.showingList = stackedStructure.stackId;
+          this.showingList = stackedStructure.stackId
         }
       } else {
-        this.showingList = true;
+        this.showingList = true
       }
     },
 
@@ -318,10 +273,10 @@ export default {
         operational: structure.operational,
         condition: structure.condition,
         ruin: structure.ruin,
-      });
+      })
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">

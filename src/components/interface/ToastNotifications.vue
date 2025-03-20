@@ -6,16 +6,9 @@
       class="list-item-wrapper"
       :class="{ removing: toast.removing, good: toast.good, bad: toast.bad }"
     >
-      <div
-        class="list-item-inner-wrapper"
-        @click="removingToast(toast.toastId)"
-      >
+      <div class="list-item-inner-wrapper" @click="removingToast(toast.toastId)">
         <CloseButton v-if="toast.persisting" :size="2"></CloseButton>
-        <Container
-          class="notification-container"
-          :borderSize="1"
-          borderType="alt"
-        >
+        <Container class="notification-container" :borderSize="1" borderType="alt">
           <ListItem flexible class="notification-list-item">
             <template v-slot:icon>
               <Icon class="notification-icon" :src="toast.icon" :size="5" />
@@ -40,11 +33,7 @@
       :class="{ removing: !someValid }"
     >
       <div class="list-item-inner-wrapper" @click="removingAllToasts()">
-        <Container
-          class="notification-container"
-          :borderSize="1"
-          borderType="alt"
-        >
+        <Container class="notification-container" :borderSize="1" borderType="alt">
           <Horizontal tight>
             <div class="remove-all-label">Dismiss All</div>
             <CloseButton :size="5" static />
@@ -56,16 +45,13 @@
 </template>
 
 <script>
-import exclamationIcon from "../../assets/ui/cartoon/icons/exclamation.png";
-import okIcon from "../../assets/ui/cartoon/icons/tick_green.jpg";
-import CloseButton from "./CloseButton";
-import HorizontalFill from "../layouts/HorizontalFill";
+import exclamationIcon from '../../assets/ui/cartoon/icons/exclamation.png'
+import okIcon from '../../assets/ui/cartoon/icons/tick_green.jpg'
 
-const toastStream = new Rx.Subject();
-let toastId = 0;
+const toastStream = new Rx.Subject()
+let toastId = 0
 
 export default {
-  components: { HorizontalFill, CloseButton },
   props: {
     hideDelay: {
       default: 6000,
@@ -79,95 +65,91 @@ export default {
 
   subscriptions() {
     return {
-      offset: ControlsService.getControlEventStream("notificationOffset").map(
-        ([offset]) => offset
-      ),
+      offset: ControlsService.getControlEventStream('notificationOffset').map(([offset]) => offset),
       toastsFeed: toastStream.tap((toast) => {
-        this.addToast(toast);
+        this.addToast(toast)
       }),
-    };
+    }
   },
 
   mounted() {
-    this.$emit("init");
-    GameService.registerHandler(REQUEST_CODES.TOAST, (toast) =>
-      ToastNotify(toast)
-    );
+    this.$emit('init')
+    GameService.registerHandler(REQUEST_CODES.TOAST, (toast) => ToastNotify(toast))
   },
 
   methods: {
     addToast(toast) {
-      this.someValid = true;
-      toastId++;
+      this.someValid = true
+      toastId++
       this.toasts.unshift({
         ...toast,
         removing: false,
         toastId: toastId,
-      });
+      })
       if (!toast.persisting) {
-        this.queueRemovingToast(toastId);
+        this.queueRemovingToast(toastId)
       }
     },
 
     queueRemovingToast(toastId) {
       setTimeout(() => {
-        this.removingToast(toastId);
-      }, this.hideDelay);
+        this.removingToast(toastId)
+      }, this.hideDelay)
     },
 
     removingAllToasts() {
-      this.toasts.forEach((toast) => this.removingToast(toast.toastId));
+      this.toasts.forEach((toast) => this.removingToast(toast.toastId))
     },
 
     removingToast(toastId) {
-      const toast = this.toasts.find((toast) => toast.toastId === toastId);
+      const toast = this.toasts.find((toast) => toast.toastId === toastId)
       if (!toast || toast.removing) {
-        return;
+        return
       }
-      toast.removing = true;
+      toast.removing = true
       setTimeout(() => {
-        this.removeToast(toastId);
-      }, 2500);
+        this.removeToast(toastId)
+      }, 2500)
 
-      this.someValid = this.toasts.some((toast) => !toast.removing);
+      this.someValid = this.toasts.some((toast) => !toast.removing)
     },
 
     removeToast(toastId) {
-      this.toasts = this.toasts.filter((toast) => toast.toastId !== toastId);
+      this.toasts = this.toasts.filter((toast) => toast.toastId !== toastId)
     },
   },
-};
+}
 
 const ToastNotify = (toasts) => {
   if (!toasts) {
-    return;
+    return
   }
   if (!Array.isArray(toasts)) {
-    toasts = [toasts];
+    toasts = [toasts]
   }
-  toasts.forEach((toast) => toastStream.next(toast));
-};
+  toasts.forEach((toast) => toastStream.next(toast))
+}
 const ToastError = (message) => {
   ToastNotify({
     icon: exclamationIcon,
-    text: message || "Unexpected error",
-  });
-};
+    text: message || 'Unexpected error',
+  })
+}
 const ToastSuccess = (message, subtext) => {
   ToastNotify({
     icon: okIcon,
-    text: message || "Success",
+    text: message || 'Success',
     subtext,
-  });
-};
-window.ToastNotify = ToastNotify;
-window.ToastError = ToastError;
-window.ToastSuccess = ToastSuccess;
-export { ToastNotify, ToastError };
+  })
+}
+window.ToastNotify = ToastNotify
+window.ToastError = ToastError
+window.ToastSuccess = ToastSuccess
+export { ToastNotify, ToastError }
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@import '../../utils.scss';
 
 $height: 7rem;
 

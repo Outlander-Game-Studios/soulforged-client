@@ -12,7 +12,7 @@
     <div class="info-container-wrapper">
       <div class="info-container">
         <HorizontalFill tight class="ap-container">
-          <APBar />
+          <APBarCurrent />
         </HorizontalFill>
         <Container
           borderSize="0.5"

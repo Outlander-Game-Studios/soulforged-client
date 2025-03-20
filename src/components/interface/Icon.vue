@@ -47,10 +47,7 @@
 </template>
 
 <script>
-import BorderRound from "../layouts/BorderRound";
-
 export default {
-  components: { BorderRound },
   props: {
     size: {
       default: 8,
@@ -64,10 +61,10 @@ export default {
       default: false,
     },
     borderType: {
-      default: "base",
+      default: 'base',
     },
     backgroundType: {
-      default: "alt2",
+      default: 'alt2',
     },
     noFrame: {
       type: Boolean,
@@ -81,37 +78,37 @@ export default {
   computed: {
     iconWrapperStyle() {
       return {
-        width: this.size + "rem",
-        height: this.size + "rem",
-        "min-width": this.size + "rem",
-        "min-height": this.size + "rem",
-        fontSize: (this.size * 2) / 3 + "rem",
-      };
+        width: this.size + 'rem',
+        height: this.size + 'rem',
+        'min-width': this.size + 'rem',
+        'min-height': this.size + 'rem',
+        fontSize: (this.size * 2) / 3 + 'rem',
+      }
     },
 
     iconStyle() {
       if (!this.src) {
-        return {};
+        return {}
       }
       return {
         backgroundImage: `url("${this.src}")`,
-      };
+      }
     },
 
     textStyle() {
-      const minSize = 0.9;
-      const size = Math.max(minSize, this.size / 3);
+      const minSize = 0.9
+      const size = Math.max(minSize, this.size / 3)
       return {
-        "line-height": size + "rem",
-        "font-size": size + "rem",
-      };
+        'line-height': size + 'rem',
+        'font-size': size + 'rem',
+      }
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@import '../../utils.scss';
 
 .icon-wrapper {
   overflow: hidden;

@@ -13,11 +13,7 @@
       >
         <div class="modal">
           <Container borderType="alt" :borderSize="1.6">
-            <CloseButton
-              v-if="$listeners.close"
-              class="close"
-              @click="$emit('close')"
-            />
+            <CloseButton v-if="$listeners.close" class="close" @click="$emit('close')" />
             <div v-if="$slots.title || title" class="title-wrapper">
               <Header class="title-container" :alt3="specialFrame">
                 <div class="title-contents">
@@ -41,11 +37,9 @@
 </template>
 
 <script>
-import Container from "../layouts/Container";
-import closeSound from "../../assets/sounds/close.mp3";
+import closeSound from '../../assets/sounds/close.mp3'
 
 export default {
-  components: { Container },
   props: {
     closeable: {
       type: Boolean,
@@ -75,36 +69,36 @@ export default {
   },
 
   data: () => ({
-    headerSideStyle: "",
+    headerSideStyle: '',
   }),
 
   mounted() {
     if (this.attachToBody) {
-      document.body.appendChild(this.$refs.modalWrapper);
+      document.body.appendChild(this.$refs.modalWrapper)
     }
   },
 
   beforeDestroy() {
     if (this.$refs.modalWrapper) {
-      this.$refs.modalWrapper.remove();
+      this.$refs.modalWrapper.remove()
     }
   },
 
   methods: {
     backdropMouseClick() {
       if (!!this.$listeners.close) {
-        SoundService.playSound(closeSound, { speed: 2 });
-        this.$emit("close");
+        SoundService.playSound(closeSound, { speed: 2 })
+        this.$emit('close')
       } else {
         // TODO: add error sound
       }
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@import '../../utils.scss';
 
 @keyframes fade-in {
   from {
@@ -187,12 +181,12 @@ export default {
     .modal {
       .border-container {
         &::before {
-          content: "";
+          content: '';
           @include fill();
           pointer-events: none;
           border-width: 10rem;
           border-style: solid;
-          border-image: url(ui-asset("/borders/mid_bar_frame_single.png")) 200;
+          border-image: url(ui-asset('/borders/mid_bar_frame_single.png')) 200;
           background-size: 100% 100%;
         }
       }

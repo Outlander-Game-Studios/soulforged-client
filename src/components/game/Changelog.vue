@@ -3,17 +3,10 @@
   <div v-else-if="true" class="top-container">
     <div class="column">
       <LoadingPlaceholder v-if="!versionsDetails" />
-      <Vertical
-        v-for="(versionChangelog, versionNumber) in versionsDetails"
-        :key="versionNumber"
-      >
+      <Vertical v-for="(versionChangelog, versionNumber) in versionsDetails" :key="versionNumber">
         <Header small alt2> Version {{ versionNumber }} </Header>
         <Spaced>
-          <div
-            v-for="(items, category) in versionChangelog.changes"
-            :key="category"
-            class="item"
-          >
+          <div v-for="(items, category) in versionChangelog.changes" :key="category" class="item">
             <div v-for="(text, idx) in items" :key="idx">
               <span class="symbol" :class="category" />
               <RichText class="change-text" :value="text" />
@@ -25,11 +18,7 @@
     <div class="column versions">
       <Vertical class="version-selector">
         <Header small alt2>Versions</Header>
-        <Button
-          v-for="version in versions"
-          :key="version"
-          @click="showSpecific(version)"
-        >
+        <Button v-for="version in versions" :key="version" @click="showSpecific(version)">
           {{ version }}
         </Button>
       </Vertical>
@@ -42,66 +31,61 @@
 </template>
 
 <script>
-import flatten from "lodash/flatten.js";
-import Description from "../interface/Description";
-import RichText from "./RichText";
-import Vertical from "../layouts/Vertical";
-import Horizontal from "../layouts/Horizontal";
+import flatten from 'lodash/flatten.js'
 
 export default {
-  components: { Horizontal, Vertical, RichText, Description },
   data: () => ({
     showVersion: null,
     showSinceLast: true,
   }),
 
   subscriptions() {
-    const versionsStream = GameService.getInfoStream("Changelog");
+    const versionsStream = GameService.getInfoStream('Changelog')
     const versionsToShow = Rx.combineLatest(
-      this.$stream("showVersion"),
+      this.$stream('showVersion'),
       versionsStream,
-      GameService.getLastViewedVersionStream().first()
+      GameService.getLastViewedVersionStream().first(),
     ).map(([showVersion, versions, lastVersion]) => {
-      const idx = versions.indexOf(lastVersion);
+      const idx = versions.indexOf(lastVersion)
       if (idx <= 0 || !this.showSinceLast) {
-        this.showSinceLast = false;
-        return [showVersion];
+        this.showSinceLast = false
+        return [showVersion]
       }
-      this.showSinceLast = true;
-      return versions.slice(0, idx);
-    });
+      this.showSinceLast = true
+      return versions.slice(0, idx)
+    })
     return {
       versionsSinceLast: versionsToShow,
       versionsDetails: versionsToShow.switchMap((versions) => {
         return Rx.combineLatest(
           versions.map((version) =>
-            GameService.getInfoStream("Changelog", {
+            GameService.getInfoStream('Changelog', {
               version,
-            })
-          )
-        ).map((details) => details.toObject((detail, idx) => versions[idx]));
+            }),
+          ),
+        ).map((details) => details.toObject((detail, idx) => versions[idx]))
       }),
       versions: versionsStream,
       currentVersion: GameService.getVersionStream().tap((current) => {
-        GameService.getInfoStream("Changelog", {
+        GameService.getInfoStream('Changelog', {
           updateLastVersion: true,
-        });
-        this.showVersion = current;
+        })
+        this.showVersion = current
       }),
-    };
+    }
   },
 
   methods: {
     showSpecific(version) {
-      this.showVersion = version;
-      this.showSinceLast = false;
+      this.showVersion = version
+      this.showSinceLast = false
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@import '../../utils.scss';
 
 .symbol {
   display: inline-block;
@@ -111,25 +95,25 @@ export default {
   background-repeat: no-repeat;
   margin-right: 0.5rem;
   @include filter(
-    drop-shadow(1px 1px 0 #111) drop-shadow(1px -1px 0 #111)
-      drop-shadow(-1px 1px 0 #111) drop-shadow(-1px -1px 0 #111)
+    drop-shadow(1px 1px 0 #111) drop-shadow(1px -1px 0 #111) drop-shadow(-1px 1px 0 #111)
+      drop-shadow(-1px -1px 0 #111)
   );
-  background-image: url(ui-asset("/emoji/question-mark.svg"));
+  background-image: url(ui-asset('/emoji/question-mark.svg'));
 
   &.balance {
-    background-image: url(ui-asset("/emoji/scales.svg"));
+    background-image: url(ui-asset('/emoji/scales.svg'));
   }
   &.feature {
-    background-image: url(ui-asset("/emoji/new.svg"));
+    background-image: url(ui-asset('/emoji/new.svg'));
   }
   &.interface {
-    background-image: url(ui-asset("/emoji/screwdriver.svg"));
+    background-image: url(ui-asset('/emoji/screwdriver.svg'));
   }
   &.bugfix {
-    background-image: url(ui-asset("/emoji/tools.svg"));
+    background-image: url(ui-asset('/emoji/tools.svg'));
   }
   &.visual {
-    background-image: url(ui-asset("/emoji/picture.svg"));
+    background-image: url(ui-asset('/emoji/picture.svg'));
   }
 }
 .item {

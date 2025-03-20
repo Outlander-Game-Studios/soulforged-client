@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="!filteredStructures || filteredStructures.length === 0"
-    class="empty-text"
-  >
+  <div v-if="!filteredStructures || filteredStructures.length === 0" class="empty-text">
     Nothing to select from
   </div>
   <div v-else>
@@ -40,11 +37,7 @@
         <Description v-else warning inline> None </Description>
       </LabeledValue>
       <HorizontalWrap tight>
-        <div
-          v-if="includeEmpty"
-          class="item-button"
-          @click="selectedItem(null)"
-        >
+        <div v-if="includeEmpty" class="item-button" @click="selectedItem(null)">
           <ItemIcon :size="size" />
         </div>
         <div
@@ -64,10 +57,7 @@
 </template>
 
 <script>
-import Vertical from "../layouts/Vertical";
-import StructureIcon from "./StructureIcon";
 export default {
-  components: { StructureIcon, Vertical },
   props: {
     includeEmpty: {
       default: true,
@@ -98,35 +88,33 @@ export default {
         .map((location) => location.structures)
         .switchMap((ids) => GameService.getEntitiesStream(ids))
         .map((structures) => structures.sort(structureSorter)),
-    };
+    }
   },
 
   computed: {
     filteredStructures() {
-      return this.structures?.filter(this.filter) || [];
+      return this.structures?.filter(this.filter) || []
     },
   },
 
   methods: {
     selectedStructure(structure) {
-      this.internalValue = structure;
-      this.$emit("selected", structure);
-      this.$emit("input", structure);
+      this.internalValue = structure
+      this.$emit('selected', structure)
+      this.$emit('input', structure)
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@import '../../utils.scss';
 
 .item-button {
   @include interactive();
 
   &.selected {
-    @include filter(
-      saturate(1.1) brightness(1.5) drop-shadow(0.2rem 0.2rem 0.2rem black)
-    );
+    @include filter(saturate(1.1) brightness(1.5) drop-shadow(0.2rem 0.2rem 0.2rem black));
     z-index: 3;
   }
 }

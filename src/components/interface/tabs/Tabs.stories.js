@@ -1,14 +1,16 @@
 export default {
-  title: "Base UI/Tabs",
-};
+  title: 'Base UI/Tabs',
+}
 
-const factory = (placement = "top") => () => {
-  return {
-    data: () => ({
-      placement,
-      loremIpsum,
-    }),
-    template: `
+const factory =
+  (placement = 'top') =>
+  () => {
+    return {
+      data: () => ({
+        placement,
+        loremIpsum,
+      }),
+      template: `
       <div>
       <Tabs :url="false" :placement="placement">
         <Tab header="First">
@@ -53,13 +55,13 @@ const factory = (placement = "top") => () => {
       </Tabs>
       </div>
     `,
-  };
-};
+    }
+  }
 
-export const PlacementTop = factory("top");
-export const PlacementLeft = factory("left");
-export const PlacementRight = factory("right");
-export const PlacementBottom = factory("bottom");
+export const PlacementTop = factory('top')
+export const PlacementLeft = factory('left')
+export const PlacementRight = factory('right')
+export const PlacementBottom = factory('bottom')
 
 export const withHtml = () => {
   return {
@@ -90,5 +92,5 @@ export const withHtml = () => {
       </Tabs>
       </div>
     `,
-  };
-};
+  }
+}

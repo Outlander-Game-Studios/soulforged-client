@@ -1,9 +1,7 @@
 <template>
   <div>
     <LoadingPlaceholder v-if="!filteredInventory" />
-    <div v-if="!filteredInventory.length" class="empty-text">
-      Nothing to select from
-    </div>
+    <div v-if="!filteredInventory.length" class="empty-text">Nothing to select from</div>
     <template v-else>
       <Vertical v-if="$scopedSlots.default">
         <ListItem :iconSrc="crossIcon" flexible v-if="includeNone">
@@ -48,11 +46,7 @@
           <Description v-else warning inline> None </Description>
         </LabeledValue>
         <HorizontalWrap tight>
-          <div
-            class="item-button"
-            @click="selectedItem(null)"
-            v-if="includeNone"
-          >
+          <div class="item-button" @click="selectedItem(null)" v-if="includeNone">
             <ItemIcon :size="size" :icon="crossIcon" />
           </div>
           <div
@@ -80,13 +74,9 @@
 </template>
 
 <script>
-import crossIcon from "../../../assets/ui/cartoon/icons/cross.jpg";
-import LabeledValue from "../../interface/LabeledValue";
-import RichText from "../RichText";
-import Vertical from "../../layouts/Vertical";
+import crossIcon from '../../../assets/ui/cartoon/icons/cross.jpg'
 
 export default {
-  components: { Vertical, RichText, LabeledValue },
   props: {
     size: {
       default: 8,
@@ -125,39 +115,34 @@ export default {
   }),
 
   subscriptions() {
-    const rootEntityStream = GameService.getRootEntityStream();
-    const locationStream = GameService.getLocationStream();
+    const rootEntityStream = GameService.getRootEntityStream()
+    const locationStream = GameService.getLocationStream()
     return {
       itemSorter: GameService.getItemSorterStream(),
       equipmentMap: GameService.getEquipmentMapStream(),
-      playerInventory: this.$stream("itemVariant").switchMap((itemVariant) =>
-        this.$stream("includeLocation")
+      playerInventory: this.$stream('itemVariant').switchMap((itemVariant) =>
+        this.$stream('includeLocation')
           .switchMap((includeLocation) => {
-            const entityStream = GameService.getInventoryStream(
-              rootEntityStream,
-              itemVariant
-            );
+            const entityStream = GameService.getInventoryStream(rootEntityStream, itemVariant)
             return includeLocation
               ? Rx.combineLatest(
                   entityStream,
-                  GameService.getInventoryStream(locationStream, itemVariant)
+                  GameService.getInventoryStream(locationStream, itemVariant),
                 ).map(([character, location]) => [...character, ...location])
-              : entityStream;
+              : entityStream
           })
           .tap((inventory) => {
             if (this.internalValue) {
-              const item = inventory.find(
-                (i) => i.id === this.internalValue.id
-              );
+              const item = inventory.find((i) => i.id === this.internalValue.id)
               if (item) {
-                this.selectedItem(item);
+                this.selectedItem(item)
               }
             } else if (this.autoSelect) {
-              this.selectedItem(inventory.filter(this.filter).first());
+              this.selectedItem(inventory.filter(this.filter).first())
             }
-          })
+          }),
       ),
-    };
+    }
   },
 
   computed: {
@@ -167,31 +152,29 @@ export default {
           ?.filter(this.filter)
           .filter((item) => !!item)
           .sort(this.itemSorter) || []
-      );
+      )
     },
   },
 
   methods: {
     selectedItem(item) {
-      this.internalValue = item;
-      console.log("Selected item", JSON.stringify(item));
-      this.$emit("selected", item);
-      this.$emit("input", item);
+      this.internalValue = item
+      console.log('Selected item', JSON.stringify(item))
+      this.$emit('selected', item)
+      this.$emit('input', item)
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@import '../../../utils.scss';
 
 .item-button {
   @include interactive();
 
   &.selected {
-    @include filter(
-      saturate(1.1) brightness(1.5) drop-shadow(0.2rem 0.2rem 0.2rem black)
-    );
+    @include filter(saturate(1.1) brightness(1.5) drop-shadow(0.2rem 0.2rem 0.2rem black));
     z-index: 3;
   }
 }

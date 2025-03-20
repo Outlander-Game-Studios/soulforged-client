@@ -1,30 +1,32 @@
 <script>
 global.BACKGROUNDS = [
-  "none",
-  "base",
-  "alt",
-  "alt2",
-  "alt3",
-  "self",
-  "danger",
-  "danger-low",
-  "severity--5",
-  "severity--4",
-  "severity--3",
-  "severity--2",
-  "severity--1",
-  "severity-0",
-  "severity-1",
-  "severity-2",
-  "severity-3",
-  "severity-4",
-  "severity-5",
-];
+  'none',
+  'base',
+  'alt',
+  'alt2',
+  'alt3',
+  'self',
+  'danger',
+  'danger-low',
+  'severity--5',
+  'severity--4',
+  'severity--3',
+  'severity--2',
+  'severity--1',
+  'severity-0',
+  'severity-1',
+  'severity-2',
+  'severity-3',
+  'severity-4',
+  'severity-5',
+]
+
+export default {}
 </script>
 
 <style lang="scss">
-@use "sass:map";
-@import "../../utils.scss";
+@use 'sass:map';
+@import '../../utils.scss';
 
 @mixin effect-sev-background($color, $second: black) {
   background-image: radial-gradient($color, $second);

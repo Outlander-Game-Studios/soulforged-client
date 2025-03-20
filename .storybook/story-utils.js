@@ -11,9 +11,9 @@ export const operationWrapper = (template, fullscreen) => `
   <div :style="{ display: 'flex' }"  v-if="!${fullscreen}">
     <div class="tab-icon inventory">
       <Icon src="${inventoryIcon}" :size="3.5" />
-    </div> 
+    </div>
     <div :style="{ flexGrow: 1 }">
-      <APBar />
+      <APBarCurrent />
     </div>
   </div>
       ${
@@ -38,7 +38,7 @@ export const operationWrapper = (template, fullscreen) => `
   </div>
 `
       }
-      
+
   <ToastNotifications />
 </Vertical>
 `;

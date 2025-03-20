@@ -1,13 +1,15 @@
 <script>
-console.log("App styles included");
+console.log('App styles included')
+
+export default {}
 </script>
 
 <style lang="scss">
-@import "../../utils.scss";
+@import '../../utils.scss';
 
 @font-face {
   font-family: Booter;
-  src: url("../../assets/fonts/booter/BOOTERFZ.ttf");
+  src: url('../../assets/fonts/booter/BOOTERFZ.ttf');
 }
 
 html,
@@ -176,7 +178,9 @@ body {
 
 .fade-expand-enter-active,
 .fade-expand-leave-active {
-  transition: opacity 1s ease-in, max-height 2s ease-in;
+  transition:
+    opacity 1s ease-in,
+    max-height 2s ease-in;
   max-height: var(--app-height);
   overflow: hidden;
 }
@@ -295,7 +299,7 @@ label {
   width: 2rem;
   height: 2rem;
   vertical-align: text-top;
-  background-image: url(ui-asset("/icons/problem.png"));
+  background-image: url(ui-asset('/icons/problem.png'));
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }

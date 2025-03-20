@@ -9,20 +9,12 @@
     </Horizontal>
     <slot />
     <div v-show="searchVisible">
-      <Input
-        v-model="textSearch"
-        ref="textSearchInput"
-        placeholder="Search..."
-      />
+      <Input v-model="textSearch" ref="textSearchInput" placeholder="Search..." />
     </div>
     <div v-if="!inventory">
       <LoadingPlaceholder :size="5" />
     </div>
-    <HorizontalWrap
-      tight
-      v-else-if="sortedFilteredInventory.length > 0"
-      class="inventory-items"
-    >
+    <HorizontalWrap tight v-else-if="sortedFilteredInventory.length > 0" class="inventory-items">
       <Item
         v-for="(item, idx) in sortedFilteredInventory"
         class="draggable"
@@ -84,12 +76,9 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Horizontal from "../../layouts/Horizontal";
-import Input from "../../interface/Input";
+import Vue from 'vue'
 
 export default {
-  components: { Input, Horizontal },
   props: {
     header: {},
     includeCrafts: {
@@ -108,139 +97,125 @@ export default {
   },
 
   data: () => ({
-    textSearch: "",
+    textSearch: '',
     searchVisible: false,
   }),
 
   computed: {
     sortedFilteredInventory() {
       const words = this.textSearch
-        .split("|")
+        .split('|')
         .filter((w) => !!w)
-        .map((w) => w.toLowerCase());
+        .map((w) => w.toLowerCase())
       return this.sortedInventory.filter(
         (item) =>
           !this.textSearch ||
-          words.some((w) =>
-            GameService.stripRichText(item.name).toLowerCase().includes(w)
-          )
-      );
+          words.some((w) => GameService.stripRichText(item.name).toLowerCase().includes(w)),
+      )
     },
 
     sortedInventory() {
-      return [...this.inventory].filter((item) => !!item).sort(this.itemSorter);
+      return [...this.inventory].filter((item) => !!item).sort(this.itemSorter)
     },
 
     hasClick() {
-      return !!this.$listeners.click;
+      return !!this.$listeners.click
     },
   },
 
   subscriptions() {
-    const draggedItemStream = ControlsService.getDraggedItemStream();
+    const draggedItemStream = ControlsService.getDraggedItemStream()
 
     return {
-      applySearch: this.$stream("searchControlEvent")
+      applySearch: this.$stream('searchControlEvent')
         .switchMap((eventName) =>
-          eventName
-            ? ControlsService.getControlEventStream(eventName)
-            : Rx.Observable.empty()
+          eventName ? ControlsService.getControlEventStream(eventName) : Rx.Observable.empty(),
         )
         .tap(([text]) => {
-          this.searchVisible = true;
-          this.textSearch = text;
+          this.searchVisible = true
+          this.textSearch = text
         }),
       itemSorter: GameService.getItemSorterStream(),
       equipmentMap: GameService.getEquipmentMapStream(),
-      draggingSource: ControlsService.getControlEventStream(
-        "draggingInventory"
-      ).map(([source]) => source),
-      draggingOther: ControlsService.getControlEventStream(
-        "draggingInventory"
-      ).map(([uid]) => uid && uid !== this._uid),
+      draggingSource: ControlsService.getControlEventStream('draggingInventory').map(
+        ([source]) => source,
+      ),
+      draggingOther: ControlsService.getControlEventStream('draggingInventory').map(
+        ([uid]) => uid && uid !== this._uid,
+      ),
       draggedItem: draggedItemStream,
       unequipDropTargets: draggedItemStream
         .filter((item) => !!item)
         .map(
           (item) =>
             this.includeUnequipDrop &&
-            item.actions.filter(
-              (a) => a.actionId.substring(0, 9) === "un_equip_"
-            )
+            item.actions.filter((a) => a.actionId.substring(0, 9) === 'un_equip_'),
         ),
-    };
+    }
   },
 
   methods: {
     toggleSearch() {
-      this.textSearch = "";
-      this.searchVisible = !this.searchVisible;
+      this.textSearch = ''
+      this.searchVisible = !this.searchVisible
       if (this.searchVisible) {
         setTimeout(() => {
-          this.$refs.textSearchInput.focus();
-        });
+          this.$refs.textSearchInput.focus()
+        })
       }
     },
 
     onActionDrop($event, selectedActionId) {
-      const item = this.draggedItem;
-      const action = item.actions.find(
-        ({ actionId }) => actionId === selectedActionId
-      );
-      GameService.performAction(item, action);
+      const item = this.draggedItem
+      const action = item.actions.find(({ actionId }) => actionId === selectedActionId)
+      GameService.performAction(item, action)
     },
 
     onDrop($event, amount) {
-      const item = this.draggedItem;
-      const action = item.actions.find(({ actionId }) =>
-        ["pickup", "drop"].includes(actionId)
-      );
+      const item = this.draggedItem
+      const action = item.actions.find(({ actionId }) => ['pickup', 'drop'].includes(actionId))
 
       if (amount) {
-        amount = Math.min(amount, item.amount);
+        amount = Math.min(amount, item.amount)
         GameService.performAction(item, action, {
           amount,
-        });
+        })
       } else {
         document
-          .getElementById("item" + item.id)
-          ?.querySelector(".item-icon")
-          ?.click();
+          .getElementById('item' + item.id)
+          ?.querySelector('.item-icon')
+          ?.click()
         setTimeout(() => {
-          let times = 200;
+          let times = 200
           const attemptInterval = setInterval(() => {
-            const button = document.querySelector(
-              `.modal button.action-button.${action.actionId}`
-            );
+            const button = document.querySelector(`.modal button.action-button.${action.actionId}`)
             if (button) {
-              clearInterval(attemptInterval);
-              button.click();
+              clearInterval(attemptInterval)
+              button.click()
               setTimeout(() => {
-                const inputs = document.querySelectorAll(
-                  ".modal-wrapper + .modal-wrapper input"
-                );
-                const input = [...inputs].last();
+                const inputs = document.querySelectorAll('.modal-wrapper + .modal-wrapper input')
+                const input = [...inputs].last()
                 if (input) {
-                  input.value = Math.ceil(item.amount / 2);
-                  input.dispatchEvent(new Event("input"));
+                  input.value = Math.ceil(item.amount / 2)
+                  input.dispatchEvent(new Event('input'))
                 }
-              });
+              })
             } else {
-              times--;
+              times--
               if (times <= 0) {
-                clearInterval(attemptInterval);
+                clearInterval(attemptInterval)
               }
             }
-          }, 10);
-        });
+          }, 10)
+        })
       }
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@import '../../../utils.scss';
 
 .inventory-wrapper {
   position: relative;

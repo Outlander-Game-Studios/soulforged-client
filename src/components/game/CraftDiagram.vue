@@ -58,17 +58,11 @@
       </component>
     </Horizontal>
     <LoadingPlaceholder v-else />
-    <Modal
-      dialog
-      large
-      v-if="showItemCraftsByItem"
-      @close="showItemCraftsByItem = null"
-    >
+    <Modal dialog large v-if="showItemCraftsByItem" @close="showItemCraftsByItem = null">
       <template v-slot:title>
         <Horizontal>
           <div class="header-text">
-            <RichText :value="showItemCraftsByItem.itemDef.name" /> - Related
-            Recipes
+            <RichText :value="showItemCraftsByItem.itemDef.name" /> - Related Recipes
           </div>
         </Horizontal>
       </template>
@@ -93,10 +87,7 @@
 </template>
 
 <script>
-import Horizontal from "../layouts/Horizontal";
-
 export default {
-  components: { Horizontal },
   props: {
     craft: {},
     showSearchButton: {
@@ -129,30 +120,28 @@ export default {
 
   subscriptions() {
     const filteredCrafts = (filter) =>
-      this.$stream("showItemCraftsByItem").switchMap((item) =>
+      this.$stream('showItemCraftsByItem').switchMap((item) =>
         item?.publicId
-          ? GameService.getCraftsStream().map((crafts) =>
-              crafts.filter(filter(item?.publicId))
-            )
-          : Rx.Observable.of([])
-      );
+          ? GameService.getCraftsStream().map((crafts) => crafts.filter(filter(item?.publicId)))
+          : Rx.Observable.of([]),
+      )
 
     return {
-      craftsByMaterialPublicId: filteredCrafts((publicId) => (craft) =>
-        craft.materials.some((material) => material.publicId === publicId)
+      craftsByMaterialPublicId: filteredCrafts(
+        (publicId) => (craft) => craft.materials.some((material) => material.publicId === publicId),
       ),
-      craftsByProducePublicId: filteredCrafts((publicId) => (craft) =>
-        craft.produce.some((produce) => produce.publicId === publicId)
+      craftsByProducePublicId: filteredCrafts(
+        (publicId) => (craft) => craft.produce.some((produce) => produce.publicId === publicId),
       ),
-    };
+    }
   },
 
   computed: {
     finalAmount() {
       if (isNaN(this.amount)) {
-        return 0;
+        return 0
       }
-      return this.amount;
+      return this.amount
     },
   },
 
@@ -160,61 +149,61 @@ export default {
     searchInventories() {
       const text = this.craft.materials
         .map((i) => GameService.stripRichText(i.itemDef.name))
-        .join("|");
-      ControlsService.triggerControlEvent("openPanel-inventory", text);
+        .join('|')
+      ControlsService.triggerControlEvent('openPanel-inventory', text)
       setTimeout(() => {
-        ControlsService.triggerControlEvent("search-location-inventory", text);
-      });
+        ControlsService.triggerControlEvent('search-location-inventory', text)
+      })
     },
     actioned() {
-      this.showItemCraftsByItem = null;
-      this.$emit("action");
+      this.showItemCraftsByItem = null
+      this.$emit('action')
     },
     showCrafts(item) {
       if (!this.nonInteractive) {
-        this.showItemCraftsByItem = item;
+        this.showItemCraftsByItem = item
       }
     },
 
     apiAddCollected({ results, failPrefix }, selector) {
       if (!results.length) {
-        return Rx.Observable.empty();
+        return Rx.Observable.empty()
       }
       const produceAmounts = this.craft.produce.reduce(
         (acc, produce) => ({
           ...acc,
           [produce.publicId]: produce.amount,
         }),
-        {}
-      );
+        {},
+      )
       results = results.reduce((acc, result) => {
         Object.keys(result).map((itemPublicId) => {
-          acc[itemPublicId] = acc[itemPublicId] || [];
+          acc[itemPublicId] = acc[itemPublicId] || []
           const qtyMade =
-            typeof result[itemPublicId] === "object"
+            typeof result[itemPublicId] === 'object'
               ? Object.values(result[itemPublicId]).reduce(sum, 0)
-              : result[itemPublicId];
+              : result[itemPublicId]
           acc[itemPublicId].push({
             gain: qtyMade,
             loss: produceAmounts[itemPublicId] - qtyMade,
-          });
-        });
-        return acc;
-      }, {});
+          })
+        })
+        return acc
+      }, {})
       const streams = Object.keys(results).map((itemPublicId) => {
-        const itemResults = results[itemPublicId];
-        return this.$refs["produce_" + itemPublicId].first().apiAddCollected(
+        const itemResults = results[itemPublicId]
+        return this.$refs['produce_' + itemPublicId].first().apiAddCollected(
           {
             results: itemResults,
             failPrefix,
           },
-          selector
-        );
-      });
-      return streams.first();
+          selector,
+        )
+      })
+      return streams.first()
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">

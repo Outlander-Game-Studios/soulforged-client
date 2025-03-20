@@ -4,19 +4,11 @@
     <CreatureKnowledgeBar :mobInfo="mobInfo" />
     <Spaced>
       <Header alt2>Offense</Header>
-      <div v-if="mobInfo.combatMoves === undefined" class="empty-text">
-        Unknown
-      </div>
+      <div v-if="mobInfo.combatMoves === undefined" class="empty-text">Unknown</div>
       <Spaced v-else>
         <Vertical>
-          <LabeledValue label="Hit Rating (base)">{{
-            mobInfo.hitRating
-          }}</LabeledValue>
-          <CombatMoves
-            noSpacing
-            showDetailsOnClick
-            :moves="mobInfo.combatMoves"
-          />
+          <LabeledValue label="Hit Rating (base)">{{ mobInfo.hitRating }}</LabeledValue>
+          <CombatMoves noSpacing showDetailsOnClick :moves="mobInfo.combatMoves" />
         </Vertical>
       </Spaced>
       <Spaced v-if="creature">
@@ -26,9 +18,7 @@
         />
       </Spaced>
       <Header alt2>Defense</Header>
-      <div v-if="mobInfo.defenseRating === undefined" class="empty-text">
-        Unknown
-      </div>
+      <div v-if="mobInfo.defenseRating === undefined" class="empty-text">Unknown</div>
       <Spaced v-else>
         <LabeledValue label="Defense Rating (base)">
           {{ mobInfo.defenseRating }}
@@ -45,12 +35,7 @@
       <Spaced v-if="creature">
         <ImpactsSummary
           :creature="creature"
-          :impacts="[
-            'Defense Rating',
-            'Cut Resistance',
-            'Blunt Resistance',
-            'Pierce Resistance',
-          ]"
+          :impacts="['Defense Rating', 'Cut Resistance', 'Blunt Resistance', 'Pierce Resistance']"
         />
       </Spaced>
       <Header alt2>Usable items</Header>
@@ -66,14 +51,10 @@
 </template>
 
 <script>
-import CombatMoves from "./CombatMoves";
-import LabeledValue from "../interface/LabeledValue";
-import Vertical from "../layouts/Vertical";
 export default {
-  components: { Vertical, LabeledValue, CombatMoves },
   props: {
     creature: {},
     mobInfo: {},
   },
-};
+}
 </script>

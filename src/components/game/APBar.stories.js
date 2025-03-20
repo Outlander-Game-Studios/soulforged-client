@@ -4,25 +4,27 @@ export default {
   title: "Game UI/APBar",
 };
 
-const factory = (actionPoints, actionPointsMax, consideredAP = 0) => () => {
-  ControlsService.mock({
-    getConsideredAPStream: () => Rx.Observable.of(consideredAP),
-  });
-  GameService.mock({
-    getRootEntityStream: () =>
-      Rx.Observable.of({
-        nextAP: {
-          gain: 15,
-          nextTickSeconds: 15,
-        },
-        actionPoints,
-        actionPointsMax,
-      }),
-  });
-  return {
-    template: "<APBar />",
+const factory =
+  (actionPoints, actionPointsMax, consideredAP = 0) =>
+  () => {
+    ControlsService.mock({
+      getConsideredAPStream: () => Rx.Observable.of(consideredAP),
+    });
+    GameService.mock({
+      getRootEntityStream: () =>
+        Rx.Observable.of({
+          nextAP: {
+            gain: 15,
+            nextTickSeconds: 15,
+          },
+          actionPoints,
+          actionPointsMax,
+        }),
+    });
+    return {
+      template: "<APBarCurrent />",
+    };
   };
-};
 
 export const Empty = factory(0, 36000);
 export const Third = factory(12000, 36000);

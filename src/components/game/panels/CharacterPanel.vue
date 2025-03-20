@@ -14,12 +14,7 @@
             @click="showStatDetails = stat"
           >
             <template v-slot:label>
-              <Icon
-                :src="data.icon"
-                backgroundType="alt"
-                class="float-left"
-                :size="2.5"
-              />
+              <Icon :src="data.icon" backgroundType="alt" class="float-left" :size="2.5" />
               {{ stat }}
             </template>
             <template>
@@ -31,9 +26,8 @@
           {{ mainEntity.mortalWounds.current }} /
           {{ mainEntity.mortalWounds.max }}
           <Help title="Mortal Wounds">
-            Mortal wounds are caused by serious injury. Once you reach the limit
-            of Mortal Wounds, any further serious injury will cause character
-            death.
+            Mortal wounds are caused by serious injury. Once you reach the limit of Mortal Wounds,
+            any further serious injury will cause character death.
           </Help>
         </LabeledValue>
       </Vertical>
@@ -42,16 +36,12 @@
       Skills
       <Help title="Skills">
         <p>
-          Skills are increased while performing any action that is using this
-          skill. The <em>skill experience</em> gained depends most notably on
-          the difficulty of the task. Performing fairly challenging actions
-          grants the most <em>skill experience</em>, while doing those that are
-          almost impossible or trivial grants less <em>skill experience</em>.
+          Skills are increased while performing any action that is using this skill. The
+          <em>skill experience</em> gained depends most notably on the difficulty of the task.
+          Performing fairly challenging actions grants the most <em>skill experience</em>, while
+          doing those that are almost impossible or trivial grants less <em>skill experience</em>.
         </p>
-        <p>
-          You can click on any skill bar to display additional information about
-          the skill.
-        </p>
+        <p>You can click on any skill bar to display additional information about the skill.</p>
       </Help>
     </Header>
     <div v-if="noSkills" class="empty-text">None</div>
@@ -74,7 +64,7 @@
       </template>
       <HorizontalCenter v-if="topSortedSkills.length !== sortedSkills.length">
         <Button @click="showAllSkills = !showAllSkills">
-          {{ showAllSkills ? "Show fewer" : "Show all" }}
+          {{ showAllSkills ? 'Show fewer' : 'Show all' }}
         </Button>
       </HorizontalCenter>
     </Spaced>
@@ -102,9 +92,8 @@ export default {
     showAllSkills: false,
   }),
 
-  components: {},
   subscriptions() {
-    const mainEntityStream = GameService.getRootEntityStream();
+    const mainEntityStream = GameService.getRootEntityStream()
 
     return {
       mainEntity: mainEntityStream,
@@ -112,25 +101,25 @@ export default {
         mainEntity.skills
           ? Object.keys(mainEntity.skills)
               .sort((a, b) => {
-                const diff = mainEntity.skills[b] - mainEntity.skills[a];
-                return diff || compareStrings(a, b);
+                const diff = mainEntity.skills[b] - mainEntity.skills[a]
+                return diff || compareStrings(a, b)
               })
               .map((skillName) => ({
                 skillName,
                 level: mainEntity.skills[skillName],
               }))
-          : Rx.Observable.empty()
+          : Rx.Observable.empty(),
       ),
-    };
+    }
   },
 
   computed: {
     noSkills() {
-      return this.sortedSkills && !Object.keys(this.sortedSkills).length;
+      return this.sortedSkills && !Object.keys(this.sortedSkills).length
     },
     topSortedSkills() {
-      return this.sortedSkills?.slice(0, 5);
+      return this.sortedSkills?.slice(0, 5)
     },
   },
-};
+}
 </script>

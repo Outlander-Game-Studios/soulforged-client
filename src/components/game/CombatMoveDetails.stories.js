@@ -1,8 +1,6 @@
-import CombatMoveDetails from "./CombatMoveDetails.vue";
-
 export default {
-  title: "Game UI/Combat Move Details",
-};
+  title: 'Game UI/Combat Move Details',
+}
 
 export const moveOdds = () => ({
   data: () => ({
@@ -10,10 +8,6 @@ export const moveOdds = () => ({
       stopsFleeing: true,
     },
   }),
-
-  components: {
-    CombatMoveDetails,
-  },
 
   template: `
 <div>
@@ -28,4 +22,4 @@ export const moveOdds = () => ({
   <CombatMoveDetails :moveDetails="moveDetails" :odds="4" noIcon />
 </div>
 `,
-});
+})
