@@ -279,7 +279,7 @@
                       <Horizontal tight>
                         <div class="flex-grow">Abilities</div>
                         <div class="skip-confirm">
-                          <Checkbox v-model="skipConfirm">Skip confirm</Checkbox>
+                          <Checkbox v-model:value="skipConfirm">Skip confirm</Checkbox>
                         </div>
                       </Horizontal>
                     </Header>

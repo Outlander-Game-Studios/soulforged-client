@@ -299,7 +299,7 @@ label {
   width: 2rem;
   height: 2rem;
   vertical-align: text-top;
-  background-image: url(ui-asset('/icons/problem.png'));
+  background-image: utils.ui-asset('/icons/problem.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }

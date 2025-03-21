@@ -141,7 +141,7 @@ export default rxComponent({
   $size: 5rem;
   width: $size;
   height: $size;
-  background-image: url(ui-asset('/icons/ama.png'));
+  background-image: utils.ui-asset('/icons/ama.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
   cursor: pointer;

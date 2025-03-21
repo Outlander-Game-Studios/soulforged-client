@@ -16,7 +16,7 @@
       <HorizontalCenter>How long?</HorizontalCenter>
       <Input
         type="number"
-        v-model="amount"
+        v-model:value="amount"
         ref="inputField"
         :max="max"
         @enter="$refs.submit.click()"

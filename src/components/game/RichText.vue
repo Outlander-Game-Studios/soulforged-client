@@ -44,7 +44,7 @@
           <Vertical v-else>
             <div>
               <Icon v-if="namingInfo.icon" class="icon" :src="namingInfo.icon" />
-              <Input v-model="selectedName" @enter="$refs.submit.click()" autoFocus />
+              <Input v-model:value="selectedName" @enter="$refs.submit.click()" autoFocus />
               <div class="error-text">{{ error }}</div>
               <HorizontalCenter>
                 <Button

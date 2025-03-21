@@ -7,14 +7,14 @@
     <Horizontal>
       <div class="flex-grow">
         <Horizontal>
-          <Checkbox v-model="onlyCollected"> Show only collected </Checkbox>
+          <Checkbox v-model:value="onlyCollected"> Show only collected </Checkbox>
         </Horizontal>
         <div>
           <LabeledValue label="Collected"> {{ collectedCount }} / {{ allCount }} </LabeledValue>
         </div>
       </div>
       <div>
-        <Select v-model="chapterSelected" :options="chapters" />
+        <Select v-model:value="chapterSelected" :options="chapters" />
       </div>
     </Horizontal>
     <div class="cards">
@@ -28,7 +28,7 @@
     <HorizontalCenter v-if="collectedCount || (!onlyCollected && allCount)">
       <OptionSelector
         :label="'Page: ' + (page + 1) + ' / ' + maxPages"
-        v-model="page"
+        v-model:value="page"
         :options="pages"
       />
     </HorizontalCenter>

@@ -71,7 +71,7 @@
       </div>
       <Input
         ref="textInput"
-        v-model="newMessageText"
+        v-model:value="newMessageText"
         class="message-input"
         :disabled="sending"
         @keypress="inputKeypress($event)"

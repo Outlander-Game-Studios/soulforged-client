@@ -87,7 +87,7 @@ export default {
       }
       const actualValue = Math.limit(this.value, this.min, this.max)
       if (actualValue !== this.value) {
-        this.$emit('input', actualValue)
+        this.$emit('update:value', actualValue)
       }
     },
     setValueBaseOnPosition(position) {
@@ -113,7 +113,7 @@ export default {
         throttle: 50,
       })
       this.old = value
-      this.$emit('input', value)
+      this.$emit('update:value', value)
     },
 
     getOffsetX(event) {

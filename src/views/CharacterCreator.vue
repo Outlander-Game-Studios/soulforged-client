@@ -11,13 +11,13 @@
               <Vertical>
                 <HorizontalFill>
                   <label>Name</label>
-                  <Input v-model="characterName" @enter="$refs.submit.click()" autoFocus />
+                  <Input v-model:value="characterName" @enter="$refs.submit.click()" autoFocus />
                 </HorizontalFill>
                 <div class="error-text">{{ error }}</div>
                 <OptionSelector
                   v-if="races && races.length > 1"
                   :label="'Race: ' + race"
-                  v-model="race"
+                  v-model:value="race"
                   :options="races"
                   random
                   cycle
@@ -26,7 +26,7 @@
                   v-for="(def, feature) in featureSelections"
                   :key="def.label"
                   :label="def.label + ': ' + (+looks[feature] + 1)"
-                  v-model="looks[feature]"
+                  v-model:value="looks[feature]"
                   :options="def.options"
                   @input="updateAvatar()"
                   random
@@ -159,7 +159,7 @@ export default rxComponent({
   height: 100%;
   max-height: 100%;
   overflow: auto;
-  background-image: url(ui-asset('/backdrops/main.jpg', 'src/'));
+  background-image: utils.ui-asset('/backdrops/main.jpg', 'src/');
   background-size: cover;
   background-position: center center;
   display: flex;

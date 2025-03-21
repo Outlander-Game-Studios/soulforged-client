@@ -20,7 +20,7 @@
         <div>How many attempts?</div>
         <Input
           type="number"
-          v-model="amount"
+          v-model:value="amount"
           :min="1"
           :max="maxAmount"
           @enter="$refs.submit.click()"

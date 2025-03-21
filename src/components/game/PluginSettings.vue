@@ -24,9 +24,9 @@
             <label>{{ setting.name }}</label>
             <Checkbox
               v-if="setting.type === 'boolean'"
-              v-model="settingsValues[plugin.id][setting.id]"
+              v-model:value="settingsValues[plugin.id][setting.id]"
             />
-            <Input v-else v-model="settingsValues[plugin.id][setting.id]" />
+            <Input v-else v-model:value="settingsValues[plugin.id][setting.id]" />
           </div>
           <HorizontalCenter>
             <Button @click="saveSettings(plugin)">Save</Button>

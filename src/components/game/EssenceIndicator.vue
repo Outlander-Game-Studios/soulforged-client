@@ -55,7 +55,7 @@ export default rxComponent({
   height: 4rem;
   transform: rotate(10deg);
   pointer-events: none;
-  background-image: url(ui-asset('/icons/exclamation.png'));
+  background-image: utils.ui-asset('/icons/exclamation.png');
   background-size: auto 100%;
   background-position: center center;
   background-repeat: no-repeat;

@@ -5,7 +5,7 @@
         <Input
           placeholder="Type your question here..."
           autoFocus
-          v-model="question"
+          v-model:value="question"
           class="flex-grow"
           @enter="$refs.submit.click()"
         />

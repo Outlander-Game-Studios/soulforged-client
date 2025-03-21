@@ -185,7 +185,7 @@ export default {
           pointer-events: none;
           border-width: 10rem;
           border-style: solid;
-          border-image: url(ui-asset('/borders/mid_bar_frame_single.png')) 200;
+          border-image: utils.ui-asset('/borders/mid_bar_frame_single.png') 200;
           background-size: 100% 100%;
           @include utils.fill();
         }

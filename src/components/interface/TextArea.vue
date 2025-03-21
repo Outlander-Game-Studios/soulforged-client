@@ -38,7 +38,7 @@ export default {
     },
     localValue: {
       handler(arg) {
-        this.$emit('input', arg)
+        this.$emit('update:value', arg)
       },
     },
   },

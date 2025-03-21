@@ -164,7 +164,9 @@
             </div>
           </div>
           <HorizontalCenter>
-            <Checkbox v-model="confirmDelete"> I confirm I want to delete my account </Checkbox>
+            <Checkbox v-model:value="confirmDelete">
+              I confirm I want to delete my account
+            </Checkbox>
           </HorizontalCenter>
           <HorizontalCenter>
             <Button @click="deleteMyAccount()" :processing="loggingOut" :disabled="!confirmDelete">
@@ -389,7 +391,7 @@ export default rxComponent({
   width: 3rem;
   height: 6rem;
   pointer-events: none;
-  background-image: url(ui-asset('/icons/exclamation.png'));
+  background-image: utils.ui-asset('/icons/exclamation.png');
   background-size: auto 100%;
   background-position: center center;
   transform: rotate(10deg);

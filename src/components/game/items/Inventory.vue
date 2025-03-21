@@ -9,7 +9,7 @@
     </Horizontal>
     <slot />
     <div v-show="searchVisible">
-      <Input v-model="textSearch" ref="textSearchInput" placeholder="Search..." />
+      <Input v-model:value="textSearch" ref="textSearchInput" placeholder="Search..." />
     </div>
     <div v-if="!inventory">
       <LoadingPlaceholder :size="5" />

@@ -182,7 +182,7 @@ export default rxComponent({
   height: 3rem;
   right: 1.5rem;
   top: 1.4rem;
-  background-image: url(ui-asset('/icons/star.png'));
+  background-image: utils.ui-asset('/icons/star.png');
   background-size: 100%;
 }
 
@@ -204,7 +204,7 @@ export default rxComponent({
       position: absolute;
       width: 3.8rem;
       height: 3.8rem;
-      background-image: url(ui-asset('/icons/quest_t.png'));
+      background-image: utils.ui-asset('/icons/quest_t.png');
       background-size: 130%;
       background-position: center;
       top: -0.5rem;

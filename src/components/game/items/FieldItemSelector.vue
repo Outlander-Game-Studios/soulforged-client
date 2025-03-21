@@ -83,7 +83,7 @@ export default rxComponent({
 
   methods: {
     selectItem(item) {
-      this.$emit('input', item && item.id)
+      this.$emit('update:value', item && item.id)
       this.selectingItem = false
     },
   },

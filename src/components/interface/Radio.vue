@@ -35,7 +35,7 @@ export default {
   methods: {
     select() {
       SoundService.playSound(checkboxSound)
-      this.$emit('input', this.option)
+      this.$emit('update:value', this.option)
     },
   },
 }
@@ -87,13 +87,13 @@ input[type='radio'] {
     left: 0;
     bottom: 0;
     right: 0;
-    background-image: url(ui-asset('/misc/radio_off.png'));
+    background-image: utils.ui-asset('/misc/radio_off.png');
     background-size: 100%;
     background-repeat: no-repeat;
   }
 
   &:checked::before {
-    background-image: url(ui-asset('/misc/radio.png'));
+    background-image: utils.ui-asset('/misc/radio.png');
   }
 
   &[disabled]::before {

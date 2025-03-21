@@ -161,7 +161,7 @@ export default rxComponent({
       this.internalValue = item
       console.log('Selected item', JSON.stringify(item))
       this.$emit('selected', item)
-      this.$emit('input', item)
+      this.$emit('update:value', item)
     },
   },
 })

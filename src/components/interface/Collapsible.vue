@@ -47,7 +47,7 @@ export default {
 .indicator {
   width: 1em;
   height: 1em;
-  background-image: url(ui-asset('/misc/arrow_right.png'));
+  background-image: utils.ui-asset('/misc/arrow_right.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
   transform: rotate(90deg);

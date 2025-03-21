@@ -59,7 +59,7 @@ export default {
   width: 9.5em;
   height: 13.3em;
 
-  background-image: url(ui-asset('/card/face.png', '../'));
+  background-image: utils.ui-asset('/card/face.png', '../');
   background-size: 100% 100%;
 
   position: relative;
@@ -68,7 +68,7 @@ export default {
     opacity: 0.6;
   }
   &.unknown {
-    background-image: url(ui-asset('/card/back.png', '../'));
+    background-image: utils.ui-asset('/card/back.png', '../');
     opacity: 0.2;
   }
 

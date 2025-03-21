@@ -94,26 +94,26 @@ export default rxComponent({
   background-size: 100% 100%;
   background-repeat: no-repeat;
   margin-right: 0.5rem;
-  background-image: url(ui-asset('/emoji/question-mark.svg'));
+  background-image: utils.ui-asset('/emoji/question-mark.svg');
   @include utils.filter(
     drop-shadow(1px 1px 0 #111) drop-shadow(1px -1px 0 #111) drop-shadow(-1px 1px 0 #111)
       drop-shadow(-1px -1px 0 #111)
   );
 
   &.balance {
-    background-image: url(ui-asset('/emoji/scales.svg'));
+    background-image: utils.ui-asset('/emoji/scales.svg');
   }
   &.feature {
-    background-image: url(ui-asset('/emoji/new.svg'));
+    background-image: utils.ui-asset('/emoji/new.svg');
   }
   &.interface {
-    background-image: url(ui-asset('/emoji/screwdriver.svg'));
+    background-image: utils.ui-asset('/emoji/screwdriver.svg');
   }
   &.bugfix {
-    background-image: url(ui-asset('/emoji/tools.svg'));
+    background-image: utils.ui-asset('/emoji/tools.svg');
   }
   &.visual {
-    background-image: url(ui-asset('/emoji/picture.svg'));
+    background-image: utils.ui-asset('/emoji/picture.svg');
   }
 }
 .item {

@@ -335,7 +335,7 @@ export default rxComponent({
   left: 50%;
   margin-top: calc($size / -2);
   margin-left: calc($size / -2);
-  background-image: url(ui-asset('/misc/current-move.png'));
+  background-image: utils.ui-asset('/misc/current-move.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
 

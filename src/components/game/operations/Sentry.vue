@@ -15,7 +15,7 @@
         </Checkbox>
       </HorizontalWrap>
       <Header alt2>Log ({{ logs.length }} / {{ SENTRY_LIMIT }})</Header>
-      <Input placeholder="Search logs" v-model="textFilter" />
+      <Input placeholder="Search logs" v-model:value="textFilter" />
       <div class="log-table-wrapper">
         <table class="log-table">
           <thead>

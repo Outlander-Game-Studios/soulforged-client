@@ -12,7 +12,7 @@
         <Vertical>
           <div v-html="description" />
           <Header alt2>Additional information</Header>
-          <TextArea v-model="additionalInfo" :disabled="processing" />
+          <TextArea v-model:value="additionalInfo" :disabled="processing" />
           <div class="error-text">{{ error }}</div>
           <HorizontalCenter>
             <Button type="reset" @click="confirm()" :processing="processing" :disabled="!!error">
@@ -83,7 +83,7 @@ export default {
   width: 1em;
   height: 1em;
   display: inline-block;
-  background-image: url(ui-asset('/icons/report.png'));
+  background-image: utils.ui-asset('/icons/report.png');
   background-size: 100% 100%;
   cursor: pointer;
 

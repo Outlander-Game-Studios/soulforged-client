@@ -49,7 +49,7 @@ $size: 3.5rem;
       text-decoration: line-through;
     }
     .objective-icon {
-      background-image: url(ui-asset('/icons/check-true.png'));
+      background-image: utils.ui-asset('/icons/check-true.png');
     }
   }
 
@@ -86,7 +86,7 @@ $size: 3.5rem;
 }
 
 .objective-icon {
-  background-image: url(ui-asset('/icons/check-false.png'));
+  background-image: utils.ui-asset('/icons/check-false.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
   display: inline-block;

@@ -10,6 +10,6 @@
   height: 1.9rem;
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  background-image: url(ui-asset('/simple-icons/search-cancel.png', '../'));
+  background-image: utils.ui-asset('/simple-icons/search-cancel.png', '../');
 }
 </style>

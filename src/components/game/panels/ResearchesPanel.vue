@@ -73,11 +73,11 @@
       </TopZIndex>
       <div class="researches">
         <Header>Research</Header>
-        <Radio v-model="displayMode" option="favourites"> Only favourites </Radio>
-        <Radio v-model="displayMode" option="wip"> In Progress </Radio>
-        <Radio v-model="displayMode" option="completed"> Completed </Radio>
+        <Radio v-model:value="displayMode" option="favourites"> Only favourites </Radio>
+        <Radio v-model:value="displayMode" option="wip"> In Progress </Radio>
+        <Radio v-model:value="displayMode" option="completed"> Completed </Radio>
         <Spaced>
-          <Input placeholder="Search..." v-model="textSearch" />
+          <Input placeholder="Search..." v-model:value="textSearch" />
           <div v-if="!researches"><LoadingPlaceholder /></div>
           <div v-else-if="!researches.length" class="empty-text">None</div>
           <div v-else>

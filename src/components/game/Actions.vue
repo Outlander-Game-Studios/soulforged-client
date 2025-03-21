@@ -79,7 +79,7 @@
             />
             <div v-else-if="parameter.type === 'item'">
               <ItemSelector
-                v-model="selectedItem"
+                v-model:value="selectedItem"
                 @input="updateItemValue(parameter, $event)"
                 :includeNone="false"
                 :size="5"

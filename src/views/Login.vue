@@ -16,7 +16,7 @@
               <span class="error"> {{ error }} </span>
             </HorizontalCenter>
             <HorizontalCenter>
-              <Checkbox v-model="acceptedTOE">
+              <Checkbox v-model:value="acceptedTOE">
                 <span class="toe-accept">
                   I agree to the
                   <a target="_blank" href="https://soulforged.net/#/legal/termsAndConditions"
@@ -124,7 +124,7 @@ export default {
   height: 100%;
   max-height: 100%;
   overflow: auto;
-  background-image: url(ui-asset('/backdrops/main.jpg', 'src/'));
+  background-image: utils.ui-asset('/backdrops/main.jpg', 'src/');
   background-size: cover;
   background-position: center center;
   display: flex;

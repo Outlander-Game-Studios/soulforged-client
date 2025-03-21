@@ -27,7 +27,7 @@
       <template v-slot:contents>
         <Vertical v-if="!selectedResult">
           <Input
-            v-model="search"
+            v-model:value="search"
             ref="itemSearchInput"
             placeholder="Search for item..."
             @input="queueSearchItems()"
@@ -66,14 +66,14 @@
                 <div>
                   {{ selectedResult.durabilityNames[durabilityStage] }}
                 </div>
-                <Slider v-model="wornStage" :min="0" max="3" :step="1"></Slider>
+                <Slider v-model:value="wornStage" :min="0" max="3" :step="1"></Slider>
               </Vertical>
               <Vertical v-if="selectedResult.qualityNames">
                 <Header alt2>Minimum Quality</Header>
                 <div>
                   {{ selectedResult.qualityNames[quality] }}
                 </div>
-                <Slider v-model="quality" :min="0" max="3" :step="1"></Slider>
+                <Slider v-model:value="quality" :min="0" max="3" :step="1"></Slider>
               </Vertical>
             </Vertical>
           </Horizontal>
@@ -147,7 +147,7 @@ export default {
         icon: this.selectedResult.icon,
         name: this.selectedResult.name,
       }
-      this.$emit('input', value)
+      this.$emit('update:value', value)
       this.selecting = null
     },
 
@@ -179,7 +179,7 @@ export default {
     selectedItem(item) {
       this.internalValue = item
       this.$emit('selected', item)
-      this.$emit('input', item)
+      this.$emit('update:value', item)
     },
   },
 }

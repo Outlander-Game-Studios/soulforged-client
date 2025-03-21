@@ -10,9 +10,9 @@
             <div class="craft-filters">
               <Spaced>
                 <Vertical>
-                  <Input placeholder="Text search..." v-model="textFilter" />
-                  <Select label="Skill" :options="availableSkills" v-model="skillFilter" />
-                  <Select label="Sort" :options="sortOptions" v-model="sortOrder" />
+                  <Input placeholder="Text search..." v-model:value="textFilter" />
+                  <Select label="Skill" :options="availableSkills" v-model:value="skillFilter" />
+                  <Select label="Sort" :options="sortOptions" v-model:value="sortOrder" />
                 </Vertical>
               </Spaced>
             </div>

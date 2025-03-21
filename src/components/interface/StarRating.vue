@@ -111,11 +111,11 @@ export default {
 
     &:not(.full) {
       opacity: 0.2;
-      background-image: url(ui-asset('/icons/star_empty.png'));
+      background-image: utils.ui-asset('/icons/star_empty.png');
     }
 
     &.full {
-      background-image: url(ui-asset('/icons/star.png'));
+      background-image: utils.ui-asset('/icons/star.png');
     }
   }
 

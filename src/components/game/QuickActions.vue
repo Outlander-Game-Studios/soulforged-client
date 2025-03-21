@@ -117,7 +117,7 @@
         <Vertical>
           <Header>Items</Header>
           <ItemSelector
-            v-model="selectedItem"
+            v-model:value="selectedItem"
             :includeNone="false"
             :size="5"
             @selected="addingSelectingItem = false"
@@ -130,7 +130,7 @@
           </ItemSelector>
           <Header>Structures</Header>
           <StructureSelector
-            v-model="selectedItem"
+            v-model:value="selectedItem"
             :includeEmpty="false"
             :size="5"
             @selected="addingSelectingItem = false"
@@ -175,7 +175,7 @@
           <template v-if="selectedItem">
             <Header>Options</Header>
             <Horizontal>
-              <Checkbox v-model="specificInstance"> Only this specific one </Checkbox>
+              <Checkbox v-model:value="specificInstance"> Only this specific one </Checkbox>
               <Help title="Specific item or structure">
                 By selecting this option the quick action will only apply to this specific piece of
                 item or building you selected.
@@ -189,7 +189,7 @@
               <Radio
                 v-for="action in selectedItemActions"
                 :key="action.actionId"
-                v-model="selectedActionId"
+                v-model:value="selectedActionId"
                 :option="action.actionId"
               >
                 <RichText :value="action.label" />
@@ -198,7 +198,7 @@
             <Header>Label</Header>
             <div>
               <Input
-                v-model="newActionLabel"
+                v-model:value="newActionLabel"
                 :maxLength="32"
                 :placeholder="newActionDefaultLabel"
               />
@@ -415,7 +415,7 @@ $border-size: 0.35rem;
 .settings-icon {
   width: $icon-height;
   height: $icon-height;
-  background-image: url(ui-asset('/icons/quick-actions.png'));
+  background-image: utils.ui-asset('/icons/quick-actions.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
   transform: rotate(0deg);
@@ -460,7 +460,7 @@ $border-size: 0.35rem;
   margin: 0.35rem;
   width: 1.4rem;
   height: 1.4rem;
-  background-image: url(ui-asset('/misc/arrow_right.png'));
+  background-image: utils.ui-asset('/misc/arrow_right.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
   transform: rotate(180deg);

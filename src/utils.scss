@@ -144,7 +144,7 @@ $disabled-color: #ccc;
 }
 
 @function ui-asset($path, $relative: '') {
-  @return $relative + '../../assets/ui/' + $theme + $path;
+  @return url($relative + '../../assets/ui/' + $theme + $path);
 }
 
 @mixin border-background($size) {
@@ -227,55 +227,55 @@ $disabled-color: #ccc;
 $theme: 'cartoon';
 
 /* CARTOON */
-$backgroundBaseUrl: url(ui-asset('/backgrounds/paper.jpg'));
-$backgroundAltUrl: url(ui-asset('/backgrounds/big_bar_bg.jpg'));
-$backgroundAlt2Url: url(ui-asset('/backgrounds/paper-light.jpg'));
-$backgroundAlt3Url: url(ui-asset('/backgrounds/ui_panel_paper_inset_bg.png'));
+$backgroundBaseUrl: ui-asset('/backgrounds/paper.jpg');
+$backgroundAltUrl: ui-asset('/backgrounds/big_bar_bg.jpg');
+$backgroundAlt2Url: ui-asset('/backgrounds/paper-light.jpg');
+$backgroundAlt3Url: ui-asset('/backgrounds/ui_panel_paper_inset_bg.png');
 
 @mixin theme-button() {
   @include border-background(26);
-  background-image: url(ui-asset('/buttons/button.png'));
-  border-image-source: url(ui-asset('/buttons/button.png'));
+  background-image: ui-asset('/buttons/button.png');
+  border-image-source: ui-asset('/buttons/button.png');
 
   &.color-green3 {
-    background-image: url(ui-asset('/buttons/button-green3.png'));
-    border-image-source: url(ui-asset('/buttons/button-green3.png'));
+    background-image: ui-asset('/buttons/button-green3.png');
+    border-image-source: ui-asset('/buttons/button-green3.png');
   }
   &.color-green2 {
-    background-image: url(ui-asset('/buttons/button-green2.png'));
-    border-image-source: url(ui-asset('/buttons/button-green2.png'));
+    background-image: ui-asset('/buttons/button-green2.png');
+    border-image-source: ui-asset('/buttons/button-green2.png');
   }
   &.color-green1 {
-    background-image: url(ui-asset('/buttons/button-green1.png'));
-    border-image-source: url(ui-asset('/buttons/button-green1.png'));
+    background-image: ui-asset('/buttons/button-green1.png');
+    border-image-source: ui-asset('/buttons/button-green1.png');
   }
   &.color-green0 {
-    background-image: url(ui-asset('/buttons/button-green0.png'));
-    border-image-source: url(ui-asset('/buttons/button-green0.png'));
+    background-image: ui-asset('/buttons/button-green0.png');
+    border-image-source: ui-asset('/buttons/button-green0.png');
   }
   &.color-yellow {
-    background-image: url(ui-asset('/buttons/button-yellow.png'));
-    border-image-source: url(ui-asset('/buttons/button-yellow.png'));
+    background-image: ui-asset('/buttons/button-yellow.png');
+    border-image-source: ui-asset('/buttons/button-yellow.png');
   }
   &.color-orange {
-    background-image: url(ui-asset('/buttons/button-orange.png'));
-    border-image-source: url(ui-asset('/buttons/button-orange.png'));
+    background-image: ui-asset('/buttons/button-orange.png');
+    border-image-source: ui-asset('/buttons/button-orange.png');
   }
   &.color-red1 {
-    background-image: url(ui-asset('/buttons/button-red1.png'));
-    border-image-source: url(ui-asset('/buttons/button-red1.png'));
+    background-image: ui-asset('/buttons/button-red1.png');
+    border-image-source: ui-asset('/buttons/button-red1.png');
   }
   &.color-red2 {
-    background-image: url(ui-asset('/buttons/button-red2.png'));
-    border-image-source: url(ui-asset('/buttons/button-red2.png'));
+    background-image: ui-asset('/buttons/button-red2.png');
+    border-image-source: ui-asset('/buttons/button-red2.png');
   }
   &.color-red3 {
-    background-image: url(ui-asset('/buttons/button-red3.png'));
-    border-image-source: url(ui-asset('/buttons/button-red3.png'));
+    background-image: ui-asset('/buttons/button-red3.png');
+    border-image-source: ui-asset('/buttons/button-red3.png');
   }
   &.color-blue {
-    background-image: url(ui-asset('/buttons/button-blue.png'));
-    border-image-source: url(ui-asset('/buttons/button-blue.png'));
+    background-image: ui-asset('/buttons/button-blue.png');
+    border-image-source: ui-asset('/buttons/button-blue.png');
   }
 }
 
@@ -286,19 +286,19 @@ $backgroundAlt3Url: url(ui-asset('/backgrounds/ui_panel_paper_inset_bg.png'));
 }
 
 @mixin theme-border() {
-  border-image: url(ui-asset('/borders/ui_bar_square.jpg')) 8;
+  border-image: ui-asset('/borders/ui_bar_square.jpg') 8;
 }
 
 @mixin theme-border-alt() {
-  border-image: url(ui-asset('/borders/metal-paper.png')) 28;
+  border-image: ui-asset('/borders/metal-paper.png') 28;
 }
 
 @mixin theme-border-alt-2() {
-  border-image: url(ui-asset('/borders/ui_bar_square.jpg')) 8;
+  border-image: ui-asset('/borders/ui_bar_square.jpg') 8;
 }
 
 @mixin theme-border-alt-3() {
-  border-image: url(ui-asset('/borders/ui_panel_paper_inset_alt.png')) 18;
+  border-image: ui-asset('/borders/ui_panel_paper_inset_alt.png') 18;
 }
 
 @mixin theme-background() {
@@ -356,20 +356,20 @@ $backgroundAlt3Url: url(ui-asset('/backgrounds/ui_panel_paper_inset_bg.png'));
 }
 
 @mixin theme-modal-close() {
-  background: url(ui-asset('/misc/ui_misc_button_close2.png'));
+  background: ui-asset('/misc/ui_misc_button_close2.png');
   background-size: 100% 100%;
 }
 
 @mixin theme-modal-close-pressed() {
-  background-image: url(ui-asset('/misc/ui_misc_button_close2_pressed.png'));
+  background-image: ui-asset('/misc/ui_misc_button_close2_pressed.png');
 }
 
 @mixin theme-header-border() {
-  border-image: url(ui-asset('/backgrounds/ui_banner_wood.png')) 22;
+  border-image: ui-asset('/backgrounds/ui_banner_wood.png') 22;
   z-index: -1;
 }
 @mixin theme-header-background() {
-  background: url(ui-asset('/backgrounds/header-bg.jpg'));
+  background: ui-asset('/backgrounds/header-bg.jpg');
   background-size: 100% 100%;
   margin: -1px;
   @include text-outline();
@@ -377,36 +377,36 @@ $backgroundAlt3Url: url(ui-asset('/backgrounds/ui_panel_paper_inset_bg.png'));
 }
 
 @mixin theme-header-border-alt() {
-  border-image: url(ui-asset('/backgrounds/dark-frame.png')) 8;
-  //border-image: url(ui-asset("/backgrounds/plank_15.png")) 46;
+  border-image: ui-asset('/backgrounds/dark-frame.png') 8;
+  //border-image: ui-asset("/backgrounds/plank_15.png") 46;
   z-index: -1;
 }
 @mixin theme-header-background-alt() {
-  background: url(ui-asset('/backgrounds/dark-frame-bg.png'));
-  //background: url(ui-asset("/backgrounds/plank_15_bg.jpg"));
+  background: ui-asset('/backgrounds/dark-frame-bg.png');
+  //background: ui-asset("/backgrounds/plank_15_bg.jpg");
   background-size: 100% 100%;
   margin: -1px;
 }
 
 @mixin theme-header-border-alt2() {
-  border-image: url(ui-asset('/backgrounds/strip_bg02.png')) 24;
+  border-image: ui-asset('/backgrounds/strip_bg02.png') 24;
   z-index: -1;
   border-width: 0.6rem;
 }
 @mixin theme-header-background-alt2() {
-  background: url(ui-asset('/backgrounds/strip_bg02_bg.png'));
+  background: ui-asset('/backgrounds/strip_bg02_bg.png');
   background-size: 100% 100%;
   margin: -1px;
   text-align: center;
 }
 
 @mixin theme-header-border-alt3() {
-  border-image: url(ui-asset('/backgrounds/header_alt3.jpg')) 32;
+  border-image: ui-asset('/backgrounds/header_alt3.jpg') 32;
   z-index: -1;
   border-width: 0.6rem;
 }
 @mixin theme-header-background-alt3() {
-  background: url(ui-asset('/backgrounds/header_alt3_bg.jpg'));
+  background: ui-asset('/backgrounds/header_alt3_bg.jpg');
   background-size: 100% 100%;
   margin: -1px;
   padding: 0.1rem 1rem;
@@ -414,8 +414,8 @@ $backgroundAlt3Url: url(ui-asset('/backgrounds/ui_panel_paper_inset_bg.png'));
 }
 
 @mixin theme-slider-rail($rail-height) {
-  //border-image: url(ui-asset("/misc/knob_rail-m.png")) 16;
-  background-image: url(ui-asset('/misc/knob_rail-m.png'));
+  //border-image: ui-asset("/misc/knob_rail-m.png") 16;
+  background-image: ui-asset('/misc/knob_rail-m.png');
   background-size: 100% 100%;
   background-clip: content-box;
   border-style: solid;
@@ -435,17 +435,17 @@ $backgroundAlt3Url: url(ui-asset('/backgrounds/ui_panel_paper_inset_bg.png'));
 
   &::before {
     left: calc(#{calc($rail-height / -2)} + 1px);
-    background-image: url(ui-asset('/misc/knob_rail_l.png'));
+    background-image: ui-asset('/misc/knob_rail_l.png');
   }
 
   &::after {
     right: calc(#{calc($rail-height / -2)} + 1px);
-    background-image: url(ui-asset('/misc/knob_rail_r.png'));
+    background-image: ui-asset('/misc/knob_rail_r.png');
   }
 }
 
 @mixin theme-slider-knob() {
-  background-image: url(ui-asset('/misc/knob.png'));
+  background-image: ui-asset('/misc/knob.png');
   background-size: 100% 100%;
   cursor: pointer;
   @include filter(drop-shadow(0.1rem 0.1rem 0.1rem black));
@@ -457,31 +457,31 @@ $backgroundAlt3Url: url(ui-asset('/backgrounds/ui_panel_paper_inset_bg.png'));
 
   &.blue {
     background: #2fa0e0;
-    border-image: url(ui-asset('/progress-bar/blue.png')) 12;
+    border-image: ui-asset('/progress-bar/blue.png') 12;
   }
   &.darkBlue {
     background-color: #056da9;
-    border-image: url(ui-asset('/progress-bar/dark-blue.png')) 12;
+    border-image: ui-asset('/progress-bar/dark-blue.png') 12;
   }
   &.red {
     background: #d84823;
-    border-image: url(ui-asset('/progress-bar/red.png')) 12;
+    border-image: ui-asset('/progress-bar/red.png') 12;
   }
   &.cyan {
     background: #3bdfdc;
-    border-image: url(ui-asset('/progress-bar/cyan.png')) 12;
+    border-image: ui-asset('/progress-bar/cyan.png') 12;
   }
   &.yellow {
     background: #f8f40d;
-    border-image: url(ui-asset('/progress-bar/yellow.png')) 12;
+    border-image: ui-asset('/progress-bar/yellow.png') 12;
   }
   &.orange {
     background: #e89400;
-    border-image: url(ui-asset('/progress-bar/orange.png')) 12;
+    border-image: ui-asset('/progress-bar/orange.png') 12;
   }
   &.green {
     background: #73c833;
-    border-image: url(ui-asset('/progress-bar/green.png')) 12;
+    border-image: ui-asset('/progress-bar/green.png') 12;
   }
 }
 

@@ -21,7 +21,7 @@
           </Tabs>
           <div v-else class="vertical-tight">
             <HorizontalFill>
-              <Select v-model="currentCollection" :options="categories">
+              <Select v-model:value="currentCollection" :options="categories">
                 <template v-slot:option="{ label }">
                   <span
                     :class="{
@@ -114,7 +114,7 @@ export default rxComponent({
 }
 
 .community-label {
-  background-image: url(ui-asset('/icons/story.png', '../'));
+  background-image: utils.ui-asset('/icons/story.png', '../');
   padding-left: 2.8rem;
   background-size: auto 100%;
   background-repeat: no-repeat;

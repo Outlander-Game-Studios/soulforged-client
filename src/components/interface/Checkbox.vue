@@ -33,8 +33,8 @@ export default {
       immediate: true,
     },
     internalValue: {
-      handler() {
-        this.$emit('input', !!this.internalValue)
+      handler(newValue) {
+        this.$emit('update:value', !!this.internalValue)
       },
       immediate: true,
     },
@@ -94,13 +94,13 @@ input[type='checkbox'] {
     left: 0;
     bottom: 0;
     right: 0;
-    background-image: url(ui-asset('/misc/checkbox_off.png'));
+    background-image: utils.ui-asset('/misc/checkbox_off.png');
     background-size: 100%;
     background-repeat: no-repeat;
   }
 
   &:checked::before {
-    background-image: url(ui-asset('/misc/checkbox.png'));
+    background-image: utils.ui-asset('/misc/checkbox.png');
   }
 
   &[disabled]::before {

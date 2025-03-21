@@ -17,7 +17,7 @@
     </div>
     <Slider
       v-if="type === 'number' && max !== null"
-      v-model="localValue"
+      v-model:value="localValue"
       :disabled="disabled"
       :step="step"
       :min="min"
@@ -88,7 +88,7 @@ export default {
     },
     localValue: {
       handler(arg) {
-        this.$emit('input', arg)
+        this.$emit('update:value', arg)
       },
     },
   },
@@ -125,7 +125,7 @@ export default {
         return
       }
       this.localValue = Math.limit(+this.value, this.min, this.max === null ? Infinity : this.max)
-      this.$emit('input', this.localValue)
+      this.$emit('update:value', this.localValue)
     },
   },
 }

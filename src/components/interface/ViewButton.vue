@@ -15,7 +15,7 @@ export default {}
   height: 1em;
   display: inline-block;
   vertical-align: bottom;
-  background-image: url(ui-asset('/icons/view.png'));
+  background-image: utils.ui-asset('/icons/view.png');
   background-size: 100% 100%;
   cursor: pointer;
 

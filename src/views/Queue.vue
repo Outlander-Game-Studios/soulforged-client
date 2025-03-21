@@ -74,7 +74,7 @@ export default rxComponent({
   height: 100%;
   max-height: 100%;
   overflow: auto;
-  background-image: url(ui-asset('/backdrops/main.jpg', 'src/'));
+  background-image: utils.ui-asset('/backdrops/main.jpg', 'src/');
   background-size: cover;
   background-position: center center;
   display: flex;

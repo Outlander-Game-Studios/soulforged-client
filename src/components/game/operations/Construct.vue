@@ -34,7 +34,7 @@
               <Input
                 type="number"
                 :max="addingMaterial.amount"
-                v-model="addMaterialAmount"
+                v-model:value="addMaterialAmount"
                 @enter="$refs.submit.click()"
                 autoFocus
               />
@@ -60,7 +60,7 @@
             }"
           />
           <Slider
-            v-model="workAmount"
+            v-model:value="workAmount"
             :step="1"
             :min="0"
             :max="CONSTRUCT_RESOLUTION - structure.constructionProgress"

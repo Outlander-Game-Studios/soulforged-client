@@ -230,7 +230,7 @@ export default rxComponent({
 }
 
 .loading-texture {
-  background-image: url(ui-asset('/clouds-1.jpg'));
+  background-image: utils.ui-asset('/clouds-1.jpg');
   background-size: 50% 100%;
   background-repeat: round;
   width: 200%;
@@ -250,7 +250,7 @@ $transition-time: 120ms;
   &.framed {
     border: $border-width solid transparent;
     box-sizing: border-box;
-    background-image: url(ui-asset('/borders/hero_icon_frame.png'));
+    background-image: utils.ui-asset('/borders/hero_icon_frame.png');
     background-size: calc(100% + calc(2 * #{$border-width})) calc(100% + calc(2 * #{$border-width}));
     background-position: center center;
     background-repeat: no-repeat;
@@ -268,7 +268,7 @@ $transition-time: 120ms;
     overflow: hidden;
     cursor: pointer;
 
-    background: url(ui-asset('/misc/flag_blue.png'));
+    background: utils.ui-asset('/misc/flag_blue.png');
     background-size: 100% 100%;
 
     &:hover {
@@ -318,7 +318,7 @@ $transition-time: 120ms;
           opacity: 1;
           transform: rotate(45deg);
 
-          background-image: url(ui-asset('/borders/reinforced.png'));
+          background-image: utils.ui-asset('/borders/reinforced.png');
           background-size: 100% 100%;
           background-repeat: no-repeat;
         }
@@ -326,7 +326,7 @@ $transition-time: 120ms;
 
       @for $i from 0 through 5 {
         &.difficulty-#{$i} {
-          background-image: url(ui-asset('/misc/travel-#{$i}.png'));
+          background-image: utils.ui-asset('/misc/travel-#{$i}.png');
         }
       }
 

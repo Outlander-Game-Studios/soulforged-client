@@ -1,61 +1,59 @@
-
 @mixin theme-button() {
-  border-image: url(ui-asset("/buttons/button1_unpressed.jpg")) 63;
-  background-image: url(ui-asset("/buttons/button1_unpressed_bg.jpg"));
+  border-image: utils.ui-asset('/buttons/button1_unpressed.jpg') 63;
+  background-image: utils.ui-asset('/buttons/button1_unpressed_bg.jpg');
 }
 
 @mixin theme-button-pressed() {
-  border-image: url(ui-asset("/buttons/button1_pressed.jpg")) 63;
-  background-image: url(ui-asset("/buttons/button1_pressed_bg.jpg"));
+  border-image: utils.ui-asset('/buttons/button1_pressed.jpg') 63;
+  background-image: utils.ui-asset('/buttons/button1_pressed_bg.jpg');
 }
 
 @mixin theme-border() {
-  border-image: url(ui-asset("/borders/inventory_frame.jpg")) 12;
+  border-image: utils.ui-asset('/borders/inventory_frame.jpg') 12;
 }
 
 @mixin theme-border-alt() {
-  border-image: url(ui-asset("/borders/big_bar_frame_small.png")) 37;
+  border-image: utils.ui-asset('/borders/big_bar_frame_small.png') 37;
 }
 
 @mixin theme-background() {
   color: #b7a891;
-  background-image: url(ui-asset("/backgrounds/big_bar_bg.jpg"));
+  background-image: utils.ui-asset('/backgrounds/big_bar_bg.jpg');
   background-size: 100% 100%;
   background-position: center center;
 }
 
 @mixin theme-background-alt() {
   color: #1d0c00;
-  background-image: url(ui-asset("/backgrounds/paper_01.jpg"));
+  background-image: utils.ui-asset('/backgrounds/paper_01.jpg');
   background-position: center center;
 }
 
 @mixin theme-modal-close() {
-  background: url(ui-asset("/misc/mini_exit.jpg"));
+  background: utils.ui-asset('/misc/mini_exit.jpg');
   background-size: 100% 100%;
 }
 
 @mixin theme-modal-close-pressed() {
-  background-image: url(ui-asset("/misc/mini_exit_t.jpg"));
+  background-image: utils.ui-asset('/misc/mini_exit_t.jpg');
 }
 
 @mixin theme-header-border() {
-  //border-image: url(ui-asset("/backgrounds/ui_banner_wood.png")) 22;
+  //border-image: utils.ui-asset("/backgrounds/ui_banner_wood.png") 22;
   z-index: -1;
 }
 
 @mixin theme-header-background() {
-  //background: url(ui-asset("/backgrounds/header-bg.jpg"));
+  //background: utils.ui-asset("/backgrounds/header-bg.jpg");
   background-size: 100% 100%;
 }
 
-
 @mixin theme-slider-rail() {
-  //border-image: url(ui-asset("/borders/ui_bar.png")) 16;
+  //border-image: utils.ui-asset("/borders/ui_bar.png") 16;
   background-size: 100% 100%;
 }
 
 @mixin theme-slider-knob() {
-  background-image: url(ui-asset("/misc/knob.jpg"));
+  background-image: utils.ui-asset('/misc/knob.jpg');
   background-size: 100% 100%;
 }

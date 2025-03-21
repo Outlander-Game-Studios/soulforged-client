@@ -101,7 +101,7 @@ export default rxComponent({
     selectedStructure(structure) {
       this.internalValue = structure
       this.$emit('selected', structure)
-      this.$emit('input', structure)
+      this.$emit('update:value', structure)
     },
   },
 })
