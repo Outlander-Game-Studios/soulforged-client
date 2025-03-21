@@ -49,7 +49,7 @@ export default rxComponent({
       }
       const fnName = `loaded_${jsId}`
       window[fnName] = () => {
-        Vue.component(componentName, window[componentName])
+        app.component(componentName, window[componentName])
         this.component = componentName
       }
 
