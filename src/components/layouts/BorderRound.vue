@@ -59,7 +59,7 @@ export default {
   }
 
   &.border-base {
-    background-image: ui-asset('/borders/round_fr.jpg');
+    background-image: utils.ui-asset('/borders/round_fr.jpg');
     .contents {
       $borderSize: 0.12em; // depends on the image used
       @include utils.fill($borderSize);
@@ -67,7 +67,7 @@ export default {
     }
   }
   &.border-secondary {
-    background-image: ui-asset('/borders/hero_icon_frame.jpg');
+    background-image: utils.ui-asset('/borders/hero_icon_frame.jpg');
     .contents {
       $borderSize: 0.1em; // depends on the image used
       @include utils.fill($borderSize);
@@ -75,7 +75,7 @@ export default {
     }
   }
   &.border-tight {
-    background-image: ui-asset('/borders/little_round_frame2.jpg');
+    background-image: utils.ui-asset('/borders/little_round_frame2.jpg');
     .contents {
       $borderSize: 0.22em; // depends on the image used
       @include utils.fill($borderSize);
@@ -83,7 +83,7 @@ export default {
     }
   }
   &.border-tightGlow {
-    background-image: ui-asset('/borders/little_round_frame2_elite.jpg');
+    background-image: utils.ui-asset('/borders/little_round_frame2_elite.jpg');
     .contents {
       $borderSize: 0.22em; // depends on the image used
       @include utils.fill($borderSize);

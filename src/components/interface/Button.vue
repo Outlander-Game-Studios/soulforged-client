@@ -1,8 +1,5 @@
 <template>
   <button
-    @click="click($event)"
-    @mouseover="$emit('mouseover', $event)"
-    @mouseout="$emit('mouseout', $event)"
     :disabled="isDisabled"
     :class="[
       { processing: processingOn },

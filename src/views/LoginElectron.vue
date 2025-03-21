@@ -44,7 +44,7 @@ export default {
 
   methods: {
     initCheck() {
-      const token = this.$router.currentRoute?.query?.token
+      const token = this.$router.currentRoute?.value?.query?.token
       if (!token) {
         return this.handleError('Invalid token')
       }

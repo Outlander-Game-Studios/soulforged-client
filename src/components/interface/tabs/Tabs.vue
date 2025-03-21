@@ -104,7 +104,7 @@ export default {
 
   mounted() {
     if (this.url) {
-      const startingTab = this.$router.currentRoute.query[this.url]
+      const startingTab = this.$router.currentRoute?.value?.query?.[this.url]
       if (startingTab) {
         const tab = this.tabs.find((tab) => tab.header === startingTab) || this.tabs[0]
         this.setActive(tab)

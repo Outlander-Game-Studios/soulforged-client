@@ -12,6 +12,7 @@ import App from './App.vue'
 import router from './router'
 try {
   const app = createApp(App)
+  window.app = app
 
   loadAll(app)
   app.use(router)
@@ -55,7 +56,6 @@ try {
       stack: info,
     })
   }
-
   ;(function () {
     if (window.document.documentMode) {
       // IE

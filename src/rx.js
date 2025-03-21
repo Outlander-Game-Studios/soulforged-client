@@ -51,22 +51,33 @@ Observable.prototype.publishReplay = usePipe(publishReplay)
 Observable.prototype.debounceTime = usePipe(debounceTime)
 Observable.prototype.distinctUntilChanged = usePipe(distinctUntilChanged)
 
+const $stream = function (property) {
+  const stream = new Rx.ReplaySubject(1)
+  stream.next(this[property])
+  this.$watch(property, (newValue) => {
+    stream.next(newValue)
+  })
+  return stream
+}
+
 global.rxComponent = (definition) => {
   return {
     ...definition,
-    created() {
-      this.$stream = (property) => {
-        const stream = new Rx.ReplaySubject(1)
-        stream.next(this[property])
-        this.$watch(property, (newValue) => {
-          console.log(property, 'set to', newValue)
-          stream.next(newValue)
-        })
-        return stream
+    data() {
+      this.$stream = $stream.bind(this)
+      const subscriptions = definition.subscriptions.call(this)
+      const data = definition.data ? definition.data.call(this) : {}
+      return {
+        ...data,
+        ...Object.keys(subscriptions).toObject(
+          (key) => key,
+          () => undefined,
+        ),
       }
+    },
+    created() {
       const subscriptions = definition.subscriptions.call(this)
       this._subscriptions = Object.keys(subscriptions).map((key) => {
-        this[key] = undefined
         return subscriptions[key].subscribe((value) => {
           this[key] = value
         })

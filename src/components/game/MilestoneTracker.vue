@@ -43,10 +43,13 @@ import pageSound from '../../assets/sounds/page.mp3'
 window.MILESTONES_IDX = 1
 
 export default rxComponent({
-  data: () => ({
-    showDetails: false,
-    nextObjective: null,
-  }),
+  data: () => {
+    return {
+      showDetails: false,
+      nextObjective: null,
+      currentObjective: null,
+    }
+  },
 
   computed: {
     display() {

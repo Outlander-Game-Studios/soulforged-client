@@ -101,7 +101,7 @@ global.mockComponent = (
 ) => {
   const storyFunction = (args) => {
     const updatedPluginSettings = {}
-    Object.keys(args).forEach((key) => {
+    Object.keys(args || {}).forEach((key) => {
       if (pluginParamsMap[key]) {
         const [plugin, setting] = pluginParamsMap[key]
         if (!updatedPluginSettings[plugin]) {

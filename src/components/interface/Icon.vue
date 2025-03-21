@@ -1,13 +1,5 @@
 <template>
-  <div
-    class="icon-wrapper"
-    :class="{ 'no-frame': noFrame }"
-    :style="iconWrapperStyle"
-    @click="$emit('click', $event)"
-    @mousedown="$emit('mousedown', $event)"
-    @mouseover="$emit('mouseover', $event)"
-    @mouseout="$emit('mouseout', $event)"
-  >
+  <div class="icon-wrapper" :class="{ 'no-frame': noFrame }" :style="iconWrapperStyle">
     <BorderRound
       v-if="round"
       :size="size"
