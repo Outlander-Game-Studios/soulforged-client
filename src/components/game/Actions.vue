@@ -44,59 +44,57 @@
             <LoadingPlaceholder :size="3.5" v-if="actionPoints && calculatingAp" />
             <APBarCurrent v-else-if="actionPoints" />
           </div>
-          <div
-            v-for="parameter in currentAction.parameters"
-            ref="inputsContainers"
-            v-if="!parameterValues[parameter.paramId]"
-          >
-            <Input
-              v-if="
-                parameter.type === 'integer' ||
-                parameter.type === 'decimal' ||
-                parameter.type === 'essence'
-              "
-              ref="inputs"
-              :value="parameters[parameter.paramId]"
-              type="number"
-              @input="updateParameterValue(parameter, $event)"
-              @enter="$refs.submit.click()"
-              autoFocus
-              :min="parameter.min"
-              :max="getMax(parameter)"
-            />
-            <Input
-              v-else-if="parameter.type === 'string'"
-              ref="inputs"
-              v-model.trim="parameter.value"
-              @enter="$refs.submit.click()"
-              autoFocus
-              type="text"
-            />
-            <pre
-              v-else-if="parameter.type === 'message'"
-              class="empty-text message"
-              v-html="parameter.text"
-            />
-            <div v-else-if="parameter.type === 'item'">
-              <ItemSelector
-                v-model:value="selectedItem"
-                @input="updateItemValue(parameter, $event)"
-                :includeNone="false"
-                :size="5"
-                withText
+          <template v-for="parameter in currentAction.parameters">
+            <div ref="inputsContainers" v-if="!parameterValues[parameter.paramId]">
+              <Input
+                v-if="
+                  parameter.type === 'integer' ||
+                  parameter.type === 'decimal' ||
+                  parameter.type === 'essence'
+                "
+                ref="inputs"
+                :value="parameters[parameter.paramId]"
+                type="number"
+                @input="updateParameterValue(parameter, $event)"
+                @enter="$refs.submit.click()"
+                autoFocus
+                :min="parameter.min"
+                :max="getMax(parameter)"
               />
-            </div>
-            <div v-else-if="parameter.type === 'holding'">
-              <StructureSelector
-                :includeEmpty="false"
-                :filter="holdingsFilter"
-                @selected="updateStructureValue(parameter, $event)"
-                :size="5"
-                withText
+              <Input
+                v-else-if="parameter.type === 'string'"
+                ref="inputs"
+                v-model.trim="parameter.value"
+                @enter="$refs.submit.click()"
+                autoFocus
+                type="text"
               />
+              <pre
+                v-else-if="parameter.type === 'message'"
+                class="empty-text message"
+                v-html="parameter.text"
+              />
+              <div v-else-if="parameter.type === 'item'">
+                <ItemSelector
+                  v-model:value="selectedItem"
+                  @input="updateItemValue(parameter, $event)"
+                  :includeNone="false"
+                  :size="5"
+                  withText
+                />
+              </div>
+              <div v-else-if="parameter.type === 'holding'">
+                <StructureSelector
+                  :includeEmpty="false"
+                  :filter="holdingsFilter"
+                  @selected="updateStructureValue(parameter, $event)"
+                  :size="5"
+                  withText
+                />
+              </div>
+              <div v-else>Missing implementation: {{ parameter }}</div>
             </div>
-            <div v-else>Missing implementation: {{ parameter }}</div>
-          </div>
+          </template>
           <Button @click="performAction(currentAction)" ref="submit" :processing="performing">
             {{ confirmLabel }}
           </Button>
@@ -238,6 +236,7 @@ export default rxComponent({
         this.performAction(action)
         return
       }
+      console.log(action, action.parameters[0])
       this.currentAction = action
       this.parameters = (action.parameters || []).reduce(
         (acc, param) => ({
