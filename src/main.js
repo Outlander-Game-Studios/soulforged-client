@@ -7,12 +7,13 @@ import './services/controls.js'
 import './services/plugin.js'
 import { loadAll } from '../load-all.js'
 
-import { createApp } from 'vue'
+import * as Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 try {
-  const app = createApp(App)
+  const app = Vue.createApp(App)
   window.app = app
+  window.Vue = Vue
 
   loadAll(app)
   app.use(router)
