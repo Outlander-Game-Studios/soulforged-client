@@ -97,6 +97,7 @@ export default rxComponent({
   data: () => ({
     textSearch: '',
     searchVisible: false,
+    _uid: Math.random(),
   }),
 
   computed: {
