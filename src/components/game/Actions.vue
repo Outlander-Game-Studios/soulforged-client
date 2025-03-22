@@ -55,7 +55,7 @@
                 ref="inputs"
                 :value="parameters[parameter.paramId]"
                 type="number"
-                @input="updateParameterValue(parameter, $event)"
+                @update:value="updateParameterValue(parameter, $event)"
                 @enter="$refs.submit.click()"
                 autoFocus
                 :min="parameter.min"
@@ -77,7 +77,7 @@
               <div v-else-if="parameter.type === 'item'">
                 <ItemSelector
                   v-model:value="selectedItem"
-                  @input="updateItemValue(parameter, $event)"
+                  @update:value="updateItemValue(parameter, $event)"
                   :includeNone="false"
                   :size="5"
                   withText

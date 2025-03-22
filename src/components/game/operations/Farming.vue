@@ -62,7 +62,7 @@
                     <FieldItemSelector
                       :itemFilter="seedFilter"
                       :value="operation.context.seedId"
-                      @input="selectSeed($event)"
+                      @update:value="selectSeed($event)"
                       :size="4"
                       compact
                       topRightText="Seed"
@@ -72,7 +72,7 @@
                     <FieldItemSelector
                       :itemFilter="liquidFilter"
                       :value="operation.context.liquidId"
-                      @input="selectLiquid($event)"
+                      @update:value="selectLiquid($event)"
                       :size="4"
                       compact
                       topRightText="Liquid"
@@ -226,7 +226,7 @@
               <FieldItemSelector
                 :itemFilter="liquidFilter"
                 :value="operation.context.liquidId"
-                @input="selectLiquid($event)"
+                @update:value="selectLiquid($event)"
                 :size="5"
               />
             </div>
@@ -235,7 +235,7 @@
               <FieldItemSelector
                 :itemFilter="seedFilter"
                 :value="operation.context.seedId"
-                @input="selectSeed($event)"
+                @update:value="selectSeed($event)"
                 :size="5"
               />
             </div>

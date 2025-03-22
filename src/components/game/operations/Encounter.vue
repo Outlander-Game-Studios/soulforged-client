@@ -73,7 +73,7 @@
             able to engage
           </div>
           <HorizontalCenter v-else-if="operation.context.showReady">
-            <Checkbox :value="operation.context.isReady" @input="setReadiness($event)">
+            <Checkbox :value="operation.context.isReady" @update:value="setReadiness($event)">
               Ready
             </Checkbox>
           </HorizontalCenter>

@@ -14,7 +14,7 @@
           </Button>
           <Checkbox
             :value="pluginsEnabled.some((p) => p.id === plugin.id)"
-            @input="togglePlugin(plugin.id, $event)"
+            @update:value="togglePlugin(plugin.id, $event)"
           />
         </Horizontal>
       </Spaced>

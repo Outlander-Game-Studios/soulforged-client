@@ -19,7 +19,7 @@
               </Description>
               <Checkbox
                 :disabled="processingFav"
-                @input="toggleFav($event)"
+                @update:value="toggleFav($event)"
                 :value="selectedResearch.fav"
               >
                 Favourite

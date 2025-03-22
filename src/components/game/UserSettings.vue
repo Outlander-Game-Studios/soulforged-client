@@ -7,7 +7,7 @@
       :max="100"
       :value="audioVolume.master"
       noInputElement
-      @input="setMasterVolume($event)"
+      @update:value="setMasterVolume($event)"
     />
     <Header alt2>Sound volume</Header>
     <Input
@@ -16,7 +16,7 @@
       :max="100"
       :value="audioVolume.sound"
       noInputElement
-      @input="setSoundVolume($event)"
+      @update:value="setSoundVolume($event)"
     />
     <Header alt2>Ambience volume</Header>
     <Input
@@ -25,7 +25,7 @@
       :max="100"
       :value="audioVolume.music"
       noInputElement
-      @input="setMusicVolume($event)"
+      @update:value="setMusicVolume($event)"
     />
     <Header alt2>Notification volume</Header>
     <Input
@@ -34,10 +34,13 @@
       :max="100"
       :value="audioVolume.notif"
       noInputElement
-      @input="setNotifVolume($event)"
+      @update:value="setNotifVolume($event)"
     />
     <Header alt2>Other settings</Header>
-    <Checkbox v-model:value="enableSoundsInBackground" @input="setEnableSoundInBackground($event)">
+    <Checkbox
+      v-model:value="enableSoundsInBackground"
+      @update:value="setEnableSoundInBackground($event)"
+    >
       Play ambience in background
     </Checkbox>
     <div class="debug-info">

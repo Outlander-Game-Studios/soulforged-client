@@ -28,7 +28,7 @@
                   :label="def.label + ': ' + (+looks[feature] + 1)"
                   v-model:value="looks[feature]"
                   :options="def.options"
-                  @input="updateAvatar()"
+                  @update:value="updateAvatar()"
                   random
                   cycle
                 />

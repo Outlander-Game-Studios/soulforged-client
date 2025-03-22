@@ -30,7 +30,7 @@
             v-model:value="search"
             ref="itemSearchInput"
             placeholder="Search for item..."
-            @input="queueSearchItems()"
+            @update:value="queueSearchItems()"
           />
           <LoadingPlaceholder v-if="!results" />
           <div v-else-if="!search" class="empty-text">Enter search text to see results</div>

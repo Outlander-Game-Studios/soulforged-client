@@ -12,12 +12,12 @@ global.PropValidator = {
   },
 }
 
-global.bubbleEvents = ($listeners, events) => {
+global.bubbleEvents = ($attrs, events) => {
   return events
-    .filter((e) => !!$listeners[e])
+    .filter((e) => !!$attrs[e])
     .toObject(
       (e) => e,
-      (e) => $listeners[e],
+      (e) => $attrs[e],
     )
 }
 
