@@ -722,9 +722,11 @@ const OperationCombat = rxComponent({
     },
 
     setAnimationSpeed(speedValue) {
-      this.ANIMATION_SPEED = speedValue
-      this.selectedAnimationSpeed = ANIMATION_SPEEDS.find((option) => option.speed === speedValue)
-      LocalStorageService.setItem('combat-animationSpeed', speedValue)
+      if (speedValue) {
+        this.ANIMATION_SPEED = speedValue
+        this.selectedAnimationSpeed = ANIMATION_SPEEDS.find((option) => option.speed === speedValue)
+        LocalStorageService.setItem('combat-animationSpeed', speedValue)
+      }
     },
 
     switchAnimationSpeed() {

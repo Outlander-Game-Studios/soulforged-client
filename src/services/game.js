@@ -1,4 +1,3 @@
-import { Rx } from '@/rx.js'
 import exclamationIcon from '../assets/ui/cartoon/icons/exclamation.png'
 
 const pendingRequests = {}

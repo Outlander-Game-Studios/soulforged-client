@@ -1,5 +1,6 @@
 console.log('Storybook preview.js is being loaded!')
 import '../src/utils.js'
+import '../src/rx.js'
 import '../common/utils/index.js'
 import '../src/services/game.mock.js'
 import '../src/services/local-storage.mock.js'

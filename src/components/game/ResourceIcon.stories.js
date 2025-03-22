@@ -1,9 +1,9 @@
-import "./ResourceIcon.vue";
-import pebbleIcon from "../../../.storybook/mocks/assets/pebble.png";
+import './ResourceIcon.vue'
+import pebbleIcon from '../../../.storybook/mocks/assets/pebble.png'
 
 export default {
-  title: "Game UI/ResourceIcon",
-};
+  title: 'Game UI/ResourceIcon',
+}
 
 const factory = (onMounted, onCreate) => {
   return mockComponent(
@@ -37,15 +37,13 @@ const factory = (onMounted, onCreate) => {
         </Horizontal>
         </div>
         <script>
-        import Horizontal from "./Horizontal";
         export default {
-          components: {Horizontal}
         }
         </script>`,
     },
     onMounted,
-    onCreate
-  );
-};
+    onCreate,
+  )
+}
 
-export const base = factory();
+export const base = factory()

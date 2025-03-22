@@ -44,6 +44,7 @@
                 @action="onAction($event)"
                 noWrap
               />
+              <!-- TODO: $scopedSlots is undefined, needs fixing in all files that use it -->
             </template>
           </ListItem>
         </div>
@@ -53,7 +54,6 @@
 </template>
 
 <script>
-import { Rx } from '@/rx.js'
 import omit from 'lodash/omit.js'
 
 export default rxComponent({

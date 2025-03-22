@@ -15,23 +15,21 @@
 
 <script>
 export default rxComponent({
-  name: "DeathView",
-
   subscriptions() {
     return {
       rootEntity: GameService.getRootEntityStream(),
-    };
+    }
   },
 
   methods: {
     continueAfterDeath() {
       GameService.request(REQUEST_CODES.CONFIRM_DEATH).then(() => {
-        location.reload(true);
-      });
+        location.reload(true)
+      })
     },
 
     redirectToGame() {
-      window.location.hash = "/main";
+      window.location.hash = '/main'
     },
   },
 
@@ -41,16 +39,16 @@ export default rxComponent({
         .first()
         .subscribe((entity) => {
           if (!entity || !entity.dead) {
-            this.redirectToGame();
+            this.redirectToGame()
           }
-        });
-    }, 3000);
+        })
+    }, 3000)
   },
 
   destroyed() {
-    clearInterval(this.interval);
+    clearInterval(this.interval)
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
@@ -120,5 +118,5 @@ export default rxComponent({
     animation: dead-button-continue 0.6s ease-in-out 1 both;
     animation-delay: 5.7s;
   }
-})
+}
 </style>

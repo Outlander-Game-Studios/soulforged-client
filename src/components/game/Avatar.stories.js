@@ -1,15 +1,14 @@
-import { Rx } from "@/rx.js";
-import avatarAssets from "../../../.storybook/mocks/assets/avatar/avatar-assets.js";
-import avatarAssets2 from "../../../.storybook/mocks/assets/avatar/avatar-assets-2.js";
+import avatarAssets from '../../../.storybook/mocks/assets/avatar/avatar-assets.js'
+import avatarAssets2 from '../../../.storybook/mocks/assets/avatar/avatar-assets-2.js'
 
 export default {
-  title: "Game UI/Avatar",
-};
+  title: 'Game UI/Avatar',
+}
 
 GameService.mock({
   getEntityStream: () => Rx.Observable.empty(),
   getRootEntityStream: () => Rx.Observable.of({ id: 5 }),
-});
+})
 
 export const sizes = () => ({
   data: () => ({
@@ -40,7 +39,7 @@ export const sizes = () => ({
     </Vertical>
   </HorizontalWrap>
 </div>`,
-});
+})
 
 export const emos = () => ({
   data: () => ({
@@ -58,7 +57,7 @@ export const emos = () => ({
     <Avatar :avatarAssets="avatarAssets" size="large" headOnly emo=":P" />
   </HorizontalWrap>
 </div>`,
-});
+})
 
 export const framing = () => ({
   data: () => ({
@@ -72,7 +71,7 @@ export const framing = () => ({
     <Avatar :avatarAssets="avatarAssets" size="large" headOnly />
   </HorizontalWrap>
 </div>`,
-});
+})
 
 export const self = () => ({
   data: () => ({
@@ -86,7 +85,7 @@ export const self = () => ({
     <Avatar :avatarAssets="avatarAssets" size="large" :creature="{ id: 5 }" headOnly />
   </HorizontalWrap>
 </div>`,
-});
+})
 
 export const faces = () => ({
   data: () => ({
@@ -106,7 +105,7 @@ export const faces = () => ({
     <Avatar :creature="{ currentAction: { actionId: 'Sleep'}}" :avatarAssets="avatarAssets" size="large" />
   </HorizontalWrap>
 </div>`,
-});
+})
 
 export const variants = () => ({
   data: () => ({
@@ -126,4 +125,4 @@ export const variants = () => ({
     <Avatar :creature="{ currentAction: { actionId: 'Sleep'}}" :avatarAssets="avatarAssets2" size="large" />
   </HorizontalWrap>
 </div>`,
-});
+})

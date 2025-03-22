@@ -4,6 +4,7 @@
     :class="{ flexible: flexible, 'lazy-load': lazyLoad }"
     v-observe-visibility="onVisibilityChange"
   >
+    <!-- TODO: v-observe-visibility not working -->
     <div v-if="(lazyLoad && !loadedData) || (!visible && !flexible)" class="flex-grow">
       <LoadingPlaceholder :size="6" />
     </div>

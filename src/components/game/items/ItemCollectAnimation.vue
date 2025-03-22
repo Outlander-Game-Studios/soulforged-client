@@ -161,7 +161,11 @@ export default {
           }
           if (animation.step >= 100) {
             clearInterval(interval)
-            this.acquireAnimations = this.acquireAnimations.filter((a) => a !== animation)
+            this.acquireAnimations = this.acquireAnimations.filter(
+              (a) => a.animId !== animation.animId,
+            )
+          } else {
+            this.acquireAnimations = [...this.acquireAnimations]
           }
         }, 10)
         this.acquireAnimations = [...this.acquireAnimations, animation]

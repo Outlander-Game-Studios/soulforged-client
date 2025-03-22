@@ -65,8 +65,6 @@
 </template>
 
 <script>
-import { Rx } from '@/rx.js'
-
 export default rxComponent({
   data: () => ({
     race: 'Human',

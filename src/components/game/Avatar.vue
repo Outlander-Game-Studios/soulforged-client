@@ -112,8 +112,6 @@
 </template>
 
 <script>
-import { Rx } from '@/rx.js'
-
 const EYES = {
   DEAD: 3,
   SLEEPING: 4,

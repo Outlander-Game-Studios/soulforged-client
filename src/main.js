@@ -1,4 +1,5 @@
 import './utils.js'
+import './rx.js'
 import '../common/utils/index.js'
 import './services/game.js'
 import './services/sound.js'

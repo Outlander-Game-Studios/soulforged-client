@@ -104,7 +104,7 @@ export default {
 
   mounted() {
     if (this.url) {
-      const startingTab = this.$router.currentRoute?.value?.query?.[this.url]
+      const startingTab = this.$router?.currentRoute?.value?.query?.[this.url]
       if (startingTab) {
         const tab = this.tabs.find((tab) => tab.header === startingTab) || this.tabs[0]
         this.setActive(tab)
@@ -194,8 +194,8 @@ export default {
         localStorage.setItem(`tabsAutoOpen.${this.rememberTabId}`, tab.tabId)
       }
       if (this.url) {
-        if (this.$route.query[this.url] !== tab.header) {
-          this.$router.push({
+        if (this.$route?.query?.[this.url] !== tab.header) {
+          this.$router?.push({
             query: { ...(this.$route.query || {}), [this.url]: tab.header },
           })
         }
