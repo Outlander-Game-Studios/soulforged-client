@@ -27,19 +27,19 @@ export default {
   computed: {
     internalOptions() {
       if (!Array.isArray(this.options)) {
-        return Array.create(this.options);
+        return Array.create(this.options)
       }
-      return this.options;
+      return this.options
     },
 
     internalOptionsCount() {
-      return this.internalOptions.length;
+      return this.internalOptions.length
     },
     isFirst() {
-      return this.value === this.internalOptions[0];
+      return this.value === this.internalOptions[0]
     },
     isLast() {
-      return this.value === this.internalOptions[this.internalOptionsCount - 1];
+      return this.value === this.internalOptions[this.internalOptionsCount - 1]
     },
   },
 
@@ -47,7 +47,7 @@ export default {
     options: {
       handler() {
         if (this.random) {
-          this.selectRandom();
+          this.selectRandom()
         }
       },
       immediate: true,
@@ -57,34 +57,28 @@ export default {
   methods: {
     selectRandom() {
       this.$emit(
-        "input",
-        this.internalOptions[
-          Math.floor(Math.random() * this.internalOptionsCount)
-        ]
-      );
+        'update:value',
+        this.internalOptions[Math.floor(Math.random() * this.internalOptionsCount)],
+      )
     },
 
     prev() {
-      const idx = this.internalOptions.indexOf(this.value);
+      const idx = this.internalOptions.indexOf(this.value)
       this.$emit(
-        "input",
-        this.internalOptions[
-          (idx + this.internalOptionsCount - 1) % this.internalOptionsCount
-        ]
-      );
+        'update:value',
+        this.internalOptions[(idx + this.internalOptionsCount - 1) % this.internalOptionsCount],
+      )
     },
 
     next() {
-      const idx = this.internalOptions.indexOf(this.value);
+      const idx = this.internalOptions.indexOf(this.value)
       this.$emit(
-        "input",
-        this.internalOptions[
-          (idx + this.internalOptionsCount + 1) % this.internalOptionsCount
-        ]
-      );
+        'update:value',
+        this.internalOptions[(idx + this.internalOptionsCount + 1) % this.internalOptionsCount],
+      )
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">

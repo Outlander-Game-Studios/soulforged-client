@@ -46,7 +46,7 @@ export default {
     options: {
       handler() {
         if (!this.options[this.value]) {
-          this.$emit('input', Object.keys(this.options).shift())
+          this.$emit('update:value', Object.keys(this.options).shift())
         }
       },
       immediate: true,
