@@ -39,12 +39,11 @@
             <template v-slot:buttons="{ lazyData: creatureDetails }">
               <slot name="actions" :creature="creatureDetails" />
               <Actions
-                v-if="!$slots.actions && !$scopedSlots.actions"
+                v-if="!$slots.actions"
                 :target="creatureDetails"
                 @action="onAction($event)"
                 noWrap
               />
-              <!-- TODO: $scopedSlots is undefined, needs fixing in all files that use it -->
             </template>
           </ListItem>
         </div>

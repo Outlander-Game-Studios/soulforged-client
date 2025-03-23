@@ -4907,6 +4907,11 @@ vue-router@^4.5.0:
   dependencies:
     "@vue/devtools-api" "^6.6.4"
 
+vue3-observe-visibility@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/vue3-observe-visibility/-/vue3-observe-visibility-1.0.3.tgz#7b058749cce06ade74bc7581b1fedef6f30c8434"
+  integrity sha512-dPXJu5NADzui/BwvAE2Vu5/dy+aX0UjRQC6hkLFSY5Da0BxCoPlOE/NkFNz3T+tRXAocey9HBOtaUwZOdWX2KQ==
+
 vue@^3.5.13:
   version "3.5.13"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.5.13.tgz#9f760a1a982b09c0c04a867903fc339c9f29ec0a"

@@ -88,6 +88,7 @@ global.rxComponent = (definition) => {
       Object.values(this._subscriptions).forEach((sub) => {
         sub.unsubscribe()
       })
+      return definition.beforeUnmount?.call(this)
     },
   }
 }

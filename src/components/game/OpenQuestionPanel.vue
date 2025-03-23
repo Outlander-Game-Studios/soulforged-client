@@ -21,16 +21,17 @@
         <div class="empty-text" v-else-if="!similarQuestions.length">
           No similar questions found
         </div>
-        <Header
-          alt2
-          v-else
-          v-for="(similarQuestion, idx) in similarQuestions"
-          :key="idx"
-          class="interactive"
-          @click="showSimilarQuestion(similarQuestion)"
-        >
-          {{ similarQuestion.question }}
-        </Header>
+        <template v-else>
+          <Header
+            alt2
+            v-for="(similarQuestion, idx) in similarQuestions"
+            :key="idx"
+            class="interactive"
+            @click="showSimilarQuestion(similarQuestion)"
+          >
+            {{ similarQuestion.question }}
+          </Header>
+        </template>
       </Vertical>
       <Description>
         Your open questions:

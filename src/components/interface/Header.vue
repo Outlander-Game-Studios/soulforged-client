@@ -57,7 +57,6 @@ export default {
   methods: {
     mouseClick() {
       if (!!this.$attrs.onClick) {
-        this.$emit('click')
         SoundService.playSound(buttonClickSound)
       }
     },

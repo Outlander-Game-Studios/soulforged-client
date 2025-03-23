@@ -4,7 +4,6 @@
       <template v-slot:header>
         Hostile encounter
         <Help @click.stop title="Hostile encounter">
-          <!-- TODO: check this click works! -->
           You are in an Encounter. You will have to either <em>Engage</em> or <em>Back Away</em> to
           resolve it.<br />
           During this time other players can join you to fight the enemies. Once you Engage and the

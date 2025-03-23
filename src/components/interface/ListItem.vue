@@ -4,13 +4,12 @@
     :class="{ flexible: flexible, 'lazy-load': lazyLoad }"
     v-observe-visibility="onVisibilityChange"
   >
-    <!-- TODO: v-observe-visibility not working -->
     <div v-if="(lazyLoad && !loadedData) || (!visible && !flexible)" class="flex-grow">
       <LoadingPlaceholder :size="6" />
     </div>
     <div v-else class="info" :class="{ interactive: hasClick }" @click="$emit('click', $event)">
       <div class="icon">
-        <slot v-if="!!$slots.icon || !!$scopedSlots.icon" name="icon" :lazyData="loadedData" />
+        <slot v-if="!!$slots.icon" name="icon" :lazyData="loadedData" />
         <Icon v-else :src="iconSrc" :size="iconSize" :text="text" />
       </div>
       <div class="details">

@@ -3,7 +3,7 @@
     <LoadingPlaceholder v-if="!filteredInventory" />
     <div v-if="!filteredInventory.length" class="empty-text">Nothing to select from</div>
     <template v-else>
-      <Vertical v-if="$scopedSlots.default">
+      <Vertical v-if="$slots.default">
         <ListItem :iconSrc="crossIcon" flexible v-if="includeNone">
           <template v-slot:title> </template>
           <template v-slot:subtitle> </template>
@@ -11,11 +11,7 @@
             <Button @click="selectedItem(null)">Select none</Button>
           </template>
         </ListItem>
-        <div
-          v-if="filteredInventory.length > 0"
-          v-for="(item, idx) in filteredInventory"
-          :key="idx"
-        >
+        <div v-for="(item, idx) in filteredInventory" :key="idx">
           <ListItem :iconSrc="item.icon">
             <template v-slot:icon>
               <ItemIcon
@@ -50,7 +46,6 @@
             <ItemIcon :size="size" :icon="crossIcon" />
           </div>
           <div
-            v-if="filteredInventory.length > 0"
             v-for="(item, idx) in filteredInventory"
             :key="idx"
             class="item-button"

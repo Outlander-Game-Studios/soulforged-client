@@ -3,12 +3,8 @@
     Nothing to select from
   </div>
   <div v-else>
-    <Vertical v-if="$scopedSlots.default">
-      <div
-        v-if="filteredStructures.length > 0"
-        v-for="(structure, idx) in filteredStructures"
-        :key="idx"
-      >
+    <Vertical v-if="$slots.default">
+      <div v-for="(structure, idx) in filteredStructures" :key="idx">
         <ListItem :iconSrc="structure.icon">
           <template v-slot:icon>
             <ItemIcon

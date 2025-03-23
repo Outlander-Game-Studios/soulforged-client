@@ -7,6 +7,7 @@ import './services/chat.js'
 import './services/controls.js'
 import './services/plugin.js'
 import { loadAll } from '../load-all.js'
+import VueObserveVisibility from 'vue3-observe-visibility'
 
 import * as Vue from 'vue'
 import App from './App.vue'
@@ -17,6 +18,7 @@ try {
   window.Vue = Vue
 
   loadAll(app)
+  app.use(VueObserveVisibility)
   app.use(router)
 
   app.mount('#app')
