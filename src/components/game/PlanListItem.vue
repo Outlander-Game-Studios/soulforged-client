@@ -89,7 +89,7 @@
       </Modal>
     </template>
     <template v-slot:buttons>
-      <Button @click="startPlan(plan)">Start</Button>
+      <Button @click.stop="startPlan(plan)">Start</Button>
     </template>
   </ListItem>
 </template>
