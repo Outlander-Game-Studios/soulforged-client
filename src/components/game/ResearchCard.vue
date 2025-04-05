@@ -4,7 +4,7 @@
       :class="{
         interactive: !research.completed,
       }"
-      @click="mouseClick()"
+      @click="mouseClick"
     >
       <Container
         borderType="alt3"
@@ -123,7 +123,8 @@ export default rxComponent({
   },
 
   methods: {
-    mouseClick() {
+    mouseClick(event) {
+      event.stopPropagation()
       if (!this.research.completed) {
         this.$emit('click')
         SoundService.playSound(buttonClickSound)

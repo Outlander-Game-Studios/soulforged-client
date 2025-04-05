@@ -400,7 +400,7 @@ export default rxComponent({
   @include utils.main-tab-extra();
 
   @media (orientation: portrait) {
-    &.slide-enter,
+    &.slide-enter-from,
     &.slide-leave-to {
       margin-bottom: -5rem;
       opacity: 0;
@@ -408,7 +408,7 @@ export default rxComponent({
   }
 
   @media (orientation: landscape) {
-    &.slide-enter,
+    &.slide-enter-from,
     &.slide-leave-to {
       margin-right: -5rem;
       opacity: 0;

@@ -56,8 +56,8 @@
                   Confirm
                 </Button>
               </HorizontalCenter>
-              <Description v-if="namingInfo.description" class="description">
-                <RichText :value="namingInfo.description" />
+              <Description v-if="namingInfo.description">
+                <RichText :value="namingInfo.description" html />
               </Description>
             </div>
             <Spaced>
