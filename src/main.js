@@ -1,3 +1,5 @@
+import VueObserveVisibility from 'vue3-observe-visibility'
+
 import './utils.js'
 import './rx.js'
 import '../common/utils/index.js'
@@ -7,7 +9,7 @@ import './services/chat.js'
 import './services/controls.js'
 import './services/plugin.js'
 import { loadAll } from '../load-all.js'
-import VueObserveVisibility from 'vue3-observe-visibility'
+import { loadPlugins } from './plugins/loader.js'
 
 import * as Vue from 'vue'
 import App from './App.vue'
@@ -18,6 +20,7 @@ try {
   window.Vue = Vue
 
   loadAll(app)
+  loadPlugins(app)
   app.use(VueObserveVisibility)
   app.use(router)
 

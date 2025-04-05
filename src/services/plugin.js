@@ -1,6 +1,6 @@
 global.PluginService = {
   getAllPluginsStream() {
-    return Rx.Observable.of(window.allPlugins || [])
+    return Rx.Observable.of(Object.values(window.allPlugins) || [])
   },
 
   getWorkingPluginsStream() {

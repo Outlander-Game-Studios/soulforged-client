@@ -101,6 +101,7 @@ export default rxComponent({
       try {
         await PluginService.togglePlugin(pluginId, value)
       } catch (e) {
+        console.error(e)
         ToastError('Unexpected error')
       }
     },

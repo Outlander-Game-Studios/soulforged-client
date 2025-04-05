@@ -77,6 +77,8 @@ export default {
   }
 
   .value {
+    margin-left: 0.5rem;
+
     &.invalid,
     &.bad {
       @include utils.text-bad();

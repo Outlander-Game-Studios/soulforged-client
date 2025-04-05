@@ -10,7 +10,7 @@
     :customStyle="iconStyle"
     class="item-icon"
   >
-    <template>
+    <template #default>
       <div class="is-equipped-indicator" v-if="isEquipped" />
       <slot />
     </template>
