@@ -39,7 +39,6 @@
         </div>
       </Vertical>
     </Vertical>
-    <LoadingPlaceholder v-else />
   </div>
 </template>
 
