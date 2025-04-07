@@ -13,11 +13,11 @@
             class="interactive clear-both"
             @click="showStatDetails = stat"
           >
-            <template v-slot:label>
+            <template #label>
               <Icon :src="data.icon" backgroundType="alt" class="float-left" :size="2.5" />
               {{ stat }}
             </template>
-            <template>
+            <template #default>
               {{ data.value }}
             </template>
           </LabeledValue>
