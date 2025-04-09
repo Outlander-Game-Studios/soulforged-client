@@ -1,8 +1,14 @@
+import Spinner from './Spinner.vue'
+import '../layouts/Vertical.vue'
+
 export default {
-  title: "Base UI/Spinner",
-};
+  title: 'Base UI/Spinner',
+}
 
 export const base = () => ({
+  components: {
+    Spinner,
+  },
   template: `
 <div>
   <Vertical>
@@ -13,10 +19,10 @@ export const base = () => ({
   </Vertical>
 </div>
 `,
-});
+})
 base.parameters = {
   storyshots: { disable: true },
-};
+}
 
 export const centeredOverlay = () => ({
   template: `
@@ -29,10 +35,10 @@ export const centeredOverlay = () => ({
   </Vertical>
 </div>
 `,
-});
+})
 centeredOverlay.parameters = {
   storyshots: { disable: true },
-};
+}
 
 export const multitude = () => ({
   template: `
@@ -42,7 +48,7 @@ export const multitude = () => ({
   </HorizontalWrap>
 </div>
 `,
-});
+})
 multitude.parameters = {
   storyshots: { disable: true },
-};
+}

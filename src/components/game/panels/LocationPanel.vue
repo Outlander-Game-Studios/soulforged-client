@@ -10,29 +10,25 @@
     <template v-if="location.indoors">
       <DecorationsPanel />
     </template>
-    <Inventory
-      header="Location Inventory"
-      :inventory="locationInventory"
-      includeCrafts
-    />
+    <Inventory header="Location Inventory" :inventory="locationInventory" includeCrafts />
   </div>
 </template>
 
 <script>
-export default {
+export default rxComponent({
   data: () => ({}),
 
   subscriptions() {
-    const mainEntity = GameService.getRootEntityStream();
-    const location = GameService.getLocationStream();
+    const mainEntity = GameService.getRootEntityStream()
+    const location = GameService.getLocationStream()
     return {
       mainEntity,
       location,
       locationInventory: GameService.getInventoryStream(location),
       structures: GameService.getStructuresIdsStream(),
-    };
+    }
   },
-};
+})
 </script>
 
 <style scoped lang="scss">

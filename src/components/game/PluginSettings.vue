@@ -9,15 +9,12 @@
             <div class="name">{{ plugin.name }}</div>
             <div class="author">by {{ plugin.author }}</div>
           </div>
-          <Button
-            v-if="plugin.settings.length && true"
-            @click="toggleConfig(plugin)"
-          >
-            {{ showSettings[plugin.id] ? "Hide" : "Show" }} Config
+          <Button v-if="plugin.settings.length && true" @click="toggleConfig(plugin)">
+            {{ showSettings[plugin.id] ? 'Hide' : 'Show' }} Config
           </Button>
           <Checkbox
             :value="pluginsEnabled.some((p) => p.id === plugin.id)"
-            @input="togglePlugin(plugin.id, $event)"
+            @update:value="togglePlugin(plugin.id, $event)"
           />
         </Horizontal>
       </Spaced>
@@ -27,9 +24,9 @@
             <label>{{ setting.name }}</label>
             <Checkbox
               v-if="setting.type === 'boolean'"
-              v-model="settingsValues[plugin.id][setting.id]"
+              v-model:value="settingsValues[plugin.id][setting.id]"
             />
-            <Input v-else v-model="settingsValues[plugin.id][setting.id]" />
+            <Input v-else v-model:value="settingsValues[plugin.id][setting.id]" />
           </div>
           <HorizontalCenter>
             <Button @click="saveSettings(plugin)">Save</Button>
@@ -50,7 +47,7 @@
                     <div class="name">{{ plugin.name }}</div>
                     <div class="author">by {{ plugin.author }}</div>
                   </div>
-                  <div>Reason: {{ plugin.error ? "Error" : "Disabled" }}</div>
+                  <div>Reason: {{ plugin.error ? 'Error' : 'Disabled' }}</div>
                 </Horizontal>
               </Spaced>
             </Container>
@@ -62,11 +59,7 @@
 </template>
 
 <script>
-import Vertical from "../layouts/Vertical";
-import HorizontalCenter from "../layouts/HorizontalCenter";
-import LoadingPlaceholder from "../interface/LoadingPlaceholder";
-export default {
-  components: { LoadingPlaceholder, HorizontalCenter, Vertical },
+export default rxComponent({
   data: () => ({
     showSettings: {},
     settingsValues: {},
@@ -78,60 +71,51 @@ export default {
       workingPlugins: PluginService.getWorkingPluginsStream(),
       disabledPlugins: PluginService.getDisabledPluginsStream(),
       pluginSettings: PluginService.getPluginSettingsStream(),
-    };
+    }
   },
 
   methods: {
     toggleConfig(plugin) {
-      const show = !this.showSettings[plugin.id];
-      this.$set(this.showSettings, plugin.id, show);
+      const show = !this.showSettings[plugin.id]
+      this.showSettings[plugin.id] = show
       if (show) {
-        this.$set(
-          this.settingsValues,
-          plugin.id,
-          this.settingsValues[plugin.id] || {}
-        );
+        this.settingsValues[plugin.id] = this.settingsValues[plugin.id] || {}
         plugin.settings.forEach((setting) => {
-          let defaultValue;
+          let defaultValue
           switch (setting.type) {
-            case "string":
-              defaultValue = "";
-              break;
+            case 'string':
+              defaultValue = ''
+              break
           }
-          const currentValue = this.pluginSettings?.[plugin.id]?.[setting.id];
-          this.$set(
-            this.settingsValues[plugin.id],
-            setting.id,
+          const currentValue = this.pluginSettings?.[plugin.id]?.[setting.id]
+          this.settingsValues[plugin.id][setting.id] =
             currentValue === undefined ? defaultValue : currentValue
-          );
-        });
+        })
       }
     },
 
     async togglePlugin(pluginId, value) {
       if (Boolean(this.pluginSettings?.[pluginId]?.enabled) === value) {
-        return;
+        return
       }
       try {
-        await PluginService.togglePlugin(pluginId, value);
+        await PluginService.togglePlugin(pluginId, value)
       } catch (e) {
-        ToastError("Unexpected error");
+        console.error(e)
+        ToastError('Unexpected error')
       }
     },
 
     async saveSettings(plugin) {
       try {
-        await PluginService.updatePluginSettings(
-          plugin.id,
-          this.settingsValues[plugin.id]
-        );
-        this.toggleConfig(plugin);
+        await PluginService.updatePluginSettings(plugin.id, this.settingsValues[plugin.id])
+        this.toggleConfig(plugin)
       } catch (e) {
-        ToastError("Unexpected error");
+        ToastError('Unexpected error')
       }
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">

@@ -20,7 +20,7 @@
         <div>How many attempts?</div>
         <Input
           type="number"
-          v-model="amount"
+          v-model:value="amount"
           :min="1"
           :max="maxAmount"
           @enter="$refs.submit.click()"
@@ -28,12 +28,7 @@
         />
       </div>
       <HorizontalCenter>
-        <Button
-          @click="commence()"
-          :processing="processing"
-          :disabled="!maxAmount"
-          ref="submit"
-        >
+        <Button @click="commence()" :processing="processing" :disabled="!maxAmount" ref="submit">
           Commence
         </Button>
       </HorizontalCenter>
@@ -42,7 +37,7 @@
 </template>
 
 <script>
-export default window.OperationCraft = {
+const OperationCraft = rxComponent({
   props: {
     operation: {},
   },
@@ -54,84 +49,83 @@ export default window.OperationCraft = {
 
   subscriptions() {
     return {
-      currentAP: GameService.getRootEntityStream().pluck("actionPoints"),
-      craftId: this.$stream("operation")
-        .pluck("context", "craftId")
+      currentAP: GameService.getRootEntityStream().pluck('actionPoints'),
+      craftId: this.$stream('operation')
+        .pluck('context', 'craftId')
         .distinctUntilChanged()
         .tap((craftId) => GameService.fetchCraftDetails(craftId)),
-      craft: this.$stream("operation").switchMap((operation) =>
+      craft: this.$stream('operation').switchMap((operation) =>
         GameService.getCraftsStream().map((crafts) =>
-          crafts.find((craft) => craft.craftId === operation.context.craftId)
-        )
+          crafts.find((craft) => craft.craftId === operation.context.craftId),
+        ),
       ),
-    };
+    }
   },
 
   computed: {
     maxAmount() {
-      return 20;
+      return 20
     },
 
     unitCost() {
-      return this.operation.context.unitCost || 0;
+      return this.operation.context.unitCost || 0
     },
   },
 
   watch: {
     operation() {
-      this.updateConsideredAP();
+      this.updateConsideredAP()
     },
     amount() {
-      this.updateConsideredAP();
+      this.updateConsideredAP()
     },
   },
 
   mounted() {
-    this.updateConsideredAP();
+    this.updateConsideredAP()
   },
 
-  beforeDestroy() {
-    ControlsService.updateConsideredAP(0);
+  beforeUnmount() {
+    ControlsService.updateConsideredAP(0)
   },
 
   methods: {
     commence() {
-      const orderedAmount = this.amount;
-      this.processing = true;
+      const orderedAmount = this.amount
+      this.processing = true
       GameService.request(REQUEST_CODES.COMMENCE_OPERATION, {
         amount: orderedAmount,
       }).then(({ amount = orderedAmount, results = [], statusChanges }) => {
-        this.consideredAPOverride = amount * this.unitCost;
-        this.updateConsideredAP();
-        this.$refs.diagram
-          .apiAddCollected({ results, failPrefix: "-" })
-          .subscribe(
-            () => {
-              this.amount -= 1;
-            },
-            () => {},
-            () => {
-              this.processing = false;
-              ToastNotify(statusChanges);
-              this.consideredAPOverride = null;
-              this.updateConsideredAP();
-            }
-          );
-      });
+        this.consideredAPOverride = amount * this.unitCost
+        this.updateConsideredAP()
+        this.$refs.diagram.apiAddCollected({ results, failPrefix: '-' }).subscribe(
+          () => {
+            this.amount -= 1
+          },
+          () => {},
+          () => {
+            this.processing = false
+            ToastNotify(statusChanges)
+            this.consideredAPOverride = null
+            this.updateConsideredAP()
+          },
+        )
+      })
     },
 
     cancel() {
-      GameService.request(REQUEST_CODES.CANCEL_OPERATION);
+      GameService.request(REQUEST_CODES.CANCEL_OPERATION)
     },
 
     updateConsideredAP() {
       ControlsService.updateConsideredAP(
-        this.consideredAPOverride ||
-          this.amount * this.operation.context.unitCost
-      );
+        this.consideredAPOverride || this.amount * this.operation.context.unitCost,
+      )
     },
   },
-};
+})
+window.OperationCraft = OperationCraft
+export default OperationCraft
 </script>
 
 <style scoped lang="scss"></style>

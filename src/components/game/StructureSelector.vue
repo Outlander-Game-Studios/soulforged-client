@@ -1,17 +1,10 @@
 <template>
-  <div
-    v-if="!filteredStructures || filteredStructures.length === 0"
-    class="empty-text"
-  >
+  <div v-if="!filteredStructures || filteredStructures.length === 0" class="empty-text">
     Nothing to select from
   </div>
   <div v-else>
-    <Vertical v-if="$scopedSlots.default">
-      <div
-        v-if="filteredStructures.length > 0"
-        v-for="(structure, idx) in filteredStructures"
-        :key="idx"
-      >
+    <Vertical v-if="$slots.default">
+      <div v-for="(structure, idx) in filteredStructures" :key="idx">
         <ListItem :iconSrc="structure.icon">
           <template v-slot:icon>
             <ItemIcon
@@ -40,11 +33,7 @@
         <Description v-else warning inline> None </Description>
       </LabeledValue>
       <HorizontalWrap tight>
-        <div
-          v-if="includeEmpty"
-          class="item-button"
-          @click="selectedItem(null)"
-        >
+        <div v-if="includeEmpty" class="item-button" @click="selectedItem(null)">
           <ItemIcon :size="size" />
         </div>
         <div
@@ -64,10 +53,7 @@
 </template>
 
 <script>
-import Vertical from "../layouts/Vertical";
-import StructureIcon from "./StructureIcon";
-export default {
-  components: { StructureIcon, Vertical },
+export default rxComponent({
   props: {
     includeEmpty: {
       default: true,
@@ -98,36 +84,34 @@ export default {
         .map((location) => location.structures)
         .switchMap((ids) => GameService.getEntitiesStream(ids))
         .map((structures) => structures.sort(structureSorter)),
-    };
+    }
   },
 
   computed: {
     filteredStructures() {
-      return this.structures?.filter(this.filter) || [];
+      return this.structures?.filter(this.filter) || []
     },
   },
 
   methods: {
     selectedStructure(structure) {
-      this.internalValue = structure;
-      this.$emit("selected", structure);
-      this.$emit("input", structure);
+      this.internalValue = structure
+      this.$emit('selected', structure)
+      this.$emit('update:value', structure)
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .item-button {
-  @include interactive();
+  @include utils.interactive();
 
   &.selected {
-    @include filter(
-      saturate(1.1) brightness(1.5) drop-shadow(0.2rem 0.2rem 0.2rem black)
-    );
     z-index: 3;
+    @include utils.filter(saturate(1.1) brightness(1.5) drop-shadow(0.2rem 0.2rem 0.2rem black));
   }
 }
 </style>

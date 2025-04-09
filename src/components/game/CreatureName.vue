@@ -3,17 +3,17 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     creatureId: {},
   },
 
   subscriptions() {
     return {
-      internalCreature: this.$stream("creatureId").switchMap((creatureId) =>
-        GameService.getEntityStream(creatureId, ENTITY_VARIANTS.DETAILS)
+      internalCreature: this.$stream('creatureId').switchMap((creatureId) =>
+        GameService.getEntityStream(creatureId, ENTITY_VARIANTS.DETAILS),
       ),
-    };
+    }
   },
-};
+})
 </script>

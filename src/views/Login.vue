@@ -16,23 +16,17 @@
               <span class="error"> {{ error }} </span>
             </HorizontalCenter>
             <HorizontalCenter>
-              <Checkbox v-model="acceptedTOE">
+              <Checkbox v-model:value="acceptedTOE">
                 <span class="toe-accept">
                   I agree to the
-                  <a
-                    target="_blank"
-                    href="https://soulforged.net/#/legal/termsAndConditions"
+                  <a target="_blank" href="https://soulforged.net/#/legal/termsAndConditions"
                     >Terms and Conditions</a
                   >,<br />
-                  <a
-                    target="_blank"
-                    href="https://soulforged.net/#/legal/privacyPolicy"
+                  <a target="_blank" href="https://soulforged.net/#/legal/privacyPolicy"
                     >Privacy Policy</a
                   >
                   and
-                  <a
-                    target="_blank"
-                    href="https://soulforged.net/#/legal/cookiePolicy"
+                  <a target="_blank" href="https://soulforged.net/#/legal/cookiePolicy"
                     >Cookie Policy</a
                   >.
                 </span>
@@ -61,9 +55,7 @@
             >Manual Login</Button
           >
           <Button @click="showRules = true"> Game Rules </Button>
-          <Button @click="openNewWindow(DISCORD_INVITE_URL)">
-            Join Discord
-          </Button>
+          <Button @click="openNewWindow(DISCORD_INVITE_URL)"> Join Discord </Button>
           <Button @click="showCredits = true"> Game Credits </Button>
         </Vertical>
         <Modal v-if="showRules" dialog large @close="showRules = false">
@@ -79,7 +71,7 @@
 
 <script>
 export default {
-  name: "Login",
+  name: 'Login',
 
   data: () => ({
     acceptedTOE: false,
@@ -93,38 +85,38 @@ export default {
 
   computed: {
     error() {
-      return this.$route?.query?.error;
+      return this.$route?.query?.error
     },
   },
 
   methods: {
     startLogin() {
-      this.loggingIn = true;
+      this.loggingIn = true
       setTimeout(() => {
-        this.loggingIn = false;
-      }, 3000);
+        this.loggingIn = false
+      }, 3000)
       if (ControlsService.electronLoginAvailable()) {
-        ControlsService.initiateElectronLogin();
+        ControlsService.initiateElectronLogin()
       } else if (ControlsService.cordovaLoginAvailable()) {
-        ControlsService.initiateCordovaLogin();
+        ControlsService.initiateCordovaLogin()
       } else {
-        this.goToLogin();
+        this.goToLogin()
       }
     },
 
     goToLogin() {
-      window.location = "/api/login";
+      window.location = '/api/login'
     },
 
     openNewWindow(url) {
-      ControlsService.openNewWindow(url);
+      ControlsService.openNewWindow(url)
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../utils.scss";
+@use '../utils.scss';
 
 .login-wrapper {
   padding: 3rem;
@@ -132,7 +124,7 @@ export default {
   height: 100%;
   max-height: 100%;
   overflow: auto;
-  background-image: url(ui-asset("/backdrops/main.jpg", "src/"));
+  background-image: utils.ui-asset('/backdrops/main.jpg', 'src/');
   background-size: cover;
   background-position: center center;
   display: flex;
@@ -193,7 +185,7 @@ export default {
   padding: 0.5rem;
   font-weight: bold;
   font-size: 150%;
-  @include text-bad();
+  @include utils.text-bad();
 }
 
 .spacer {

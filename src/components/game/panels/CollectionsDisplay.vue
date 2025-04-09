@@ -8,34 +8,20 @@
             <Header class="flex-grow">Collections</Header>
             <CloseButton static @click="$emit('close')" />
           </HorizontalFill>
-          <Tabs
-            v-if="landscape"
-            placement="left"
-            url="collection"
-            flex
-            ref="tabs"
-          >
+          <Tabs v-if="landscape" placement="left" url="collection" flex ref="tabs">
             <template v-slot:header:Undiscovered>
               <span class="undiscovered-label">Undiscovered</span>
             </template>
             <template v-slot:header:Story_Chapters>
               <span class="community-label">Story Chapters</span>
             </template>
-            <Tab
-              :header="label"
-              v-for="(label, value) in categories"
-              :key="value"
-              flex
-            >
-              <CollectionCardsDisplay
-                :categoryIdx="value"
-                :landscape="landscape"
-              />
+            <Tab :header="label" v-for="(label, value) in categories" :key="value" flex>
+              <CollectionCardsDisplay :categoryIdx="value" :landscape="landscape" />
             </Tab>
           </Tabs>
           <div v-else class="vertical-tight">
             <HorizontalFill>
-              <Select v-model="currentCollection" :options="categories">
+              <Select v-model:value="currentCollection" :options="categories">
                 <template v-slot:option="{ label }">
                   <span
                     :class="{
@@ -65,10 +51,7 @@
 </template>
 
 <script>
-import Horizontal from "../../layouts/Horizontal";
-import HorizontalCenter from "../../layouts/HorizontalCenter";
-export default {
-  components: { HorizontalCenter, Horizontal },
+export default rxComponent({
   data: () => ({
     landscape: false,
     currentCollection: null,
@@ -76,42 +59,42 @@ export default {
 
   subscriptions() {
     return {
-      categories: GameService.getInfoStream("Collectible", {}, true),
-    };
+      categories: GameService.getInfoStream('Collectible', {}, true),
+    }
   },
 
   created() {
-    this.handleResize();
-    this.handler = this.handleResize.bind(this);
-    window.addEventListener("resize", this.handler);
+    this.handleResize()
+    this.handler = this.handleResize.bind(this)
+    window.addEventListener('resize', this.handler)
   },
 
   destroyed() {
-    window.removeEventListener("resize", this.handler);
+    window.removeEventListener('resize', this.handler)
   },
 
   methods: {
     handleResize() {
-      this.landscape = isScreenOrientationLandscape();
+      this.landscape = isScreenOrientationLandscape()
     },
 
     showCategory(categoryIdx) {
-      this.$stream("categories")
+      this.$stream('categories')
         .filter((c) => !!c)
         .first()
         .subscribe(() => {
-          this.currentCollection = categoryIdx;
+          this.currentCollection = categoryIdx
           if (this.$refs.tabs) {
-            this.$refs.tabs.setActive(this.$refs.tabs.tabs[categoryIdx]);
+            this.$refs.tabs.setActive(this.$refs.tabs.tabs[categoryIdx])
           }
-        });
+        })
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 
 .collection-display-wrapper {
   background: #150a03;
@@ -131,7 +114,7 @@ export default {
 }
 
 .community-label {
-  background-image: url(ui-asset("/icons/story.png", "../"));
+  background-image: utils.ui-asset('/icons/story.png', '../');
   padding-left: 2.8rem;
   background-size: auto 100%;
   background-repeat: no-repeat;

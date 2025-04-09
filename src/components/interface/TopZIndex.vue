@@ -9,15 +9,15 @@
 <script>
 export default {
   mounted() {
-    document.body.appendChild(this.$refs.content);
+    document.body.appendChild(this.$refs.content)
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.$refs.content) {
-      this.$refs.content.remove();
+      this.$refs.content.remove()
     }
   },
-};
+}
 </script>
 
 <style scoped lang="scss"></style>

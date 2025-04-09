@@ -13,11 +13,7 @@
       >
         <div class="modal">
           <Container borderType="alt" :borderSize="1.6">
-            <CloseButton
-              v-if="$listeners.close"
-              class="close"
-              @click="$emit('close')"
-            />
+            <CloseButton v-if="$attrs.onClose" class="close" @click="$emit('close')" />
             <div v-if="$slots.title || title" class="title-wrapper">
               <Header class="title-container" :alt3="specialFrame">
                 <div class="title-contents">
@@ -41,11 +37,9 @@
 </template>
 
 <script>
-import Container from "../layouts/Container";
-import closeSound from "../../assets/sounds/close.mp3";
+import closeSound from '../../assets/sounds/close.mp3'
 
 export default {
-  components: { Container },
   props: {
     closeable: {
       type: Boolean,
@@ -75,36 +69,36 @@ export default {
   },
 
   data: () => ({
-    headerSideStyle: "",
+    headerSideStyle: '',
   }),
 
   mounted() {
     if (this.attachToBody) {
-      document.body.appendChild(this.$refs.modalWrapper);
+      document.body.appendChild(this.$refs.modalWrapper)
     }
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.$refs.modalWrapper) {
-      this.$refs.modalWrapper.remove();
+      this.$refs.modalWrapper.remove()
     }
   },
 
   methods: {
     backdropMouseClick() {
-      if (!!this.$listeners.close) {
-        SoundService.playSound(closeSound, { speed: 2 });
-        this.$emit("close");
+      if (!!this.$attrs.onClose) {
+        SoundService.playSound(closeSound, { speed: 2 })
+        this.$emit('close')
       } else {
         // TODO: add error sound
       }
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 @keyframes fade-in {
   from {
@@ -140,7 +134,7 @@ export default {
   flex-direction: column;
 
   .backdrop {
-    @include fill();
+    @include utils.fill();
     position: fixed;
     background-color: rgba(0, 0, 0, 0.7);
     z-index: 9001;
@@ -187,13 +181,13 @@ export default {
     .modal {
       .border-container {
         &::before {
-          content: "";
-          @include fill();
+          content: '';
           pointer-events: none;
           border-width: 10rem;
           border-style: solid;
-          border-image: url(ui-asset("/borders/mid_bar_frame_single.png")) 200;
+          border-image: utils.ui-asset('/borders/mid_bar_frame_single.png') 200;
           background-size: 100% 100%;
+          @include utils.fill();
         }
       }
     }

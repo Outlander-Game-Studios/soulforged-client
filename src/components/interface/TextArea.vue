@@ -1,9 +1,5 @@
 <template>
-  <Container
-    backgroundType="base"
-    borderType="alt2"
-    :class="{ disabled: disabled }"
-  >
+  <Container backgroundType="base" borderType="alt2" :class="{ disabled: disabled }">
     <textarea
       class="textarea main"
       v-model="localValue"
@@ -20,7 +16,7 @@
 export default {
   props: {
     value: {
-      default: "",
+      default: '',
     },
     disabled: {
       type: Boolean,
@@ -30,33 +26,33 @@ export default {
   },
 
   data: () => ({
-    localValue: "",
+    localValue: '',
   }),
 
   watch: {
     value: {
       handler(arg) {
-        this.localValue = arg;
+        this.localValue = arg
       },
       immediate: true,
     },
     localValue: {
       handler(arg) {
-        this.$emit("input", arg);
+        this.$emit('update:value', arg)
       },
     },
   },
 
   methods: {
     focus() {
-      this.$refs.main.focus();
+      this.$refs.main.focus()
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .textarea.main {
   resize: none;
@@ -79,7 +75,7 @@ export default {
 }
 
 .disabled {
-  @include disabled();
   pointer-events: none;
+  @include utils.disabled();
 }
 </style>

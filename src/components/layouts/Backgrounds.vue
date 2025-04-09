@@ -1,30 +1,32 @@
 <script>
 global.BACKGROUNDS = [
-  "none",
-  "base",
-  "alt",
-  "alt2",
-  "alt3",
-  "self",
-  "danger",
-  "danger-low",
-  "severity--5",
-  "severity--4",
-  "severity--3",
-  "severity--2",
-  "severity--1",
-  "severity-0",
-  "severity-1",
-  "severity-2",
-  "severity-3",
-  "severity-4",
-  "severity-5",
-];
+  'none',
+  'base',
+  'alt',
+  'alt2',
+  'alt3',
+  'self',
+  'danger',
+  'danger-low',
+  'severity--5',
+  'severity--4',
+  'severity--3',
+  'severity--2',
+  'severity--1',
+  'severity-0',
+  'severity-1',
+  'severity-2',
+  'severity-3',
+  'severity-4',
+  'severity-5',
+]
+
+export default {}
 </script>
 
 <style lang="scss">
-@use "sass:map";
-@import "../../utils.scss";
+@use 'sass:map';
+@use '../../utils.scss';
 
 @mixin effect-sev-background($color, $second: black) {
   background-image: radial-gradient($color, $second);
@@ -46,28 +48,28 @@ global.BACKGROUNDS = [
   background: transparent;
 }
 .background-base {
-  @include theme-background();
+  @include utils.theme-background();
 }
 .background-alt {
-  @include theme-background-alt();
+  @include utils.theme-background-alt();
 }
 .background-alt2 {
-  @include theme-background-alt-2();
+  @include utils.theme-background-alt-2();
 }
 .background-alt3 {
-  @include theme-background-alt-3();
+  @include utils.theme-background-alt-3();
 }
 .background-self {
-  @include theme-background-self();
+  @include utils.theme-background-self();
 }
 .background-danger {
-  @include theme-background-danger();
+  @include utils.theme-background-danger();
 }
 .background-danger-low {
-  @include theme-background-danger-low();
+  @include utils.theme-background-danger-low();
 }
 .background-important {
-  @include theme-background-important();
+  @include utils.theme-background-important();
 }
 .background-severity--5 {
   @include effect-sev-background(#19cb00);
@@ -100,7 +102,7 @@ global.BACKGROUNDS = [
   @include effect-sev-background(red, #810000);
   //background-color: black;
   //background-repeat: no-repeat;
-  //background-image: url(ui-asset("/backgrounds/severity-blink.gif"));
+  //background-image: utils.ui-asset("/backgrounds/severity-blink.gif");
   //background-position: center center;
   //background-size: 100%;
   //border-radius: 0 !important;

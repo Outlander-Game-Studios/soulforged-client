@@ -18,34 +18,31 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   computed: {
     decorationSlots() {
       if (!this.home || !this.items || !this.home.decorations) {
-        return [];
+        return []
       }
       return this.home.decorations.map((slot) => ({
         ...slot,
         item: this.items[slot.itemId],
-      }));
+      }))
     },
   },
 
   subscriptions() {
-    const locationStream = GameService.getLocationStream();
+    const locationStream = GameService.getLocationStream()
     return {
       items: GameService.getAllItemsByIdStream(),
       home: locationStream
         .filter((location) => location?.structure)
         .switchMap((location) =>
-          GameService.getEntityStream(
-            location.structure,
-            ENTITY_VARIANTS.DETAILS
-          )
+          GameService.getEntityStream(location.structure, ENTITY_VARIANTS.DETAILS),
         ),
-    };
+    }
   },
-};
+})
 </script>
 
 <style scoped lang="scss"></style>

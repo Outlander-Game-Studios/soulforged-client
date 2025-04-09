@@ -4,7 +4,7 @@
       <div class="current">{{ AP }}</div>
       <div class="flex-grow"></div>
       <div class="considered" v-if="consideredAP">
-        {{ consideredAP === Infinity ? "Impossible" : "-" + consideredAP }}
+        {{ consideredAP === Infinity ? 'Impossible' : '-' + consideredAP }}
       </div>
     </div>
   </ProgressBar>
@@ -28,37 +28,37 @@ export default {
 
   computed: {
     fills() {
-      const currentRatio = (this.AP / this.maxAP) * 100;
-      const consideredRatio = (this.consideredAP / this.maxAP) * 100;
+      const currentRatio = (this.AP / this.maxAP) * 100
+      const consideredRatio = (this.consideredAP / this.maxAP) * 100
       if (currentRatio < consideredRatio) {
         return {
           orange: currentRatio,
           red: consideredRatio - currentRatio,
-        };
+        }
       }
       return {
         darkBlue: currentRatio - consideredRatio,
         blue: consideredRatio,
-      };
+      }
     },
   },
 
   mounted() {},
 
-  beforeDestroy() {},
+  beforeUnmount() {},
 
   methods: {},
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .text-display {
   display: flex;
   margin: 0.3rem 0.6rem 0;
   justify-content: flex-start;
-  @include text-outline();
+  @include utils.text-outline();
 
   .current,
   .considered {

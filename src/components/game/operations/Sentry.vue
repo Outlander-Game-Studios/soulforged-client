@@ -8,37 +8,38 @@
         <Checkbox
           v-for="(filter, label) in FILTERS"
           :key="label"
-          @input="toggleFilter(filter, $event)"
+          @update:value="toggleFilter(filter, $event)"
           :value="operation.context.typeFilters[filter]"
         >
           {{ label }}
         </Checkbox>
       </HorizontalWrap>
       <Header alt2>Log ({{ logs.length }} / {{ SENTRY_LIMIT }})</Header>
-      <Input placeholder="Search logs" v-model="textFilter" />
+      <Input placeholder="Search logs" v-model:value="textFilter" />
       <div class="log-table-wrapper">
         <table class="log-table">
-          <tr>
-            <th class="interactive info-header" @click="setSort('info')">
-              Info {{ sortIndicator.info }}
-            </th>
-            <th class="interactive date-header" @click="setSort('first')">
-              First time {{ sortIndicator.first }}
-            </th>
-            <th class="interactive date-header" @click="setSort('last')">
-              Last time {{ sortIndicator.last }}
-            </th>
-          </tr>
-          <tr v-for="logRow in logsSortedAndFiltered">
-            <td><RichText :value="logRow.text" html /> x{{ logRow.count }}</td>
-            <td class="nowrap">{{ logRow.firstText }}</td>
-            <td
-              class="nowrap"
-              :class="{ unimportant: logRow.last === logRow.first }"
-            >
-              {{ logRow.lastText }}
-            </td>
-          </tr>
+          <thead>
+            <tr>
+              <th class="interactive info-header" @click="setSort('info')">
+                Info {{ sortIndicator.info }}
+              </th>
+              <th class="interactive date-header" @click="setSort('first')">
+                First time {{ sortIndicator.first }}
+              </th>
+              <th class="interactive date-header" @click="setSort('last')">
+                Last time {{ sortIndicator.last }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="logRow in logsSortedAndFiltered">
+              <td><RichText :value="logRow.text" html /> x{{ logRow.count }}</td>
+              <td class="nowrap">{{ logRow.firstText }}</td>
+              <td class="nowrap" :class="{ unimportant: logRow.last === logRow.first }">
+                {{ logRow.lastText }}
+              </td>
+            </tr>
+          </tbody>
         </table>
         <div class="empty-text" v-if="!logs.length">No entries</div>
       </div>
@@ -54,20 +55,15 @@
     <Modal v-if="purging" dialog @close="purging = false" title="Erase log">
       <Vertical>
         <div class="important-text">
-          Are you sure you want to erase the log data? Doing this will free up
-          space for more new entries.
+          Are you sure you want to erase the log data? Doing this will free up space for more new
+          entries.
         </div>
         <HorizontalCenter>
           <Button @click="purge()">Confirm</Button>
         </HorizontalCenter>
       </Vertical>
     </Modal>
-    <Modal
-      v-if="exporting"
-      dialog
-      @close="exporting = false"
-      title="Export log"
-    >
+    <Modal v-if="exporting" dialog @close="exporting = false" title="Export log">
       <Vertical>
         <textarea :value="exportValue" readonly> </textarea>
       </Vertical>
@@ -76,23 +72,23 @@
 </template>
 
 <script>
-export default window.OperationSentry = {
+const OperationSentry = {
   props: {
     operation: {},
   },
 
   data: () => ({
     SENTRY_LIMIT,
-    textFilter: "",
+    textFilter: '',
     purging: false,
     exporting: false,
     sorting: {
-      value: "first",
+      value: 'first',
       dir: -1,
     },
     FILTERS: Object.keys(SENTRY_EVENT_TYPE).toObject(
       (key) => SENTRY_EVENT_LABEL[key],
-      (key) => SENTRY_EVENT_TYPE[key]
+      (key) => SENTRY_EVENT_TYPE[key],
     ),
   }),
 
@@ -101,13 +97,13 @@ export default window.OperationSentry = {
       function formatExportDate(number) {
         try {
           return new Date(number)
-            .toLocaleString("en-GB", {
-              timeZone: "Europe/London",
-              timeZoneName: "shortOffset",
+            .toLocaleString('en-GB', {
+              timeZone: 'Europe/London',
+              timeZoneName: 'shortOffset',
             })
-            .replace(/,/g, "");
+            .replace(/,/g, '')
         } catch (e) {
-          return new Date(number).toString();
+          return new Date(number).toString()
         }
       }
       return this.logsSortedAndFiltered
@@ -117,93 +113,91 @@ export default window.OperationSentry = {
             row.count,
             formatExportDate(row.first),
             formatExportDate(row.last),
-          ].join(",")
+          ].join(','),
         )
-        .join("\n");
+        .join('\n')
     },
     sortIndicator() {
       const indicators = {
-        info: "",
-        first: "",
-        last: "",
-      };
-      indicators[this.sorting.value] = this.sorting.dir > 0 ? "▲" : "▼";
-      return indicators;
+        info: '',
+        first: '',
+        last: '',
+      }
+      indicators[this.sorting.value] = this.sorting.dir > 0 ? '▲' : '▼'
+      return indicators
     },
     sorter() {
-      if (this.sorting.value === "info") {
-        return compareStrings;
+      if (this.sorting.value === 'info') {
+        return compareStrings
       }
-      return (a, b) => b[this.sorting.value] - a[this.sorting.value];
+      return (a, b) => b[this.sorting.value] - a[this.sorting.value]
     },
     logs() {
-      return this.operation.context.logs;
+      return this.operation.context.logs
     },
     logsSortedAndFiltered() {
-      const textFilter = this.textFilter.toLowerCase();
+      const textFilter = this.textFilter.toLowerCase()
       return this.logs
         .map((log) => ({
           ...log,
           firstText: this.formatDate(log.first),
           lastText: this.formatDate(log.last),
         }))
-        .filter(
-          (log) =>
-            !textFilter ||
-            this.stripInfo(log.text).toLowerCase().includes(textFilter)
-        )
-        .sort((a, b) => this.sorter(a, b) * this.sorting.dir);
+        .filter((log) => !textFilter || this.stripInfo(log.text).toLowerCase().includes(textFilter))
+        .sort((a, b) => this.sorter(a, b) * this.sorting.dir)
     },
   },
 
   methods: {
     startExport() {
       if (!this.logs.length) {
-        ToastError("No entries to export");
-        return;
+        ToastError('No entries to export')
+        return
       }
-      this.exporting = true;
+      this.exporting = true
     },
     stripInfo(text) {
-      return GameService.stripRichText(text).replace(/<\/?em>/g, "");
+      return GameService.stripRichText(text).replace(/<\/?em>/g, '')
     },
     formatDate(date) {
-      const dateFull = new Date(date);
+      const dateFull = new Date(date)
       const extra =
         new Date().getTime() - date < 5 * DAYS * IN_MILISECONDS
           ? DAYS_OF_WEEK_SHORT[dateFull.getDay()]
-          : dateFull.getDate() + " " + MONTHS_SHORT[dateFull.getMonth()];
-      return dateFull.toLocaleTimeString() + ", " + extra;
+          : dateFull.getDate() + ' ' + MONTHS_SHORT[dateFull.getMonth()]
+      return dateFull.toLocaleTimeString() + ', ' + extra
     },
     setSort(value) {
       if (this.sorting.value === value) {
-        this.sorting.dir = -this.sorting.dir;
+        this.sorting.dir = -this.sorting.dir
       } else {
-        this.sorting.value = value;
-        this.sorting.dir = 1;
+        this.sorting.value = value
+        this.sorting.dir = 1
       }
     },
     toggleFilter(type, value) {
       if (value === this.operation.context.typeFilters[type]) {
-        return;
+        return
       }
       GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-        updateType: "setFilter",
+        updateType: 'setFilter',
         type,
         value,
-      });
+      })
     },
     purge() {
-      this.purging = false;
+      this.purging = false
       GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-        updateType: "purge",
-      });
+        updateType: 'purge',
+      })
     },
     cancel() {
-      GameService.request(REQUEST_CODES.CANCEL_OPERATION);
+      GameService.request(REQUEST_CODES.CANCEL_OPERATION)
     },
   },
-};
+}
+window.OperationSentry = OperationSentry
+export default OperationSentry
 </script>
 
 <style scoped lang="scss">

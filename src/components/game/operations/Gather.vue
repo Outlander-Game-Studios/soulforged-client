@@ -10,16 +10,11 @@
         <div>
           <div class="icon-container">
             <div class="flex-grow">
-              <LabeledValue v-if="resourceGone" label="Density">
-                Exhausted
-              </LabeledValue>
+              <LabeledValue v-if="resourceGone" label="Density"> Exhausted </LabeledValue>
               <div v-else>
                 <LabeledValue label="Density">
                   {{ ucFirst(resource.densityName) }}
-                  <IndicatorResourceDensity
-                    :density="resource.density"
-                    highRes
-                  />
+                  <IndicatorResourceDensity :density="resource.density" highRes />
                   &nbsp;
                   <HelpResourceDensity :resource="resource" />
                 </LabeledValue>
@@ -40,7 +35,7 @@
           <div>How many attempts?</div>
           <Input
             type="number"
-            v-model="amount"
+            v-model:value="amount"
             :min="1"
             :max="maxAmount"
             @enter="$refs.submit.click()"
@@ -64,7 +59,7 @@
 </template>
 
 <script>
-export default window.OperationGather = {
+const OperationGather = rxComponent({
   props: {
     operation: {},
   },
@@ -76,105 +71,98 @@ export default window.OperationGather = {
 
   subscriptions() {
     return {
-      currentAP: GameService.getRootEntityStream().pluck("actionPoints"),
-      resource: this.$stream("operation")
+      currentAP: GameService.getRootEntityStream().pluck('actionPoints'),
+      resource: this.$stream('operation')
         .filter((operation) => !!operation.context.resource)
         .switchMap((operation) =>
-          GameService.getEntityStream(
-            operation.context.resource,
-            ENTITY_VARIANTS.DETAILS
-          )
+          GameService.getEntityStream(operation.context.resource, ENTITY_VARIANTS.DETAILS),
         )
         .distinctUntilChanged(null, JSON.stringify)
         .tap(() => GameService.getRootEntityStream(false, true)),
-      resourceGone: this.$stream("operation").map(
-        (operation) => !operation.context.resource
-      ),
-    };
+      resourceGone: this.$stream('operation').map((operation) => !operation.context.resource),
+    }
   },
 
   computed: {
     consideredAP() {
-      ControlsService.updateConsideredAP(this.amount * this.unitCost);
+      ControlsService.updateConsideredAP(this.amount * this.unitCost)
     },
 
     maxAmount() {
-      return 20;
+      return 20
     },
 
     unitCost() {
-      return this.operation.context.unitCost || 0;
+      return this.operation.context.unitCost || 0
     },
   },
 
   watch: {
     operation() {
-      this.updateConsideredAP();
+      this.updateConsideredAP()
     },
     amount() {
-      this.updateConsideredAP();
+      this.updateConsideredAP()
     },
   },
 
   mounted() {
-    this.updateConsideredAP();
+    this.updateConsideredAP()
   },
 
-  beforeDestroy() {
-    this.componentDestroyed = true;
-    ControlsService.updateConsideredAP(0);
+  beforeUnmount() {
+    this.componentDestroyed = true
+    ControlsService.updateConsideredAP(0)
   },
 
   methods: {
     ucFirst,
 
     commence() {
-      const orderedAmount = this.amount;
-      const expectedDensity = this.resource.densityName;
-      this.processing = true;
+      const orderedAmount = this.amount
+      const expectedDensity = this.resource.densityName
+      this.processing = true
       GameService.request(REQUEST_CODES.COMMENCE_OPERATION, {
         amount: orderedAmount,
         density: expectedDensity,
       }).then(({ amount = orderedAmount, results = [], statusChanges }) => {
-        this.consideredAPOverride = amount * this.unitCost;
-        this.updateConsideredAP();
+        this.consideredAPOverride = amount * this.unitCost
+        this.updateConsideredAP()
         results = results.map((result) => ({
-          [result ? "gain" : "loss"]: 1,
-        }));
-        this.$refs.resourceIcon
-          .apiAddCollected({ results, failPrefix: "Fail x" })
-          .subscribe(
-            () => {
-              this.amount -= 1;
-            },
-            () => {},
-            () => {
-              this.processing = false;
-              ToastNotify(statusChanges);
-              this.consideredAPOverride = null;
-              this.updateConsideredAP();
-            }
-          );
-      });
+          [result ? 'gain' : 'loss']: 1,
+        }))
+        this.$refs.resourceIcon.apiAddCollected({ results, failPrefix: 'Fail x' }).subscribe(
+          () => {
+            this.amount -= 1
+          },
+          () => {},
+          () => {
+            this.processing = false
+            ToastNotify(statusChanges)
+            this.consideredAPOverride = null
+            this.updateConsideredAP()
+          },
+        )
+      })
     },
 
     cancel() {
-      GameService.request(REQUEST_CODES.CANCEL_OPERATION);
+      GameService.request(REQUEST_CODES.CANCEL_OPERATION)
     },
 
     updateConsideredAP() {
       if (!this.componentDestroyed) {
-        ControlsService.updateConsideredAP(
-          this.consideredAPOverride || this.amount * this.unitCost
-        );
+        ControlsService.updateConsideredAP(this.consideredAPOverride || this.amount * this.unitCost)
       }
     },
   },
-};
+})
+window.OperationGather = OperationGather
+export default OperationGather
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 
 .density-help {
   max-width: 45rem;

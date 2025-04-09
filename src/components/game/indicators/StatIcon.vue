@@ -4,7 +4,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     stat: {},
     size: {},
@@ -12,12 +12,12 @@ export default {
 
   subscriptions() {
     return {
-      info: this.$stream("stat").switchMap((stat) =>
-        GameService.getInfoStream("STATISTICS", { stat }, true)
+      info: this.$stream('stat').switchMap((stat) =>
+        GameService.getInfoStream('STATISTICS', { stat }, true),
       ),
-    };
+    }
   },
-};
+})
 </script>
 
 <style scoped lang="scss"></style>

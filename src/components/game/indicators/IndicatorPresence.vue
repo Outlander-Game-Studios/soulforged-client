@@ -3,16 +3,16 @@
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 
 .indicator-presence {
   display: inline-block;
   vertical-align: text-bottom;
-  background-image: url(ui-asset("/icons/indicators/presence.png", "../"));
+  background-image: utils.ui-asset('/icons/indicators/presence.png', '../');
   width: 1em;
   height: 1em;
   background-size: 100% 100%;

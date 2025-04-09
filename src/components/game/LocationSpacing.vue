@@ -5,11 +5,11 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   subscriptions() {
-    return { location: GameService.getLocationStream() };
+    return { location: GameService.getLocationStream() }
   },
-};
+})
 </script>
 
 <style scoped lang="scss"></style>

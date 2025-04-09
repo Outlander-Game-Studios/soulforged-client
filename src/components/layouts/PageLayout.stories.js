@@ -1,21 +1,25 @@
-import Main from "../../views/Main.vue";
-import combatEffectIcon from "../../../.storybook/mocks/assets/combat-effect.png";
-import bruiseIcon from "../../../.storybook/mocks/assets/bruise.png";
-import cutIcon from "../../../.storybook/mocks/assets/cut.png";
-import combatIcon from "../../../.storybook/mocks/assets/combat.png";
-import Vue from "vue";
-import { effects } from "../../../.storybook/mocks/@effects";
-import { dungeonAssets } from "../../../.storybook/mocks/@dungeon";
-import { GameService } from "../../services/game";
+import Main from '../../views/Main.vue'
+import combatEffectIcon from '../../../.storybook/mocks/assets/combat-effect.png'
+import bruiseIcon from '../../../.storybook/mocks/assets/bruise.png'
+import cutIcon from '../../../.storybook/mocks/assets/cut.png'
+import combatIcon from '../../../.storybook/mocks/assets/combat.png'
+import * as Vue from 'vue'
+import { effects } from '../../../.storybook/mocks/@effects'
+import { dungeonAssets } from '../../../.storybook/mocks/@dungeon'
+import { GameService } from '../../services/game'
 
-Vue.component("OperationEncounter", window.OperationEncounter);
-Vue.component("OperationGather", window.OperationGather);
-Vue.component("OperationTravel", window.OperationTravel);
-Vue.component("OperationCombat", window.OperationCombat);
+import { setup } from '@storybook/vue3'
+
+setup((app) => {
+  app.component('OperationEncounter', window.OperationEncounter)
+  app.component('OperationGather', window.OperationGather)
+  app.component('OperationTravel', window.OperationTravel)
+  app.component('OperationCombat', window.OperationCombat)
+})
 
 export default {
-  title: "Screens",
-};
+  title: 'Screens',
+}
 
 const factory = (onMounted = () => {}, onCreate = () => {}) =>
   mockComponent(
@@ -25,7 +29,7 @@ const factory = (onMounted = () => {}, onCreate = () => {}) =>
       },
 
       mounted() {
-        onMounted(this);
+        onMounted(this)
       },
 
       template: `
@@ -34,21 +38,21 @@ const factory = (onMounted = () => {}, onCreate = () => {}) =>
     },
     onMounted,
     () => {
-      ControlsService.setCurrentOpenTab(null);
+      ControlsService.setCurrentOpenTab(null)
       GameService.mock({
         request: () => new Promise(() => {}),
-      });
-      storyMocks.modifyEntity("location", {
+      })
+      storyMocks.modifyEntity('location', {
         creatures: [
-          mockEntityId("mainEntity2"),
-          mockEntityId("mainEntity"),
-          mockEntityId("mob1"),
-          mockEntityId("mob1"),
+          mockEntityId('mainEntity2'),
+          mockEntityId('mainEntity'),
+          mockEntityId('mob1'),
+          mockEntityId('mob1'),
         ],
-      });
-      onCreate();
-    }
-  );
+      })
+      onCreate()
+    },
+  )
 
 const TABS = {
   location: 0,
@@ -56,7 +60,7 @@ const TABS = {
   character: 2,
   chat: 5,
   trade: 6,
-};
+}
 
 export const outline = mockComponent(
   {
@@ -81,9 +85,9 @@ export const outline = mockComponent(
   () => {
     GameService.mock({
       request: () => new Promise(() => {}),
-    });
-  }
-);
+    })
+  },
+)
 
 export const loading = factory(
   () => {},
@@ -93,162 +97,160 @@ export const loading = factory(
       getRootEntityStream: () => Rx.Observable.empty(),
       getEntityStream: () => Rx.Observable.empty(),
       getLocationStream: () => Rx.Observable.empty(),
-    });
-  }
-);
+    })
+  },
+)
 loading.parameters = {
-  storyshotsScope: "medium",
-};
+  storyshotsScope: 'medium',
+}
 
-export const sample = factory();
+export const sample = factory()
 sample.parameters = {
-  storyshotsScope: "medium",
-};
+  storyshotsScope: 'medium',
+}
 
 export const seeEffects = factory((vm) => {
   setTimeout(() => {
-    vm.$el
-      .querySelectorAll(".info-container .effects-container")
-      [TABS.location].click();
-  });
-});
+    vm.$el.querySelectorAll('.info-container .effects-container')[TABS.location].click()
+  })
+})
 
 export const locationInfo = factory((vm) => {
   setTimeout(() => {
-    vm.$el.querySelectorAll(".tab-header")[TABS.location].click();
-  });
-});
+    vm.$el.querySelectorAll('.tab-header')[TABS.location].click()
+  })
+})
 locationInfo.parameters = {
-  storyshotsScope: "medium",
-};
+  storyshotsScope: 'medium',
+}
 
 export const locationCreature = factory((vm) => {
   setTimeout(() => {
-    vm.$el.querySelectorAll(".tab-header")[TABS.location].click();
+    vm.$el.querySelectorAll('.tab-header')[TABS.location].click()
     setTimeout(() => {
-      vm.$el.querySelector(".location-panel .creature-icon-wrapper").click();
-    });
-  });
-});
+      vm.$el.querySelector('.location-panel .creature-icon-wrapper').click()
+    })
+  })
+})
 export const locationListCreatures = factory((vm) => {
   setTimeout(() => {
-    vm.$el.querySelectorAll(".tab-header")[TABS.location].click();
+    vm.$el.querySelectorAll('.tab-header')[TABS.location].click()
     setTimeout(() => {
-      vm.$el.querySelectorAll(".header-component.interactive")[0].click();
-    });
-  });
-});
+      vm.$el.querySelectorAll('.header-component.interactive')[0].click()
+    })
+  })
+})
 export const locationListResources = factory((vm) => {
   setTimeout(() => {
-    vm.$el.querySelectorAll(".tab-header")[TABS.location].click();
+    vm.$el.querySelectorAll('.tab-header')[TABS.location].click()
     setTimeout(() => {
-      vm.$el.querySelectorAll(".header-component.interactive")[1].click();
-    });
-  });
-});
+      vm.$el.querySelectorAll('.header-component.interactive')[1].click()
+    })
+  })
+})
 export const locationListStructures = factory((vm) => {
   setTimeout(() => {
-    vm.$el.querySelectorAll(".tab-header")[TABS.location].click();
+    vm.$el.querySelectorAll('.tab-header')[TABS.location].click()
     setTimeout(() => {
-      vm.$el.querySelectorAll(".header-component.interactive")[2].click();
-    });
-  });
-});
+      vm.$el.querySelectorAll('.header-component.interactive')[2].click()
+    })
+  })
+})
 export const locationStructure = factory((vm) => {
   setTimeout(() => {
-    vm.$el.querySelectorAll(".tab-header")[TABS.location].click();
+    vm.$el.querySelectorAll('.tab-header')[TABS.location].click()
     setTimeout(() => {
-      vm.$el.querySelectorAll(".structure-icon")[0].click();
-    });
-  });
-});
+      vm.$el.querySelectorAll('.structure-icon')[0].click()
+    })
+  })
+})
 
 export const inventoryInfo = factory((vm) => {
   setTimeout(() => {
-    vm.$el.querySelectorAll(".tab-header")[TABS.inventory].click();
-  });
-});
+    vm.$el.querySelectorAll('.tab-header')[TABS.inventory].click()
+  })
+})
 inventoryInfo.parameters = {
-  storyshotsScope: "medium",
-};
+  storyshotsScope: 'medium',
+}
 
 export const characterInfo = factory((vm) => {
   setTimeout(() => {
-    vm.$el.querySelectorAll(".tab-header")[TABS.character].click();
-  });
-});
+    vm.$el.querySelectorAll('.tab-header')[TABS.character].click()
+  })
+})
 characterInfo.parameters = {
-  storyshotsScope: "medium",
-};
+  storyshotsScope: 'medium',
+}
 
 export const tradePanel = factory((vm) => {
   setTimeout(() => {
-    vm.$el.querySelectorAll(".tab-header")[TABS.trade].click();
-  });
-});
+    vm.$el.querySelectorAll('.tab-header')[TABS.trade].click()
+  })
+})
 tradePanel.parameters = {
-  storyshotsScope: "medium",
-};
+  storyshotsScope: 'medium',
+}
 
 export const chatPanel = factory((vm) => {
   setTimeout(() => {
-    vm.$el.querySelectorAll(".tab-header")[TABS.chat].click();
-  });
-});
+    vm.$el.querySelectorAll('.tab-header')[TABS.chat].click()
+  })
+})
 chatPanel.parameters = {
-  storyshotsScope: "medium",
-};
+  storyshotsScope: 'medium',
+}
 
 export const chatPanelFull = factory(
   (vm) => {
     setTimeout(() => {
-      vm.$el.querySelectorAll(".tab-header")[TABS.chat].click();
-    });
+      vm.$el.querySelectorAll('.tab-header')[TABS.chat].click()
+    })
   },
   () => {
     storyMocks.chatMocks = [
       {
-        whoId: mockEntityId("mainEntity"),
-        emo: ":)",
-        when: new Date("2021-02-15 12:55:12").getTime(),
+        whoId: mockEntityId('mainEntity'),
+        emo: ':)',
+        when: new Date('2021-02-15 12:55:12').getTime(),
         msg: loremIpsum,
       },
-    ];
-  }
-);
+    ]
+  },
+)
 chatPanel.parameters = {
-  storyshotsScope: "medium",
-};
+  storyshotsScope: 'medium',
+}
 
 export const encounterOperation = factory(
   () => {},
   () => {
-    storyMocks.operations.start(storyMocks.operations.encounter);
-  }
-);
+    storyMocks.operations.start(storyMocks.operations.encounter)
+  },
+)
 encounterOperation.parameters = {
-  storyshotsScope: "medium",
-};
+  storyshotsScope: 'medium',
+}
 
 export const gatherOperation = factory(
   () => {},
   () => {
-    storyMocks.operations.start(storyMocks.operations.gather);
-  }
-);
+    storyMocks.operations.start(storyMocks.operations.gather)
+  },
+)
 gatherOperation.parameters = {
-  storyshotsScope: "medium",
-};
+  storyshotsScope: 'medium',
+}
 
 export const travelOperation = factory(
   () => {},
   () => {
-    storyMocks.operations.start(storyMocks.operations.travel);
-  }
-);
+    storyMocks.operations.start(storyMocks.operations.travel)
+  },
+)
 travelOperation.parameters = {
-  storyshotsScope: "extended",
-};
+  storyshotsScope: 'extended',
+}
 
 const outcomes = [
   [
@@ -293,17 +295,17 @@ const outcomes = [
       effects: [],
     },
   ],
-];
-let timeouts = [];
-let interval;
+]
+let timeouts = []
+let interval
 export const combatOperation = factory(
   () => {},
   () => {
-    storyMocks.operations.start(storyMocks.operations.combat);
-    storyMocks.modifyEntity("mainEntity", {
+    storyMocks.operations.start(storyMocks.operations.combat)
+    storyMocks.modifyEntity('mainEntity', {
       effects: [
         {
-          name: "Stunned",
+          name: 'Stunned',
           icon: combatEffectIcon,
           durationTurns: 2,
           severity: 3,
@@ -313,53 +315,49 @@ export const combatOperation = factory(
       ],
       operationInfo: {
         icon: combatIcon,
-        name: "In Combat",
+        name: 'In Combat',
       },
-    });
-    storyMocks.modifyEntity("mob1", {
+    })
+    storyMocks.modifyEntity('mob1', {
       operationInfo: {
         icon: combatIcon,
-        name: "In Combat",
+        name: 'In Combat',
       },
-    });
-  }
-);
+    })
+  },
+)
 combatOperation.parameters = {
-  storyshotsScope: "extended",
-};
+  storyshotsScope: 'extended',
+}
 export const combatOperationAnimated = factory(
   () => {},
   () => {
-    storyMocks.operations.start(storyMocks.operations.combat);
-    storyMocks.modifyEntity("mainEntity", {
+    storyMocks.operations.start(storyMocks.operations.combat)
+    storyMocks.modifyEntity('mainEntity', {
       operationInfo: {
         icon: combatIcon,
-        name: "In Combat",
+        name: 'In Combat',
       },
-    });
-    storyMocks.modifyEntity("mob1", {
+    })
+    storyMocks.modifyEntity('mob1', {
       operationInfo: {
         icon: combatIcon,
-        name: "In Combat",
+        name: 'In Combat',
       },
-    });
+    })
 
-    storyMocks.modifyEntity("combat", {
-      creatures: [
-        mockEntityId("mainEntity"),
-        mockEntityId("mainEntity2"),
-        mockEntityId("mob1"),
-      ],
-    });
+    storyMocks.modifyEntity('combat', {
+      creatures: [mockEntityId('mainEntity'), mockEntityId('mainEntity2'), mockEntityId('mob1')],
+    })
     const makeDamages = (from, to) => {
-      const fromEntity = entitiesMocks[from];
-      const toEntity = entitiesMocks[to];
+      const fromEntity = entitiesMocks[from]
+      const toEntity = entitiesMocks[to]
       GameService.getCombatFramesStream().next({
         type: COMBAT_FRAMES.APPROACH,
         affects: [fromEntity, toEntity],
         whoId: fromEntity.id,
         targetId: toEntity.id,
-      });
+      })
       GameService.getCombatFramesStream().next({
         type: COMBAT_FRAMES.STRIKE,
         affects: [fromEntity, toEntity],
@@ -368,7 +366,7 @@ export const combatOperationAnimated = factory(
         floaties: {
           [toEntity.id]: random.randomItem(outcomes),
         },
-      });
+      })
       GameService.getCombatFramesStream().next({
         type: COMBAT_FRAMES.STRIKE,
         affects: [fromEntity, toEntity],
@@ -377,122 +375,122 @@ export const combatOperationAnimated = factory(
         floaties: {
           [fromEntity.id]: random.randomItem(outcomes),
         },
-      });
+      })
       GameService.getCombatFramesStream().next({
         type: COMBAT_FRAMES.RETURN,
         affects: [fromEntity, toEntity],
         whoId: fromEntity.id,
         targetId: toEntity.id,
-      });
-    };
-    timeouts.forEach((t) => clearTimeout(t));
-    clearInterval(interval);
-    timeouts = [];
-    const base = 300;
+      })
+    }
+    timeouts.forEach((t) => clearTimeout(t))
+    clearInterval(interval)
+    timeouts = []
+    const base = 300
     const action = () => {
       timeouts = [
-        setTimeout(() => makeDamages("mainEntity", "mob1"), 1 * base),
-        setTimeout(() => makeDamages("mob1", "mainEntity"), 3 * base),
-        setTimeout(() => makeDamages("mainEntity2", "mainEntity"), 5 * base),
-        setTimeout(() => makeDamages("mob1", "mainEntity2"), 7 * base),
-      ];
-    };
-    interval = setInterval(action, 8 * base);
-    action();
-  }
-);
+        setTimeout(() => makeDamages('mainEntity', 'mob1'), 1 * base),
+        setTimeout(() => makeDamages('mob1', 'mainEntity'), 3 * base),
+        setTimeout(() => makeDamages('mainEntity2', 'mainEntity'), 5 * base),
+        setTimeout(() => makeDamages('mob1', 'mainEntity2'), 7 * base),
+      ]
+    }
+    interval = setInterval(action, 8 * base)
+    action()
+  },
+)
 combatOperationAnimated.parameters = {
   storyshots: { disable: true },
-};
+}
 
 export const helpDialog = factory((vm) => {
   setTimeout(() => {
-    document.querySelector(".help-trigger .help-button").click();
-  });
-});
+    document.querySelector('.help-trigger .help-button').click()
+  })
+})
 
 export const helpDialogInterface = factory((vm) => {
   setTimeout(() => {
-    document.querySelector(".help-trigger .help-button").click();
+    document.querySelector('.help-trigger .help-button').click()
     setTimeout(() => {
-      document.querySelectorAll(".modal button")[0].click();
-    });
-  });
-});
+      document.querySelectorAll('.modal button')[0].click()
+    })
+  })
+})
 
 const setupDungeon = () => {
-  storyMocks.modifyEntity("location", {
+  storyMocks.modifyEntity('location', {
     indoors: true,
-    paths: [mockEntityId("path2"), mockEntityId("path3")],
+    paths: [mockEntityId('path2'), mockEntityId('path3')],
     dungeon: {
       assets: {
         ...storyMocks.dungeonAssets,
         wallLeft: null,
       },
     },
-  });
-  storyMocks.modifyEntity("path1", {
+  })
+  storyMocks.modifyEntity('path1', {
     position: 180,
     accidentGrade: 1,
-  });
-  storyMocks.modifyEntity("path2", {
+  })
+  storyMocks.modifyEntity('path2', {
     position: 0,
     accidentGrade: 1,
-  });
-  storyMocks.modifyEntity("path3", {
+  })
+  storyMocks.modifyEntity('path3', {
     position: 120,
     accidentGrade: 1,
-  });
+  })
   LocalStorageService.mock({
-    getItem: (itemKey) => (itemKey === "HideHelpIndicator" ? 2 : undefined),
-  });
+    getItem: (itemKey, defaultValue) => (itemKey === 'HideHelpIndicator' ? 2 : defaultValue),
+  })
   GameService.mock({
     getBackdropStyleStream: () => Rx.Observable.of(null),
-  });
-};
+  })
+}
 export const dungeon = factory(
   () => {},
   () => {
-    setupDungeon();
-  }
-);
+    setupDungeon()
+  },
+)
 dungeon.parameters = {
-  storyshotsScope: "extended",
-};
+  storyshotsScope: 'extended',
+}
 
 export const dungeonWithPanel = factory(
   (vm) => {
     setTimeout(() => {
-      vm.$el.querySelectorAll(".tab-header")[TABS.inventory].click();
-    });
+      vm.$el.querySelectorAll('.tab-header')[TABS.inventory].click()
+    })
   },
   () => {
-    setupDungeon();
-  }
-);
+    setupDungeon()
+  },
+)
 dungeonWithPanel.parameters = {
-  storyshotsScope: "extended",
-};
+  storyshotsScope: 'extended',
+}
 
 export const dungeonInCombat = factory(
   (vm) => {},
   () => {
-    setupDungeon();
-    storyMocks.operations.start(storyMocks.operations.combat);
-    storyMocks.modifyEntity("mainEntity", {
+    setupDungeon()
+    storyMocks.operations.start(storyMocks.operations.combat)
+    storyMocks.modifyEntity('mainEntity', {
       operationInfo: {
         icon: combatIcon,
-        name: "In Combat",
+        name: 'In Combat',
       },
-    });
-    storyMocks.modifyEntity("mob1", {
+    })
+    storyMocks.modifyEntity('mob1', {
       operationInfo: {
         icon: combatIcon,
-        name: "In Combat",
+        name: 'In Combat',
       },
-    });
-  }
-);
+    })
+  },
+)
 dungeonWithPanel.parameters = {
-  storyshotsScope: "extended",
-};
+  storyshotsScope: 'extended',
+}

@@ -9,12 +9,7 @@
             <HelpAttackStats />
           </Help>
         </Header>
-        <CombatMoves
-          wrap
-          noSpacing
-          showDetailsOnClick
-          :moves="mainEntity.combatStats.moves"
-        />
+        <CombatMoves wrap noSpacing showDetailsOnClick :moves="mainEntity.combatStats.moves" />
         <Header alt2>
           Defense
           <Help title="Defense">
@@ -51,10 +46,7 @@
 </template>
 
 <script>
-import Vertical from "../layouts/Vertical";
-import DisplayImpacts from "./DisplayImpacts";
-export default {
-  components: { DisplayImpacts, Vertical },
+export default rxComponent({
   props: {
     noHeader: {
       type: Boolean,
@@ -64,26 +56,18 @@ export default {
   subscriptions() {
     return {
       mainEntity: GameService.getRootEntityStream(),
-    };
+    }
   },
 
   computed: {
     stealthMultiplier() {
-      const stealthImpacts = [
-        ...this.mainEntity.environment,
-        ...this.mainEntity.effects,
-      ]
-        .map(
-          (e) =>
-            e.impacts
-              ?.find((i) => i.name === "Stealth")
-              ?.value.replace("x", "") || 1
-        )
-        .map((v) => +v);
-      return stealthImpacts.reduce(multiply, 1);
+      const stealthImpacts = [...this.mainEntity.environment, ...this.mainEntity.effects]
+        .map((e) => e.impacts?.find((i) => i.name === 'Stealth')?.value.replace('x', '') || 1)
+        .map((v) => +v)
+      return stealthImpacts.reduce(multiply, 1)
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss"></style>

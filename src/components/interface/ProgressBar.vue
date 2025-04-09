@@ -39,7 +39,7 @@ export default {
     fills: {},
     current: {},
     color: {
-      default: "blue",
+      default: 'blue',
     },
     max: {
       default: 100,
@@ -56,64 +56,60 @@ export default {
   computed: {
     containerStyle() {
       return {
-        height: this.size + "rem",
-      };
+        height: this.size + 'rem',
+      }
     },
     containerInnerStyle() {
       return {
-        height: (this.size * 5) / 7 + "rem",
-      };
+        height: (this.size * 5) / 7 + 'rem',
+      }
     },
 
     borderSize() {
-      return this.size / 7;
+      return this.size / 7
     },
 
     fillItems() {
-      let offset = 0;
-      let spaceLeft = 1;
+      let offset = 0
+      let spaceLeft = 1
       return Object.keys(this.fills || {}).map((color) => {
-        const style = this.getFillStyle(this.fills[color], offset, spaceLeft);
-        const wrapperStyle = this.getFillWrapperStyle(
-          this.fills[color],
-          offset,
-          spaceLeft
-        );
-        offset += style.value;
-        spaceLeft -= style.value;
+        const style = this.getFillStyle(this.fills[color], offset, spaceLeft)
+        const wrapperStyle = this.getFillWrapperStyle(this.fills[color], offset, spaceLeft)
+        offset += style.value
+        spaceLeft -= style.value
         return {
           color,
           style,
           wrapperStyle,
-        };
-      });
+        }
+      })
     },
   },
 
   methods: {
     getFillWrapperStyle(value, offset = 0, spaceLeft = 1) {
-      const size = Math.min(value / this.max, spaceLeft, 1);
+      const size = Math.min(value / this.max, spaceLeft, 1)
       return {
-        width: 100 * size + "%",
-      };
+        width: 100 * size + '%',
+      }
     },
 
     getFillStyle(value, offset = 0, spaceLeft = 1) {
-      const size = Math.min(value / this.max, spaceLeft, 1);
+      const size = Math.min(value / this.max, spaceLeft, 1)
       return {
         value: size,
-        width: 100 / size + "%",
-        left: (-100 * offset) / size + "%",
-        "border-width": `${this.size / 7}rem`,
-        "border-radius": `${this.size / 6}rem`,
-      };
+        width: 100 / size + '%',
+        left: (-100 * offset) / size + '%',
+        'border-width': `${this.size / 7}rem`,
+        'border-radius': `${this.size / 6}rem`,
+      }
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .container {
   overflow: visible;
@@ -154,7 +150,7 @@ export default {
       background-color: cyan;
     }
 
-    @include theme-progress-bar-fill();
+    @include utils.theme-progress-bar-fill();
   }
 
   .text {

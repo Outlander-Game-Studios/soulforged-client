@@ -1,10 +1,6 @@
 <template>
   <transition name="fade">
-    <div
-      v-if="disconnected"
-      class="disconnect-container"
-      :class="'stage-' + disconnected"
-    >
+    <div v-if="disconnected" class="disconnect-container" :class="'stage-' + disconnected">
       <Container
         :borderSize="1"
         borderType="alt"
@@ -33,9 +29,9 @@
 </template>
 
 <script>
-import connectionIcon from "../../assets/ui/cartoon/icons/connection2.jpg";
+import connectionIcon from '../../assets/ui/cartoon/icons/connection2.jpg'
 
-export default {
+export default rxComponent({
   data: () => ({
     connectionIcon,
   }),
@@ -43,34 +39,35 @@ export default {
   subscriptions() {
     return {
       disconnected: GameService.getDisconnectionDetectedStream(),
-    };
+    }
   },
 
   methods: {
     onClick() {
-      window.location.reload();
+      window.location.reload()
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .disconnect-container {
-  @include filter-fix();
   display: flex;
   width: 100%;
   position: fixed;
   z-index: 90009000;
   pointer-events: none;
-  > * {
-    pointer-events: all;
-  }
-
   top: 1rem;
   left: 1rem;
   justify-content: flex-start;
+
+  @include utils.filter-fix();
+
+  > * {
+    pointer-events: all;
+  }
 
   &.stage-1 {
     @media (orientation: landscape) {

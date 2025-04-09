@@ -3,14 +3,9 @@
     <CreatureDetailsModal
       :creatureId="showDetailsId"
       @close="showDetailsId = null"
-      @action="
-        showDetailsId = null;
-        showingList = false;
-      "
+      @action="hideAll()"
     />
-    <Header v-if="!hideHeader" class="interactive" @click="showList()"
-      >Creatures</Header
-    >
+    <Header v-if="!hideHeader" class="interactive" @click="showList()">Creatures</Header>
     <LoadingPlaceholder v-if="!loadedCreatures" :size="6" />
     <div v-else-if="!loadedCreatures.length" class="empty-text">None</div>
     <HorizontalWrap v-else tight class="scroll-spacing">
@@ -44,7 +39,7 @@
             <template v-slot:buttons="{ lazyData: creatureDetails }">
               <slot name="actions" :creature="creatureDetails" />
               <Actions
-                v-if="!$slots.actions && !$scopedSlots.actions"
+                v-if="!$slots.actions"
                 :target="creatureDetails"
                 @action="onAction($event)"
                 noWrap
@@ -58,12 +53,9 @@
 </template>
 
 <script>
-import { Rx } from "@/rx.js";
-import omit from "lodash/omit.js";
-import LoadingPlaceholder from "../../interface/LoadingPlaceholder";
+import omit from 'lodash/omit.js'
 
-export default {
-  components: { LoadingPlaceholder },
+export default rxComponent({
   props: {
     header: {},
     creatures: {},
@@ -79,65 +71,66 @@ export default {
 
   subscriptions() {
     const loadedCreaturesStream = Rx.combineLatest(
-      this.$stream("creatures"),
-      GameService.getRootEntityStream()
+      this.$stream('creatures'),
+      GameService.getRootEntityStream(),
     )
       .map(([ids, mainEntity]) => ids.filter((id) => id !== mainEntity.id))
       .switchMap((ids) => GameService.getEntitiesStream(ids))
-      .map((loadedCreatures) =>
-        loadedCreatures.filter((c) => !c.dead).sort(creaturesSort)
-      );
+      .map((loadedCreatures) => loadedCreatures.filter((c) => !c.dead).sort(creaturesSort))
     return {
       loadedCreatures: loadedCreaturesStream,
-    };
+    }
   },
 
   computed: {
     filteredCreatures() {
       return this.loadedCreatures?.filter(
         (creature) =>
-          this.showingList === true ||
-          this.getCreatureId(creature) === this.showingList
-      );
+          this.showingList === true || this.getCreatureId(creature) === this.showingList,
+      )
     },
     stackedCreatures() {
-      return this.deduplicateCreatures(this.loadedCreatures);
+      return this.deduplicateCreatures(this.loadedCreatures)
     },
 
     hasClick() {
-      return !!this.$listeners.click;
+      return !!this.$attrs.onClick
     },
   },
 
   methods: {
+    hideAll() {
+      this.showDetailsId = null
+      this.showingList = false
+    },
     onAction({ result: { instant } = {} } = {}) {
       if (!instant) {
-        this.showingList = false;
+        this.showingList = false
       }
     },
 
     getCreatureDetailsStream(creature) {
-      return GameService.getEntityStream(creature.id, ENTITY_VARIANTS.DETAILS);
+      return GameService.getEntityStream(creature.id, ENTITY_VARIANTS.DETAILS)
     },
 
     showList(stackedCreature) {
       if (stackedCreature) {
         if (stackedCreature.number === 1) {
-          this.clickHandler(stackedCreature);
+          this.clickHandler(stackedCreature)
         } else {
-          this.showingList = stackedCreature.stackId;
+          this.showingList = stackedCreature.stackId
         }
       } else {
-        this.showingList = true;
+        this.showingList = true
       }
     },
 
     clickHandler(creature) {
-      this.showDetailsId = creature.id;
+      this.showDetailsId = creature.id
     },
 
     allEffects(creature) {
-      return [...(creature.tracks || []), ...(creature.effects || [])];
+      return [...(creature.tracks || []), ...(creature.effects || [])]
     },
 
     getCreatureId(creature, extras = {}) {
@@ -147,34 +140,34 @@ export default {
         dead: creature.dead,
         eliteIcon: creature.eliteIcon,
         ...extras,
-      });
+      })
     },
 
     deduplicateCreatures(loadedCreatures) {
       if (!loadedCreatures) {
-        return;
+        return
       }
-      const LIMIT = 10;
-      let splitAvatars = 0;
-      let lastAvatar = -1;
+      const LIMIT = 10
+      let splitAvatars = 0
+      let lastAvatar = -1
       const mapped = loadedCreatures
         .map((creature, idx) => {
           if (!creature.avatar) {
-            return creature;
+            return creature
           }
-          splitAvatars++;
+          splitAvatars++
           if (splitAvatars < LIMIT) {
-            return creature;
+            return creature
           }
           if (splitAvatars === LIMIT) {
-            lastAvatar = { ...creature };
-            return lastAvatar;
+            lastAvatar = { ...creature }
+            return lastAvatar
           }
           if (splitAvatars > LIMIT) {
-            delete lastAvatar.avatar;
-            delete lastAvatar.operationInfo;
+            delete lastAvatar.avatar
+            delete lastAvatar.operationInfo
           }
-          return omit(creature, ["avatar", "operationInfo"]);
+          return omit(creature, ['avatar', 'operationInfo'])
         })
         .reduce((acc, creature) => {
           const creatureId = this.getCreatureId(
@@ -183,21 +176,21 @@ export default {
               ? {
                   uniqueId: creature.avatar,
                 }
-              : {}
-          );
+              : {},
+          )
           if (!acc[creatureId]) {
             acc[creatureId] = {
               ...creature,
               number: 0,
               stackId: creatureId,
-            };
+            }
           }
-          acc[creatureId].number += 1;
-          return acc;
-        }, {});
+          acc[creatureId].number += 1
+          return acc
+        }, {})
 
-      return Object.values(mapped);
+      return Object.values(mapped)
     },
   },
-};
+})
 </script>

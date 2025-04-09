@@ -5,12 +5,7 @@
     v-if="row"
     :style="{ height: wrap ? '' : size + 'rem' }"
   >
-    <EffectIcon
-      v-for="(effect, idx) in sortedEffects"
-      :key="idx"
-      :effect="effect"
-      :size="size"
-    />
+    <EffectIcon v-for="(effect, idx) in sortedEffects" :key="idx" :effect="effect" :size="size" />
   </component>
   <div v-else>
     <div v-for="(effect, idx) in sortedEffects" :key="idx">
@@ -20,11 +15,7 @@
         </template>
         <template v-slot:title>
           <div class="effect-wrap">
-            <RichText
-              :value="
-                (effect.name || effect.text) + ' ' + displayDuration(effect)
-              "
-            />
+            <RichText :value="(effect.name || effect.text) + ' ' + displayDuration(effect)" />
           </div>
         </template>
         <template v-slot:subtitle>
@@ -42,8 +33,8 @@
 </template>
 
 <script>
-import groupBy from "lodash/groupBy.js";
-import flatten from "lodash/flatten.js";
+import groupBy from 'lodash/groupBy.js'
+import flatten from 'lodash/flatten.js'
 
 export default {
   props: {
@@ -73,99 +64,92 @@ export default {
     sortedEffects() {
       function formatDuration(durationValue) {
         if (!durationValue) {
-          return;
+          return
         }
         if (Array.isArray(durationValue)) {
-          return `${Math.min(...durationValue)}-${Math.max(...durationValue)}`;
+          return `${Math.min(...durationValue)}-${Math.max(...durationValue)}`
         }
-        return durationValue;
+        return durationValue
       }
 
-      let effects = [...(this.effects || [])]
-        .filter(this.filter)
-        .sort((a, b) => {
-          const orderDelta = a.order - b.order;
-          if (orderDelta === 0) {
-            return (
-              (b.severity || 0) - (a.severity || 0) ||
-              compareStrings(a.name, b.name)
-            );
-          }
-          return orderDelta;
-        });
+      let effects = [...(this.effects || [])].filter(this.filter).sort((a, b) => {
+        const orderDelta = a.order - b.order
+        if (orderDelta === 0) {
+          return (b.severity || 0) - (a.severity || 0) || compareStrings(a.name, b.name)
+        }
+        return orderDelta
+      })
       if (this.group) {
-        const grouped = groupBy(effects, "icon");
+        const grouped = groupBy(effects, 'icon')
         effects = Object.values(grouped)
           .map((group) =>
             group.reduce((acc, i) => ({
               ...acc,
               stacks: (acc.stacks || 1) + (i.stacks || 1),
-              duration: acc.duration
-                ? flatten([acc.duration, i.duration])
-                : undefined,
+              duration: acc.duration ? flatten([acc.duration, i.duration]) : undefined,
               durationTurns: acc.durationTurns
                 ? flatten([acc.durationTurns, i.durationTurns])
                 : undefined,
-            }))
+            })),
           )
           .map((e) => ({
             ...e,
             duration: formatDuration(e.duration),
             durationTurns: formatDuration(e.durationTurns),
-          }));
+          }))
       }
-      return effects;
+      return effects
     },
   },
 
   methods: {
     displayDuration(effect) {
-      let { duration, durationTurns } = effect;
+      let { duration, durationTurns } = effect
       if (durationTurns) {
-        return `(${durationTurns} turn${durationTurns > 1 ? "s" : ""})`;
+        return `(${durationTurns} turn${durationTurns > 1 ? 's' : ''})`
       }
       if (!duration) {
-        return "";
+        return ''
       }
       if (!Array.isArray(duration)) {
-        duration = [duration];
+        duration = [duration]
       } else {
         if (duration[0] === duration[1]) {
-          duration = [duration[0]];
+          duration = [duration[0]]
         }
       }
-      return "(" + duration.map((d) => `${d} AP`).join(" ~ ") + ")";
+      return '(' + duration.map((d) => `${d} AP`).join(' ~ ') + ')'
     },
   },
-};
+}
 </script>
 
 <style lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .effect-wrap {
   white-space: normal;
 }
 .effect-description {
   strong {
-    @include text-outline();
+    @include utils.text-outline();
   }
 
   em {
-    @include text-bad();
+    @include utils.text-bad();
     &.ok {
-      @include text-outline();
+      @include utils.text-outline();
     }
   }
 
   .ok {
     em {
-      @include text-outline();
+      @include utils.text-outline();
     }
   }
 
   .nameable {
-    @include text-outline();
+    @include utils.text-outline();
   }
 }
 </style>

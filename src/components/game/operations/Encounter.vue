@@ -4,13 +4,12 @@
       <template v-slot:header>
         Hostile encounter
         <Help @click.stop title="Hostile encounter">
-          You are in an Encounter. You will have to either <em>Engage</em> or
-          <em>Back Away</em> to resolve it.<br />
-          During this time other players can join you to fight the enemies. Once
-          you Engage and the combat starts no other player can join.<br />
-          You can also try and use items you have in your inventory to toss them
-          to the enemy possibly triggering some behaviours. The items used will
-          be consumed in the process.
+          You are in an Encounter. You will have to either <em>Engage</em> or <em>Back Away</em> to
+          resolve it.<br />
+          During this time other players can join you to fight the enemies. Once you Engage and the
+          combat starts no other player can join.<br />
+          You can also try and use items you have in your inventory to toss them to the enemy
+          possibly triggering some behaviours. The items used will be consumed in the process.
         </Help>
       </template>
       <template v-slot:content>
@@ -44,7 +43,7 @@
                     :key="friendly.id"
                     :creature="friendly"
                     class="interactive friendly-creature"
-                    :class="{ ready: friendly.operationInfo?.isReady }"
+                    :class="{ ready: friendly.operationInfo && friendly.operationInfo.isReady }"
                     @click="selectedCreatureId = friendly.id"
                   />
                 </div>
@@ -68,38 +67,21 @@
               </div>
             </Container>
           </div>
-          <div
-            v-if="inCombatCheck && !operation.context.canAttack"
-            class="in-combat-message"
-          >
-            Some creatures are engaged in combat, you must wait for it to be
-            resolved before you're able to engage
+          <div v-if="inCombatCheck && !operation.context.canAttack" class="in-combat-message">
+            Some creatures are engaged in combat, you must wait for it to be resolved before you're
+            able to engage
           </div>
           <HorizontalCenter v-else-if="operation.context.showReady">
-            <Checkbox
-              :value="operation.context.isReady"
-              @input="setReadiness($event)"
-            >
+            <Checkbox :value="operation.context.isReady" @update:value="setReadiness($event)">
               Ready
             </Checkbox>
           </HorizontalCenter>
           <HorizontalFill
-            v-if="
-              (!hostiles || hostiles.length) &&
-              operation.context.hasAliveHostiles
-            "
+            v-if="(!hostiles || hostiles.length) && operation.context.hasAliveHostiles"
           >
             <Vertical>
-              <Button
-                :disabled="!operation.context.canAttack"
-                @click="commence()"
-              >
-                Engage
-              </Button>
-              <Button
-                :disabled="!operation.context.canBackAway"
-                @click="action('backAway')"
-              >
+              <Button :disabled="!operation.context.canAttack" @click="commence()"> Engage </Button>
+              <Button :disabled="!operation.context.canBackAway" @click="action('backAway')">
                 Back away
               </Button>
             </Vertical>
@@ -110,12 +92,7 @@
               </LabeledValue>
               <LabeledValue flex label="Utilities">
                 <Horizontal v-if="utilities && utilities.length" tight>
-                  <Item
-                    v-for="(util, idx) in utilities"
-                    :key="idx"
-                    :data="util"
-                    :size="2.5"
-                  />
+                  <Item v-for="(util, idx) in utilities" :key="idx" :data="util" :size="2.5" />
                 </Horizontal>
                 <div v-else>None</div>
               </LabeledValue>
@@ -135,17 +112,14 @@
             <Button @click="action('backAway')"> Leave </Button>
           </div>
         </Vertical>
-        <CreatureDetailsModal
-          :creatureId="selectedCreatureId"
-          @close="selectedCreatureId = null"
-        />
+        <CreatureDetailsModal :creatureId="selectedCreatureId" @close="selectedCreatureId = null" />
       </template>
     </Collapsible>
   </div>
 </template>
 
 <script>
-export default window.OperationEncounter = {
+const OperationEncounter = rxComponent({
   props: {
     operation: {},
   },
@@ -156,26 +130,22 @@ export default window.OperationEncounter = {
 
   watch: {
     operation() {
-      this.updateConsideredAP();
+      this.updateConsideredAP()
     },
   },
 
   subscriptions() {
-    const operationStream = this.$stream("operation");
+    const operationStream = this.$stream('operation')
     const combatEngagementStream = operationStream
-      .pluck("context")
-      .pluck("combatEngagement")
-      .switchMap((id) => GameService.getEntityStream(id));
+      .pluck('context')
+      .pluck('combatEngagement')
+      .switchMap((id) => GameService.getEntityStream(id))
     const creaturesStream = combatEngagementStream
-      .pluck("creatures")
+      .pluck('creatures')
       .switchMap((ids) => GameService.getEntitiesStream(ids))
-      .map((creatures) => creatures.filter((c) => !c.dead));
-    const friendliesStream = creaturesStream.map((creatures) =>
-      creatures.filter((c) => !c.hostile)
-    );
-    const hostilesStream = creaturesStream.map((creatures) =>
-      creatures.filter((c) => !!c.hostile)
-    );
+      .map((creatures) => creatures.filter((c) => !c.dead))
+    const friendliesStream = creaturesStream.map((creatures) => creatures.filter((c) => !c.hostile))
+    const hostilesStream = creaturesStream.map((creatures) => creatures.filter((c) => !!c.hostile))
     return {
       mainEntity: GameService.getRootEntityStream(),
       combatEngagement: combatEngagementStream,
@@ -187,73 +157,67 @@ export default window.OperationEncounter = {
       inCombatCheck: creaturesStream
         .map((creatures) =>
           creatures.map(
-            (creature) =>
-              !!(
-                creature.operationInfo &&
-                creature.operationInfo.name === "In Combat"
-              )
-          )
+            (creature) => !!(creature.operationInfo && creature.operationInfo.name === 'In Combat'),
+          ),
         )
         .distinctUntilChanged(undefined, JSON.stringify)
         .tap(() => {
           GameService.getRootEntityStream()
             .first()
             .subscribe((entity) => {
-              GameService.getEntityStream(
-                entity.id,
-                ENTITY_VARIANTS.DETAILS,
-                true
-              );
-            });
+              GameService.getEntityStream(entity.id, ENTITY_VARIANTS.DETAILS, true)
+            })
         })
         .map((inCombat) => inCombat.reduce((acc, i) => acc || i, false)),
-    };
+    }
   },
 
   mounted() {
-    this.updateConsideredAP();
-    GameService.checkQuickActions();
+    this.updateConsideredAP()
+    GameService.checkQuickActions()
   },
 
-  beforeDestroy() {
-    ControlsService.updateConsideredAP(0);
-    GameService.checkQuickActions();
+  beforeUnmount() {
+    ControlsService.updateConsideredAP(0)
+    GameService.checkQuickActions()
   },
 
   methods: {
     setReadiness(value) {
-      this.action("setReady", { ready: value });
+      this.action('setReady', { ready: value })
     },
 
     commence() {
       GameService.request(REQUEST_CODES.COMMENCE_OPERATION, {
         startEncounter: true,
       }).then(({ statusChanges = [] } = {}) => {
-        ToastNotify(statusChanges);
-      });
+        ToastNotify(statusChanges)
+      })
     },
 
     action(action, params = {}) {
       GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-        updateType: "action",
+        updateType: 'action',
         action,
         ...params,
-      });
+      })
     },
 
     cancel() {
-      GameService.request(REQUEST_CODES.CANCEL_OPERATION);
+      GameService.request(REQUEST_CODES.CANCEL_OPERATION)
     },
 
     updateConsideredAP() {
-      ControlsService.updateConsideredAP(this.operation.context.unitCost);
+      ControlsService.updateConsideredAP(this.operation.context.unitCost)
     },
   },
-};
+})
+window.OperationEncounter = OperationEncounter
+export default OperationEncounter
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 
 .encounter-operation {
   width: 35rem;
@@ -265,7 +229,7 @@ export default window.OperationEncounter = {
 
   header {
     padding: 0.5rem;
-    @include text-outline();
+    @include utils.text-outline();
   }
 
   .creatures-icons {
@@ -284,8 +248,8 @@ export default window.OperationEncounter = {
 
     .friendly-creature {
       &:not(.ready) {
-        @include filter(brightness(0.75) saturate(0.5));
         opacity: 0.5;
+        @include utils.filter(brightness(0.75) saturate(0.5));
       }
     }
   }

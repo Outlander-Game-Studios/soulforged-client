@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import loaderGif from "../../assets/ui/cartoon/misc/loader.gif";
-import loaderPng from "../../assets/ui/cartoon/misc/loader.png";
+import loaderGif from '../../assets/ui/cartoon/misc/loader.gif'
+import loaderPng from '../../assets/ui/cartoon/misc/loader.png'
 
 export default {
   props: {
@@ -16,7 +16,7 @@ export default {
       default: 5,
     },
     color: {
-      default: "black",
+      default: 'black',
     },
   },
 
@@ -24,24 +24,24 @@ export default {
     style() {
       const margins = this.centered
         ? {
-            marginLeft: -this.size / 2 + "rem",
-            marginTop: -this.size / 2 + "rem",
+            marginLeft: -this.size / 2 + 'rem',
+            marginTop: -this.size / 2 + 'rem',
           }
-        : {};
-      const imageUrl = ControlsService.isStoryshots() ? loaderPng : loaderGif;
+        : {}
+      const imageUrl = ControlsService.isStoryshots() ? loaderPng : loaderGif
       return {
         ...margins,
-        "background-image": `url(${imageUrl})`,
-        width: this.size + "rem",
-        height: this.size + "rem",
-      };
+        'background-image': `url(${imageUrl})`,
+        width: this.size + 'rem',
+        height: this.size + 'rem',
+      }
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 $speed: 2s;
 $size: 22%;

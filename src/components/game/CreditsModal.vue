@@ -18,13 +18,13 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   subscriptions() {
     return {
-      credits: Rx.fromPromise(GameService.fetcher("/api/credits")),
-    };
+      credits: Rx.fromPromise(GameService.fetcher('/api/credits')),
+    }
   },
-};
+})
 </script>
 
 <style scoped lang="scss">

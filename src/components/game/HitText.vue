@@ -8,25 +8,25 @@ export default {
     text: {},
     type: {},
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .hit-text {
   white-space: nowrap;
   &.default {
-    @include text-outline();
+    @include utils.text-outline();
   }
   &.great {
-    @include text-outline(black, limegreen);
+    @include utils.text-outline(black, limegreen);
   }
   &.good {
-    @include text-outline(black, yellow);
+    @include utils.text-outline(black, yellow);
   }
   &.poor {
-    @include text-outline(black, darkorange);
+    @include utils.text-outline(black, darkorange);
   }
 }
 </style>

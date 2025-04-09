@@ -13,7 +13,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     selector: {},
     placement: {},
@@ -29,99 +29,99 @@ export default {
   subscriptions() {
     return {
       controls: ControlsService.getCurrentOpenTabStream().tap(() => {
-        this.handleResize();
+        this.handleResize()
       }),
-    };
+    }
   },
 
   created() {
-    this.handleResize();
-    this.handler = this.handleResize.bind(this);
-    window.addEventListener("resize", this.handler);
+    this.handleResize()
+    this.handler = this.handleResize.bind(this)
+    window.addEventListener('resize', this.handler)
   },
 
   destroyed() {
-    window.removeEventListener("resize", this.handler);
+    window.removeEventListener('resize', this.handler)
   },
 
   methods: {
     handleResize(repeat) {
       if (parseInt(repeat) !== repeat) {
-        repeat = 12;
+        repeat = 12
       }
       if (repeat === 0) {
-        return;
+        return
       }
       setTimeout(() => {
-        this.handleResize(repeat - 1);
-      }, 50);
+        this.handleResize(repeat - 1)
+      }, 50)
 
-      const screenWidth = getScreenWidth();
-      const screenHeight = getScreenHeight();
+      const screenWidth = getScreenWidth()
+      const screenHeight = getScreenHeight()
 
-      this.currentScreenOrientation = getScreenOrientation();
+      this.currentScreenOrientation = getScreenOrientation()
 
-      const element = document.querySelector(this.selector);
+      const element = document.querySelector(this.selector)
       if (!element) {
-        return;
+        return
       }
-      const boundingRect = element.getBoundingClientRect();
+      const boundingRect = element.getBoundingClientRect()
       switch (this.finalPlacement) {
-        case "left":
+        case 'left':
           this.anchorStyle = {
             right: `${screenWidth - boundingRect.x}px`,
             top: `${boundingRect.y + boundingRect.height / 2}px`,
-          };
-          return;
-        case "top":
+          }
+          return
+        case 'top':
           this.anchorStyle = {
             left: `${boundingRect.x + boundingRect.width / 2}px`,
             bottom: `${screenHeight - boundingRect.y}px`,
-          };
-          return;
-        case "top-left":
+          }
+          return
+        case 'top-left':
           this.anchorStyle = {
             left: `${boundingRect.x + boundingRect.width / 2}px`,
             bottom: `${screenHeight - boundingRect.y}px`,
-          };
-          return;
-        case "bottom":
+          }
+          return
+        case 'bottom':
           this.anchorStyle = {
             left: `${boundingRect.x + boundingRect.width / 2}px`,
             top: `${boundingRect.y + boundingRect.height}px`,
-          };
-          return;
-        case "right":
+          }
+          return
+        case 'right':
           this.anchorStyle = {
             left: `${boundingRect.x + boundingRect.width}px`,
             top: `${boundingRect.y + boundingRect.height / 2}px`,
-          };
-          return;
+          }
+          return
       }
       this.anchorStyle = {
         left: `${boundingRect.x + boundingRect.width / 2}px`,
         top: `${boundingRect.y + boundingRect.height / 2}px`,
-      };
+      }
     },
   },
 
   computed: {
     finalPlacement() {
       if (this.placement) {
-        return this.placement;
+        return this.placement
       }
-      if (this.currentScreenOrientation === "landscape") {
-        return this.landscapePlacement;
+      if (this.currentScreenOrientation === 'landscape') {
+        return this.landscapePlacement
       } else {
-        return this.portraitPlacement;
+        return this.portraitPlacement
       }
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 @keyframes pop-in {
   0% {
@@ -144,8 +144,8 @@ export default {
   line-height: $lineHeight;
   margin-top: calc($lineHeight / -2);
   pointer-events: none;
-  @include text-outline();
-  @include filter(drop-shadow(0.2rem 0.2rem 0.1rem black));
+  @include utils.text-outline();
+  @include utils.filter(drop-shadow(0.2rem 0.2rem 0.1rem black));
 
   .pointer {
     $dashHeight: 0.2rem;
@@ -159,7 +159,7 @@ export default {
     position: relative;
 
     &::before {
-      content: "";
+      content: '';
       position: absolute;
       border-left: 1rem solid white;
       border-top: 0.5rem solid transparent;

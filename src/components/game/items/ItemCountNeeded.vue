@@ -1,16 +1,13 @@
 <template>
   <div>
-    <div
-      class="amount"
-      :class="{ insufficient: !noFlash && insufficientAmount }"
-    >
+    <div class="amount" :class="{ insufficient: !noFlash && insufficientAmount }">
       {{ displayAmount }}
     </div>
   </div>
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     needed: {},
     publicId: {},
@@ -23,31 +20,27 @@ export default {
   subscriptions() {
     return {
       itemCountsByPublicId: GameService.getItemCountsByPublicIdStream(),
-    };
+    }
   },
 
   computed: {
     insufficientAmount() {
       return (
-        this.itemCountsByPublicId &&
-        (this.itemCountsByPublicId[this.publicId] || 0) < this.needed
-      );
+        this.itemCountsByPublicId && (this.itemCountsByPublicId[this.publicId] || 0) < this.needed
+      )
     },
 
     displayAmount() {
       return this.itemCountsByPublicId
-        ? this.needed +
-            " (" +
-            formatNumber(this.itemCountsByPublicId[this.publicId] || 0) +
-            ")"
-        : this.needed;
+        ? this.needed + ' (' + formatNumber(this.itemCountsByPublicId[this.publicId] || 0) + ')'
+        : this.needed
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 
 @keyframes saturationBlink {
   0% {
@@ -72,7 +65,7 @@ export default {
   &.insufficient {
     color: darkorange;
     animation: saturationBlink 1s infinite;
-    @include filter-fix();
+    @include utils.filter-fix();
   }
 }
 </style>

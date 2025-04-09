@@ -10,7 +10,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     identifier: null,
     data: null,
@@ -18,11 +18,11 @@ export default {
 
   subscriptions() {
     return {
-      plugins: this.$stream("identifier").switchMap((identifier) =>
-        PluginService.getPluginsForSlotStream(identifier)
+      plugins: this.$stream('identifier').switchMap((identifier) =>
+        PluginService.getPluginsForSlotStream(identifier),
       ),
       pluginSettings: PluginService.getPluginSettingsStream(),
-    };
+    }
   },
-};
+})
 </script>

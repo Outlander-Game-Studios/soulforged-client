@@ -1,20 +1,8 @@
 <template>
   <div>
-    <div
-      class="combat-container"
-      v-if="combat"
-      :style="{ '--anim-speed': ANIMATION_SPEED }"
-    >
-      <CreatureDetailsModal
-        :creatureId="selectedCreatureId"
-        @close="selectedCreatureId = null"
-      />
-      <Modal
-        dialog
-        v-if="selectingWeapon"
-        title="Select weapon"
-        @close="selectingWeapon = null"
-      >
+    <div class="combat-container" v-if="combat" :style="{ '--anim-speed': ANIMATION_SPEED }">
+      <CreatureDetailsModal :creatureId="selectedCreatureId" @close="selectedCreatureId = null" />
+      <Modal dialog v-if="selectingWeapon" title="Select weapon" @close="selectingWeapon = null">
         <Spaced>
           <Description>
             Swapping weapon will stop you from<br />
@@ -41,12 +29,7 @@
           </ItemSelector>
         </div>
       </Modal>
-      <Modal
-        dialog
-        v-if="selectingOffhand"
-        title="Select offhand"
-        @close="selectingOffhand = null"
-      >
+      <Modal dialog v-if="selectingOffhand" title="Select offhand" @close="selectingOffhand = null">
         <Spaced>
           <Description>
             Swapping offhand will stop you from<br />
@@ -57,10 +40,7 @@
           </Description>
         </Spaced>
         <div class="select-weapon">
-          <ItemSelector
-            :filter="itemOffhandFilter()"
-            @selected="selectOffhand($event)"
-          >
+          <ItemSelector :filter="itemOffhandFilter()" @selected="selectOffhand($event)">
             <template v-slot="{ item }"> </template>
           </ItemSelector>
         </div>
@@ -78,10 +58,7 @@
               <Description>Auto-resolving combat...</Description>
               <ProgressBar
                 color="orange"
-                :current="
-                  (100 * (AUTO_RESOLVE_TURNS - combat.autoResolving)) /
-                  AUTO_RESOLVE_TURNS
-                "
+                :current="(100 * (AUTO_RESOLVE_TURNS - combat.autoResolving)) / AUTO_RESOLVE_TURNS"
               >
                 <div class="auto-resolve-count">
                   {{ AUTO_RESOLVE_TURNS - combat.autoResolving }} /
@@ -93,8 +70,7 @@
           <div v-else>
             <Vertical>
               <Description>
-                This will attempt to resolve combat by automatically executing
-                up to
+                This will attempt to resolve combat by automatically executing up to
                 <em>{{ AUTO_RESOLVE_TURNS }}</em>
                 following turns.<br />
                 Your character will use the currently selected move:
@@ -110,10 +86,7 @@
                 />
               </HorizontalCenter>
               <HorizontalCenter>
-                <Button
-                  @click="triggerAutoResolve(autoResolveMove)"
-                  :disabled="!autoResolveMove"
-                >
+                <Button @click="triggerAutoResolve(autoResolveMove)" :disabled="!autoResolveMove">
                   Confirm
                 </Button>
               </HorizontalCenter>
@@ -123,18 +96,11 @@
       </Modal>
       <template v-if="inBattle || inBattleDebounced">
         <div class="main-area">
-          <Button
-            v-if="combat.canAutoResolve"
-            class="skipping-button"
-            @click="skipping = true"
-          >
+          <Button v-if="combat.canAutoResolve" class="skipping-button" @click="skipping = true">
             Auto-resolve
           </Button>
           <div v-if="selectedMove && timeRemaining" class="move-info">
-            <CloseButton
-              class="move-preview-close"
-              @click="selectedMoveId = null"
-            />
+            <CloseButton class="move-preview-close" @click="selectedMoveId = null" />
             <Container borderType="alt" :borderSize="0.8">
               <Vertical>
                 <Header small>
@@ -149,9 +115,7 @@
                 </Spaced>
                 <Spaced>
                   <HorizontalFill>
-                    <Button @click="selectMove(selectedMoveId)" reactToEnter>
-                      Perform
-                    </Button>
+                    <Button @click="selectMove(selectedMoveId)" reactToEnter> Perform </Button>
                   </HorizontalFill>
                 </Spaced>
               </Vertical>
@@ -229,10 +193,7 @@
                   </div>
                 </HorizontalCenter>
                 <HorizontalCenter tight>
-                  <div
-                    v-for="(effect, idx) in floatie.effectsCombat"
-                    :key="idx"
-                  >
+                  <div v-for="(effect, idx) in floatie.effectsCombat" :key="idx">
                     <EffectIcon :effect="effect" :size="2.8" />
                   </div>
                 </HorizontalCenter>
@@ -245,14 +206,9 @@
                 <div class="flee-icon" :style="fleeIconStyle"></div>
                 <div
                   class="percentage"
-                  v-if="
-                    creature.operationInfo &&
-                    creature.operationInfo.fleeing < 100
-                  "
+                  v-if="creature.operationInfo && creature.operationInfo.fleeing < 100"
                 >
-                  {{
-                    creature.operationInfo && creature.operationInfo.fleeing
-                  }}%
+                  {{ creature.operationInfo && creature.operationInfo.fleeing }}%
                 </div>
               </div>
             </div>
@@ -283,11 +239,9 @@
             <Container borderSize="0.5" class="effects-container flex-grow">
               <Effects row :effects="mainEntity.effects" :size="4" />
             </Container>
-            <Button
-              class="animation-speed-button"
-              @click="switchAnimationSpeed()"
-              >{{ selectedAnimationSpeed.button }}</Button
-            >
+            <Button class="animation-speed-button" @click="switchAnimationSpeed()">{{
+              selectedAnimationSpeed.button
+            }}</Button>
           </Horizontal>
         </div>
         <div class="relative">
@@ -303,18 +257,8 @@
                 <Vertical :class="{ 'not-your-turn': !ownTurn }">
                   <Header alt2 small>Weapon</Header>
                   <HorizontalCenter>
-                    <Item
-                      v-if="weapon"
-                      :data="weapon"
-                      @click="selectingWeapon = true"
-                      :size="7"
-                    />
-                    <Icon
-                      v-else
-                      class="interactive"
-                      @click="selectingWeapon = true"
-                      :size="7"
-                    />
+                    <Item v-if="weapon" :data="weapon" @click="selectingWeapon = true" :size="7" />
+                    <Icon v-else class="interactive" @click="selectingWeapon = true" :size="7" />
                   </HorizontalCenter>
                 </Vertical>
                 <Vertical :class="{ 'not-your-turn': !ownTurn }">
@@ -326,12 +270,7 @@
                       @click="selectingOffhand = true"
                       :size="7"
                     />
-                    <Icon
-                      v-else
-                      class="interactive"
-                      @click="selectingOffhand = true"
-                      :size="7"
-                    />
+                    <Icon v-else class="interactive" @click="selectingOffhand = true" :size="7" />
                   </HorizontalCenter>
                 </Vertical>
                 <div class="flex-grow" :class="{ 'not-your-turn': !ownTurn }">
@@ -340,9 +279,7 @@
                       <Horizontal tight>
                         <div class="flex-grow">Abilities</div>
                         <div class="skip-confirm">
-                          <Checkbox v-model="skipConfirm"
-                            >Skip confirm</Checkbox
-                          >
+                          <Checkbox v-model:value="skipConfirm">Skip confirm</Checkbox>
                         </div>
                       </Horizontal>
                     </Header>
@@ -376,9 +313,7 @@
           <Spaced>
             <Vertical>
               <HorizontalCenter>
-                <Header veryLarge v-if="operation.lost">
-                  You lost the fight!
-                </Header>
+                <Header veryLarge v-if="operation.lost"> You lost the fight! </Header>
                 <Header veryLarge v-else-if="operation.fled">You fled.</Header>
                 <Header veryLarge v-else>Victory!</Header>
               </HorizontalCenter>
@@ -412,9 +347,7 @@
                       <LoadingPlaceholder v-if="!operation.context.summary" />
                       <Vertical v-else>
                         <Header>Summary</Header>
-                        <template
-                          v-if="operation.context.summary.skills.length"
-                        >
+                        <template v-if="operation.context.summary.skills.length">
                           <Header alt2>Skills</Header>
                           <Horizontal
                             v-for="skill in operation.context.summary.skills"
@@ -430,21 +363,14 @@
                             </span>
                           </Horizontal>
                         </template>
-                        <template
-                          v-if="operation.context.summary.effects.length"
-                        >
+                        <template v-if="operation.context.summary.effects.length">
                           <Header alt2>Effects</Header>
-                          <Effects
-                            :effects="operation.context.summary.effects"
-                          />
+                          <Effects :effects="operation.context.summary.effects" />
                         </template>
-                        <template
-                          v-if="operation.context.summary.mobKnowledge.length"
-                        >
+                        <template v-if="operation.context.summary.mobKnowledge.length">
                           <Header alt2>Monster Knowledge</Header>
                           <ListItem
-                            v-for="mobKnowledge in operation.context.summary
-                              .mobKnowledge"
+                            v-for="mobKnowledge in operation.context.summary.mobKnowledge"
                             :key="mobKnowledge.name"
                             :iconSize="4"
                             :iconSrc="mobKnowledge.icon"
@@ -457,9 +383,7 @@
                               {{ mobKnowledge.info.mobExpLevel }}
                             </template>
                             <template v-slot:subtitle>
-                              <CreatureKnowledgeBar
-                                :mobInfo="mobKnowledge.info"
-                              />
+                              <CreatureKnowledgeBar :mobInfo="mobKnowledge.info" />
                             </template>
                             <template v-slot:buttons>
                               <span class="gained-text">
@@ -477,11 +401,7 @@
           </Spaced>
         </div>
       </template>
-      <Modal
-        dialog
-        v-if="showMobInfoDetails"
-        @close="showMobInfoDetails = null"
-      >
+      <Modal dialog v-if="showMobInfoDetails" @close="showMobInfoDetails = null">
         <template v-slot:title>
           <RichText :value="showMobInfoDetails.name" />
         </template>
@@ -493,20 +413,17 @@
         <template v-slot:title>
           Combat Paused
           <Help title="Combat Pause">
-            When any player participating in combat disconnects the combat is
-            automatically paused.<br />
-            It can only be resumed once all players are connected back again or
-            it will be resumed automatically when the pause timer runs out.
+            When any player participating in combat disconnects the combat is automatically
+            paused.<br />
+            It can only be resumed once all players are connected back again or it will be resumed
+            automatically when the pause timer runs out.
           </Help>
         </template>
         <template v-slot:contents>
           <Vertical>
-            <div
-              class="paused-modal-text"
-              v-if="combat.disconnectedCharacters.length"
-            >
+            <div class="paused-modal-text" v-if="combat.disconnectedCharacters.length">
               Waiting for players to reconnect:
-              <em>{{ combat.disconnectedCharacters.join(", ") }}</em>
+              <em>{{ combat.disconnectedCharacters.join(', ') }}</em>
             </div>
             <div class="paused-modal-text" v-if="combat.pauseTimeLeft">
               Time remaining:
@@ -514,13 +431,9 @@
                 <Countdown :seconds="combat.pauseTimeLeft" />
               </em>
             </div>
-            <div v-else class="paused-modal-text">
-              The combat is paused due to server restart.
-            </div>
+            <div v-else class="paused-modal-text">The combat is paused due to server restart.</div>
             <HorizontalCenter>
-              <Button @click="resume()" :disabled="!combat.canResume"
-                >Resume</Button
-              >
+              <Button @click="resume()" :disabled="!combat.canResume">Resume</Button>
             </HorizontalCenter>
           </Vertical>
         </template>
@@ -530,26 +443,26 @@
 </template>
 
 <script>
-import fleeIcon from "../operation-assets/flee.png";
-import targetIcon from "../operation-assets/target.png";
-import turnIcon from "../operation-assets/combat-turn.png";
-import promptSound from "../../../assets/sounds/prompt2.mp3";
-import omit from "lodash/omit.js";
+import fleeIcon from '../operation-assets/flee.png'
+import targetIcon from '../operation-assets/target.png'
+import turnIcon from '../operation-assets/combat-turn.png'
+import promptSound from '../../../assets/sounds/prompt2.mp3'
+import omit from 'lodash/omit.js'
 
 const BIG_TEXT_CLASS = {
-  DEFAULT: "default",
-  NEUTRAL: "neutral",
-  GREAT: "great",
-  GOOD: "good",
-  POOR: "poor",
-  BAD: "bad",
-};
+  DEFAULT: 'default',
+  NEUTRAL: 'neutral',
+  GREAT: 'great',
+  GOOD: 'good',
+  POOR: 'poor',
+  BAD: 'bad',
+}
 const ANIMATION_SPEEDS = [
-  { speed: 0.2, text: "Very Slow", button: ">" },
-  { speed: 0.6, text: "Slow", button: ">>" },
-  { speed: 1, text: "Normal", button: ">>>" },
-  { speed: 2, text: "Fast", button: ">>>>" },
-];
+  { speed: 0.2, text: 'Very Slow', button: '>' },
+  { speed: 0.6, text: 'Slow', button: '>>' },
+  { speed: 1, text: 'Normal', button: '>>>' },
+  { speed: 2, text: 'Fast', button: '>>>>' },
+]
 
 const positions = [
   [75, 50],
@@ -569,25 +482,24 @@ const positions = [
   [85, 85],
   [15, 33],
   [70, 15],
-];
+]
 
 const STANCES = {
   IDLE: 1,
   ATTACKING: 2,
   DEFENDING: 3,
-};
+}
 const ANIMATIONS = {
   ATTACKING: 1,
   BEING_HIT: 2,
-};
+}
 
-const wait = (milliseconds) =>
-  new Promise((resolve) => setTimeout(resolve, milliseconds));
+const wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds))
 
-const nonCombatEffectFilter = (effect) => !effect.durationTurns;
-const combatEffectFilter = (effect) => !!effect.durationTurns;
+const nonCombatEffectFilter = (effect) => !effect.durationTurns
+const combatEffectFilter = (effect) => !!effect.durationTurns
 
-export default window.OperationCombat = {
+const OperationCombat = rxComponent({
   FULLSCREEN: true,
   props: {
     operation: {},
@@ -624,10 +536,10 @@ export default window.OperationCombat = {
 
   watch: {
     operation() {
-      this.updateConsideredAP();
+      this.updateConsideredAP()
     },
     skipConfirm() {
-      LocalStorageService.setItem("combat-skipConfirm", this.skipConfirm);
+      LocalStorageService.setItem('combat-skipConfirm', this.skipConfirm)
     },
   },
 
@@ -635,245 +547,230 @@ export default window.OperationCombat = {
     fleeIconStyle() {
       return {
         backgroundImage: `url("${GameService.getSecureResource(fleeIcon)}")`,
-      };
+      }
     },
     targetIconStyle() {
       return {
         backgroundImage: `url("${GameService.getSecureResource(targetIcon)}")`,
-      };
+      }
     },
     turnIconStyle() {
       return {
         backgroundImage: `url("${GameService.getSecureResource(turnIcon)}")`,
-      };
+      }
     },
   },
 
   subscriptions() {
-    this.friendlyPositionsTaken = 0;
-    this.hostilePositionsTaken = 0;
+    this.friendlyPositionsTaken = 0
+    this.hostilePositionsTaken = 0
 
-    const combatStream = this.$stream("operation")
-      .pluck("combatEngagement")
+    const combatStream = this.$stream('operation')
+      .pluck('combatEngagement')
       .distinctUntilChanged()
-      .switchMap((id) => GameService.getEntityStream(id));
+      .switchMap((id) => GameService.getEntityStream(id))
     const creaturesStream = combatStream
-      .map((combat) =>
-        combat ? [...combat.creatures, ...combat.benchedCreatures] : []
-      )
-      .switchMap((ids) =>
-        GameService.getEntitiesStream(ids, ENTITY_VARIANTS.DETAILS)
-      );
+      .map((combat) => (combat ? [...combat.creatures, ...combat.benchedCreatures] : []))
+      .switchMap((ids) => GameService.getEntitiesStream(ids, ENTITY_VARIANTS.DETAILS))
     const currentCreatureIdStream = Rx.combineLatest(
-      combatStream.pluck("creatureTurn").distinctUntilChanged(),
-      this.$stream("currentCombatFrame").scan((acc, frame) =>
-        frame?.type === COMBAT_FRAMES.TURN ? frame : acc
-      )
+      combatStream.pluck('creatureTurn').distinctUntilChanged(),
+      this.$stream('currentCombatFrame').scan((acc, frame) =>
+        frame?.type === COMBAT_FRAMES.TURN ? frame : acc,
+      ),
     )
       .map(([creatureTurn, currentCombatFrame]) => {
-        return currentCombatFrame?.actingCreatureId || creatureTurn;
+        return currentCombatFrame?.actingCreatureId || creatureTurn
       })
-      .distinctUntilChanged();
+      .distinctUntilChanged()
     const inBattleStream = Rx.combineLatest(
       combatStream,
-      this.$stream("operation"),
-      this.$stream("currentCombatFrame"),
-      this.$stream("combatFramesQueue")
+      this.$stream('operation'),
+      this.$stream('currentCombatFrame'),
+      this.$stream('combatFramesQueue'),
     ).map(
       ([combat, operation, currentCombatFrame, combatFramesQueue]) =>
         combatFramesQueue.length ||
         !!currentCombatFrame ||
-        (combat && !combat?.finished && !operation?.fled && !operation.lost)
-    );
+        (combat && !combat?.finished && !operation?.fled && !operation.lost),
+    )
 
     return {
       combat: combatStream.tap((combat) => {
-        this.timeRemaining = combat.timeLeft;
+        this.timeRemaining = combat.timeLeft
       }),
       currentCreatureId: currentCreatureIdStream,
       combatFrames: GameService.getCombatFramesStream().tap((frame) => {
-        this.queueCombatFrame(frame);
+        this.queueCombatFrame(frame)
       }),
       inBattle: inBattleStream,
       ownFleeProgress: Rx.combineLatest(
         combatStream,
-        GameService.getRootEntityStream().pluck("id").distinctUntilChanged()
+        GameService.getRootEntityStream().pluck('id').distinctUntilChanged(),
       )
         .map(([combat, mainEntityId]) => combat.fleeing[mainEntityId] || 0)
         .tap((fleeProgress) => {
           if (fleeProgress > this.ownFleeProgress) {
-            this.displayBigText(`Fleeing progress ${fleeProgress}%`);
+            this.displayBigText(`Fleeing progress ${fleeProgress}%`)
           }
         }),
-      currentMove: this.$stream("operation")
-        .pluck("context", "currentMoveId")
+      currentMove: this.$stream('operation')
+        .pluck('context', 'currentMoveId')
         .switchMap((moveId) =>
           GameService.getRootEntityStream().map((entity) =>
-            entity?.combatStats?.moves?.find((m) => m.moveId === moveId)
-          )
+            entity?.combatStats?.moves?.find((m) => m.moveId === moveId),
+          ),
         ),
       inBattleDebounced: inBattleStream.debounceTime(1000),
-      selectedMove: this.$stream("selectedMoveId").switchMap((selectedMoveId) =>
+      selectedMove: this.$stream('selectedMoveId').switchMap((selectedMoveId) =>
         !selectedMoveId
           ? Rx.Observable.of(null)
           : GameService.getInfoStream(
-              "CombatMove",
+              'CombatMove',
               {
                 moveId: selectedMoveId,
               },
-              true
-            )
+              true,
+            ),
       ),
       moveOdds: this.fetchCombatMovesOdds(),
-      loot: combatStream
-        .pluck("loot")
-        .switchMap((ids) => GameService.getEntitiesStream(ids)),
+      loot: combatStream.pluck('loot').switchMap((ids) => GameService.getEntitiesStream(ids)),
       mainEntity: GameService.getRootEntityStream(),
       backdropImage: GameService.getBackdropStyleStream(),
       weapon: GameService.getWeaponStream(),
       offhand: GameService.getOffhandStream(),
       ownTurn: Rx.combineLatest(
         currentCreatureIdStream,
-        GameService.getRootEntityStream().pluck("id"),
-        this.$stream("currentCombatFrame"),
-        this.$stream("combatFramesQueue")
+        GameService.getRootEntityStream().pluck('id'),
+        this.$stream('currentCombatFrame'),
+        this.$stream('combatFramesQueue'),
       )
         .map(
           ([creatureId, ownId, currentCombatFrame, combatFramesQueue]) =>
-            creatureId === ownId &&
-            !currentCombatFrame &&
-            !combatFramesQueue.length
+            creatureId === ownId && !currentCombatFrame && !combatFramesQueue.length,
         )
         .distinctUntilChanged()
         .debounceTime(200)
         .tap((ownTurn) => {
           if (ownTurn && !this.combat.autoResolving) {
-            this.displayBigText("Your turn!", BIG_TEXT_CLASS.NEUTRAL);
-            this.fetchCombatMovesOdds();
-            SoundService.playSound(promptSound, { volume: 0.3 });
+            this.displayBigText('Your turn!', BIG_TEXT_CLASS.NEUTRAL)
+            this.fetchCombatMovesOdds()
+            SoundService.playSound(promptSound, { volume: 0.3 })
           }
         }),
       creatures: creaturesStream
         .tap((creatures) => {
           creatures.forEach((creature) => {
-            const displayed = this.displayedCreatures[creature.id];
-            if (!displayed || displayed.operationInfo?.name !== "In Combat") {
-              this.$set(this.displayedCreatures, creature.id, creature);
+            const displayed = this.displayedCreatures[creature.id]
+            if (!displayed || displayed.operationInfo?.name !== 'In Combat') {
+              this.displayedCreatures[creature.id] = creature
             }
             if (!this.creaturePositions[creature.id]) {
               const positionIdx = creature.hostile
                 ? this.hostilePositionsTaken++
-                : this.friendlyPositionsTaken++;
-              const pickedPosition = positions[positionIdx % positions.length];
-              const offset = Math.floor(positionIdx / positions.length);
+                : this.friendlyPositionsTaken++
+              const pickedPosition = positions[positionIdx % positions.length]
+              const offset = Math.floor(positionIdx / positions.length)
               const position = {
                 x:
                   (creature.hostile ? -0.33 : 0.33) * pickedPosition[0] +
                   (creature.hostile ? 100 : 0) +
                   offset * 2,
                 y: pickedPosition[1] - offset * 2,
-              };
-              this.$set(this.creaturePositions, creature.id, {
+              }
+              this.creaturePositions[creature.id] = {
                 animation: null,
                 stance: STANCES.IDLE,
                 initial: { ...position },
                 current: { ...position },
-              });
-              return creature;
+              }
+              return creature
             }
-          });
+          })
         })
         .map((creatures) => {
-          return creatures.toObject((creature) => creature.id);
+          return creatures.toObject((creature) => creature.id)
         }),
-    };
+    }
   },
 
   mounted() {
-    ControlsService.triggerControlEvent("notificationOffset", true);
-    this.updateConsideredAP();
-    this.initiateTimerCountdown();
-    this.skipConfirm = LocalStorageService.getItem("combat-skipConfirm", true);
-    this.setAnimationSpeed(
-      LocalStorageService.getItem("combat-animationSpeed", 1)
-    );
-    document.addEventListener("keydown", this.keyDownHandler);
+    ControlsService.triggerControlEvent('notificationOffset', true)
+    this.updateConsideredAP()
+    this.initiateTimerCountdown()
+    this.skipConfirm = LocalStorageService.getItem('combat-skipConfirm', true)
+    this.setAnimationSpeed(LocalStorageService.getItem('combat-animationSpeed', 1))
+    document.addEventListener('keydown', this.keyDownHandler)
   },
 
-  beforeDestroy() {
-    ControlsService.triggerControlEvent("notificationOffset", false);
-    ControlsService.updateConsideredAP(0);
-    document.removeEventListener("keydown", this.keyDownHandler);
+  beforeUnmount() {
+    ControlsService.triggerControlEvent('notificationOffset', false)
+    ControlsService.updateConsideredAP(0)
+    document.removeEventListener('keydown', this.keyDownHandler)
   },
 
   methods: {
     keyDownHandler($event) {
-      const { key } = $event;
+      const { key } = $event
       switch (key) {
-        case "ArrowLeft":
-          this.targetPreviousEnemy();
-          break;
-        case "ArrowRight":
-          this.targetNextEnemy();
-          break;
+        case 'ArrowLeft':
+          this.targetPreviousEnemy()
+          break
+        case 'ArrowRight':
+          this.targetNextEnemy()
+          break
       }
     },
 
     setAnimationSpeed(speedValue) {
-      this.ANIMATION_SPEED = speedValue;
-      this.selectedAnimationSpeed = ANIMATION_SPEEDS.find(
-        (option) => option.speed === speedValue
-      );
-      LocalStorageService.setItem("combat-animationSpeed", speedValue);
+      if (speedValue) {
+        this.ANIMATION_SPEED = speedValue
+        this.selectedAnimationSpeed = ANIMATION_SPEEDS.find((option) => option.speed === speedValue)
+        LocalStorageService.setItem('combat-animationSpeed', speedValue)
+      }
     },
 
     switchAnimationSpeed() {
       const target =
-        ANIMATION_SPEEDS.find(
-          (option) => option.speed > this.ANIMATION_SPEED
-        ) || ANIMATION_SPEEDS.first();
-      this.setAnimationSpeed(target.speed);
-      this.displayBigText(`Animation speed: ${target.text}`);
+        ANIMATION_SPEEDS.find((option) => option.speed > this.ANIMATION_SPEED) ||
+        ANIMATION_SPEEDS.first()
+      this.setAnimationSpeed(target.speed)
+      this.displayBigText(`Animation speed: ${target.text}`)
     },
 
     fetchCombatMovesOdds() {
-      return GameService.getInfoStream(
-        "Human",
-        { type: "combatMovesOdds" },
-        true
-      );
+      return GameService.getInfoStream('Human', { type: 'combatMovesOdds' }, true)
     },
 
     initiateTimerCountdown() {
-      const resolution = 50;
+      const resolution = 50
       this.timerInterval = setInterval(() => {
         if (this.timeRemaining) {
-          this.timeRemaining = this.timeRemaining -= resolution;
+          this.timeRemaining = this.timeRemaining -= resolution
           if (this.timeRemaining < 0) {
-            this.timeRemaining = null;
+            this.timeRemaining = null
           }
         }
-      }, resolution);
+      }, resolution)
     },
 
     displayBigText(text, cssClass = BIG_TEXT_CLASS.DEFAULT) {
-      const duration = 1500;
-      const resolution = 100;
+      const duration = 1500
+      const resolution = 100
       const interval = ControlsService.setAnimationInterval(() => {
-        nextBigText.stage = nextBigText.stage += 1;
+        nextBigText.stage = nextBigText.stage += 1
         if (nextBigText.stage >= resolution) {
-          clearInterval(nextBigText.interval);
-          this.bigTexts = omit(this.bigTexts, nextBigText.id);
+          clearInterval(nextBigText.interval)
+          this.bigTexts = omit(this.bigTexts, nextBigText.id)
         } else {
-          const step = nextBigText.stage / resolution;
+          const step = nextBigText.stage / resolution
           nextBigText.style = {
             opacity: 2 - step * 2,
             fontSize: `${200 + 100 * (1 - step)}%`,
             marginBottom: `${15 * step}rem`,
-          };
+          }
         }
-      }, duration / resolution);
-      const id = new Date().getTime();
+      }, duration / resolution)
+      const id = new Date().getTime()
       const nextBigText = {
         id,
         text,
@@ -881,370 +778,350 @@ export default window.OperationCombat = {
         interval,
         style: {},
         stage: 0,
-      };
+      }
       this.bigTexts = {
         ...this.bigTexts,
         [id]: nextBigText,
-      };
+      }
     },
 
     clickedCreature(creature) {
       if (this.targetting) {
-        this.targetCreature(creature.id);
+        this.targetCreature(creature.id)
       } else {
-        this.selectedCreatureId = creature.id;
+        this.selectedCreatureId = creature.id
       }
     },
 
     targetCreature(creatureId) {
       GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-        updateType: "selectTarget",
+        updateType: 'selectTarget',
         creatureId: creatureId,
       }).then((result) => {
         if (result && result.ok) {
-          this.targetting = false;
-          this.fetchCombatMovesOdds();
+          this.targetting = false
+          this.fetchCombatMovesOdds()
         } else {
-          ToastError(result.message);
+          ToastError(result.message)
         }
-      });
+      })
     },
 
     findNextHostile(direction) {
-      const currentTarget = this.operation.context.currentTarget;
-      const creatureIds = Object.keys(this.creatures);
-      const currentIndex = creatureIds.indexOf(`${currentTarget}`);
+      const currentTarget = this.operation.context.currentTarget
+      const creatureIds = Object.keys(this.creatures)
+      const currentIndex = creatureIds.indexOf(`${currentTarget}`)
       for (let i = 1; i < creatureIds.length; i++) {
         const indexCandidate =
-          (i * direction + currentIndex + creatureIds.length) %
-          creatureIds.length;
-        const creature = this.creatures[creatureIds[indexCandidate]];
+          (i * direction + currentIndex + creatureIds.length) % creatureIds.length
+        const creature = this.creatures[creatureIds[indexCandidate]]
         if (
           creature &&
           creature.hostile &&
           !creature.dead &&
           creature.operationInfo?.combatId === this.combat.id
         ) {
-          this.targetCreature(creature.id);
-          return;
+          this.targetCreature(creature.id)
+          return
         }
       }
-      ToastError("No valid targets");
+      ToastError('No valid targets')
     },
 
     targetNextEnemy() {
-      return this.findNextHostile(+1);
+      return this.findNextHostile(+1)
     },
 
     targetPreviousEnemy() {
-      return this.findNextHostile(-1);
+      return this.findNextHostile(-1)
     },
 
     lootAll() {
       if (this.loot) {
         this.loot.forEach((item) => {
-          GameService.performAction(
-            item,
-            { actionId: "loot" },
-            { amount: item.amount }
-          );
-        });
+          GameService.performAction(item, { actionId: 'loot' }, { amount: item.amount })
+        })
       }
     },
 
     itemOffhandFilter() {
       return (item) =>
-        item.actions.some((a) =>
-          ["equip_Offhand", "un_equip_Offhand"].includes(a.actionId)
-        );
+        item.actions.some((a) => ['equip_Offhand', 'un_equip_Offhand'].includes(a.actionId))
     },
     selectOffhand(item) {
       if (!item) {
         if (this.offhand) {
           GameService.performAction(this.offhand, {
-            actionId: "un_equip_Offhand",
-          });
+            actionId: 'un_equip_Offhand',
+          })
         }
       } else {
-        if (item.actions.some((a) => a.actionId === "un_equip_Offhand")) {
-          ToastError("Already equipped");
-          return;
+        if (item.actions.some((a) => a.actionId === 'un_equip_Offhand')) {
+          ToastError('Already equipped')
+          return
         }
-        GameService.performAction(item, { actionId: "equip_Offhand" });
+        GameService.performAction(item, { actionId: 'equip_Offhand' })
       }
-      this.selectingOffhand = false;
-      this.selectedMoveId = null;
+      this.selectingOffhand = false
+      this.selectedMoveId = null
     },
 
     itemWeaponFilter() {
       return (item) =>
-        item.actions.some((a) =>
-          ["equip_Weapon", "un_equip_Weapon"].includes(a.actionId)
-        );
+        item.actions.some((a) => ['equip_Weapon', 'un_equip_Weapon'].includes(a.actionId))
     },
     selectWeapon(item) {
       if (!item) {
         if (this.weapon) {
           GameService.performAction(this.weapon, {
-            actionId: "un_equip_Weapon",
-          });
+            actionId: 'un_equip_Weapon',
+          })
         }
       } else {
-        if (item.actions.some((a) => a.actionId === "un_equip_Weapon")) {
-          ToastError("Already equipped");
-          return;
+        if (item.actions.some((a) => a.actionId === 'un_equip_Weapon')) {
+          ToastError('Already equipped')
+          return
         }
-        GameService.performAction(item, { actionId: "equip_Weapon" });
+        GameService.performAction(item, { actionId: 'equip_Weapon' })
       }
-      this.selectingWeapon = false;
-      this.selectedMoveId = null;
+      this.selectingWeapon = false
+      this.selectedMoveId = null
     },
 
     executeMove(moveId) {
       GameService.request(REQUEST_CODES.COMMENCE_OPERATION, {
         moveId,
       }).then(() => {
-        this.performingMove = false;
-      });
+        this.performingMove = false
+      })
     },
 
     selectMove(moveId) {
       if (this.timeRemaining && !this.performingMove) {
         if (this.selectedMoveId === moveId || this.skipConfirm) {
-          this.performingMove = true;
+          this.performingMove = true
           GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-            updateType: "selectMove",
+            updateType: 'selectMove',
             moveId,
           }).then((response) => {
             if (!response || !response.ok) {
-              this.performingMove = false;
-              ToastError(response && response.message);
-              return;
+              this.performingMove = false
+              ToastError(response && response.message)
+              return
             }
-            this.selectedMoveId = null;
-            this.executeMove(moveId);
-          });
+            this.selectedMoveId = null
+            this.executeMove(moveId)
+          })
         } else {
-          this.selectedMoveId = moveId;
+          this.selectedMoveId = moveId
         }
       }
     },
 
     triggerAutoResolve(moveId) {
       GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-        updateType: "selectMove",
+        updateType: 'selectMove',
         moveId,
       }).then((response) => {
         GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-          updateType: "autoResolve",
+          updateType: 'autoResolve',
         }).then((response) => {
           if (response?.ok === false) {
-            ToastError(response.message);
+            ToastError(response.message)
           }
-        });
-      });
+        })
+      })
     },
 
     resume() {
       GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-        updateType: "resume",
-      });
+        updateType: 'resume',
+      })
     },
 
     creatureStyle(creature) {
-      const positioning = this.creaturePositions[creature.id];
+      const positioning = this.creaturePositions[creature.id]
       if (!positioning) {
-        return {};
+        return {}
       }
-      let offsetX = 0;
+      let offsetX = 0
       if (positioning.stance === STANCES.ATTACKING) {
-        const target = this.displayedCreatures[positioning.approachedId];
-        offsetX = (target && target.hostile ? -1 : 1) * 12.8;
+        const target = this.displayedCreatures[positioning.approachedId]
+        offsetX = (target && target.hostile ? -1 : 1) * 12.8
       }
       return {
         left: `calc(${positioning.current.x}% + ${offsetX}rem)`,
         top: `${positioning.current.y}%`,
         zIndex: (creature.hostile ? 100 : 0) + positioning.current.y,
-      };
+      }
     },
 
     creatureCssClass(creature) {
-      const positioning = this.creaturePositions[creature.id];
+      const positioning = this.creaturePositions[creature.id]
       if (!positioning) {
-        return {};
+        return {}
       }
-      const target = this.displayedCreatures[positioning.approachedId];
+      const target = this.displayedCreatures[positioning.approachedId]
       return {
         hostile: creature.hostile,
-        fled:
-          !creature.operationInfo?.inCombat ||
-          creature.operationInfo?.fleeing >= 100,
-        "from-left":
-          (positioning.stance === STANCES.ATTACKING &&
-            target &&
-            target.hostile) ||
+        fled: !creature.operationInfo?.inCombat || creature.operationInfo?.fleeing >= 100,
+        'from-left':
+          (positioning.stance === STANCES.ATTACKING && target && target.hostile) ||
           (positioning.stance === STANCES.DEFENDING && !creature.hostile),
-        "from-right":
-          (positioning.stance === STANCES.ATTACKING &&
-            target &&
-            !target.hostile) ||
+        'from-right':
+          (positioning.stance === STANCES.ATTACKING && target && !target.hostile) ||
           (positioning.stance === STANCES.DEFENDING && creature.hostile),
-        "animation-attacking": positioning.animation === ANIMATIONS.ATTACKING,
-        "animation-being-hit": positioning.animation === ANIMATIONS.BEING_HIT,
-      };
+        'animation-attacking': positioning.animation === ANIMATIONS.ATTACKING,
+        'animation-being-hit': positioning.animation === ANIMATIONS.BEING_HIT,
+      }
     },
 
     queueCombatFrame(frame) {
       if (this.lastFrameId && frame.frameId !== this.lastFrameId + 1) {
-        this.shelvedFrames = this.shelvedFrames || {};
-        this.shelvedFrames[frame.frameId] = frame;
-        return;
+        this.shelvedFrames = this.shelvedFrames || {}
+        this.shelvedFrames[frame.frameId] = frame
+        return
       }
-      this.lastFrameId = frame.frameId;
-      this.combatFramesQueue.push(frame);
-      this.nextCombatFrame();
-      const shelvedFrame = this.shelvedFrames?.[frame.frameId + 1];
+      this.lastFrameId = frame.frameId
+      this.combatFramesQueue.push(frame)
+      this.nextCombatFrame()
+      const shelvedFrame = this.shelvedFrames?.[frame.frameId + 1]
       if (shelvedFrame) {
-        delete this.shelvedFrames[frame.frameId + 1];
-        this.queueCombatFrame(shelvedFrame);
+        delete this.shelvedFrames[frame.frameId + 1]
+        this.queueCombatFrame(shelvedFrame)
       }
     },
     async nextCombatFrame() {
       if (this.currentCombatFrame) {
-        return;
+        return
       }
-      const frame = this.combatFramesQueue.shift();
+      const frame = this.combatFramesQueue.shift()
       if (!frame) {
-        return;
+        return
       }
-      this.currentCombatFrame = frame;
-      await this.showcaseCombatFrame(frame);
-      this.currentCombatFrame = null;
-      setTimeout(() => this.nextCombatFrame());
+      this.currentCombatFrame = frame
+      await this.showcaseCombatFrame(frame)
+      this.currentCombatFrame = null
+      setTimeout(() => this.nextCombatFrame())
     },
 
     async showcaseCombatFrame(frame) {
       switch (frame.type) {
         case COMBAT_FRAMES.INFO:
-          return await this.showcaseCombatFrameGeneral(frame, true);
+          return await this.showcaseCombatFrameGeneral(frame, true)
         case COMBAT_FRAMES.GENERAL:
-          return await this.showcaseCombatFrameGeneral(frame);
+          return await this.showcaseCombatFrameGeneral(frame)
         case COMBAT_FRAMES.APPROACH:
-          return await this.showcaseCombatFrameApproach(frame);
+          return await this.showcaseCombatFrameApproach(frame)
         case COMBAT_FRAMES.STRIKE:
-          return await this.showcaseCombatFrameStrike(frame);
+          return await this.showcaseCombatFrameStrike(frame)
         case COMBAT_FRAMES.RETURN:
-          return await this.showcaseCombatFrameReturn(frame);
+          return await this.showcaseCombatFrameReturn(frame)
       }
     },
 
     async showcaseCombatFrameGeneral(frame, noDelay = false) {
       Object.keys(frame.floaties || {}).forEach((floatieTargetId) => {
-        this.addFloatingCombatText(
-          floatieTargetId,
-          frame.floaties[floatieTargetId]
-        );
-      });
-      this.updateCreaturesStates(frame.affects);
-      SoundService.playSound(frame.sound);
+        this.addFloatingCombatText(floatieTargetId, frame.floaties[floatieTargetId])
+      })
+      this.updateCreaturesStates(frame.affects)
+      SoundService.playSound(frame.sound)
       if (!noDelay) {
-        await wait(150 / this.ANIMATION_SPEED);
+        await wait(150 / this.ANIMATION_SPEED)
       }
     },
     async showcaseCombatFrameApproach(frame) {
-      const { whoId, targetId } = frame;
+      const { whoId, targetId } = frame
       if (!this.creaturePositions[whoId] || !this.creaturePositions[targetId]) {
-        return;
+        return
       }
-      this.creaturePositions[whoId].stance = STANCES.ATTACKING;
-      this.creaturePositions[whoId].approachedId = targetId;
+      this.creaturePositions[whoId].stance = STANCES.ATTACKING
+      this.creaturePositions[whoId].approachedId = targetId
       this.creaturePositions[whoId].current = {
         ...this.creaturePositions[targetId].initial,
-      };
-      this.creaturePositions[targetId].stance = STANCES.DEFENDING;
+      }
+      this.creaturePositions[targetId].stance = STANCES.DEFENDING
       // update creature position
-      await wait(100 / this.ANIMATION_SPEED);
+      await wait(100 / this.ANIMATION_SPEED)
     },
     async showcaseCombatFrameStrike(frame) {
       const preloadedSound = SoundService.playSound(frame.sound, {
         preload: true,
-      });
-      const { whoId, targetId } = frame;
+      })
+      const { whoId, targetId } = frame
       if (!this.creaturePositions[whoId] || !this.creaturePositions[whoId]) {
-        return;
+        return
       }
-      this.creaturePositions[whoId].animation = null;
-      this.creaturePositions[targetId].animation = null;
-      await wait(50 / this.ANIMATION_SPEED);
-      this.creaturePositions[whoId].animation = ANIMATIONS.ATTACKING;
-      this.creaturePositions[targetId].animation = ANIMATIONS.BEING_HIT;
+      this.creaturePositions[whoId].animation = null
+      this.creaturePositions[targetId].animation = null
+      await wait(50 / this.ANIMATION_SPEED)
+      this.creaturePositions[whoId].animation = ANIMATIONS.ATTACKING
+      this.creaturePositions[targetId].animation = ANIMATIONS.BEING_HIT
       Object.keys(frame.floaties || {}).forEach((floatieTargetId) => {
-        this.addFloatingCombatText(
-          floatieTargetId,
-          frame.floaties[floatieTargetId]
-        );
-      });
-      preloadedSound?.play();
-      this.updateCreaturesStates(frame.affects);
-      await wait(150 / this.ANIMATION_SPEED);
+        this.addFloatingCombatText(floatieTargetId, frame.floaties[floatieTargetId])
+      })
+      preloadedSound?.play()
+      this.updateCreaturesStates(frame.affects)
+      await wait(150 / this.ANIMATION_SPEED)
     },
     async showcaseCombatFrameReturn(frame) {
-      const { whoId, targetId } = frame;
+      const { whoId, targetId } = frame
       if (!this.creaturePositions[whoId] || !this.creaturePositions[targetId]) {
-        return;
+        return
       }
-      this.creaturePositions[whoId].animation = null;
-      this.creaturePositions[targetId].animation = null;
-      this.creaturePositions[whoId].stance = STANCES.IDLE;
-      this.creaturePositions[targetId].stance = STANCES.IDLE;
+      this.creaturePositions[whoId].animation = null
+      this.creaturePositions[targetId].animation = null
+      this.creaturePositions[whoId].stance = STANCES.IDLE
+      this.creaturePositions[targetId].stance = STANCES.IDLE
       this.creaturePositions[whoId].current = {
         ...this.creaturePositions[whoId].initial,
-      };
+      }
       // update creature position
-      await wait(100 / this.ANIMATION_SPEED);
+      await wait(100 / this.ANIMATION_SPEED)
       if (this.creaturePositions[whoId]) {
-        this.creaturePositions[whoId].approachedId = null;
+        this.creaturePositions[whoId].approachedId = null
       }
     },
 
     addFloatingCombatText(creatureId, floatie) {
-      this.floatingCombatId = this.floatingCombatId || 0;
-      const currentId = ++this.floatingCombatId;
-      this.floatingCombatTexts[creatureId] =
-        this.floatingCombatTexts[creatureId] || [];
-      const effects = floatie.effects;
+      this.floatingCombatId = this.floatingCombatId || 0
+      const currentId = ++this.floatingCombatId
+      this.floatingCombatTexts[creatureId] = this.floatingCombatTexts[creatureId] || []
+      const effects = floatie.effects
       this.floatingCombatTexts[creatureId].push({
         floatingCombatId: currentId,
         text: floatie.text,
-        type: floatie.type || "default",
+        type: floatie.type || 'default',
         effects: effects?.filter((e) => !e.durationTurns),
         effectsCombat: effects?.filter((e) => !!e.durationTurns),
-      });
+      })
       setTimeout(() => {
-        this.floatingCombatTexts[creatureId].shift();
-      }, 2000);
+        this.floatingCombatTexts[creatureId].shift()
+      }, 2000)
     },
 
     cancel() {
-      GameService.request(REQUEST_CODES.CANCEL_OPERATION);
+      GameService.request(REQUEST_CODES.CANCEL_OPERATION)
     },
 
     updateConsideredAP() {
-      ControlsService.updateConsideredAP(this.operation.context.unitCost);
+      ControlsService.updateConsideredAP(this.operation.context.unitCost)
     },
 
     updateCreaturesStates(payloads) {
-      payloads.forEach(this.updateCreatureState.bind(this));
+      payloads.forEach(this.updateCreatureState.bind(this))
     },
     updateCreatureState(creaturePayload) {
-      this.$set(this.displayedCreatures, creaturePayload.id, creaturePayload);
+      this.displayedCreatures[creaturePayload.id] = creaturePayload
     },
   },
-};
+})
+window.OperationCombat = OperationCombat
+export default OperationCombat
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 
 $avatar-size: 9rem;
 $effects-size: 6rem;
@@ -1401,13 +1278,13 @@ $effects-size: 6rem;
   transition: all calc(0.1s / var(--anim-speed)) ease-in;
   transition-property: left, top, z-index;
 
-  @include iOSOnly() {
-    transition: none;
-  }
-
   margin: calc($avatar-size / -2);
   position: absolute;
   display: inline-block;
+
+  @include utils.iOSOnly() {
+    transition: none;
+  }
 
   .flee-indicator {
     position: absolute;
@@ -1424,8 +1301,8 @@ $effects-size: 6rem;
       color: #080808;
       animation: fleeing-indicator-up 0.5s linear forwards;
       transform-origin: center center;
-      @include text-outline(black, #bbb);
-      @include filter-fix();
+      @include utils.text-outline(black, #bbb);
+      @include utils.filter-fix();
     }
 
     .flee-icon {
@@ -1542,7 +1419,7 @@ $side-position: 1rem;
   padding: $padding;
   border-radius: $padding;
 
-  @include iOSOnly() {
+  @include utils.iOSOnly() {
     animation: none;
     margin-left: 1rem;
     margin-top: -3rem;
@@ -1550,7 +1427,7 @@ $side-position: 1rem;
 
   .no-damage {
     font-size: 70%;
-    @include text-outline();
+    @include utils.text-outline();
     white-space: nowrap;
   }
 }
@@ -1587,7 +1464,7 @@ $side-position: 1rem;
     height: $size;
     background-size: 100% 100%;
     background-repeat: no-repeat;
-    @include filter(drop-shadow(0 0 0.1rem black));
+    @include utils.filter(drop-shadow(0 0 0.1rem black));
     &.current-turn {
     }
   }
@@ -1595,13 +1472,13 @@ $side-position: 1rem;
 
 .targetting-overlay {
   position: absolute;
-  @include fill();
+  @include utils.fill();
   background: rgba(0, 0, 0, 0.8);
   z-index: 200;
   padding: 1rem;
 
   .text {
-    @include text-outline();
+    @include utils.text-outline();
     text-align: center;
     padding: 1rem;
   }
@@ -1620,25 +1497,25 @@ $side-position: 1rem;
     width: 100%;
     text-align: center;
     font-size: 300%;
-    @include filter(drop-shadow(0.2rem 0.2rem 0.1rem black));
+    @include utils.filter(drop-shadow(0.2rem 0.2rem 0.1rem black));
 
     &.default {
-      @include text-outline();
+      @include utils.text-outline();
     }
     &.neutral {
-      @include text-outline(black, deepskyblue);
+      @include utils.text-outline(black, deepskyblue);
     }
     &.great {
-      @include text-outline(black, green);
+      @include utils.text-outline(black, green);
     }
     &.good {
-      @include text-outline(black, limegreen);
+      @include utils.text-outline(black, limegreen);
     }
     &.poor {
-      @include text-outline(black, yellow);
+      @include utils.text-outline(black, yellow);
     }
     &.bad {
-      @include text-outline(black, firebrick);
+      @include utils.text-outline(black, firebrick);
     }
   }
 
@@ -1696,7 +1573,7 @@ $side-position: 1rem;
 .gained-text {
   padding-top: 1rem;
   display: block;
-  @include text-good();
+  @include utils.text-good();
 }
 
 .skipping-button {
@@ -1712,7 +1589,7 @@ em {
 
 .auto-resolve-count {
   text-align: center;
-  @include text-outline();
+  @include utils.text-outline();
 }
 
 .game-help-container {

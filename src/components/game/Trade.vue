@@ -1,9 +1,6 @@
 <template>
   <Container class="trade-component" borderType="alt3">
-    <div
-      class="sides"
-      :class="{ concluded: trade.cancelled || trade.completed }"
-    >
+    <div class="sides" :class="{ concluded: trade.cancelled || trade.completed }">
       <TradeSide :trade="trade" tradeSide="me" mySide />
       <div class="spacing"></div>
       <TradeSide :trade="trade" tradeSide="them" />
@@ -32,20 +29,12 @@
         >
           <template v-slot:toggleAcceptTrade>
             <Button v-if="trade.me.accepted">Hold off</Button>
-            <Button
-              v-else
-              type="accept"
-              :processing="!trade.canUpdate || !trade.canAccept"
-            >
+            <Button v-else type="accept" :processing="!trade.canUpdate || !trade.canAccept">
               Accept
             </Button>
           </template>
         </Actions>
-        <Actions
-          :target="trade"
-          actionId="cancelTrade"
-          :disabled="!trade.canUpdate"
-        >
+        <Actions :target="trade" actionId="cancelTrade" :disabled="!trade.canUpdate">
           <template v-slot:cancelTrade>
             <Button type="reject" :disabled="!trade.canUpdate">Cancel</Button>
           </template>
@@ -56,7 +45,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     trade: {},
   },
@@ -64,17 +53,17 @@ export default {
   subscriptions() {
     return {
       me: GameService.getMyCreatureStream(),
-      them: this.$stream("trade")
-        .pluck("them")
+      them: this.$stream('trade')
+        .pluck('them')
         .switchMap((id) => GameService.getEntityStream(id)),
-      errors: this.$stream("trade").pluck("errors"),
-    };
+      errors: this.$stream('trade').pluck('errors'),
+    }
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 .trade-component {
   margin: 0.1rem;
 
@@ -116,10 +105,10 @@ export default {
     font-size: 105%;
 
     &.good {
-      @include text-good();
+      @include utils.text-good();
     }
     &.bad {
-      @include text-bad();
+      @include utils.text-bad();
     }
   }
 }
