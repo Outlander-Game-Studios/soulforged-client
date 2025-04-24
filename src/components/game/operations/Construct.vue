@@ -128,7 +128,7 @@ const OperationConstruct = rxComponent({
       ) {
         return 1
       }
-      if (!this.structure.operational) {
+      if (!this.structure.operational && this.structure.structureClass === 'Building') {
         return 2
       }
       return 3

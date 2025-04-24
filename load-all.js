@@ -142,6 +142,7 @@ import HelpStealth from './src/components/game/help/HelpStealth.vue'
 import HelpTravel from './src/components/game/help/HelpTravel.vue'
 import HelpYourLocation from './src/components/game/help/HelpYourLocation.vue'
 import IndicatorConstruction from './src/components/game/indicators/IndicatorConstruction.vue'
+import IndicatorIsLootable from './src/components/game/indicators/IndicatorIsLootable.vue'
 import IndicatorPresence from './src/components/game/indicators/IndicatorPresence.vue'
 import IndicatorResourceDensity from './src/components/game/indicators/IndicatorResourceDensity.vue'
 import NextMoveIndicator from './src/components/game/indicators/NextMoveIndicator.vue'
@@ -334,6 +335,7 @@ export const loadAll = (app) => {
   app.component('HelpTravel', HelpTravel)
   app.component('HelpYourLocation', HelpYourLocation)
   app.component('IndicatorConstruction', IndicatorConstruction)
+  app.component('IndicatorIsLootable', IndicatorIsLootable)
   app.component('IndicatorPresence', IndicatorPresence)
   app.component('IndicatorResourceDensity', IndicatorResourceDensity)
   app.component('NextMoveIndicator', NextMoveIndicator)

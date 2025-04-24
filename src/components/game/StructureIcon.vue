@@ -14,12 +14,12 @@
       <slot name="textTopRight"></slot>
     </template>
     <IndicatorPresence class="presence" v-if="!!structure.presence" />
-    <IndicatorConstruction class="under-construction" v-if="!structure.operational" />
+    <IndicatorConstruction class="under-construction" v-if="!structure.operational && structure.structureClass === 'Building'" />
+    <IndicatorIsLootable class="is-lootable" v-if="structure.operational && structure.structureClass === 'Container'" />
   </ItemIcon>
 </template>
 
 <script>
-import iconClickSound from '../../assets/sounds/icon-click.mp3'
 
 export default {
   props: {
@@ -47,6 +47,13 @@ export default {
   position: absolute;
   top: 5%;
   left: 5%;
+}
+
+.is-lootable {
+  position: absolute;
+  bottom: 5%;
+  left: 5%;
+  font-size: 130%;
 }
 
 .ruin {

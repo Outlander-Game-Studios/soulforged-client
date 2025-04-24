@@ -43,7 +43,7 @@
                     />
                   </template>
                   <template v-else>
-                    <div class="progress-bar-wrapper" v-if="!structureDetails.operational">
+                    <div class="progress-bar-wrapper" v-if="!structureDetails.operational && structureDetails.structureClass === 'Building'">
                       <ProgressBar
                         :size="3"
                         :current="
@@ -85,7 +85,7 @@
                 </Help>
                 {{ permanentOwner }}
               </Header>
-              <Header alt2 v-if="!showDetails.operational">
+              <Header alt2 v-if="!showDetails.operational && showDetails.structureClass === 'Building'">
                 <IndicatorConstruction />
                 Under construction
                 <IndicatorConstruction />
@@ -102,7 +102,7 @@
                   />
                 </HorizontalWrap>
               </div>
-              <div v-else-if="!showDetails.operational">
+              <div v-else-if="!showDetails.operational && showDetails.structureClass === 'Building'">
                 <Header alt2>Construction progress</Header>
                 <ProgressBar
                   :size="3"
@@ -155,6 +155,13 @@
                   >
                     {{ efficiency }}%
                   </LabeledValue>
+                </div>
+                <div v-if="showDetails.structureClass === 'Container'">
+                  <Header alt2>Container</Header>
+                  <span>{{ showDetails.description }}</span>
+                  <div v-if="!showDetails.operational">
+                    <span>This was already looted.</span>
+                  </div>
                 </div>
               </Vertical>
             </Vertical>
@@ -268,8 +275,10 @@ export default rxComponent({
         own: structure.own,
         presence: structure.presence,
         operational: structure.operational,
+        structureClass: structure.structureClass,
         condition: structure.condition,
         ruin: structure.ruin,
+        description: structure.description,
       })
     },
   },

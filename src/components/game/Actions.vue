@@ -106,6 +106,7 @@
 
 <script>
 import exclamationIcon from '../../assets/ui/cartoon/icons/exclamation.png'
+import fanfareSound from '../../assets/sounds/fanfare.mp3'
 
 export default rxComponent({
   props: {
@@ -275,6 +276,9 @@ export default rxComponent({
             this.$emit('action', { action, result: response.result })
             if (action.actionId === 'trade') {
               ControlsService.triggerControlEvent('openPanel-trade')
+            }
+            if (action.actionId === 'lootContainer') {
+              SoundService.playSound(fanfareSound)
             }
           }
         },

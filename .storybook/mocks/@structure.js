@@ -3,6 +3,8 @@ import pebbleIcon from "./assets/pebble.png";
 import barkRopeIcon from "./assets/bark-rope.png";
 import stoneHammerIcon from "./assets/stone-hammer.png";
 import appleIcon from "./assets/apple.png";
+import stallIcon from "./assets/stall1.jpg";
+import treasureChestIcon from "./assets/treasure-chest.png";
 import "./@utils.js";
 
 const constructAction = {
@@ -18,12 +20,20 @@ const abandonAction = {
   parameters: [],
 };
 
+const lootAction = {
+  actionId: "loot",
+  label: "Loot",
+  actionPoints: 0,
+  parameters: [],
+};
+
 mockEntity("structureNonOperational1", () => ({
   icon: tentIcon,
   name: "{code:1:Tent} (Bobby)",
   materials: [],
   constructionProgress: 30,
   operational: false,
+  structureClass: "Building",
   condition: 0,
   own: true,
   toolEfficiency: {
@@ -40,6 +50,7 @@ mockEntity("structureNonOperational2", () => ({
   ],
   constructionProgress: 0,
   operational: false,
+  structureClass: "Building",
   condition: 2,
   toolEfficiency: {
     Hammering: 100,
@@ -52,6 +63,7 @@ mockEntity("structureOperational", () => ({
   materials: [],
   constructionProgress: 0,
   operational: true,
+  structureClass: "Building",
   condition: 0,
   toolEfficiency: {
     Hammering: 100,
@@ -64,6 +76,7 @@ mockEntity("structureHome", () => ({
   materials: [],
   constructionProgress: 0,
   operational: true,
+  structureClass: "Building",
   condition: 2,
   toolEfficiency: {
     Hammering: 100,
@@ -92,15 +105,17 @@ mockEntity("structureNoTool", () => ({
   condition: 0,
   constructionProgress: 30,
   operational: true,
+  structureClass: "Building",
   actions: [],
 }));
 
 mockEntity("shop", () => ({
-  icon: tentIcon,
+  icon: stallIcon,
   name: "{code:1:Shop} (Bobby)",
   materials: [],
   condition: 0,
   operational: true,
+  structureClass: "Building",
   actions: [],
   maxListings: 5,
   buyListings: [
@@ -186,4 +201,22 @@ mockEntity("shop", () => ({
       },
     ],
   },
+}));
+
+mockEntity("containerUnlooted", () => ({
+  icon: treasureChestIcon,
+  name: "{code:1:TreasureChest}",
+  operational: true,
+  structureClass: "Container",
+  actions: [lootAction],
+  description: "A neat chest",
+}));
+
+mockEntity("containerLooted", () => ({
+  icon: treasureChestIcon,
+  name: "{code:1:TreasureChest} (Looted)",
+  operational: false,
+  structureClass: "Container",
+  actions: [],
+  description: "Another neat chest",
 }));

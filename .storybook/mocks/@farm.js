@@ -129,6 +129,7 @@ mockEntity("farm", () => ({
   materials: [],
   constructionProgress: 100,
   operational: true,
+  structureClass: "Building",
   condition: 0,
   own: true,
   farmSize: size,

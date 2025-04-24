@@ -60,12 +60,14 @@ export const withProgress = factory((vm) => {
   storyMocks.modifyEntity("structureNonOperational2", {
     materials: [],
     constructionProgress: 20,
+    structureClass: "Building",
   });
 });
 export const selectWorkAmount = factory((vm) => {
   storyMocks.modifyEntity("structureNonOperational2", {
     materials: [],
     constructionProgress: 20,
+    structureClass: "Building",
   });
   vm.$refs.operationComponent.workAmount = 30;
 });
@@ -73,5 +75,6 @@ export const completed = factory(() => {
   storyMocks.modifyEntity("structureNonOperational2", {
     materials: [],
     operational: true,
+    structureClass: "Building",
   });
 });
