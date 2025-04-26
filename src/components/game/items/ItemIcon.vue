@@ -98,7 +98,6 @@ export default {
     formatNumber: global.formatNumber,
     mouseClick($event) {
       if (!!this.$attrs.onClick) {
-        this.$emit('click', $event)
         SoundService.playSound(iconClickSound)
       }
     },

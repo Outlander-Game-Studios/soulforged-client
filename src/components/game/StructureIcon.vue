@@ -1,7 +1,6 @@
 <template>
   <ItemIcon
     v-if="structure"
-    v-on="$attrs.onClick ? { click: ($event) => $emit('click', $event) } : {}"
     :icon="structure.icon"
     :size="size"
     :condition="structure.condition"
@@ -19,8 +18,6 @@
 </template>
 
 <script>
-import iconClickSound from '../../assets/sounds/icon-click.mp3'
-
 export default {
   props: {
     structure: {},

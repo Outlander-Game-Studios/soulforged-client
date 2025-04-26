@@ -1,5 +1,6 @@
 <template>
   <button
+    @click="click($event)"
     :disabled="isDisabled"
     :class="[
       { processing: processingOn },
@@ -97,7 +98,6 @@ export default {
     click($event) {
       if (!this.isDisabled) {
         SoundService.playSound(buttonClickSound)
-        this.$emit('click', $event)
       }
     },
   },
