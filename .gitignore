@@ -30,3 +30,5 @@ coverage
 *.tsbuildinfo
 
 *storybook.log
+
+.data

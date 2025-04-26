@@ -16,7 +16,7 @@ while getopts "w:" flag; do
 done
 
 if [ $# -eq 0 ]; then
-  FILES=$(find engine/server/assets/operations -name "*.vue")
+  FILES=$(find .data/engine/server/assets/operations -name "*.vue")
 else
   FILES="${1#`pwd`/}"
 fi
@@ -26,7 +26,7 @@ for FILE in $FILES; do
   FILENAME=${TEMP%.vue}
   echo "Building ${FILE}..."
   export OPERATION_SOURCE_FILE=$FILE
-  yarn build $EXTRA_PARAMS  -c tools/vite.config.js --outDir engine/server/assets/operations/dist/$FILENAME/
+  yarn build $EXTRA_PARAMS  -c tools/vite.config.js --outDir .data/engine/server/assets/operations/dist/$FILENAME/
 done
 
 # wait
