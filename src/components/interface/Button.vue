@@ -1,6 +1,6 @@
 <template>
   <button
-    @click="click($event)"
+    @click="handleClick($event)"
     :disabled="isDisabled"
     :class="[
       { processing: processingOn },
@@ -28,7 +28,7 @@ window.addEventListener('keypress', ($event) => {
   }
 })
 
-export default {
+export default rxComponent({
   props: {
     processing: null,
     highlighted: false,
@@ -95,13 +95,13 @@ export default {
   },
 
   methods: {
-    click($event) {
+    handleClick($event) {
       if (!this.isDisabled) {
         SoundService.playSound(buttonClickSound)
       }
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

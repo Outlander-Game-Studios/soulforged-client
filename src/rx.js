@@ -90,5 +90,11 @@ global.rxComponent = (definition) => {
       })
       return definition.beforeUnmount?.call(this)
     },
+    methods: {
+      click() {
+        this.$emit('click')
+      },
+      ...definition.methods,
+    },
   }
 }
