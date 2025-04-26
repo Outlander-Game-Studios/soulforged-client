@@ -39,7 +39,7 @@ const fetcher = (url, params) =>
       })
       .catch((error) => {
         reject(error)
-      }),
+      })
   )
 
 let openPromise
@@ -128,7 +128,7 @@ export const GameService = (window.GameService = {
             delete pendingRequests[json.key]
           } else {
             throw new Error(
-              "Received response to a request that wasn't sent: " + JSON.stringify(json),
+              "Received response to a request that wasn't sent: " + JSON.stringify(json)
             )
           }
         }
@@ -138,7 +138,7 @@ export const GameService = (window.GameService = {
           } else {
             console.warn(
               `Received update that does not have a handler: "${json.u4e}", data received:\n`,
-              json.data,
+              json.data
             )
           }
         }
@@ -187,7 +187,7 @@ export const GameService = (window.GameService = {
   },
 
   getClientStartupId() {
-    return 1
+    return process.env.VUE_APP_GIT_HASH
   },
 
   getStartupIdStream() {
@@ -209,9 +209,9 @@ export const GameService = (window.GameService = {
               knowledgeBaseId,
               ENTITY_VARIANTS.BASE,
               false,
-              30 * MINUTES * IN_MILISECONDS,
+              30 * MINUTES * IN_MILISECONDS
             )
-          : Rx.Observable.empty(),
+          : Rx.Observable.empty()
       )
       .distinctUntilChanged(null, JSON.stringify)
   },
@@ -226,10 +226,8 @@ export const GameService = (window.GameService = {
         !researchIds.length
           ? Rx.Observable.of([])
           : Rx.combineLatest(
-              researchIds.map((researchId) =>
-                GameService.getInfoStream('Research', { researchId }),
-              ),
-            ),
+              researchIds.map((researchId) => GameService.getInfoStream('Research', { researchId }))
+            )
       )
       .map((researches) => researches.filter((research) => !!research))
   },
@@ -299,7 +297,7 @@ export const GameService = (window.GameService = {
       .switchMap((craftIds) =>
         !craftIds || !craftIds.length
           ? Rx.Observable.of([])
-          : Rx.combineLatest(craftIds.map((craftId) => GameService.getCraftDetails(craftId))),
+          : Rx.combineLatest(craftIds.map((craftId) => GameService.getCraftDetails(craftId)))
       )
       .map((crafts) => crafts.filter((craft) => !!craft))
   },
@@ -309,9 +307,7 @@ export const GameService = (window.GameService = {
       .switchMap((planIds) =>
         !planIds.length
           ? Rx.Observable.of([])
-          : Rx.combineLatest(
-              planIds.map((planId) => GameService.getInfoStream('Plan', { planId })),
-            ),
+          : Rx.combineLatest(planIds.map((planId) => GameService.getInfoStream('Plan', { planId })))
       )
       .map((plans) => plans.filter((plan) => !!plan))
   },
@@ -347,8 +343,8 @@ export const GameService = (window.GameService = {
         }
         return Rx.combineLatest(
           utils.map((slotName) =>
-            GameService.getEntityStream(equipment[slotName], ENTITY_VARIANTS.BASE),
-          ),
+            GameService.getEntityStream(equipment[slotName], ENTITY_VARIANTS.BASE)
+          )
         )
       })
   },
@@ -390,7 +386,7 @@ export const GameService = (window.GameService = {
       .switchMap((locationId) =>
         locationId
           ? GameService.getEntityStream(locationId, ENTITY_VARIANTS.DETAILS, forceFetch)
-          : Rx.Observable.empty(),
+          : Rx.Observable.empty()
       )
   },
 
@@ -401,7 +397,7 @@ export const GameService = (window.GameService = {
           ? {
               'background-image': `url(${location.backdrop})`,
             }
-          : null,
+          : null
       )
       .filter((style) => !!style)
       .distinctUntilChanged(null, JSON.stringify)
@@ -422,7 +418,7 @@ export const GameService = (window.GameService = {
       ([locationStructures, pathsStructures]) => [
         ...(locationStructures || []),
         ...(pathsStructures || []),
-      ],
+      ]
     )
   },
 
@@ -442,7 +438,7 @@ export const GameService = (window.GameService = {
     return GameService.getRootEntityStream().switchMap((entity) =>
       entity
         ? GameService.getEntityStream(entity.id, ENTITY_VARIANTS.DETAILS)
-        : Rx.Observable.empty(),
+        : Rx.Observable.empty()
     )
   },
 
@@ -458,7 +454,7 @@ export const GameService = (window.GameService = {
                 ...acc,
                 [item.publicId]: (acc[item.publicId] || 0) + item.amount,
               }),
-              {},
+              {}
             )
         })
         .shareReplay(1)
@@ -544,8 +540,8 @@ export const GameService = (window.GameService = {
       .map((equipment) =>
         Object.values(equipment || {}).toObject(
           (key) => key,
-          () => true,
-        ),
+          () => true
+        )
       )
   },
 
@@ -591,7 +587,7 @@ export const GameService = (window.GameService = {
     id,
     variant = ENTITY_VARIANTS.BASE,
     forceFetch = false,
-    retention = 30 * SECONDS * IN_MILISECONDS,
+    retention = 30 * SECONDS * IN_MILISECONDS
   ) {
     if (typeof variant !== 'string') {
       throw new Error(`Invalid variant provided: ${variant}`)
@@ -670,7 +666,7 @@ export const GameService = (window.GameService = {
       return Rx.Observable.of([])
     }
     return Rx.combineLatest(
-      entitiesIds.map((id) => GameService.getEntityStream(id, variant, forceFetch)),
+      entitiesIds.map((id) => GameService.getEntityStream(id, variant, forceFetch))
     ).map((entities) => entities.filter((e) => !!e))
   },
 
@@ -699,7 +695,7 @@ export const GameService = (window.GameService = {
               r5t: name,
               params: params,
               key: key,
-            }),
+            })
           )
           pendingRequests[key] = resolve
         })
@@ -713,7 +709,7 @@ export const GameService = (window.GameService = {
         .then((c) => {
           console.log('Re-fetching all entities')
           GameService.request(REQUEST_CODES.ROOT).then((rootEntityId) =>
-            rootEntityIdStream.next(rootEntityId),
+            rootEntityIdStream.next(rootEntityId)
           )
           Object.keys(entityStreams).forEach((payloadId) => {
             const { id, variant } = destructurePayloadId(payloadId)
@@ -836,7 +832,7 @@ export const GameService = (window.GameService = {
             return nameOverrides[code]
           }
           return baseline
-        },
+        }
       ))
     )
   },
