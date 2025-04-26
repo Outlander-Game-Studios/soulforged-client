@@ -187,7 +187,7 @@ export const GameService = (window.GameService = {
   },
 
   getClientStartupId() {
-    return process.env.VUE_APP_GIT_HASH
+    return import.meta.env.VITE_APP_GIT_HASH
   },
 
   getStartupIdStream() {
