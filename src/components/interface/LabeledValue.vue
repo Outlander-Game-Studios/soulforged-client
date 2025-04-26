@@ -10,10 +10,7 @@
       <slot name="label" />
     </div>
     <div class="flex-grow" v-if="flex"></div>
-    <div
-      class="value"
-      :class="{ invalid: invalid, good: good, bad: bad, 'no-label': !label }"
-    >
+    <div class="value" :class="{ invalid: invalid, good: good, bad: bad, 'no-label': !label }">
       <slot />
       <slot name="value" />
     </div>
@@ -32,11 +29,11 @@ export default {
     good: { type: Boolean, default: false },
     bad: { type: Boolean, default: false },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .label-icon {
   display: inline-block;
@@ -80,12 +77,14 @@ export default {
   }
 
   .value {
+    margin-left: 0.5rem;
+
     &.invalid,
     &.bad {
-      @include text-bad();
+      @include utils.text-bad();
     }
     &.good {
-      @include text-good();
+      @include utils.text-good();
     }
 
     &.no-label {

@@ -19,9 +19,7 @@
     </div>
     <Modal v-if="showDetails" dialog large @close="showDetails = false">
       <template v-slot:title>
-        Milestone<span v-if="milestoneInfo"
-          >: {{ milestoneInfo.milestoneName }}</span
-        >
+        Milestone<span v-if="milestoneInfo">: {{ milestoneInfo.milestoneName }}</span>
       </template>
       <template v-slot:contents>
         <Vertical>
@@ -39,24 +37,23 @@
 </template>
 
 <script>
-import fanfareSound from "../../assets/sounds/fanfare.mp3";
-import pageSound from "../../assets/sounds/page.mp3";
+import fanfareSound from '../../assets/sounds/fanfare.mp3'
+import pageSound from '../../assets/sounds/page.mp3'
 
-window.MILESTONES_IDX = 1;
+window.MILESTONES_IDX = 1
 
-export default {
-  data: () => ({
-    showDetails: false,
-    nextObjective: null,
-  }),
+export default rxComponent({
+  data: () => {
+    return {
+      showDetails: false,
+      nextObjective: null,
+      currentObjective: null,
+    }
+  },
 
   computed: {
     display() {
-      return (
-        this.currentObjective &&
-        this.currentObjective.text &&
-        !this.fullscreenOperation
-      );
+      return this.currentObjective && this.currentObjective.text && !this.fullscreenOperation
     },
   },
 
@@ -64,7 +61,7 @@ export default {
     return {
       currentObjective: GameService.getCurrentObjectiveStream()
         .tap((newObjective) => {
-          this.nextObjective = newObjective;
+          this.nextObjective = newObjective
           if (
             this.display &&
             this.currentObjective &&
@@ -73,54 +70,49 @@ export default {
             this.nextObjective.text !== this.currentObjective.text
           ) {
             SoundService.playSound(fanfareSound, {
-              unique: "objectiveTracker",
+              unique: 'objectiveTracker',
               throttle: 1000,
-            });
+            })
           }
           if (!newObjective) {
-            this.showDetails = false;
+            this.showDetails = false
           }
         })
         .delay(500),
       fullscreenOperation: ControlsService.getFullscreenOperationStream(),
-      milestoneInfo: this.$stream("showDetails").switchMap((showDetails) =>
+      milestoneInfo: this.$stream('showDetails').switchMap((showDetails) =>
         showDetails
-          ? GameService.getInfoStream(
-              "Collectible",
-              { categoryIdx: MILESTONES_IDX },
-              true
-            ).map((data) =>
-              data
-                .filter((d) => d?.collectibleDetails)
-                .map((d) =>
-                  d.collectibleDetails
-                    ? JSON.parse(d.collectibleDetails).milestoneInfo
-                    : {}
-                )
-                .find((d) => d.tracked)
+          ? GameService.getInfoStream('Collectible', { categoryIdx: MILESTONES_IDX }, true).map(
+              (data) =>
+                data
+                  .filter((d) => d?.collectibleDetails)
+                  .map((d) =>
+                    d.collectibleDetails ? JSON.parse(d.collectibleDetails).milestoneInfo : {},
+                  )
+                  .find((d) => d.tracked),
             )
-          : Rx.Observable.empty()
+          : Rx.Observable.empty(),
       ),
-    };
+    }
   },
 
   methods: {
     showMilestoneDetails() {
-      SoundService.playSound(pageSound);
-      this.showDetails = true;
+      SoundService.playSound(pageSound)
+      this.showDetails = true
     },
     showMilestones() {
-      this.showDetails = false;
-      ControlsService.triggerControlEvent("openMilestones", {
+      this.showDetails = false
+      ControlsService.triggerControlEvent('openMilestones', {
         categoryIdx: MILESTONES_IDX,
-      });
+      })
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .tracker-wrapper {
   display: flex;
@@ -128,7 +120,7 @@ export default {
   flex-direction: column;
   position: fixed;
   z-index: 2;
-  //@include filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
+  //@include utils.filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
 
   @media (orientation: landscape) {
     right: 6rem;
@@ -142,8 +134,8 @@ export default {
 
   &:hover {
     cursor: pointer;
-    @include filter(brightness(1.2));
-    //@include filter(drop-shadow(0.3rem 0.3rem 0.3rem black) brightness(1.2));
+    @include utils.filter(brightness(1.2));
+    //@include utils.filter(drop-shadow(0.3rem 0.3rem 0.3rem black) brightness(1.2));
   }
 }
 

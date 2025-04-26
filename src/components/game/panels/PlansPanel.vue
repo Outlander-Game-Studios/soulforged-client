@@ -12,11 +12,11 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   subscriptions() {
     return {
       plans: GameService.getPlansStream(),
-    };
+    }
   },
-};
+})
 </script>

@@ -28,14 +28,9 @@
           <div class="arm-anchor left">
             <div
               class="shoulder-wear"
-              :style="
-                avatarAssetsStyles(`equipment/chest`, [128, 0], [128, 90])
-              "
+              :style="avatarAssetsStyles(`equipment/chest`, [128, 0], [128, 90])"
             />
-            <div
-              class="forearm"
-              :style="avatarAssetsStyles(`body_parts_v2`, [0, 0], [31, 42])"
-            />
+            <div class="forearm" :style="avatarAssetsStyles(`body_parts_v2`, [0, 0], [31, 42])" />
             <div
               v-if="!headOnly"
               class="hand"
@@ -52,23 +47,14 @@
             />
           </div>
           <div class="leg-anchor left" v-if="!headOnly">
-            <div
-              class="hip"
-              :style="avatarAssetsStyles(`body_parts_v2`, [0, 91], [31, 32])"
-            />
-            <div
-              class="foot"
-              :style="avatarAssetsStyles(`body_parts_v2`, [0, 123], [32, 27])"
-            />
+            <div class="hip" :style="avatarAssetsStyles(`body_parts_v2`, [0, 91], [31, 32])" />
+            <div class="foot" :style="avatarAssetsStyles(`body_parts_v2`, [0, 123], [32, 27])" />
             <div
               class="foot-wear"
               :style="avatarAssetsStyles(`equipment/boots`, [0, 0], [90, 100])"
             />
           </div>
-          <div
-            class="torso"
-            :style="avatarAssetsStyles(`body_parts_v2`, [64, 122], [59, 67])"
-          >
+          <div class="torso" :style="avatarAssetsStyles(`body_parts_v2`, [64, 122], [59, 67])">
             <div
               class="chest-wear"
               :style="avatarAssetsStyles(`equipment/chest`, [0, 0], [128, 188])"
@@ -79,52 +65,25 @@
             :style="avatarAssetsStyles(`equipment/head`, [0, 0], [512, 512])"
           />
           <div class="head-anchor">
+            <div class="face" :style="avatarAssetsStyles(`body_parts_v2`, [64, 0], [115, 122])" />
             <div
-              class="face"
-              :style="avatarAssetsStyles(`body_parts_v2`, [64, 0], [115, 122])"
+              class="eyes"
+              :style="avatarAssetsStyles(`eye/all_brows`, [0, 70 * eyesType], [110, 70])"
             />
             <div
               class="eyes"
-              :style="
-                avatarAssetsStyles(
-                  `eye/all_brows`,
-                  [0, 70 * eyesType],
-                  [110, 70]
-                )
-              "
-            />
-            <div
-              class="eyes"
-              :style="
-                avatarAssetsStyles(
-                  `eye/all_eyes`,
-                  [0, 70 * eyesType],
-                  [110, 70]
-                )
-              "
+              :style="avatarAssetsStyles(`eye/all_eyes`, [0, 70 * eyesType], [110, 70])"
             />
             <div class="hair" :style="avatarAssetsStylesForHair" />
             <div
               class="mouth"
-              :style="
-                avatarAssetsStyles(
-                  `mouth/all`,
-                  [0, 250 * mouthState],
-                  [250, 250]
-                )
-              "
+              :style="avatarAssetsStyles(`mouth/all`, [0, 250 * mouthState], [250, 250])"
             />
             <div class="ear" :style="avatarAssetsStyles(`ear`)" />
           </div>
           <div class="leg-anchor right" v-if="!headOnly">
-            <div
-              class="hip"
-              :style="avatarAssetsStyles(`body_parts_v2`, [32, 91], [31, 32])"
-            />
-            <div
-              class="foot"
-              :style="avatarAssetsStyles(`body_parts_v2`, [32, 123], [32, 27])"
-            />
+            <div class="hip" :style="avatarAssetsStyles(`body_parts_v2`, [32, 91], [31, 32])" />
+            <div class="foot" :style="avatarAssetsStyles(`body_parts_v2`, [32, 123], [32, 27])" />
             <div
               class="foot-wear"
               :style="avatarAssetsStyles(`equipment/boots`, [0, 0], [90, 100])"
@@ -133,19 +92,12 @@
           <div class="arm-anchor right">
             <div
               class="shoulder-wear"
-              :style="
-                avatarAssetsStyles(`equipment/chest`, [128, 0], [128, 90])
-              "
+              :style="avatarAssetsStyles(`equipment/chest`, [128, 0], [128, 90])"
             />
-            <div
-              class="forearm"
-              :style="avatarAssetsStyles(`body_parts_v2`, [31, 0], [31, 42])"
-            />
+            <div class="forearm" :style="avatarAssetsStyles(`body_parts_v2`, [31, 0], [31, 42])" />
             <div
               class="hand-wear"
-              :style="
-                avatarAssetsStyles(`equipment/gloves`, [90, 0], [90, 100])
-              "
+              :style="avatarAssetsStyles(`equipment/gloves`, [90, 0], [90, 100])"
             />
             <div
               v-if="!headOnly"
@@ -160,8 +112,6 @@
 </template>
 
 <script>
-import { Rx } from "@/rx.js";
-
 const EYES = {
   DEAD: 3,
   SLEEPING: 4,
@@ -171,7 +121,7 @@ const EYES = {
   TIRED: 2,
   BASE: 0,
   WIDE: 7,
-};
+}
 const MOUTHS = {
   DEAD: 0,
   SNORING: 1,
@@ -185,20 +135,20 @@ const MOUTHS = {
   GLOOMY: 9,
   BASE: 10,
   TONGUE_OUT: 11,
-};
+}
 
 const imageSizes = {
-  "equipment/chest": [256, 188],
-  "equipment/head": [512, 512],
-  "equipment/gloves": [180, 100],
-  "equipment/boots": [180, 100],
+  'equipment/chest': [256, 188],
+  'equipment/head': [512, 512],
+  'equipment/gloves': [180, 100],
+  'equipment/boots': [180, 100],
   body_parts_v2: [185, 195],
-  "eye/all_brows": [110, 560],
-  "eye/all_eyes": [110, 560],
-  "mouth/all": [250, 3000],
-};
+  'eye/all_brows': [110, 560],
+  'eye/all_eyes': [110, 560],
+  'mouth/all': [250, 3000],
+}
 
-export default {
+export default rxComponent({
   props: {
     text: {},
     chatHead: {},
@@ -221,7 +171,7 @@ export default {
       default: false,
     },
     size: {
-      default: "normal",
+      default: 'normal',
     },
     creature: null,
     emo: {},
@@ -246,244 +196,239 @@ export default {
     gloomy: false,
     feelingPain: 0,
     loading: true,
+    animationsTimeouts: [],
+    images: {},
   }),
 
   created() {
-    this.$avatarAssetsStylesCache = {};
+    this.$avatarAssetsStylesCache = {}
   },
 
   subscriptions() {
     return {
       self: Rx.combineLatest(
-        this.$stream("creature"),
-        this.$stream("chatHead"),
-        GameService.getRootEntityStream()
-      ).map(
-        ([creature, chatHead, self]) =>
-          self.id === creature?.id || self.id === chatHead
-      ),
-      chatHeadAssets: this.$stream("chatHead")
+        this.$stream('creature'),
+        this.$stream('chatHead'),
+        GameService.getRootEntityStream(),
+      ).map(([creature, chatHead, self]) => self.id === creature?.id || self.id === chatHead),
+      chatHeadAssets: this.$stream('chatHead')
         .filter((whoId) => !!whoId)
-        .switchMap((whoId) =>
-          GameService.getEntityStream(whoId, ENTITY_VARIANTS.CHAT_HEAD)
-        )
+        .switchMap((whoId) => GameService.getEntityStream(whoId, ENTITY_VARIANTS.CHAT_HEAD))
         .filter((creature) => !!creature)
         .map((creature) => creature.avatar)
-        .switchMap((avatarId) =>
-          GameService.getEntityStream(avatarId, ENTITY_VARIANTS.CHAT_HEAD)
-        )
+        .switchMap((avatarId) => GameService.getEntityStream(avatarId, ENTITY_VARIANTS.CHAT_HEAD))
         .filter((avatar) => !!avatar)
         .map((avatar) => avatar.avatarAssets),
-      avatar: this.$stream("creature").switchMap((creature) =>
+      avatar: this.$stream('creature').switchMap((creature) =>
         creature
           ? GameService.getEntityStream(creature.avatar, this.variant)
-          : Rx.Observable.of(null)
+          : Rx.Observable.of(null),
       ),
-    };
+    }
   },
 
   computed: {
     hasClick() {
-      return !!this.$listeners.click;
+      return !!this.$attrs.onClick
     },
 
     borderSize() {
       switch (this.size) {
-        case "tiny":
-          return 0.3;
+        case 'tiny':
+          return 0.3
         default:
-          return 0.6;
+          return 0.6
       }
     },
 
     spinnerSize() {
-      const ratio = 0.5;
+      const ratio = 0.5
       switch (this.size) {
-        case "huge":
-          return 16 * ratio;
-        case "large":
-          return 12 * ratio;
-        case "normal":
-          return 9 * ratio;
-        case "small":
-          return 6 * ratio;
-        case "tiny":
-          return 4 * ratio;
-        case "relative":
-          return 4 * ratio;
+        case 'huge':
+          return 16 * ratio
+        case 'large':
+          return 12 * ratio
+        case 'normal':
+          return 9 * ratio
+        case 'small':
+          return 6 * ratio
+        case 'tiny':
+          return 4 * ratio
+        case 'relative':
+          return 4 * ratio
       }
     },
 
     eyesType() {
       switch (this.emo) {
-        case ":)":
-          return EYES.BASE;
-        case ":D":
-          return EYES.BASE;
-        case ":(":
-          return EYES.BASE;
-        case ":<":
-          return EYES.TIRED;
-        case ":/":
-          return EYES.BASE;
-        case ":O":
-          return EYES.WIDE;
-        case ":P":
-          return EYES.BASE;
+        case ':)':
+          return EYES.BASE
+        case ':D':
+          return EYES.BASE
+        case ':(':
+          return EYES.BASE
+        case ':<':
+          return EYES.TIRED
+        case ':/':
+          return EYES.BASE
+        case ':O':
+          return EYES.WIDE
+        case ':P':
+          return EYES.BASE
         default:
       }
 
       if (this.dead) {
-        return EYES.DEAD;
+        return EYES.DEAD
       }
 
       if (this.sleeping) {
-        return EYES.SLEEPING;
+        return EYES.SLEEPING
       }
 
       if (this.feelingPain >= 3) {
-        return EYES.EXTREME_PAIN;
+        return EYES.EXTREME_PAIN
       }
       if (this.feelingPain >= 1) {
-        return EYES.PAIN;
+        return EYES.PAIN
       }
 
       if (this.blinking) {
-        return EYES.BLINKING;
+        return EYES.BLINKING
       }
       if (this.tired) {
-        return EYES.TIRED;
+        return EYES.TIRED
       }
-      return EYES.BASE;
+      return EYES.BASE
     },
 
     mouthState() {
       switch (this.emo) {
-        case ":)":
-          return MOUTHS.BASE;
-        case ":D":
-          return MOUTHS.HAPPY;
-        case ":(":
-          return MOUTHS.GLOOMY;
-        case ":<":
-          return MOUTHS.EXTREME_PAIN;
-        case ":/":
-          return MOUTHS.PAIN;
-        case ":O":
-          return MOUTHS.SNORING_TWO;
-        case ":P":
-          return MOUTHS.TONGUE_OUT;
+        case ':)':
+          return MOUTHS.BASE
+        case ':D':
+          return MOUTHS.HAPPY
+        case ':(':
+          return MOUTHS.GLOOMY
+        case ':<':
+          return MOUTHS.EXTREME_PAIN
+        case ':/':
+          return MOUTHS.PAIN
+        case ':O':
+          return MOUTHS.SNORING_TWO
+        case ':P':
+          return MOUTHS.TONGUE_OUT
         default:
       }
 
       if (this.dead) {
-        return MOUTHS.DEAD;
+        return MOUTHS.DEAD
       }
 
       if (this.sleeping) {
         if (this.snoring === 1) {
-          return MOUTHS.SNORING;
+          return MOUTHS.SNORING
         }
         if (this.snoring === 0) {
-          return MOUTHS.SNORING_TWO;
+          return MOUTHS.SNORING_TWO
         }
       }
 
       if (this.feelingPain >= 3) {
-        return MOUTHS.EXTREME_PAIN;
+        return MOUTHS.EXTREME_PAIN
       }
       if (this.feelingPain >= 1) {
-        return MOUTHS.PAIN;
+        return MOUTHS.PAIN
       }
 
-      if (this.happy) return MOUTHS.HAPPY;
-      if (this.slightlySad) return MOUTHS.SLIGHTLY_SAD;
-      if (this.sad) return MOUTHS.SAD;
-      if (this.verySad) return MOUTHS.VERY_SAD;
-      if (this.gloomy) return MOUTHS.GLOOMY;
-      return MOUTHS.BASE;
+      if (this.happy) return MOUTHS.HAPPY
+      if (this.slightlySad) return MOUTHS.SLIGHTLY_SAD
+      if (this.sad) return MOUTHS.SAD
+      if (this.verySad) return MOUTHS.VERY_SAD
+      if (this.gloomy) return MOUTHS.GLOOMY
+      return MOUTHS.BASE
     },
 
     animations() {
-      (this.animationsTimeouts || []).forEach((ai) => clearInterval(ai));
-      this.animationsTimeouts = [];
+      ;(this.animationsTimeouts || []).forEach((ai) => clearInterval(ai))
+      this.animationsTimeouts = []
 
       if (this.creature) {
         if (this.creature.dead) {
-          this.dead = true;
-          return;
+          this.dead = true
+          return
         }
         const smiling = {
-          "Mood: Cheerful": true,
-          "Mood: Overjoyed": true,
-          "Mood: Ecstatic": true,
-        };
+          'Mood: Cheerful': true,
+          'Mood: Overjoyed': true,
+          'Mood: Ecstatic': true,
+        }
 
-        this.happy = this.hasBuff((b) => smiling[b.name]);
-        this.slightlySad = this.hasBuff("Mood: Slightly Sad");
-        this.sad = this.hasBuff("Mood: Sad");
-        this.verySad = this.hasBuff("Mood: Very Sad");
-        this.gloomy = this.hasBuff("Mood: Gloomy");
+        this.happy = this.hasBuff((b) => smiling[b.name])
+        this.slightlySad = this.hasBuff('Mood: Slightly Sad')
+        this.sad = this.hasBuff('Mood: Sad')
+        this.verySad = this.hasBuff('Mood: Very Sad')
+        this.gloomy = this.hasBuff('Mood: Gloomy')
 
-        this.tired = this.verySad || this.gloomy;
+        this.tired = this.verySad || this.gloomy
 
-        this.sleeping = this.creature.inactive && !this.noSleep;
+        this.sleeping = this.creature.inactive && !this.noSleep
         if (this.sleeping) {
-          this.snoring = 0;
+          this.snoring = 0
           this.repeatingAnimation(
             () => (this.snoring = 1),
             () => (this.snoring = 0),
             () => 1000 + Math.random() * 300,
-            () => 1000 + Math.random() * 300
-          );
+            () => 1000 + Math.random() * 300,
+          )
         }
 
         const painDegree =
-          (this.hasBuff("Minor pain") && 1) ||
-          (this.hasBuff("Pain") && 2) ||
-          (this.hasBuff("Major pain") && 3) ||
-          (this.hasBuff("Extreme pain") && 4);
+          (this.hasBuff('Minor pain') && 1) ||
+          (this.hasBuff('Pain') && 2) ||
+          (this.hasBuff('Major pain') && 3) ||
+          (this.hasBuff('Extreme pain') && 4)
 
-        this.feelingPain = 0;
+        this.feelingPain = 0
         this.repeatingAnimation(
           () => (this.feelingPain = painDegree),
           () => (this.feelingPain = 0),
           () => 12000 / painDegree + Math.random() * 2000,
-          () => 4000 / (5 - painDegree) + Math.random() * 500
-        );
+          () => 4000 / (5 - painDegree) + Math.random() * 500,
+        )
 
-        this.blinking = false;
+        this.blinking = false
         this.repeatingAnimation(
           () => (this.blinking = true),
           () => (this.blinking = false),
           () => 3000 + Math.random() * 1000,
-          () => 300 + Math.random() * 200
-        );
+          () => 300 + Math.random() * 200,
+        )
       }
 
-      return "idle";
+      return 'idle'
     },
 
     actualAvatarAssets() {
       return this.chatHead
         ? this.chatHeadAssets
         : this.avatar
-        ? this.avatar.avatarAssets
-        : this.avatarAssets;
+          ? this.avatar.avatarAssets
+          : this.avatarAssets
     },
 
     avatarAssetsStylesForHair() {
-      const avatarAssets = this.actualAvatarAssets;
-      let style = this.avatarAssetsStyles("hair");
+      const avatarAssets = this.actualAvatarAssets
+      let style = this.avatarAssetsStyles('hair')
       if (avatarAssets && avatarAssets[`equipment/head/mask`]) {
         style = {
           ...style,
-          "mask-size": "110% auto",
-          ["-webkit-mask-image"]: `url(${avatarAssets[`equipment/head/mask`]})`,
-          ["mask-image"]: `url(${avatarAssets[`equipment/head/mask`]})`,
-        };
+          'mask-size': '110% auto',
+          ['-webkit-mask-image']: `url(${avatarAssets[`equipment/head/mask`]})`,
+          ['mask-image']: `url(${avatarAssets[`equipment/head/mask`]})`,
+        }
       }
-      return style;
+      return style
     },
   },
 
@@ -492,111 +437,94 @@ export default {
       const STATE = {
         LOADING: 1,
         LOADED: 2,
-      };
-
-      this.images = this.images || {};
-      if (this.images[imageUrl] || !imageUrl) {
-        return;
       }
 
-      const preloaderImg = document.createElement("img");
-      preloaderImg.src = imageUrl;
+      if (this.images[imageUrl] || !imageUrl) {
+        return
+      }
+
+      const preloaderImg = document.createElement('img')
+      preloaderImg.src = imageUrl
 
       const onLoaded = () => {
-        this.images[imageUrl] = STATE.LOADED;
-        preloaderImg.remove();
+        this.images[imageUrl] = STATE.LOADED
+        preloaderImg.remove()
 
         const remainingCount = Object.values(this.images).filter(
-          (state) => state !== STATE.LOADED
-        ).length;
+          (state) => state !== STATE.LOADED,
+        ).length
         if (remainingCount === 0) {
-          this.loading = false;
+          this.loading = false
         }
-      };
+      }
 
       if (!preloaderImg.complete) {
-        this.images[imageUrl] = STATE.LOADING;
-        this.loading = true;
+        this.images[imageUrl] = STATE.LOADING
+        this.loading = true
 
-        preloaderImg.addEventListener("load", onLoaded);
+        preloaderImg.addEventListener('load', onLoaded)
       } else {
-        onLoaded();
+        onLoaded()
       }
     },
 
     avatarAssetsStyles(asset, [offsetX, offsetY] = [], [sizeX, sizeY] = []) {
-      const avatarAssets = this.actualAvatarAssets;
+      const avatarAssets = this.actualAvatarAssets
       if (!avatarAssets || !avatarAssets[asset]) {
-        return;
+        return
       }
-      const key = `${asset}:${avatarAssets[asset]}:${offsetX}-${offsetY}:${sizeX}-${sizeY}`;
+      const key = `${asset}:${avatarAssets[asset]}:${offsetX}-${offsetY}:${sizeX}-${sizeY}`
       if (!this.$avatarAssetsStylesCache[key]) {
         const style = {
-          "background-image": "url(" + avatarAssets[asset] + ")",
-        };
-        this.registerImageToLoad(avatarAssets[asset]);
+          'background-image': 'url(' + avatarAssets[asset] + ')',
+        }
+        this.registerImageToLoad(avatarAssets[asset])
         if (offsetX !== undefined) {
           if (!imageSizes[asset]) {
-            throw new Error("No size specified: " + asset);
+            throw new Error('No size specified: ' + asset)
           }
-          const [imageSizeX, imageSizeY] = imageSizes[asset];
-          style["background-position-x"] = `${
-            (100 * offsetX) / (imageSizeX - sizeX)
-          }%`;
-          style["background-position-y"] = `${
-            (100 * offsetY) / (imageSizeY - sizeY)
-          }%`;
-          style["background-size"] = `${(imageSizeX / sizeX) * 100}% ${
-            (imageSizeY / sizeY) * 100
-          }%`;
+          const [imageSizeX, imageSizeY] = imageSizes[asset]
+          style['background-position-x'] = `${(100 * offsetX) / (imageSizeX - sizeX)}%`
+          style['background-position-y'] = `${(100 * offsetY) / (imageSizeY - sizeY)}%`
+          style['background-size'] = `${(imageSizeX / sizeX) * 100}% ${(imageSizeY / sizeY) * 100}%`
         } else {
-          style["background-size"] = "100%";
+          style['background-size'] = '100%'
         }
-        this.$avatarAssetsStylesCache[key] = style;
+        this.$avatarAssetsStylesCache[key] = style
       }
-      return this.$avatarAssetsStylesCache[key];
+      return this.$avatarAssetsStylesCache[key]
     },
 
-    repeatingAnimation(
-      applyCallback,
-      unapply,
-      delayGenerator,
-      durationGenerator
-    ) {
+    repeatingAnimation(applyCallback, unapply, delayGenerator, durationGenerator) {
       const timeout = ControlsService.setAnimationTimeout(() => {
-        applyCallback();
-        const idx = this.animationsTimeouts.indexOf(timeout);
+        applyCallback()
+        const idx = this.animationsTimeouts.indexOf(timeout)
         if (idx !== -1) {
-          this.animationsTimeouts.splice(idx, 1);
+          this.animationsTimeouts.splice(idx, 1)
         }
-        this.repeatingAnimation(
-          unapply,
-          applyCallback,
-          durationGenerator,
-          delayGenerator
-        );
-      }, delayGenerator());
+        this.repeatingAnimation(unapply, applyCallback, durationGenerator, delayGenerator)
+      }, delayGenerator())
 
-      this.animationsTimeouts.push(timeout);
+      this.animationsTimeouts.push(timeout)
     },
 
     isAction(name) {
-      return this.creature?.currentAction?.actionId === name;
+      return this.creature?.currentAction?.actionId === name
     },
 
     hasBuff(nameOrCallback) {
-      let filter = nameOrCallback;
-      if (typeof nameOrCallback !== "function") {
-        filter = (b) => b.name.toLowerCase() === nameOrCallback.toLowerCase();
+      let filter = nameOrCallback
+      if (typeof nameOrCallback !== 'function') {
+        filter = (b) => b.name.toLowerCase() === nameOrCallback.toLowerCase()
       }
-      return this.creature?.effects?.some(filter);
+      return this.creature?.effects?.some(filter)
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 $avatar-bg-color: beige;
 
@@ -645,8 +573,7 @@ $avatar-bg-color: beige;
     .head-anchor {
       @include size(100, 100, #{$avatar-size-units});
       @include position(-33, -105, #{$avatar-size-units});
-      transform-origin: calc(60 * #{$avatar-size-units})
-        calc(105 * #{$avatar-size-units});
+      transform-origin: calc(60 * #{$avatar-size-units}) calc(105 * #{$avatar-size-units});
       z-index: 8;
 
       .face {
@@ -685,8 +612,7 @@ $avatar-bg-color: beige;
     .arm-anchor {
       &.left {
         @include position(25, 0, #{$avatar-size-units});
-        transform-origin: calc(30 * #{$avatar-size-units})
-          calc(10 * #{$avatar-size-units});
+        transform-origin: calc(30 * #{$avatar-size-units}) calc(10 * #{$avatar-size-units});
 
         .shoulder-wear {
           $size: 84;
@@ -721,8 +647,7 @@ $avatar-bg-color: beige;
       &.right {
         z-index: 12;
         @include position(-25, 0, #{$avatar-size-units});
-        transform-origin: calc(35 * #{$avatar-size-units})
-          calc(15 * #{$avatar-size-units});
+        transform-origin: calc(35 * #{$avatar-size-units}) calc(15 * #{$avatar-size-units});
 
         .shoulder-wear {
           $size: 84;
@@ -756,8 +681,7 @@ $avatar-bg-color: beige;
     .leg-anchor {
       &.left {
         @include position(15, 45, #{$avatar-size-units});
-        transform-origin: calc(30 * #{$avatar-size-units})
-          calc(10 * #{$avatar-size-units});
+        transform-origin: calc(30 * #{$avatar-size-units}) calc(10 * #{$avatar-size-units});
 
         .hip {
           @include size(29, 30, #{$avatar-size-units});
@@ -780,8 +704,7 @@ $avatar-bg-color: beige;
       &.right {
         z-index: 3;
         @include position(-12, 45, #{$avatar-size-units});
-        transform-origin: calc(30 * #{$avatar-size-units})
-          calc(10 * #{$avatar-size-units});
+        transform-origin: calc(30 * #{$avatar-size-units}) calc(10 * #{$avatar-size-units});
 
         .hip {
           @include size(29, 30, #{$avatar-size-units});
@@ -817,11 +740,11 @@ $avatar-bg-color: beige;
     }
 
     .skin-color {
-      @include filter-fix();
+      @include utils.filter-fix();
     }
 
     .hair-color {
-      @include filter-fix();
+      @include utils.filter-fix();
     }
   }
 }
@@ -881,14 +804,14 @@ $size-relative: calc(0.1 * var(--app-min-size));
     background: $avatar-bg-color;
 
     &.self {
-      @include theme-background-self();
+      @include utils.theme-background-self();
     }
   }
 }
 
 .player-avatar {
   overflow: hidden;
-  @include filter-fix();
+  @include utils.filter-fix();
 
   &.head-only {
     .avatar-body-wrapper {
@@ -927,6 +850,6 @@ $size-relative: calc(0.1 * var(--app-min-size));
   bottom: 7%;
   z-index: 2;
   position: absolute;
-  @include text-outline();
+  @include utils.text-outline();
 }
 </style>

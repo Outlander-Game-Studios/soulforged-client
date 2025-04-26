@@ -5,11 +5,7 @@
       <div class="flex-grow">
         <Header>Chat</Header>
       </div>
-      <Button
-        v-if="operation.context.openQuestions"
-        noPadding
-        @click="openQuestion = true"
-      >
+      <Button v-if="operation.context.openQuestions" noPadding @click="openQuestion = true">
         <span class="header-button">More...</span>
       </Button>
     </Horizontal>
@@ -22,12 +18,7 @@
         :ref="'message_' + entry.when"
       >
         <div>
-          <CreatureIcon
-            :creatureId="entry.who"
-            noSleep
-            class="entry-avatar"
-            size="tiny"
-          />
+          <CreatureIcon :creatureId="entry.who" noSleep class="entry-avatar" size="tiny" />
         </div>
         <div>
           <div class="title">
@@ -59,10 +50,7 @@
           <AskMeAnythingHelp />
         </template>
         <template v-slot:contents>
-          <OpenQuestionPanel
-            :operation="operation"
-            @close="openQuestion = false"
-          />
+          <OpenQuestionPanel :operation="operation" @close="openQuestion = false" />
         </template>
       </Modal>
     </div>
@@ -70,7 +58,7 @@
 </template>
 
 <script>
-export default window.OperationDialogue = {
+const OperationDialogue = rxComponent({
   props: {
     operation: {},
   },
@@ -83,48 +71,50 @@ export default window.OperationDialogue = {
   subscriptions() {
     return {
       mainEntity: GameService.getRootEntityStream(),
-      scroll: this.$stream("operation")
+      scroll: this.$stream('operation')
         .switchMap((operation) => Rx.Observable.of(operation.context.history))
         .distinctUntilChanged(null, JSON.stringify)
         .tap(() => {
-          this.scrollToNewest();
+          this.scrollToNewest()
         }),
-    };
+    }
   },
 
   methods: {
     scrollToNewest() {
       const interval = setInterval(() => {
-        const el = this.$refs.entries;
+        const el = this.$refs.entries
         if (el && el.scrollTo) {
           el.scrollTo(0, el.scrollHeight, {
-            behavior: "smooth",
-          });
-          clearInterval(interval);
+            behavior: 'smooth',
+          })
+          clearInterval(interval)
         }
-      }, 50);
+      }, 50)
     },
 
     commence(option) {
-      SoundService.playSound(SoundService.SOUNDS.BUTTON);
+      SoundService.playSound(SoundService.SOUNDS.BUTTON)
       GameService.request(REQUEST_CODES.COMMENCE_OPERATION, {
         option,
-      }).then(() => {});
+      }).then(() => {})
     },
 
     cancel() {
-      GameService.request(REQUEST_CODES.CANCEL_OPERATION);
+      GameService.request(REQUEST_CODES.CANCEL_OPERATION)
     },
 
     isOwnEntry(entry) {
-      return entry.who === this.mainEntity.id;
+      return entry.who === this.mainEntity.id
     },
   },
-};
+})
+window.OperationDialogue = OperationDialogue
+export default OperationDialogue
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 
 .dialogue-operation {
   min-width: 30rem;
@@ -155,7 +145,7 @@ export default window.OperationDialogue = {
   flex-grow: 1;
   overflow: auto;
   padding-right: 0.5rem;
-  @include filter-fix();
+  @include utils.filter-fix();
 }
 
 .entry {

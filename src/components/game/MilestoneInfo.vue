@@ -8,17 +8,12 @@
       :completed="idx < milestoneInfo.current"
       :inactive="idx > milestoneInfo.current"
     />
-    <Checkbox
-      v-if="milestoneInfo.current < milestoneInfo.steps.length"
-      v-model="tracked"
-    >
+    <Checkbox v-if="milestoneInfo.current < milestoneInfo.steps.length" v-model:value="tracked">
       Tracked
     </Checkbox>
-    <Description
-      v-if="milestoneInfo.totalSteps - milestoneInfo.steps.length > 0"
-    >
-      {{ milestoneInfo.totalSteps - milestoneInfo.steps.length }} follow-up
-      objectives to be discovered
+    <Description v-if="milestoneInfo.totalSteps - milestoneInfo.steps.length > 0">
+      {{ milestoneInfo.totalSteps - milestoneInfo.steps.length }} follow-up objectives to be
+      discovered
     </Description>
     <Vertical v-if="milestoneInfo.rewardText">
       <Header alt2> Reward </Header>
@@ -42,25 +37,21 @@ export default {
   watch: {
     milestoneInfo: {
       handler() {
-        this.tracked = this.milestoneInfo.tracked;
+        this.tracked = this.milestoneInfo.tracked
       },
       immediate: true,
     },
     tracked() {
       GameService.getInfoStream(
-        "Human",
+        'Human',
         {
-          type: "setMilestoneTracker",
+          type: 'setMilestoneTracker',
           track: this.tracked ? this.milestoneInfo.key : null,
         },
-        true
-      );
-      GameService.getInfoStream(
-        "Collectible",
-        { categoryIdx: MILESTONES_IDX },
-        true
-      );
+        true,
+      )
+      GameService.getInfoStream('Collectible', { categoryIdx: MILESTONES_IDX }, true)
     },
   },
-};
+}
 </script>

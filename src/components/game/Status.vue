@@ -12,13 +12,9 @@
     <div class="info-container-wrapper">
       <div class="info-container">
         <HorizontalFill tight class="ap-container">
-          <APBar />
+          <APBarCurrent />
         </HorizontalFill>
-        <Container
-          borderSize="0.5"
-          class="effects-container interactive"
-          @click="openEffects()"
-        >
+        <Container borderSize="0.5" class="effects-container interactive" @click="openEffects()">
           <Effects row :effects="mainEntity.effects" :size="3" />
         </Container>
         <div class="currency-container">
@@ -53,57 +49,55 @@
 </template>
 
 <script>
-import pageSound from "../../assets/sounds/page.mp3";
+import pageSound from '../../assets/sounds/page.mp3'
 
-export default {
+export default rxComponent({
   data: () => ({
     showDetails: false,
   }),
 
   subscriptions() {
-    let mainEntity = GameService.getRootEntityStream();
+    let mainEntity = GameService.getRootEntityStream()
     return {
       mainEntity,
       myCreature: GameService.getMyCreatureStream(),
-    };
+    }
   },
 
   methods: {
     clickAvatar() {
-      this.showDetails = true;
-      SoundService.playSound(pageSound);
+      this.showDetails = true
+      SoundService.playSound(pageSound)
     },
 
     confirmNameChanged() {
-      GameService.request(REQUEST_CODES.CONFIRM_NAME_CHANGE);
+      GameService.request(REQUEST_CODES.CONFIRM_NAME_CHANGE)
     },
 
     confirmCustomMessage() {
-      GameService.request(REQUEST_CODES.CONFIRM_CUSTOM_MESSAGE);
+      GameService.request(REQUEST_CODES.CONFIRM_CUSTOM_MESSAGE)
     },
 
     openEffects() {
-      ControlsService.triggerControlEvent("openPanel-character-effects");
+      ControlsService.triggerControlEvent('openPanel-character-effects')
       setTimeout(() => {
-        document.getElementById("effects-section")?.scrollIntoView({
-          block: "start",
-        });
-      });
+        document.getElementById('effects-section')?.scrollIntoView({
+          block: 'start',
+        })
+      })
     },
 
     triggerQuickAction(quickAction) {
-      const item = quickAction.item;
-      const action = item.actions.find(
-        ({ actionId }) => actionId === quickAction.actionId
-      );
-      GameService.performAction(item, action, quickAction.parameters);
+      const item = quickAction.item
+      const action = item.actions.find(({ actionId }) => actionId === quickAction.actionId)
+      GameService.performAction(item, action, quickAction.parameters)
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .controls-sticky {
   max-width: 0;

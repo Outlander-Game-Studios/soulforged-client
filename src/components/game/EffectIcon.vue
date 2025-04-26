@@ -1,15 +1,7 @@
 <template>
-  <div
-    class="effect-icon"
-    :class="effect.name || effect.text"
-    @click="mouseClick($event)"
-  >
+  <div class="effect-icon" :class="effect.name || effect.text" @click="mouseClick($event)">
     <Icon
-      :backgroundType="
-        effect.severity !== undefined
-          ? 'severity-' + effect.severity
-          : 'severity-0'
-      "
+      :backgroundType="effect.severity !== undefined ? 'severity-' + effect.severity : 'severity-0'"
       v-if="effect"
       :src="effect.icon"
       :size="size"
@@ -29,7 +21,7 @@
 </template>
 
 <script>
-import iconClickSound from "../../assets/sounds/icon-click.mp3";
+import iconClickSound from '../../assets/sounds/icon-click.mp3'
 
 export default {
   props: {
@@ -40,9 +32,9 @@ export default {
   methods: {
     formatNumber: global.formatNumber,
     mouseClick($event) {
-      if (!!this.$listeners.click) {
-        this.$emit("click", $event);
-        SoundService.playSound(iconClickSound);
+      if (!!this.$attrs.onClick) {
+        this.$emit('click', $event)
+        SoundService.playSound(iconClickSound)
       }
     },
   },
@@ -51,39 +43,36 @@ export default {
     text() {
       if (this.effect.stacks) {
         if (this.effect.stackDisplay === EFFECTS.STACK_DISPLAY.PERCENT) {
-          return [`${(100 * this.effect.stacks).toFixed(0)}%`];
+          return [`${(100 * this.effect.stacks).toFixed(0)}%`]
         } else if (this.effect.stackDisplay === EFFECTS.STACK_DISPLAY.HIDE) {
-          return [""];
+          return ['']
         }
-        return [formatNumber(this.effect.stacks)];
+        return [formatNumber(this.effect.stacks)]
       }
       if (this.effect.level !== undefined) {
-        if (
-          this.effect.baseLevel &&
-          this.effect.baseLevel !== this.effect.level
-        ) {
-          return [`${this.effect.level} / ${this.effect.baseLevel}`];
+        if (this.effect.baseLevel && this.effect.baseLevel !== this.effect.level) {
+          return [`${this.effect.level} / ${this.effect.baseLevel}`]
         }
         if (this.effect.level >= 9999) {
-          return [formatNumber(this.effect.level)];
+          return [formatNumber(this.effect.level)]
         }
-        if (`${this.effect.level}`.includes(".") && this.effect.level < 1000) {
-          const values = `${this.effect.level}`.split(".");
-          return [values[0], "." + values[1]];
+        if (`${this.effect.level}`.includes('.') && this.effect.level < 1000) {
+          const values = `${this.effect.level}`.split('.')
+          return [values[0], '.' + values[1]]
         }
-        const floored = Math.floor(this.effect.level);
+        const floored = Math.floor(this.effect.level)
         if (isNaN(floored)) {
-          return [this.effect.level];
+          return [this.effect.level]
         }
-        return [floored];
+        return [floored]
       }
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .top-text {
   white-space: nowrap;
@@ -97,6 +86,6 @@ export default {
   }
 }
 .duration-turns {
-  @include text-outline(#021000, #79ff51);
+  @include utils.text-outline(#021000, #79ff51);
 }
 </style>

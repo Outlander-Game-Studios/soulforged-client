@@ -50,58 +50,52 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   data: () => ({
     showingList: false,
   }),
 
   subscriptions() {
-    const draggedItemStream = ControlsService.getDraggedItemStream();
+    const draggedItemStream = ControlsService.getDraggedItemStream()
     return {
-      draggingOther: ControlsService.getControlEventStream(
-        "draggingInventory"
-      ).map(([uid]) => uid && uid !== "equipmentDrag"),
+      draggingOther: ControlsService.getControlEventStream('draggingInventory').map(
+        ([uid]) => uid && uid !== 'equipmentDrag',
+      ),
       draggedItem: draggedItemStream,
       dropTargets: draggedItemStream
         .filter((item) => !!item)
-        .map((item) =>
-          item.actions.filter((a) => a.actionId.substring(0, 6) === "equip_")
-        ),
+        .map((item) => item.actions.filter((a) => a.actionId.substring(0, 6) === 'equip_')),
       equipment: GameService.getRootEntityStream()
-        .pluck("equipment")
+        .pluck('equipment')
         .switchMap((equipment) =>
           Object.values(equipment || {}).length
             ? Rx.combineLatest(
                 Object.keys(equipment).map((slotName) =>
-                  GameService.getEntityStream(equipment[slotName]).map(
-                    (item) => ({
-                      slotName,
-                      item,
-                    })
-                  )
-                )
+                  GameService.getEntityStream(equipment[slotName]).map((item) => ({
+                    slotName,
+                    item,
+                  })),
+                ),
               )
-            : Rx.Observable.of(null)
+            : Rx.Observable.of(null),
         ),
-    };
+    }
   },
 
   methods: {
     onDrop($event, selectedActionId) {
-      const item = this.draggedItem;
-      const action = item.actions.find(
-        ({ actionId }) => actionId === selectedActionId
-      );
-      GameService.performAction(item, action);
+      const item = this.draggedItem
+      const action = item.actions.find(({ actionId }) => actionId === selectedActionId)
+      GameService.performAction(item, action)
     },
 
     showList() {
-      this.showingList = true;
+      this.showingList = true
     },
 
     closeList() {
-      this.showingList = false;
+      this.showingList = false
     },
   },
-};
+})
 </script>

@@ -3,13 +3,13 @@
     <LoadingPlaceholder v-if="!powersInfo" />
     <span v-else>
       <p>
-        Each power you purchase increases the cost of all subsequent power
-        purchases by a fixed amount for your current character.
+        Each power you purchase increases the cost of all subsequent power purchases by a fixed
+        amount for your current character.
       </p>
       <p>
         You currently have purchased
         <em>{{ powersInfo.currentLevel }}</em>
-        {{ powersInfo.currentLevel === 1 ? "power" : "powers" }}.
+        {{ powersInfo.currentLevel === 1 ? 'power' : 'powers' }}.
       </p>
       <p>
         Because of this the next power you purchase will have
@@ -27,11 +27,11 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   subscriptions() {
     return {
       powersInfo: Rx.fromPromise(GameService.requestPowersInfo()),
-    };
+    }
   },
-};
+})
 </script>

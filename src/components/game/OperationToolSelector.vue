@@ -15,21 +15,13 @@
     </Horizontal>
     <div v-else class="outer-container">
       <Header alt2 class="tools-header">Tools</Header>
-      <HorizontalFill
-        v-for="toolType in operation.context.tools"
-        :key="toolType"
-      >
-        <Container
-          class="tools-used interactive"
-          @click="mouseClickSelect(toolType)"
-        >
+      <HorizontalFill v-for="toolType in operation.context.tools" :key="toolType">
+        <Container class="tools-used interactive" @click="mouseClickSelect(toolType)">
           <Horizontal tight>
             <ItemIcon
               :icon="operation.context.toolsSelected[toolType].icon"
               :quality="operation.context.toolsSelected[toolType].quality"
-              :condition="
-                operation.context.toolsSelected[toolType].durabilityStage
-              "
+              :condition="operation.context.toolsSelected[toolType].durabilityStage"
               :size="size"
             />
             <div class="tool-name">
@@ -37,9 +29,7 @@
                 {{ operation.context.toolsSelected[toolType].toolType }}
               </div>
               <div class="tool-efficiency">
-                <div
-                  v-if="!operation.context.toolsSelected[toolType].efficiency"
-                >
+                <div v-if="!operation.context.toolsSelected[toolType].efficiency">
                   Nothing selected
                 </div>
                 <LabeledValue
@@ -54,12 +44,7 @@
         </Container>
       </HorizontalFill>
     </div>
-    <Modal
-      dialog
-      v-if="selectingToolType"
-      title="Select tool"
-      @close="selectingToolType = null"
-    >
+    <Modal dialog v-if="selectingToolType" title="Select tool" @close="selectingToolType = null">
       <Vertical class="select-tool">
         <Header>Items</Header>
         <ItemSelector
@@ -90,12 +75,9 @@
 </template>
 
 <script>
-import buttonClickSound from "../../assets/sounds/button-click.mp3";
-import Horizontal from "../layouts/Horizontal";
-import Controls from "./Controls";
+import buttonClickSound from '../../assets/sounds/button-click.mp3'
 
 export default {
-  components: { Horizontal },
   props: {
     operation: {},
     iconOnly: {
@@ -114,40 +96,39 @@ export default {
 
   methods: {
     mouseClickSelect(toolType) {
-      SoundService.playSound(buttonClickSound);
-      this.selectingToolType = toolType;
+      SoundService.playSound(buttonClickSound)
+      this.selectingToolType = toolType
     },
 
     itemToolsFilter(toolType) {
-      return (item) => !item?.isRuined && item?.toolEfficiency?.[toolType];
+      return (item) => !item?.isRuined && item?.toolEfficiency?.[toolType]
     },
 
     structureToolsFilter(toolType) {
-      return (structure) =>
-        structure.operational && structure.toolEfficiency?.[toolType];
+      return (structure) => structure.operational && structure.toolEfficiency?.[toolType]
     },
 
     selectItemTool(toolType, item) {
       GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-        updateType: "selectTool",
+        updateType: 'selectTool',
         toolType,
         itemId: item?.id,
       }).then(() => {
-        this.selectingToolType = null;
-      });
+        this.selectingToolType = null
+      })
     },
 
     selectStructureTool(toolType, structure) {
       GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-        updateType: "selectTool",
+        updateType: 'selectTool',
         toolType,
         structureId: structure.id,
       }).then(() => {
-        this.selectingToolType = null;
-      });
+        this.selectingToolType = null
+      })
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">

@@ -11,15 +11,8 @@
         <LoadingPlaceholder v-if="!powersInfo || !knowledgeBase" />
         <div v-else>
           <Vertical>
-            <Container
-              :borderSize="0.5"
-              class="currency-display"
-              backgroundType="alt"
-            >
-              <CurrencyDisplay
-                label="Current essence"
-                :value="knowledgeBase.essence"
-              />
+            <Container :borderSize="0.5" class="currency-display" backgroundType="alt">
+              <CurrencyDisplay label="Current essence" :value="knowledgeBase.essence" />
             </Container>
             <template v-if="knowledgeBase.pendingEssence">
               <Header alt2> Pending Essence </Header>
@@ -30,9 +23,7 @@
                     label="Pending essence"
                     :value="knowledgeBase.pendingEssence"
                   />
-                  <Button @click="collectEssence()" :processing="collecting"
-                    >Collect</Button
-                  >
+                  <Button @click="collectEssence()" :processing="collecting">Collect</Button>
                 </Horizontal>
               </Spaced>
             </template>
@@ -55,10 +46,7 @@
             <Header alt2>Purchase Power</Header>
             <Spaced>
               <Vertical>
-                <div
-                  v-if="availablePowers && !availablePowers.length"
-                  class="empty-text"
-                >
+                <div v-if="availablePowers && !availablePowers.length" class="empty-text">
                   No powers available for purchase
                 </div>
                 <PowerItem
@@ -88,11 +76,7 @@
       </template>
       <template v-slot:contents>
         <Vertical class="purchase-dialog">
-          <Icon
-            class="power-icon"
-            :src="purchasing.icon"
-            backgroundType="severity--3"
-          />
+          <Icon class="power-icon" :src="purchasing.icon" backgroundType="severity--3" />
           <Header alt2>Bonuses</Header>
           <div>
             <DisplayImpacts :impacts="purchasing.impacts" />
@@ -101,9 +85,7 @@
           <Header alt2>Cost breakdown</Header>
           <div>
             <LabeledValue label="Base power cost" flex>
-              <CurrencyDisplay
-                :value="purchasing.price - powersInfo.currentTax"
-              />
+              <CurrencyDisplay :value="purchasing.price - powersInfo.currentTax" />
             </LabeledValue>
             <LabeledValue label="" flex>
               <template v-slot:label>
@@ -131,17 +113,13 @@
             </LabeledValue>
             <hr />
             <LabeledValue label="Your essence after purchase" flex>
-              <CurrencyDisplay
-                :value="knowledgeBase.essence - purchasing.price"
-                short
-              />
+              <CurrencyDisplay :value="knowledgeBase.essence - purchasing.price" short />
             </LabeledValue>
           </div>
           <template v-if="purchasing.groupName">
             <Header alt2>Power Group</Header>
             <Description warning>
-              Purchasing this power will make the following powers unavailable
-              for this character:
+              Purchasing this power will make the following powers unavailable for this character:
             </Description>
             <PowerItem
               v-for="power in availablePowerGroups[purchasing.groupName].powers"
@@ -152,9 +130,7 @@
               small
             />
           </template>
-          <Button @click="confirmPurchase()" :processing="processing">
-            Purchase
-          </Button>
+          <Button @click="confirmPurchase()" :processing="processing"> Purchase </Button>
         </Vertical>
       </template>
     </Modal>
@@ -164,9 +140,7 @@
         <Vertical>
           <div>
             <LabeledValue label="Essence Previously" flex>
-              <CurrencyDisplay
-                :value="knowledgeBase.essence - collected.essence"
-              />
+              <CurrencyDisplay :value="knowledgeBase.essence - collected.essence" />
             </LabeledValue>
             <LabeledValue label="Essence Collected" flex>
               <CurrencyDisplay :value="collected.essence" />
@@ -179,25 +153,12 @@
           <template v-if="collected.topAppreciations.length">
             <Header alt2>
               Top
-              {{
-                collected.topAppreciations.length > 1
-                  ? collected.topAppreciations.length
-                  : ""
-              }}
-              Impacted Player{{
-                collected.topAppreciations.length > 1 ? "s" : ""
-              }}
+              {{ collected.topAppreciations.length > 1 ? collected.topAppreciations.length : '' }}
+              Impacted Player{{ collected.topAppreciations.length > 1 ? 's' : '' }}
             </Header>
-            <ListItem
-              v-for="(appreciation, idx) in collected.topAppreciations"
-              :key="idx"
-            >
+            <ListItem v-for="(appreciation, idx) in collected.topAppreciations" :key="idx">
               <template v-slot:icon>
-                <Avatar
-                  :avatarAssets="appreciation.avatar"
-                  size="small"
-                  headOnly
-                />
+                <Avatar :avatarAssets="appreciation.avatar" size="small" headOnly />
               </template>
               <template v-slot:title>
                 <RichText :value="appreciation.name" />
@@ -211,11 +172,7 @@
 </template>
 
 <script>
-import LabeledValue from "../interface/LabeledValue";
-import PowerItem from "./PowerItem";
-import Description from "../interface/Description";
-export default {
-  components: { Description, PowerItem, LabeledValue },
+export default rxComponent({
   data: () => ({
     collecting: false,
     collected: null,
@@ -225,24 +182,22 @@ export default {
   }),
 
   subscriptions() {
-    const powersInfoStream = this.$stream("reFetchPowers")
+    const powersInfoStream = this.$stream('reFetchPowers')
       .switchMap(() => Rx.fromPromise(GameService.requestPowersInfo()))
-      .shareReplay(1);
+      .shareReplay(1)
     return {
       purchasedPowers: GameService.getRootEntityStream().map((c) =>
-        c.effects.toObject((e) => e.name)
+        c.effects.toObject((e) => e.name),
       ),
       knowledgeBase: GameService.getKnowledgeBaseStream(),
       powersInfo: powersInfoStream,
       availablePowers: powersInfoStream.map((powersInfo) => {
         return powersInfo.availablePowers.filter(
-          (power) =>
-            !powersInfo.selectedPowers.includes(power.powerId) &&
-            !power.groupName
-        );
+          (power) => !powersInfo.selectedPowers.includes(power.powerId) && !power.groupName,
+        )
       }),
       availablePowerGroups: powersInfoStream.map((powersInfo) => {
-        const allGroups = {};
+        const allGroups = {}
         powersInfo.availablePowers
           .filter((power) => !!power.groupName)
           .forEach((power) => {
@@ -250,59 +205,59 @@ export default {
               name: power.groupName,
               powers: [...(allGroups[power.groupName]?.powers || []), power],
               purchased: allGroups[power.groupName]?.purchased,
-            };
-            if (powersInfo.selectedPowers.includes(power.powerId)) {
-              allGroups[power.groupName].purchased = true;
             }
-          });
-        return allGroups;
+            if (powersInfo.selectedPowers.includes(power.powerId)) {
+              allGroups[power.groupName].purchased = true
+            }
+          })
+        return allGroups
       }),
-    };
+    }
   },
 
   methods: {
     purchasingPower(power) {
-      this.purchasing = power;
+      this.purchasing = power
     },
 
     confirmPurchase() {
-      this.processing = true;
-      const purchasing = this.purchasing;
+      this.processing = true
+      const purchasing = this.purchasing
       GameService.request(REQUEST_CODES.BUY_POWER, {
         powerId: purchasing.powerId,
       }).then((response) => {
         if (response.ok) {
-          this.reFetchPowers++;
+          this.reFetchPowers++
           ToastNotify({
             icon: purchasing.icon,
-            text: "Power acquired",
+            text: 'Power acquired',
             subtext: purchasing.name,
-          });
-          this.purchasing = null;
+          })
+          this.purchasing = null
         } else {
-          ToastError(response.message);
+          ToastError(response.message)
         }
-        this.processing = false;
-      });
+        this.processing = false
+      })
     },
 
     collectEssence() {
-      this.collecting = true;
-      GameService.triggerExecutor("Essence", "claim")
+      this.collecting = true
+      GameService.triggerExecutor('Essence', 'claim')
         .then((result) => {
-          this.collecting = false;
-          this.collected = result;
+          this.collecting = false
+          this.collected = result
         })
         .catch(() => {
-          this.collecting = false;
-        });
+          this.collecting = false
+        })
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .purchase-button {
   display: flex;
@@ -335,14 +290,14 @@ export default {
 }
 
 .power-group-label {
-  @include text-outline();
+  @include utils.text-outline();
 }
 .required-power {
   &:not(.pass) {
-    @include text-bad();
+    @include utils.text-bad();
   }
   &.pass {
-    @include text-good();
+    @include utils.text-good();
   }
 }
 </style>

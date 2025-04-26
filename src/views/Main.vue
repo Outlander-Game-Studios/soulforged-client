@@ -36,28 +36,26 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   subscriptions() {
-    const location = GameService.getLocationStream();
+    const location = GameService.getLocationStream()
     return {
       location,
       fullscreenOperation: ControlsService.getFullscreenOperationStream(),
-      dead: GameService.getRootEntityStream().map(
-        (mainEntity) => mainEntity.dead
-      ),
-    };
+      dead: GameService.getRootEntityStream().map((mainEntity) => mainEntity.dead),
+    }
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../utils.scss";
+@use '../utils.scss';
 
 .main-component {
   height: 100%;
 
   &.dead > :not(.dead-container) {
-    @include filter(saturate(0.45) brightness(0.95));
+    @include utils.filter(saturate(0.45) brightness(0.95));
   }
 }
 .actions {

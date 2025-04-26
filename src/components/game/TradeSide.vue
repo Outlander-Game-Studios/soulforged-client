@@ -29,15 +29,8 @@
       >
         <template v-slot:setEssence>
           <HorizontalFill tight class="interactive">
-            <Container
-              :borderSize="0.25"
-              class="currency-container flex-grow"
-              backgroundType="alt"
-            >
-              <CurrencyDisplay
-                :value="tradeSideData.essence"
-                :flipped="mySide"
-              />
+            <Container :borderSize="0.25" class="currency-container flex-grow" backgroundType="alt">
+              <CurrencyDisplay :value="tradeSideData.essence" :flipped="mySide" />
             </Container>
             <Icon
               class="set-essence-icon"
@@ -49,12 +42,7 @@
           </HorizontalFill>
         </template>
       </Actions>
-      <Container
-        v-else
-        :borderSize="0.25"
-        class="currency-container"
-        backgroundType="alt"
-      >
+      <Container v-else :borderSize="0.25" class="currency-container" backgroundType="alt">
         <CurrencyDisplay :value="tradeSideData.essence" :flipped="mySide" />
       </Container>
     </HorizontalFill>
@@ -62,12 +50,7 @@
     <Vertical>
       <Horizontal tight>
         <Header small class="flex-grow"> Items </Header>
-        <Actions
-          :target="trade"
-          actionId="addItem"
-          :disabled="!trade.canUpdate"
-          v-if="mySide"
-        >
+        <Actions :target="trade" actionId="addItem" :disabled="!trade.canUpdate" v-if="mySide">
           <template v-slot:addItem>
             <Icon
               class="add-item-icon interactive"
@@ -79,9 +62,7 @@
           </template>
         </Actions>
       </Horizontal>
-      <div v-if="!tradeSideData.items.length" class="empty-text small">
-        None
-      </div>
+      <div v-if="!tradeSideData.items.length" class="empty-text small">None</div>
       <div v-else class="items">
         <div v-for="(item, idx) in tradeSideData.items" :key="idx">
           <Actions
@@ -115,12 +96,7 @@
       </div>
       <Horizontal tight>
         <Header small class="flex-grow"> Buildings </Header>
-        <Actions
-          :target="trade"
-          actionId="addHolding"
-          :disabled="!trade.canUpdate"
-          v-if="mySide"
-        >
+        <Actions :target="trade" actionId="addHolding" :disabled="!trade.canUpdate" v-if="mySide">
           <template v-slot:addHolding>
             <Icon
               class="add-item-icon interactive"
@@ -132,9 +108,7 @@
           </template>
         </Actions>
       </Horizontal>
-      <div v-if="!tradeSideData.holdings.length" class="empty-text small">
-        None
-      </div>
+      <div v-if="!tradeSideData.holdings.length" class="empty-text small">None</div>
       <div v-else class="items">
         <div v-for="(holding, idx) in tradeSideData.holdings" :key="idx">
           <Actions
@@ -166,14 +140,9 @@
 </template>
 
 <script>
-import plusIcon from "../../assets/ui/cartoon/icons/plus_nobg.png";
-import StructureIcon from "./StructureIcon";
-import Vertical from "../layouts/Vertical";
-import HorizontalFill from "../layouts/HorizontalFill";
-import Description from "../interface/Description";
+import plusIcon from '../../assets/ui/cartoon/icons/plus_nobg.png'
 
-export default {
-  components: { Description, HorizontalFill, Vertical, StructureIcon },
+export default rxComponent({
   props: {
     trade: {},
     tradeSide: {},
@@ -189,37 +158,31 @@ export default {
 
   computed: {
     tradeSideData() {
-      return this.trade[this.tradeSide];
+      return this.trade[this.tradeSide]
     },
   },
 
   subscriptions() {
     return {
-      creature: this.$stream("tradeSideData")
-        .pluck("who")
-        .switchMap((id) =>
-          GameService.getEntityStream(id, ENTITY_VARIANTS.TRADE)
-        ),
+      creature: this.$stream('tradeSideData')
+        .pluck('who')
+        .switchMap((id) => GameService.getEntityStream(id, ENTITY_VARIANTS.TRADE)),
       creaturesAtLocation: GameService.getLocationStream().map((location) =>
-        location.creatures.toObject((cId) => cId)
+        location.creatures.toObject((cId) => cId),
       ),
-    };
+    }
   },
 
   methods: {
     characterPresent(creature) {
-      return (
-        creature &&
-        this.creaturesAtLocation &&
-        this.creaturesAtLocation[creature.id]
-      );
+      return creature && this.creaturesAtLocation && this.creaturesAtLocation[creature.id]
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .trade-side {
   width: 50%;
@@ -271,7 +234,7 @@ export default {
   }
 
   .disabled {
-    @include filter(saturate(0));
+    @include utils.filter(saturate(0));
   }
 }
 

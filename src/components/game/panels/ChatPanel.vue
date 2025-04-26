@@ -54,13 +54,7 @@
       <Header>Select Mood</Header>
       <HorizontalWrap tight>
         <div class="emo-selector" v-for="emo in EMOS" :key="emo">
-          <Avatar
-            headOnly
-            :creature="myCreature"
-            size="small"
-            :emo="emo"
-            @click="selectEmo(emo)"
-          />
+          <Avatar headOnly :creature="myCreature" size="small" :emo="emo" @click="selectEmo(emo)" />
           <span class="emo-text">{{ emo }}</span>
         </div>
       </HorizontalWrap>
@@ -77,22 +71,16 @@
       </div>
       <Input
         ref="textInput"
-        v-model="newMessageText"
+        v-model:value="newMessageText"
         class="message-input"
         :disabled="sending"
         @keypress="inputKeypress($event)"
         noSelectOnFocus
       />
-      <Button @click="sendMessage()" :disabled="sending" class="send-button">
-        Send
-      </Button>
+      <Button @click="sendMessage()" :disabled="sending" class="send-button"> Send </Button>
     </div>
     <transition name="fade">
-      <div
-        v-if="errorMsg"
-        class="message-error interactive"
-        @click="errorMsg = null"
-      >
+      <div v-if="errorMsg" class="message-error interactive" @click="errorMsg = null">
         {{ errorMsg }}
       </div>
     </transition>
@@ -114,16 +102,13 @@
                 <span class="name">{{ getCharacterName(viewMessage) }}</span>
                 <span class="date">{{ viewMessage.formattedTime }}</span>
               </div>
-              <span class="message-text" v-if="viewMessage.msg">{{
-                viewMessage.msg
-              }}</span>
+              <span class="message-text" v-if="viewMessage.msg">{{ viewMessage.msg }}</span>
               <span class="message-text redacted" v-else>Message redacted</span>
             </div>
           </div>
           <HorizontalCenter>
             <Description v-if="!characterPresent(viewMessage)">
-              Faded character picture indicates they are currently in another
-              location.
+              Faded character picture indicates they are currently in another location.
             </Description>
           </HorizontalCenter>
           <HorizontalCenter>
@@ -151,12 +136,12 @@
 </template>
 
 <script>
-const EMOS = [":)", ":D", ":(", ":<", ":/", ":O", ":P"];
+const EMOS = [':)', ':D', ':(', ':<', ':/', ':O', ':P']
 
-export default {
+export default rxComponent({
   data: () => ({
     errorMsg: null,
-    newMessageText: "",
+    newMessageText: '',
     sending: false,
     emoSelector: false,
     viewMessage: null,
@@ -167,164 +152,154 @@ export default {
   watch: {
     errorMsg(value) {
       if (value) {
-        clearTimeout(this.clearErrorTimeout);
+        clearTimeout(this.clearErrorTimeout)
       }
     },
     newMessageText(value) {
-      value = value || "";
-      LocalStorageService.setItem("typedChatMessage", value);
-      const error = ChatMessageValidator(value);
+      value = value || ''
+      LocalStorageService.setItem('typedChatMessage', value)
+      const error = ChatMessageValidator(value)
       if (error && value) {
-        this.errorMsg = error;
+        this.errorMsg = error
       } else {
-        this.errorMsg = null;
+        this.errorMsg = null
       }
     },
   },
 
   subscriptions() {
-    const messagesStream = ChatService.getMessagesStream();
-    const lastReadTimestampStream = ChatService.getLastReadTimestampStream();
+    const messagesStream = ChatService.getMessagesStream()
+    const lastReadTimestampStream = ChatService.getLastReadTimestampStream()
     const creaturesStream = messagesStream
       .filter((messages) => !!messages)
-      .map((messages) =>
-        messages.reduce((acc, msg) => ({ ...acc, [msg.whoId]: true }), {})
-      )
+      .map((messages) => messages.reduce((acc, msg) => ({ ...acc, [msg.whoId]: true }), {}))
       .map((creaturesMap) => Object.keys(creaturesMap))
       .switchMap((creaturesIds) =>
-        GameService.getEntitiesStream(creaturesIds, ENTITY_VARIANTS.CHAT_HEAD)
-      );
+        GameService.getEntitiesStream(creaturesIds, ENTITY_VARIANTS.CHAT_HEAD),
+      )
     const firstUnreadMessageStream = Rx.combineLatest(
       messagesStream,
-      lastReadTimestampStream.first()
+      lastReadTimestampStream.first(),
     )
       .first()
       .map(([messages, lastReadTimestampStream]) => {
         const firstUnreadMessage = messages.find(
-          (message) => message.when > lastReadTimestampStream
-        );
+          (message) => message.when > lastReadTimestampStream,
+        )
         setTimeout(() => {
           if (firstUnreadMessage) {
             if (this.$refs.unreadMarker?.length) {
-              this.$refs.unreadMarker.first().scrollIntoView();
+              this.$refs.unreadMarker.first().scrollIntoView()
             }
           } else {
-            this.scrollToNewest();
+            this.scrollToNewest()
           }
-        });
-        return firstUnreadMessage;
-      });
+        })
+        return firstUnreadMessage
+      })
 
     return {
       messages: messagesStream.tap(() => {
-        this.maintainBottomScroll();
+        this.maintainBottomScroll()
       }),
       firstUnreadMessage: firstUnreadMessageStream,
       myCreature: GameService.getMyCreatureStream(),
-      characters: creaturesStream.map((creatures) =>
-        creatures.toObject((c) => c.id)
-      ),
-      messageAuthor: this.$stream("viewMessage")
+      characters: creaturesStream.map((creatures) => creatures.toObject((c) => c.id)),
+      messageAuthor: this.$stream('viewMessage')
         .filter((m) => !!m)
-        .pluck("whoId")
-        .switchMap((id) =>
-          GameService.getEntityStream(id, ENTITY_VARIANTS.DETAILS)
-        ),
+        .pluck('whoId')
+        .switchMap((id) => GameService.getEntityStream(id, ENTITY_VARIANTS.DETAILS)),
       lastReadTimestamp: lastReadTimestampStream,
       creaturesAtLocation: GameService.getLocationStream().map((location) =>
-        location.creatures.toObject((cId) => cId)
+        location.creatures.toObject((cId) => cId),
       ),
-    };
+    }
   },
 
   mounted() {
-    this.newMessageText = LocalStorageService.getItem("typedChatMessage", "");
-    this.focusInput();
+    this.newMessageText = LocalStorageService.getItem('typedChatMessage', '')
+    this.focusInput()
   },
 
   methods: {
     focusInput() {
       setTimeout(() => {
-        this.$refs?.textInput?.focus();
-      });
+        this.$refs?.textInput?.focus()
+      })
     },
 
     onAction(...args) {
-      this.viewMessage = null;
+      this.viewMessage = null
     },
 
     characterPresent(message) {
-      return this.creaturesAtLocation[message.whoId];
+      return this.creaturesAtLocation[message.whoId]
     },
 
     selectEmo(emo) {
-      this.emoSelector = false;
-      this.currentEmo = emo;
+      this.emoSelector = false
+      this.currentEmo = emo
     },
 
     onMessageVisibilityChange(message) {
       return (visible) => {
         if (visible && message.when > this.lastReadTimestamp) {
-          ChatService.setLastReadTimestamp(message.when);
+          ChatService.setLastReadTimestamp(message.when)
         }
-      };
+      }
     },
 
     inputKeypress(event) {
       if (this.emoSelector) {
-        if (event.key === "Escape" || event.key === "Backspace") {
-          this.emoSelector = false;
-          return;
+        if (event.key === 'Escape' || event.key === 'Backspace') {
+          this.emoSelector = false
+          return
         }
-        const emo = EMOS.find((emo) => emo[1] === event.key.toUpperCase());
+        const emo = EMOS.find((emo) => emo[1] === event.key.toUpperCase())
         if (emo) {
-          event.preventDefault();
-          this.emoSelector = false;
-          this.currentEmo = emo;
-          this.newMessageText = this.newMessageText.substring(
-            0,
-            this.newMessageText.length - 1
-          );
+          event.preventDefault()
+          this.emoSelector = false
+          this.currentEmo = emo
+          this.newMessageText = this.newMessageText.substring(0, this.newMessageText.length - 1)
         } else {
-          this.emoSelector = false;
+          this.emoSelector = false
         }
-        return;
+        return
       }
 
-      if (event.key === "Enter") {
-        this.sendMessage();
+      if (event.key === 'Enter') {
+        this.sendMessage()
       }
-      if (event.key === ":") {
-        this.emoSelector = true;
+      if (event.key === ':') {
+        this.emoSelector = true
       }
     },
 
     maintainBottomScroll() {
-      const el = this.$refs.chatMessagesWrapper;
+      const el = this.$refs.chatMessagesWrapper
       if (!el) {
-        return;
+        return
       }
 
-      const isScrolledToBottom =
-        el.scrollHeight - 2 <= el.scrollTop + el.clientHeight;
+      const isScrolledToBottom = el.scrollHeight - 2 <= el.scrollTop + el.clientHeight
       if (isScrolledToBottom) {
         setTimeout(() => {
-          this.scrollToNewest();
-        });
+          this.scrollToNewest()
+        })
       }
     },
 
     scrollToNewest() {
-      const el = this.$refs.chatMessagesWrapper;
+      const el = this.$refs.chatMessagesWrapper
       if (el && el.scrollTo) {
         el.scrollTo(0, el.scrollHeight, {
-          behavior: "smooth",
-        });
+          behavior: 'smooth',
+        })
       }
     },
 
     sendMessage() {
-      this.sending = true;
+      this.sending = true
       setTimeout(() => {
         GameService.request(REQUEST_CODES.CHAT_SEND_MESSAGE, {
           emo: this.currentEmo,
@@ -332,43 +307,43 @@ export default {
         })
           .then((result) => {
             if (result === true) {
-              this.newMessageText = "";
-              this.currentEmo = EMOS.first();
+              this.newMessageText = ''
+              this.currentEmo = EMOS.first()
             } else if (result?.ok === false) {
-              this.errorMsg = result.message;
+              this.errorMsg = result.message
             } else {
-              this.errorMsg = result;
+              this.errorMsg = result
             }
-            this.sending = false;
-            this.focusInput();
+            this.sending = false
+            this.focusInput()
           })
           .catch(() => {
-            this.sending = false;
-            this.focusInput();
-          });
-      });
+            this.sending = false
+            this.focusInput()
+          })
+      })
     },
 
     getCharacter(message) {
       if (!this.characters) {
-        return;
+        return
       }
-      return this.characters[message.whoId];
+      return this.characters[message.whoId]
     },
 
     getCharacterName(message) {
-      return this.getCharacter(message)?.name;
+      return this.getCharacter(message)?.name
     },
 
     isOwnMessage(message) {
-      return this.myCreature && this.myCreature.id === message.whoId;
+      return this.myCreature && this.myCreature.id === message.whoId
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 
 .chat-panel {
   display: flex;
@@ -476,7 +451,7 @@ export default {
       width: 7rem;
       background: darkred;
       white-space: nowrap;
-      @include text-outline(black);
+      @include utils.text-outline(black);
     }
   }
 
@@ -557,7 +532,7 @@ export default {
   position: relative;
 
   .emo-text {
-    @include text-outline();
+    @include utils.text-outline();
     position: absolute;
     font-size: 70%;
     top: 0.5rem;

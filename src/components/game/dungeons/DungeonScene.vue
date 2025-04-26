@@ -30,9 +30,7 @@
 </template>
 
 <script>
-import EnvironmentPanel from "../panels/EnvironmentPanel";
-export default {
-  components: { EnvironmentPanel },
+export default rxComponent({
   props: {
     location: {},
   },
@@ -41,73 +39,73 @@ export default {
     return {
       tabOpened: ControlsService.getCurrentOpenTabStream().map((tab) => !!tab),
       myCreature: GameService.getMyCreatureStream(),
-    };
+    }
   },
 
   computed: {
     dungeonAssets() {
-      return this.location?.dungeon?.assets;
+      return this.location?.dungeon?.assets
     },
 
     dungeonAssetsDoodads() {
       if (this.dungeonAssets?.doodads) {
-        const doodads = this.dungeonAssets.doodads;
+        const doodads = this.dungeonAssets.doodads
         doodads.forEach((d) => {
           if (!d || !d.img) {
             throw new Error(
               `Invalid doodads definitions.\n\n${JSON.stringify(
                 d,
                 null,
-                2
-              )}\n\n${JSON.stringify(this.dungeonAssets.doodads, null, 2)}`
-            );
+                2,
+              )}\n\n${JSON.stringify(this.dungeonAssets.doodads, null, 2)}`,
+            )
           }
-        });
-        return doodads;
+        })
+        return doodads
       }
-      return [];
+      return []
     },
 
     sceneClass() {
-      if (this.myCreature?.operation?.type === "CombatOperation") {
-        return "in-combat";
+      if (this.myCreature?.operation?.type === 'CombatOperation') {
+        return 'in-combat'
       }
       if (this.tabOpened) {
-        return "panel-opened";
+        return 'panel-opened'
       }
-      return "";
+      return ''
     },
 
     processedDoodads() {
       return this.dungeonAssetsDoodads
         ?.sort((a, b) => a.layer - b.layer)
         .map((doodad) => {
-          const { frames = 1 } = doodad.animation || {};
-          const [x, y] = doodad.placement;
+          const { frames = 1 } = doodad.animation || {}
+          const [x, y] = doodad.placement
           return {
             ...doodad,
             style: {
               backgroundImage: `url(${doodad.img})`,
               backgroundSize: `${100 * frames}% auto`,
-              width: 0.2 * doodad.size + "%",
-              marginLeft: -0.1 * doodad.size + "%",
-              left: x + "%",
-              top: y + "%",
+              width: 0.2 * doodad.size + '%',
+              marginLeft: -0.1 * doodad.size + '%',
+              left: x + '%',
+              top: y + '%',
               zIndex: doodad.layer,
             },
-          };
-        });
+          }
+        })
     },
 
     styles() {
       return [
-        "backwall",
-        "ceiling",
-        "floor",
-        "fillTop",
-        "fillBottom",
-        "wallLeft",
-        "wallRight",
+        'backwall',
+        'ceiling',
+        'floor',
+        'fillTop',
+        'fillBottom',
+        'wallLeft',
+        'wallRight',
       ].toObject(
         (key) => key,
         (key) =>
@@ -115,15 +113,15 @@ export default {
             ? {
                 backgroundImage: `url(${this.dungeonAssets[key]})`,
               }
-            : {}
-      );
+            : {},
+      )
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 
 $size-base: min(var(--app-width), var(--app-height) * 2.6);
 $ceiling-height: calc(#{$size-base} * 0.065);
@@ -131,12 +129,10 @@ $backwall-width: calc(#{$size-base} * 0.35);
 $backwall-ratio: calc(2048 / 958);
 $backwall-height: calc(#{$backwall-width} * 1 / #{$backwall-ratio});
 $floor-height: calc(#{$size-base} * 0.1);
-$total-height: calc(
-  #{$ceiling-height} + #{$backwall-height} + #{$floor-height}
-);
+$total-height: calc(#{$ceiling-height} + #{$backwall-height} + #{$floor-height});
 
 .dungeon-scene-wrapper {
-  @include fill();
+  @include utils.fill();
   background: black;
   display: flex;
   justify-content: center;

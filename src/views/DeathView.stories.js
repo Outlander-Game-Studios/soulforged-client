@@ -1,17 +1,16 @@
-import DeathView from "./DeathView.vue";
-import { Rx } from "@/rx.js";
+import DeathView from './DeathView.vue'
 
 export default {
-  title: "Game UI/Death Screen",
-};
+  title: 'Game UI/Death Screen',
+}
 
 export const base = mockComponent({
   components: {
     DeathView,
   },
 
-  template: "<DeathView />",
-});
+  template: '<DeathView />',
+})
 
 export const withNotifications = mockComponent({
   components: {
@@ -20,9 +19,9 @@ export const withNotifications = mockComponent({
 
   mounted() {
     ToastNotify({
-      text: "Notification",
+      text: 'Notification',
       persisting: true,
-    });
+    })
   },
 
   template: `
@@ -30,4 +29,4 @@ export const withNotifications = mockComponent({
   <DeathView />
   <ToastNotifications />
 </div>`,
-});
+})

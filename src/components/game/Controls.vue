@@ -9,46 +9,25 @@
         @change="tabChanged"
       >
         <template v-slot:header:Location>
-          <div
-            class="tab-icon location"
-            :style="{ backgroundImage: `url(${locationIcon})` }"
-          />
+          <div class="tab-icon location" :style="{ backgroundImage: `url(${locationIcon})` }" />
         </template>
         <template v-slot:header:Items>
-          <div
-            class="tab-icon inventory"
-            :style="{ backgroundImage: `url(${itemsIcon})` }"
-          />
+          <div class="tab-icon inventory" :style="{ backgroundImage: `url(${itemsIcon})` }" />
         </template>
         <template v-slot:header:Craft>
-          <div
-            class="tab-icon craft"
-            :style="{ backgroundImage: `url(${craftIcon})` }"
-          />
+          <div class="tab-icon craft" :style="{ backgroundImage: `url(${craftIcon})` }" />
         </template>
         <template v-slot:header:Research>
-          <div
-            class="tab-icon research"
-            :style="{ backgroundImage: `url(${researchIcon})` }"
-          />
+          <div class="tab-icon research" :style="{ backgroundImage: `url(${researchIcon})` }" />
         </template>
         <template v-slot:header:Character>
-          <div
-            class="tab-icon character"
-            :style="{ backgroundImage: `url(${characterIcon})` }"
-          />
+          <div class="tab-icon character" :style="{ backgroundImage: `url(${characterIcon})` }" />
         </template>
         <template v-slot:header:Chat>
-          <div
-            class="tab-icon chat"
-            :style="{ backgroundImage: `url(${chatIcon})` }"
-          />
+          <div class="tab-icon chat" :style="{ backgroundImage: `url(${chatIcon})` }" />
         </template>
         <template v-slot:header:Trade>
-          <div
-            class="tab-icon trade"
-            :style="{ backgroundImage: `url(${tradeIcon})` }"
-          />
+          <div class="tab-icon trade" :style="{ backgroundImage: `url(${tradeIcon})` }" />
         </template>
         <Tab header="Location" ref="locationTab">
           <div class="controls-tab-contents small">
@@ -71,11 +50,7 @@
             <PlansPanel />
           </div>
         </Tab>
-        <Tab
-          header="Research"
-          :indicator="newResearchesCount"
-          indicatorStyle="important"
-        >
+        <Tab header="Research" :indicator="newResearchesCount" indicatorStyle="important">
           <div class="controls-tab-contents small">
             <ResearchesPanel />
           </div>
@@ -101,17 +76,17 @@
 </template>
 
 <script>
-import locationIcon from "../../assets/ui/cartoon/icons/tabs/location.png";
-import characterIcon from "../../assets/ui/cartoon/icons/tabs/character.png";
-import itemsIcon from "../../assets/ui/cartoon/icons/tabs/items.png";
-import craftIcon from "../../assets/ui/cartoon/icons/tabs/craft.png";
-import researchIcon from "../../assets/ui/cartoon/icons/tabs/research.png";
-import chatIcon from "../../assets/ui/cartoon/icons/tabs/chat.png";
-import tradeIcon from "../../assets/ui/cartoon/icons/tabs/trade.png";
-import pageSound from "../../assets/sounds/page.mp3";
-import pageCloseSound from "../../assets/sounds/page-close.mp3";
+import locationIcon from '../../assets/ui/cartoon/icons/tabs/location.png'
+import characterIcon from '../../assets/ui/cartoon/icons/tabs/character.png'
+import itemsIcon from '../../assets/ui/cartoon/icons/tabs/items.png'
+import craftIcon from '../../assets/ui/cartoon/icons/tabs/craft.png'
+import researchIcon from '../../assets/ui/cartoon/icons/tabs/research.png'
+import chatIcon from '../../assets/ui/cartoon/icons/tabs/chat.png'
+import tradeIcon from '../../assets/ui/cartoon/icons/tabs/trade.png'
+import pageSound from '../../assets/sounds/page.mp3'
+import pageCloseSound from '../../assets/sounds/page-close.mp3'
 
-export default {
+export default rxComponent({
   data: () => ({
     controlTabsPlacement: null,
     locationIcon,
@@ -125,31 +100,28 @@ export default {
   }),
 
   subscriptions() {
-    const mainEntity = GameService.getRootEntityStream();
+    const mainEntity = GameService.getRootEntityStream()
     return {
       mainEntity,
       newResearchesCount: GameService.getResearchesStream()
         .map((researches) => researches.filter((r) => !r.seen).length)
         .tap((count) => {
-          if (
-            this.newResearchesCount !== undefined &&
-            count > this.newResearchesCount
-          ) {
-            SoundService.playNotificationSound("research");
+          if (this.newResearchesCount !== undefined && count > this.newResearchesCount) {
+            SoundService.playNotificationSound('research')
           }
         }),
       newChatCount: ChatService.getUnreadMessagesCountStream()
-        .map((count) => (count > 99 ? "99+" : count))
+        .map((count) => (count > 99 ? '99+' : count))
         .tap((count) => {
           if (this.newChatCount !== undefined && count > this.newChatCount) {
-            SoundService.playNotificationSound("chat");
+            SoundService.playNotificationSound('chat')
           }
         }),
       tradeCount: mainEntity
         .map((entity) => entity?.trades?.length)
         .tap((count) => {
           if (this.tradeCount !== undefined && count > this.tradeCount) {
-            SoundService.playNotificationSound("trade");
+            SoundService.playNotificationSound('trade')
           }
         }),
       anyPendingTrades: mainEntity
@@ -159,72 +131,59 @@ export default {
         .map((trades) =>
           trades.some(
             (trade) =>
-              !trade.cancelled &&
-              !trade.completed &&
-              trade.canAccept &&
-              !trade.me.accepted
-          )
+              !trade.cancelled && !trade.completed && trade.canAccept && !trade.me.accepted,
+          ),
         ),
-      closePanel: ControlsService.getControlEventStream("closePanel").tap(
+      closePanel: ControlsService.getControlEventStream('closePanel').tap(() => {
+        this.$refs.tabs.closeTab()
+      }),
+      openInventoryPanel: ControlsService.getControlEventStream('openPanel-inventory').tap(() => {
+        this.$refs.tabs.setActiveByComponent(this.$refs.inventoryTab)
+      }),
+      openCharacterPanel: ControlsService.getControlEventStream('openPanel-character-effects').tap(
         () => {
-          this.$refs.tabs.closeTab();
-        }
+          this.$refs.tabs.setActiveByComponent(this.$refs.characterTab)
+        },
       ),
-      openInventoryPanel: ControlsService.getControlEventStream(
-        "openPanel-inventory"
-      ).tap(() => {
-        this.$refs.tabs.setActiveByComponent(this.$refs.inventoryTab);
+      openTradePanel: ControlsService.getControlEventStream('openPanel-trade').tap(() => {
+        this.$refs.tabs.setActiveByComponent(this.$refs.tradeTab)
       }),
-      openCharacterPanel: ControlsService.getControlEventStream(
-        "openPanel-character-effects"
-      ).tap(() => {
-        this.$refs.tabs.setActiveByComponent(this.$refs.characterTab);
+      openLocationPanel: ControlsService.getControlEventStream('openPanel-location').tap(() => {
+        this.$refs.tabs.setActiveByComponent(this.$refs.locationTab)
       }),
-      openTradePanel: ControlsService.getControlEventStream(
-        "openPanel-trade"
-      ).tap(() => {
-        this.$refs.tabs.setActiveByComponent(this.$refs.tradeTab);
-      }),
-      openLocationPanel: ControlsService.getControlEventStream(
-        "openPanel-location"
-      ).tap(() => {
-        this.$refs.tabs.setActiveByComponent(this.$refs.locationTab);
-      }),
-    };
+    }
   },
 
   mounted() {
-    this.calculateControlTabsPlacement();
-    window.addEventListener("resize", () => {
-      this.calculateControlTabsPlacement();
-    });
+    this.calculateControlTabsPlacement()
+    window.addEventListener('resize', () => {
+      this.calculateControlTabsPlacement()
+    })
   },
 
   methods: {
     tabChanged(tab) {
-      ControlsService.setCurrentOpenTab(tab);
+      ControlsService.setCurrentOpenTab(tab)
       if (this.initiated) {
         if (tab) {
-          SoundService.playSound(pageSound);
+          SoundService.playSound(pageSound)
         } else {
-          SoundService.playSound(pageCloseSound);
+          SoundService.playSound(pageCloseSound)
         }
       } else {
-        this.initiated = true;
+        this.initiated = true
       }
     },
 
     calculateControlTabsPlacement() {
       const targetPlacement =
-        window.innerWidth / window.innerHeight > 1
-          ? Tabs.POSITION.RIGHT
-          : Tabs.POSITION.BOTTOM;
+        window.innerWidth / window.innerHeight > 1 ? Tabs.POSITION.RIGHT : Tabs.POSITION.BOTTOM
       if (this.controlTabsPlacement !== targetPlacement) {
-        this.controlTabsPlacement = targetPlacement;
+        this.controlTabsPlacement = targetPlacement
       }
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">

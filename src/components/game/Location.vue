@@ -41,7 +41,7 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   props: {
     locationOverride: {},
     pathsOverride: {},
@@ -60,24 +60,19 @@ export default {
   }),
 
   subscriptions() {
-    const locationStream = this.$stream(
-      "locationOverride"
-    ).switchMap((locationOverride) =>
-      locationOverride
-        ? Rx.Observable.of(locationOverride)
-        : GameService.getLocationStream()
-    );
-    const pathsStream = this.$stream("pathsOverride").switchMap(
-      (pathsOverride) =>
-        pathsOverride
-          ? Rx.Observable.of(pathsOverride)
-          : locationStream
-              .map(({ id, paths }) => ({ id, paths }))
-              .distinctUntilChanged(null, JSON.stringify)
-              .switchMap(({ paths }) =>
-                GameService.getEntitiesStream(paths, ENTITY_VARIANTS.BASE, true)
-              )
-    );
+    const locationStream = this.$stream('locationOverride').switchMap((locationOverride) =>
+      locationOverride ? Rx.Observable.of(locationOverride) : GameService.getLocationStream(),
+    )
+    const pathsStream = this.$stream('pathsOverride').switchMap((pathsOverride) =>
+      pathsOverride
+        ? Rx.Observable.of(pathsOverride)
+        : locationStream
+            .map(({ id, paths }) => ({ id, paths }))
+            .distinctUntilChanged(null, JSON.stringify)
+            .switchMap(({ paths }) =>
+              GameService.getEntitiesStream(paths, ENTITY_VARIANTS.BASE, true),
+            ),
+    )
     return {
       shrink: ControlsService.getCurrentOpenTabStream().map((tab) => !!tab),
       mainEntity: GameService.getRootEntityStream(),
@@ -89,124 +84,120 @@ export default {
         .tap(() => {
           this.paths
             ?.filter((path) => {
-              const pathLocationId = path.fromLocationId;
-              const locationId = this.mainEntity?.location;
-              return pathLocationId === locationId;
+              const pathLocationId = path.fromLocationId
+              const locationId = this.mainEntity?.location
+              return pathLocationId === locationId
             })
-            .forEach((path) =>
-              GameService.getEntityStream(path.id, ENTITY_VARIANTS.BASE, true)
-            );
+            .forEach((path) => GameService.getEntityStream(path.id, ENTITY_VARIANTS.BASE, true))
         }),
       location: locationStream,
       paths: pathsStream,
       myCreature: GameService.getMyCreatureStream(),
-    };
+    }
   },
 
   computed: {
     visibleMapClass() {
-      let classResult = "";
+      let classResult = ''
       if (this.location?.indoors) {
-        classResult = "indoors";
+        classResult = 'indoors'
       }
       if (this.small) {
-        return [classResult, "small"];
+        return [classResult, 'small']
       }
       if (this.shrink) {
-        return [classResult, "shrink"];
+        return [classResult, 'shrink']
       }
-      return [classResult, "normal"];
+      return [classResult, 'normal']
     },
 
     travelPathId() {
       return (
         this.mainEntity &&
         this.mainEntity.operation &&
-        this.mainEntity.operation.type === "TravelOperation" &&
+        this.mainEntity.operation.type === 'TravelOperation' &&
         this.mainEntity.operation.context &&
         this.mainEntity.operation.context.pathId
-      );
+      )
     },
   },
 
   methods: {
     openLocationTab() {
-      ControlsService.triggerControlEvent("openPanel-location");
+      ControlsService.triggerControlEvent('openPanel-location')
     },
 
     getLocationImgPath() {
       const imageUrl =
         `${GameService.getLocationImgPath(this.location)}?uq=${
           this.location.mapImageVersion
-        }&refresh=` + this.imageUpdate;
+        }&refresh=` + this.imageUpdate
       if (imageUrl && this.lastImageUrl !== imageUrl) {
-        this.loadImage(imageUrl);
-        this.lastImageUrl = imageUrl;
+        this.loadImage(imageUrl)
+        this.lastImageUrl = imageUrl
       }
-      return imageUrl;
+      return imageUrl
     },
 
     loadImage(path) {
-      this.loading = true;
+      this.loading = true
 
-      const preloaderImg = document.createElement("img");
-      preloaderImg.src = path;
+      const preloaderImg = document.createElement('img')
+      preloaderImg.src = path
 
-      preloaderImg.addEventListener("load", () => {
-        this.loading = false;
-        preloaderImg.remove();
-      });
-      preloaderImg.addEventListener("error", (...args) => {
-        console.error("Error loading location image");
+      preloaderImg.addEventListener('load', () => {
+        this.loading = false
+        preloaderImg.remove()
+      })
+      preloaderImg.addEventListener('error', (...args) => {
+        console.error('Error loading location image')
         setTimeout(() => {
-          this.imageUpdate++;
-        }, 1000);
-      });
+          this.imageUpdate++
+        }, 1000)
+      })
     },
 
     pathStyle(path) {
       return {
         transform: `rotate(${180 + path.position}deg)`,
-      };
+      }
     },
 
     arrowClick(path, $event) {
-      SoundService.playSound(SoundService.SOUNDS.TRAVEL);
-      if (this.$listeners.selected) {
-        this.$emit("selected", path);
-        $event.stopPropagation();
-        return;
+      SoundService.playSound(SoundService.SOUNDS.TRAVEL)
+      if (this.$attrs.onSelected) {
+        this.$emit('selected', path)
+        $event.stopPropagation()
+        return
       }
       if (path.id === this.travelPathId) {
         GameService.request(REQUEST_CODES.COMMENCE_OPERATION, {
           locationId: this.mainEntity.location,
         }).then(({ statusChanges = [] } = {}) => {
-          ToastNotify(statusChanges);
-        });
-        $event.stopPropagation();
+          ToastNotify(statusChanges)
+        })
+        $event.stopPropagation()
       }
     },
 
     getArrowClass(path) {
-      const invalid =
-        !!this.validPathIds && !this.validPathIds.includes(path.id);
+      const invalid = !!this.validPathIds && !this.validPathIds.includes(path.id)
       return [
-        "difficulty-" + path.accidentGrade,
-        "path-" + path.id,
+        'difficulty-' + path.accidentGrade,
+        'path-' + path.id,
         {
           invalid,
-          current:
-            this.travelPathId === path.id || this.highlightId === path.id,
+          current: this.travelPathId === path.id || this.highlightId === path.id,
           backtrack: path.isBacktracking,
         },
-      ];
+      ]
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 @keyframes current-arrow {
   0% {
@@ -239,7 +230,7 @@ export default {
 }
 
 .loading-texture {
-  background-image: url(ui-asset("/clouds-1.jpg"));
+  background-image: utils.ui-asset('/clouds-1.jpg');
   background-size: 50% 100%;
   background-repeat: round;
   width: 200%;
@@ -259,9 +250,8 @@ $transition-time: 120ms;
   &.framed {
     border: $border-width solid transparent;
     box-sizing: border-box;
-    background-image: url(ui-asset("/borders/hero_icon_frame.png"));
-    background-size: calc(100% + calc(2 * #{$border-width}))
-      calc(100% + calc(2 * #{$border-width}));
+    background-image: utils.ui-asset('/borders/hero_icon_frame.png');
+    background-size: calc(100% + calc(2 * #{$border-width})) calc(100% + calc(2 * #{$border-width}));
     background-position: center center;
     background-repeat: no-repeat;
   }
@@ -278,11 +268,11 @@ $transition-time: 120ms;
     overflow: hidden;
     cursor: pointer;
 
-    background: url(ui-asset("/misc/flag_blue.png"));
+    background: utils.ui-asset('/misc/flag_blue.png');
     background-size: 100% 100%;
 
     &:hover {
-      @include filter(brightness(1.4) saturate(1.4));
+      @include utils.filter(brightness(1.4) saturate(1.4));
     }
   }
 
@@ -313,12 +303,12 @@ $transition-time: 120ms;
       position: relative;
 
       &.invalid {
-        @include filter(saturate(0));
+        @include utils.filter(saturate(0));
       }
 
       &.backtrack {
         &::before {
-          content: "";
+          content: '';
           position: absolute;
           $overlap: 10%;
           top: $overlap;
@@ -328,7 +318,7 @@ $transition-time: 120ms;
           opacity: 1;
           transform: rotate(45deg);
 
-          background-image: url(ui-asset("/borders/reinforced.png"));
+          background-image: utils.ui-asset('/borders/reinforced.png');
           background-size: 100% 100%;
           background-repeat: no-repeat;
         }
@@ -336,7 +326,7 @@ $transition-time: 120ms;
 
       @for $i from 0 through 5 {
         &.difficulty-#{$i} {
-          background-image: url(ui-asset("/misc/travel-#{$i}.png"));
+          background-image: utils.ui-asset('/misc/travel-#{$i}.png');
         }
       }
 
@@ -346,7 +336,7 @@ $transition-time: 120ms;
 
       &:hover {
         cursor: pointer;
-        @include filter(brightness(1.7));
+        @include utils.filter(brightness(1.7));
       }
     }
   }
@@ -378,18 +368,18 @@ $transition-time: 120ms;
 
   &.shrink {
     @media (orientation: landscape) {
+      top: 5rem;
+      right: 17rem;
       @include visible-map-style(
         min(var(--app-height) - 22rem, 1 * var(--app-width) - 40rem - 2rem)
       );
-      top: 5rem;
-      right: 17rem;
     }
 
     @media (orientation: portrait) {
+      margin-top: -27rem;
       @include visible-map-style(
         min(var(--app-width) - 5rem, 1 * var(--app-height) - 40rem - 16rem)
       );
-      margin-top: -27rem;
     }
   }
 
@@ -416,14 +406,13 @@ $transition-time: 120ms;
 
   $spacing: 2%;
   &:before {
-    content: "";
+    content: '';
     position: absolute;
     top: $spacing;
     left: $spacing;
     right: $spacing;
     bottom: $spacing;
     border-radius: 100%;
-    @include filter(blur(0.15rem));
     z-index: 2;
     transform: rotateZ(-30deg);
     background: radial-gradient(
@@ -434,16 +423,16 @@ $transition-time: 120ms;
       rgba(255, 255, 255, 0.7) 84%,
       rgba(255, 255, 255, 0) 100%
     );
+    @include utils.filter(blur(0.15rem));
   }
   &:after {
-    content: "";
+    content: '';
     position: absolute;
     top: $spacing;
     left: $spacing;
     right: $spacing;
     bottom: $spacing;
     border-radius: 100%;
-    @include filter(blur(0.15rem));
     z-index: 2;
     transform: rotateZ(150deg);
     background: radial-gradient(
@@ -454,6 +443,7 @@ $transition-time: 120ms;
       rgba(255, 255, 255, 0.4) 84%,
       rgba(255, 255, 255, 0) 100%
     );
+    @include utils.filter(blur(0.15rem));
   }
 }
 

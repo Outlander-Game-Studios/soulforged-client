@@ -4,7 +4,7 @@
       <template #label>
         <RichText :value="skillName + ' ' + extras" nonInteractive />
       </template>
-      <template>
+      <template #default>
         {{ skillSign }}{{ skillLevelFloor || 0 }}.<span class="fraction">{{
           fractionTwoDigits
         }}</span>
@@ -28,7 +28,7 @@ export default {
     skillName: {},
     skillLevel: {},
     extras: {
-      default: "",
+      default: '',
     },
   },
 
@@ -38,29 +38,25 @@ export default {
 
   computed: {
     skillSign() {
-      return Math.sign(this.skillLevel) < 0 ? "-" : "";
+      return Math.sign(this.skillLevel) < 0 ? '-' : ''
     },
     skillLevelFloor() {
-      return Math.floor(Math.abs(this.skillLevel) || 0);
+      return Math.floor(Math.abs(this.skillLevel) || 0)
     },
     percentage() {
-      return Math.round((this.skillLevel - Math.floor(this.skillLevel)) * 100);
+      return Math.round((this.skillLevel - Math.floor(this.skillLevel)) * 100)
     },
     fractionTwoDigits() {
       const fraction = Math.abs(
-        Math.round(
-          (this.skillLevel -
-            Math.sign(this.skillLevel) * this.skillLevelFloor) *
-            100
-        )
-      );
+        Math.round((this.skillLevel - Math.sign(this.skillLevel) * this.skillLevelFloor) * 100),
+      )
       if (fraction >= 100) {
-        return "99";
+        return '99'
       }
-      return fraction >= 10 ? fraction : "0" + (fraction || 0);
+      return fraction >= 10 ? fraction : '0' + (fraction || 0)
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">

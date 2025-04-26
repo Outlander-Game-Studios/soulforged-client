@@ -18,14 +18,7 @@
     </HorizontalFill>
     <Modal v-if="selecting" dialog @close="selecting = false">
       <Vertical>
-        <Button
-          v-for="(label, value) in options"
-          :key="value"
-          @click="
-            $emit('input', value);
-            selecting = false;
-          "
-        >
+        <Button v-for="(label, value) in options" :key="value" @click="onClick(value)">
           <slot name="option" :label="label">
             {{ label }}
           </slot>
@@ -53,7 +46,7 @@ export default {
     options: {
       handler() {
         if (!this.options[this.value]) {
-          this.$emit("input", Object.keys(this.options).shift());
+          this.$emit('update:value', Object.keys(this.options).shift())
         }
       },
       immediate: true,
@@ -62,10 +55,17 @@ export default {
 
   computed: {
     currentLabel() {
-      return this.options[this.value];
+      return this.options[this.value]
     },
   },
-};
+
+  methods: {
+    onClick(value) {
+      this.$emit('update:value', value)
+      this.selecting = false
+    },
+  },
+}
 </script>
 
 <style scoped lang="scss">

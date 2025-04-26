@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import buttonClickSound from "../../assets/sounds/button-click.mp3";
+import buttonClickSound from '../../assets/sounds/button-click.mp3'
 
 export default {
   props: {
@@ -56,18 +56,17 @@ export default {
 
   methods: {
     mouseClick() {
-      if (!!this.$listeners.click) {
-        this.$emit("click");
-        SoundService.playSound(buttonClickSound);
+      if (!!this.$attrs.onClick) {
+        SoundService.playSound(buttonClickSound)
       }
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@use "sass:map";
-@import "../../utils";
+@use 'sass:map';
+@use '../../utils';
 
 .header-component {
   position: relative;
@@ -79,11 +78,11 @@ export default {
     $border-size: 0.75rem;
     border: $border-size solid #ff0000;
     text-align: center;
-    @include theme-header-border();
+    @include utils.theme-header-border();
     z-index: -1;
 
     .header-content {
-      @include theme-header-background();
+      @include utils.theme-header-background();
     }
   }
 
@@ -109,30 +108,30 @@ export default {
 
   &.alt {
     .header-border {
-      @include theme-header-border-alt();
+      @include utils.theme-header-border-alt();
 
       .header-content {
-        @include theme-header-background-alt();
+        @include utils.theme-header-background-alt();
       }
     }
   }
 
   &.alt2 {
     .header-border {
-      @include theme-header-border-alt2();
+      @include utils.theme-header-border-alt2();
 
       .header-content {
-        @include theme-header-background-alt2();
+        @include utils.theme-header-background-alt2();
       }
     }
   }
 
   &.alt3 {
     .header-border {
-      @include theme-header-border-alt3();
+      @include utils.theme-header-border-alt3();
 
       .header-content {
-        @include theme-header-background-alt3();
+        @include utils.theme-header-background-alt3();
       }
     }
   }

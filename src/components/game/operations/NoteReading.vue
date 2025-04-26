@@ -9,19 +9,19 @@
 </template>
 
 <script>
-import exclamationIcon from "../operation-assets/exclamation.png";
-
-export default window.OperationNoteReading = {
+const OperationNoteReading = {
   props: {
     operation: {},
   },
 
   methods: {
     cancel() {
-      GameService.request(REQUEST_CODES.CANCEL_OPERATION);
+      GameService.request(REQUEST_CODES.CANCEL_OPERATION)
     },
   },
-};
+}
+window.OperationNoteReading = OperationNoteReading
+export default OperationNoteReading
 </script>
 
 <style scoped lang="scss">

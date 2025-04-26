@@ -1,22 +1,13 @@
 <template>
   <div v-if="loadedComponentName && mainEntity && mainEntity.operation">
-    <div
-      v-if="!fullscreenOperation"
-      class="overlay"
-      :class="{ 'map-centered': mapCentered }"
-    >
+    <div v-if="!fullscreenOperation" class="overlay" :class="{ 'map-centered': mapCentered }">
       <component
         v-if="mapCentered"
         :is="componentName"
         :key="mainEntity.operation.operationId"
         :operation="operation"
       />
-      <Container
-        v-else
-        class="overlay-container"
-        borderType="alt"
-        :borderSize="1.5"
-      >
+      <Container v-else class="overlay-container" borderType="alt" :borderSize="1.5">
         <Spaced>
           <component
             v-if="componentName && loadedComponents[componentName]"
@@ -39,10 +30,8 @@
 </template>
 
 <script>
-import Vue from "vue";
-
-const loadedComponents = {};
-export default {
+const loadedComponents = {}
+export default rxComponent({
   data: () => ({
     componentName: null,
     loadedComponents,
@@ -53,19 +42,19 @@ export default {
       fullscreenOperation: ControlsService.getFullscreenOperationStream(),
       mainEntity: GameService.getRootEntityStream(),
       operation: GameService.getRootEntityStream()
-        .pluck("operation")
+        .pluck('operation')
         .tap((operation) => {
           if (!operation) {
-            this.componentName = null;
-            return;
+            this.componentName = null
+            return
           }
           if (this.componentName !== operation.files.componentName) {
-            this.componentName = operation.files.componentName;
-            this.loadFiles(operation.files);
-            this.closeTabsIfNeeded();
+            this.componentName = operation.files.componentName
+            this.loadFiles(operation.files)
+            this.closeTabsIfNeeded()
           }
         }),
-    };
+    }
   },
 
   computed: {
@@ -73,95 +62,95 @@ export default {
       const result =
         this.componentName && this.loadedComponents[this.componentName]
           ? window[this.componentName]
-          : null;
+          : null
       if (result) {
-        ControlsService.toggleFullscreenOperation(!!result.FULLSCREEN);
+        ControlsService.toggleFullscreenOperation(!!result.FULLSCREEN)
       } else {
-        ControlsService.toggleFullscreenOperation(false);
+        ControlsService.toggleFullscreenOperation(false)
       }
-      return result;
+      return result
     },
 
     mapCentered() {
-      return this.mainEntity?.operation?.context?.mapCentered;
+      return this.mainEntity?.operation?.context?.mapCentered
     },
   },
 
   methods: {
     closeTabsIfNeeded() {
       if (this.mapCentered) {
-        return;
+        return
       }
-      const width = getScreenWidth();
-      const height = getScreenHeight();
+      const width = getScreenWidth()
+      const height = getScreenHeight()
       if (width > height) {
         // landscape
-        return;
+        return
       }
-      ControlsService.triggerControlEvent("closePanel");
+      ControlsService.triggerControlEvent('closePanel')
     },
 
     loadFiles({ js, css, assets, componentName }) {
-      GameService.registerSecureAssets(assets);
-      this.loadCss(css);
-      this.loadJs(js, componentName);
+      GameService.registerSecureAssets(assets)
+      this.loadCss(css)
+      this.loadJs(js, componentName)
     },
 
     loadCss(css) {
       if (!css) {
-        return;
+        return
       }
-      const cssId = `css_${md5(css)}`;
-      const loaded = document.querySelector(`#${cssId}`);
+      const cssId = `css_${md5(css)}`
+      const loaded = document.querySelector(`#${cssId}`)
       if (loaded) {
-        return;
+        return
       }
-      const link = document.createElement("link");
-      link.setAttribute("id", cssId);
-      link.setAttribute("rel", "stylesheet");
-      link.setAttribute("type", "text/css");
-      link.setAttribute("href", `${css}?${GameService.getClientStartupId()}`);
-      document.getElementsByTagName("head")[0].appendChild(link);
+      const link = document.createElement('link')
+      link.setAttribute('id', cssId)
+      link.setAttribute('rel', 'stylesheet')
+      link.setAttribute('type', 'text/css')
+      link.setAttribute('href', `${css}?${GameService.getClientStartupId()}`)
+      document.getElementsByTagName('head')[0].appendChild(link)
     },
 
     loadJs(js, componentName) {
       if (!js) {
         // Stories only
-        this.$set(this.loadedComponents, componentName, true);
-        return;
+        this.loadedComponents[componentName] = true
+        return
       }
-      const jsId = `js_${md5(js)}`;
+      const jsId = `js_${md5(js)}`
 
-      const loaded = document.querySelector(`#${jsId}`);
+      const loaded = document.querySelector(`#${jsId}`)
       if (loaded) {
-        return;
+        return
       }
-      const fnName = `loaded_${jsId}`;
+      const fnName = `loaded_${jsId}`
       window[fnName] = () => {
-        Vue.component(componentName, window[componentName]);
-        this.$set(this.loadedComponents, componentName, true);
-      };
+        global.app.component(componentName, window[componentName])
+        this.loadedComponents[componentName] = true
+      }
 
       if (!!window[componentName]) {
-        return window[fnName]();
+        return window[fnName]()
       }
 
-      const link = document.createElement("script");
-      link.setAttribute("id", jsId);
-      link.setAttribute("type", "text/javascript");
-      link.setAttribute("onload", `${fnName}()`);
-      link.setAttribute("src", `${js}?${GameService.getClientStartupId()}`);
-      document.getElementsByTagName("head")[0].appendChild(link);
+      const link = document.createElement('script')
+      link.setAttribute('id', jsId)
+      link.setAttribute('type', 'text/javascript')
+      link.setAttribute('onload', `${fnName}()`)
+      link.setAttribute('src', `${js}?${GameService.getClientStartupId()}`)
+      document.getElementsByTagName('head')[0].appendChild(link)
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .overlay {
-  //@include filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
+  //@include utils.filter(drop-shadow(0.3rem 0.3rem 0.3rem black));
   display: flex;
 
   &:not(.map-centered) {
@@ -193,7 +182,7 @@ export default {
   max-height: calc(var(--app-height) - 12.5rem) !important;
   max-width: calc(var(--app-width) - 2rem) !important;
 
-  @include FirefoxOnly() {
+  @include utils.FirefoxOnly() {
     overflow-y: scroll !important;
   }
 }

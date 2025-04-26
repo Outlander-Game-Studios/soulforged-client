@@ -43,9 +43,9 @@
 </template>
 
 <script>
-import iconClickSound from "../../assets/sounds/icon-click.mp3";
+import iconClickSound from '../../assets/sounds/icon-click.mp3'
 
-export default {
+export default rxComponent({
   props: {
     creature: {},
     creatureId: {},
@@ -61,14 +61,8 @@ export default {
       default: false,
     },
     size: {
-      default: "small",
-      validator: PropValidator.oneOf([
-        "huge",
-        "large",
-        "normal",
-        "small",
-        "tiny",
-      ]),
+      default: 'small',
+      validator: PropValidator.oneOf(['huge', 'large', 'normal', 'small', 'tiny']),
     },
     moveIndicator: {
       type: Boolean,
@@ -80,81 +74,79 @@ export default {
     return {
       mainEntity: GameService.getRootEntityStream(),
       internalCreature: Rx.combineLatest(
-        this.$stream("creature"),
-        this.$stream("creatureId")
+        this.$stream('creature'),
+        this.$stream('creatureId'),
       ).switchMap(([creature, creatureId]) =>
-        creature
-          ? Rx.Observable.of(creature)
-          : GameService.getEntityStream(creatureId)
+        creature ? Rx.Observable.of(creature) : GameService.getEntityStream(creatureId),
       ),
-    };
+    }
   },
 
   computed: {
     backgroundType() {
       if (this.internalCreature.nextMove) {
-        const { targetId } = this.internalCreature.nextMove;
+        const { targetId } = this.internalCreature.nextMove
         if (targetId === this.mainEntity.id) {
-          return "danger";
+          return 'danger'
         } else {
-          return "danger-low";
+          return 'danger-low'
         }
       }
       if (!this.internalCreature) {
-        return;
+        return
       }
       if (!this.internalCreature.hostile) {
-        return "alt2";
+        return 'alt2'
       }
       if (this.internalCreature.nonAggressive) {
-        return "danger-low";
+        return 'danger-low'
       }
-      return "danger";
+      return 'danger'
     },
 
     operationIndicatorStyle() {
       return {
-        fontSize: this.iconSize / 2.5 + "rem",
-      };
+        fontSize: this.iconSize / 2.5 + 'rem',
+      }
     },
 
     hasClick() {
-      return !!this.$listeners.click;
+      return !!this.$attrs.onClick
     },
 
     operationIsPng() {
-      return this.internalCreature?.operationInfo?.icon?.match(/\.png$/);
+      return this.internalCreature?.operationInfo?.icon?.match(/\.png$/)
     },
 
     iconSize() {
       switch (this.size) {
-        case "huge":
-          return 16;
-        case "large":
-          return 12;
-        case "normal":
-          return 9;
-        case "small":
-          return 6;
-        case "tiny":
-          return 4;
+        case 'huge':
+          return 16
+        case 'large':
+          return 12
+        case 'normal':
+          return 9
+        case 'small':
+          return 6
+        case 'tiny':
+          return 4
       }
     },
   },
 
   methods: {
     mouseClick($event) {
-      if (!!this.$listeners.click) {
-        this.$emit("click", $event);
-        SoundService.playSound(iconClickSound);
+      if (!!this.$attrs.onClick) {
+        this.$emit('click', $event)
+        SoundService.playSound(iconClickSound)
       }
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .creature-icon-wrapper {
   position: relative;
@@ -169,7 +161,7 @@ export default {
     background-size: 100% 100%;
     background-repeat: no-repeat;
     overflow: hidden;
-    @include filter(drop-shadow(0.2rem 0.2rem 0.1rem #111));
+    @include utils.filter(drop-shadow(0.2rem 0.2rem 0.1rem #111));
 
     &.round {
       width: 0.7em;
@@ -190,9 +182,11 @@ export default {
   }
 
   &.dead {
-    transition: filter 1s linear, opacity 1s linear;
-    @include filter(saturate(0) brightness(0.8));
+    transition:
+      filter 1s linear,
+      opacity 1s linear;
     opacity: 0.4;
+    @include utils.filter(saturate(0) brightness(0.8));
   }
 }
 

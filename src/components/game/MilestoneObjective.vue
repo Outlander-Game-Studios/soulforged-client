@@ -10,9 +10,7 @@
         <span class="objective-text">
           {{ text }}
         </span>
-        <span v-if="inactive" class="inactive-text"
-          >(Inactive, complete previous step)</span
-        >
+        <span v-if="inactive" class="inactive-text">(Inactive, complete previous step)</span>
       </div>
       <Description v-show="!completed" v-html="description" />
     </Vertical>
@@ -35,11 +33,11 @@ export default {
       type: Boolean,
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 $size: 3.5rem;
 
 .objective {
@@ -51,7 +49,7 @@ $size: 3.5rem;
       text-decoration: line-through;
     }
     .objective-icon {
-      background-image: url(ui-asset("/icons/check-true.png"));
+      background-image: utils.ui-asset('/icons/check-true.png');
     }
   }
 
@@ -84,11 +82,11 @@ $size: 3.5rem;
 }
 
 .objective-text {
-  @include text-outline(black, #ffa83b);
+  @include utils.text-outline(black, #ffa83b);
 }
 
 .objective-icon {
-  background-image: url(ui-asset("/icons/check-false.png"));
+  background-image: utils.ui-asset('/icons/check-false.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
   display: inline-block;

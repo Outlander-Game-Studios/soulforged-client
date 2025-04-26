@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import pageSound from "../../assets/sounds/page.mp3";
+import pageSound from '../../assets/sounds/page.mp3'
 
-export default {
+export default rxComponent({
   data: () => ({
     showDialog: false,
   }),
@@ -24,20 +24,20 @@ export default {
   subscriptions() {
     return {
       knowledgeBase: GameService.getKnowledgeBaseStream(),
-    };
+    }
   },
 
   methods: {
     mouseClick() {
-      SoundService.playSound(pageSound);
-      this.showDialog = true;
+      SoundService.playSound(pageSound)
+      this.showDialog = true
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .currency-display {
   height: 3.5rem !important;
@@ -55,7 +55,7 @@ export default {
   height: 4rem;
   transform: rotate(10deg);
   pointer-events: none;
-  background-image: url(ui-asset("/icons/exclamation.png"));
+  background-image: utils.ui-asset('/icons/exclamation.png');
   background-size: auto 100%;
   background-position: center center;
   background-repeat: no-repeat;

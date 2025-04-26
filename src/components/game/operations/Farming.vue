@@ -45,10 +45,7 @@
         <div>
           <HorizontalCenter>
             <Vertical>
-              <Container
-                borderType="alt3"
-                class="flex-grow quick-tool-container"
-              >
+              <Container borderType="alt3" class="flex-grow quick-tool-container">
                 <div class="current-action-box">
                   <div class="flex-grow action-name">
                     <div class="quick-action-label">
@@ -57,50 +54,34 @@
                     <SkillInfoDisplay
                       v-if="operation.context.skillInfo"
                       :skillData="{
-                        successChance:
-                          operation.context.skillInfo.successChance,
+                        successChance: operation.context.skillInfo.successChance,
                       }"
                     />
                   </div>
-                  <div
-                    v-if="currentAction === FARMING_ACTIONS.PLANT"
-                    class="quick-item"
-                  >
+                  <div v-if="currentAction === FARMING_ACTIONS.PLANT" class="quick-item">
                     <FieldItemSelector
                       :itemFilter="seedFilter"
                       :value="operation.context.seedId"
-                      @input="selectSeed($event)"
+                      @update:value="selectSeed($event)"
                       :size="4"
                       compact
                       topRightText="Seed"
                     />
                   </div>
-                  <div
-                    v-if="currentAction === FARMING_ACTIONS.USE_LIQUID"
-                    class="quick-item"
-                  >
+                  <div v-if="currentAction === FARMING_ACTIONS.USE_LIQUID" class="quick-item">
                     <FieldItemSelector
                       :itemFilter="liquidFilter"
                       :value="operation.context.liquidId"
-                      @input="selectLiquid($event)"
+                      @update:value="selectLiquid($event)"
                       :size="4"
                       compact
                       topRightText="Liquid"
                     />
                   </div>
-                  <div
-                    v-if="operation.context.tools.length"
-                    class="tool-selector-icon"
-                  >
-                    <OperationToolSelector
-                      :operation="operation"
-                      iconOnly
-                      topRightText="Tool"
-                    />
+                  <div v-if="operation.context.tools.length" class="tool-selector-icon">
+                    <OperationToolSelector :operation="operation" iconOnly topRightText="Tool" />
                   </div>
-                  <Button v-if="showActionOptions" @click="configureAction()">
-                    Info
-                  </Button>
+                  <Button v-if="showActionOptions" @click="configureAction()"> Info </Button>
                 </div>
               </Container>
               <Horizontal>
@@ -180,20 +161,13 @@
                     backgroundImage: 'url(' + viewDetails.plant.image + ')',
                   }"
                 />
-                <div
-                  class="weed"
-                  v-if="viewDetails.weed"
-                  :style="weedStyle(viewDetails)"
-                />
+                <div class="weed" v-if="viewDetails.weed" :style="weedStyle(viewDetails)" />
               </div>
             </div>
           </div>
           <div class="flex-grow">
             <LabeledValue label="Plant">
-              <RichText
-                v-if="viewDetails.plant"
-                :value="viewDetails.plant.name"
-              />
+              <RichText v-if="viewDetails.plant" :value="viewDetails.plant.name" />
               <span v-else class="text-none">None</span>
             </LabeledValue>
             <LabeledValue label="Moisture">
@@ -206,17 +180,11 @@
               <span v-else class="text-none">No plant</span>
             </LabeledValue>
             <LabeledValue label="Vermin">
-              <RichText
-                v-if="vermin[viewDetailsIdx]"
-                :value="vermin[viewDetailsIdx].name"
-              />
+              <RichText v-if="vermin[viewDetailsIdx]" :value="vermin[viewDetailsIdx].name" />
               <span v-else class="text-none">None</span>
             </LabeledValue>
             <LabeledValue label="Weed">
-              <RichText
-                v-if="viewDetails.weed"
-                :value="viewDetails.weed.name"
-              />
+              <RichText v-if="viewDetails.weed" :value="viewDetails.weed.name" />
               <span v-else class="text-none">None</span>
             </LabeledValue>
           </div>
@@ -247,33 +215,27 @@
       <template v-slot:title> Info </template>
       <template v-slot:contents>
         <Vertical>
-          <APBar v-if="!!currentAPCost" />
+          <APBarCurrent v-if="!!currentAPCost" />
           <Description prominent>
             {{ ACTION_DESCRIPTION[currentAction] }}
           </Description>
           <HorizontalFill>
             <OperationToolSelector :operation="operation" class="not-flex" />
-            <div
-              v-if="currentAction === FARMING_ACTIONS.USE_LIQUID"
-              class="selector-container"
-            >
+            <div v-if="currentAction === FARMING_ACTIONS.USE_LIQUID" class="selector-container">
               <Header alt2 small>Liquid</Header>
               <FieldItemSelector
                 :itemFilter="liquidFilter"
                 :value="operation.context.liquidId"
-                @input="selectLiquid($event)"
+                @update:value="selectLiquid($event)"
                 :size="5"
               />
             </div>
-            <div
-              v-if="currentAction === FARMING_ACTIONS.PLANT"
-              class="selector-container"
-            >
+            <div v-if="currentAction === FARMING_ACTIONS.PLANT" class="selector-container">
               <Header alt2 small>Seed</Header>
               <FieldItemSelector
                 :itemFilter="seedFilter"
                 :value="operation.context.seedId"
-                @input="selectSeed($event)"
+                @update:value="selectSeed($event)"
                 :size="5"
               />
             </div>
@@ -288,7 +250,7 @@
       <template v-slot:title> Cleanup weeds </template>
       <template v-slot:contents>
         <Vertical>
-          <APBar />
+          <APBarCurrent />
           <SkillInfoDisplay :operation="operation" />
           <HorizontalCenter>
             <Button @click="commence()"> Confirm </Button>
@@ -301,7 +263,7 @@
       <template v-slot:contents>
         <Vertical>
           <div v-if="!harvestingProcessing">
-            <APBar />
+            <APBarCurrent />
             <Spaced>
               <SkillInfoDisplay :operation="operation" />
             </Spaced>
@@ -313,9 +275,7 @@
             <Header alt2>Results</Header>
             <div class="modifiers">
               <div
-                v-for="(value, type) in harvestResult
-                  ? harvestResult.modifiers
-                  : []"
+                v-for="(value, type) in harvestResult ? harvestResult.modifiers : []"
                 :key="'mod_' + type"
                 class="modifier"
               >
@@ -350,49 +310,48 @@
 </template>
 
 <script>
-import liquidIcon from "../operation-assets/farm_liquid.jpg";
-import plantIcon from "../operation-assets/farm_plant.jpg";
-import harvestIcon from "../operation-assets/farm_harvest.jpg";
-import uprootIcon from "../operation-assets/farm_uproot.jpg";
-import weedoutIcon from "../operation-assets/farm_weedout.jpg";
-import inspectIcon from "../operation-assets/farm_lookup.jpg";
-import farmingWater from "../../../assets/sounds/farming-water.mp3";
+import liquidIcon from '../operation-assets/farm_liquid.jpg'
+import plantIcon from '../operation-assets/farm_plant.jpg'
+import harvestIcon from '../operation-assets/farm_harvest.jpg'
+import uprootIcon from '../operation-assets/farm_uproot.jpg'
+import weedoutIcon from '../operation-assets/farm_weedout.jpg'
+import inspectIcon from '../operation-assets/farm_lookup.jpg'
+import farmingWater from '../../../assets/sounds/farming-water.mp3'
 
 const ACTION_NAMES = {
-  [FARMING_ACTIONS.NONE]: "Inspect",
-  [FARMING_ACTIONS.UPROOT]: "Remove plant",
-  [FARMING_ACTIONS.PLANT]: "Sow",
-  [FARMING_ACTIONS.HARVEST]: "Harvest",
-  [FARMING_ACTIONS.WEEDOUT]: "Cleanup weeds",
-  [FARMING_ACTIONS.USE_LIQUID]: "Use liquid",
-};
+  [FARMING_ACTIONS.NONE]: 'Inspect',
+  [FARMING_ACTIONS.UPROOT]: 'Remove plant',
+  [FARMING_ACTIONS.PLANT]: 'Sow',
+  [FARMING_ACTIONS.HARVEST]: 'Harvest',
+  [FARMING_ACTIONS.WEEDOUT]: 'Cleanup weeds',
+  [FARMING_ACTIONS.USE_LIQUID]: 'Use liquid',
+}
 
 const ACTION_DESCRIPTION = {
   [FARMING_ACTIONS.NONE]:
-    "Inspect a plot to display more information about that plot and plant that might be there.",
+    'Inspect a plot to display more information about that plot and plant that might be there.',
   [FARMING_ACTIONS.UPROOT]:
-    "Forcibly remove the plant from a plot. This will destroy any produce this plant could yield.",
+    'Forcibly remove the plant from a plot. This will destroy any produce this plant could yield.',
   [FARMING_ACTIONS.PLANT]:
-    "Place the selected seed onto a plot. The difficulty depends on the type of seed select.",
+    'Place the selected seed onto a plot. The difficulty depends on the type of seed select.',
   [FARMING_ACTIONS.HARVEST]:
-    "Harvest the plant from a plot. Only fully grown plants can be harvested.",
-  [FARMING_ACTIONS.WEEDOUT]: "Remove the weeds from a plot.",
-  [FARMING_ACTIONS.USE_LIQUID]:
-    "Add liquid to a plot, increasing its watering level.",
-};
+    'Harvest the plant from a plot. Only fully grown plants can be harvested.',
+  [FARMING_ACTIONS.WEEDOUT]: 'Remove the weeds from a plot.',
+  [FARMING_ACTIONS.USE_LIQUID]: 'Add liquid to a plot, increasing its watering level.',
+}
 
 const MODIFIER_NAMES = {
-  ground: "Ground",
-  climate: "Environment",
-  wateringMinus: "Drought",
-  wateringPlus: "Flood",
-  vermin: "Vermin control",
-  weed: "Weed control",
-  plantQuality: "Sowing skill",
-  harvestQuality: "Harvest skill",
-};
+  ground: 'Ground',
+  climate: 'Environment',
+  wateringMinus: 'Drought',
+  wateringPlus: 'Flood',
+  vermin: 'Vermin control',
+  weed: 'Weed control',
+  plantQuality: 'Sowing skill',
+  harvestQuality: 'Harvest skill',
+}
 
-export default window.OperationFarming = {
+const OperationFarming = rxComponent({
   props: {
     operation: {},
   },
@@ -411,8 +370,7 @@ export default window.OperationFarming = {
     harvestResult: null,
     harvestResultAmount: 0,
     harvestResultAmountFinal: false,
-    liquidFilter: (item) =>
-      item.actions.some((action) => action.actionId === "drink"),
+    liquidFilter: (item) => item.actions.some((action) => action.actionId === 'drink'),
     seedFilter: (item) => item.category === 350,
     ICONS: {},
     ACTION_NAMES,
@@ -422,21 +380,18 @@ export default window.OperationFarming = {
   }),
 
   subscriptions() {
-    const farmStream = this.$stream("operation")
+    const farmStream = this.$stream('operation')
       .filter((operation) => !!operation.context.farmId)
       .switchMap((operation) =>
-        GameService.getEntityStream(
-          operation.context.farmId,
-          ENTITY_VARIANTS.DETAILS
-        )
-      );
+        GameService.getEntityStream(operation.context.farmId, ENTITY_VARIANTS.DETAILS),
+      )
     const plotsStream = farmStream
       .map((farm) => farm.plots)
-      .switchMap((ids) => GameService.getEntitiesStream(ids));
+      .switchMap((ids) => GameService.getEntitiesStream(ids))
     return {
       currentAPCost: ControlsService.getConsideredAPStream(),
-      initAction: this.$stream("operation").tap((operation) => {
-        this.currentAction = operation.context.action;
+      initAction: this.$stream('operation').tap((operation) => {
+        this.currentAction = operation.context.action
       }),
       backdropImage: GameService.getBackdropStyleStream(),
       farm: farmStream,
@@ -448,16 +403,16 @@ export default window.OperationFarming = {
             verminIds.map((id) =>
               id
                 ? GameService.getEntityStream(id, ENTITY_VARIANTS.DETAILS)
-                : Rx.Observable.of(null)
-            )
-          ).map((vermin) => vermin.map((v) => (!!v && !v.dead ? v : null)))
+                : Rx.Observable.of(null),
+            ),
+          ).map((vermin) => vermin.map((v) => (!!v && !v.dead ? v : null))),
         ),
-    };
+    }
   },
 
   computed: {
     showActionOptions() {
-      return true;
+      return true
       // return [
       //   FARMING_ACTIONS.PLANT,
       //   FARMING_ACTIONS.USE_LIQUID,
@@ -466,50 +421,50 @@ export default window.OperationFarming = {
     },
 
     viewDetails() {
-      return this.plots[this.viewDetailsIdx];
+      return this.plots[this.viewDetailsIdx]
     },
 
     actionClass() {
       return {
-        [this.currentAction]: ["selected"],
-      };
+        [this.currentAction]: ['selected'],
+      }
     },
 
     rows() {
       if (!this.farm || !this.plots) {
-        return null;
+        return null
       }
-      const [width, height] = this.farm.farmSize;
+      const [width, height] = this.farm.farmSize
       return Array.create(height).map((_, rowIdx) =>
         Array.create(width)
           .map((_, idx) => rowIdx * width + idx)
           .toObject(
             (plotIdx) => plotIdx,
-            (plotIdx) => this.plots[plotIdx]
-          )
-      );
+            (plotIdx) => this.plots[plotIdx],
+          ),
+      )
     },
 
     consideredAP() {
-      ControlsService.updateConsideredAP(this.amount * this.unitCost);
+      ControlsService.updateConsideredAP(this.amount * this.unitCost)
     },
 
     unitCost() {
-      return this.operation.context.unitCost;
+      return this.operation.context.unitCost
     },
   },
 
   watch: {
     operation() {
-      this.updateConsideredAP();
+      this.updateConsideredAP()
     },
     amount() {
-      this.updateConsideredAP();
+      this.updateConsideredAP()
     },
   },
 
   mounted() {
-    this.updateConsideredAP();
+    this.updateConsideredAP()
     this.ICONS = {
       PLANT: GameService.getSecureResource(plantIcon),
       LIQUID: GameService.getSecureResource(liquidIcon),
@@ -517,130 +472,128 @@ export default window.OperationFarming = {
       UPROOT: GameService.getSecureResource(uprootIcon),
       WEEDOUT: GameService.getSecureResource(weedoutIcon),
       NONE: GameService.getSecureResource(inspectIcon),
-    };
+    }
   },
 
-  beforeDestroy() {
-    ControlsService.updateConsideredAP(0);
+  beforeUnmount() {
+    ControlsService.updateConsideredAP(0)
   },
 
   methods: {
     ucFirst,
 
     showCreatureDetails(verminId, $event) {
-      this.showCreatureDetailsId = verminId;
-      $event.stopPropagation();
+      this.showCreatureDetailsId = verminId
+      $event.stopPropagation()
     },
 
     selectLiquid(liquidItemId) {
       GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-        updateType: "selectLiquid",
+        updateType: 'selectLiquid',
         liquidId: liquidItemId,
       }).then((response) => {
         if (!response.ok) {
-          ToastError(response.message);
+          ToastError(response.message)
         }
-      });
+      })
     },
     selectSeed(seedItemId) {
       GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-        updateType: "selectSeed",
+        updateType: 'selectSeed',
         seedId: seedItemId,
       }).then((response) => {
         if (!response.ok) {
-          ToastError(response.message);
+          ToastError(response.message)
         }
-      });
+      })
     },
 
     configureAction() {
-      this.configuring = true;
+      this.configuring = true
     },
 
     clickPlot(plot, idx) {
       switch (this.currentAction) {
         case FARMING_ACTIONS.NONE:
-          this.viewDetailsIdx = idx;
-          break;
+          this.viewDetailsIdx = idx
+          break
         case FARMING_ACTIONS.UPROOT:
           if (plot.plant) {
             this.selectPlot(idx).then(() => {
-              this.removingPlant = true;
-            });
+              this.removingPlant = true
+            })
           } else {
-            ToastError("There is no plant in this plot");
+            ToastError('There is no plant in this plot')
           }
-          break;
+          break
         case FARMING_ACTIONS.WEEDOUT:
           this.selectPlot(idx).then(() => {
-            this.weedingOut = true;
-          });
-          break;
+            this.weedingOut = true
+          })
+          break
         case FARMING_ACTIONS.HARVEST:
           if (plot.plant) {
             this.selectPlot(idx).then(() => {
-              this.harvesting = true;
-            });
+              this.harvesting = true
+            })
           } else {
-            ToastError("There is no plant in this plot");
+            ToastError('There is no plant in this plot')
           }
-          break;
+          break
         default:
-          this.commence({ plotIdx: idx });
+          this.commence({ plotIdx: idx })
       }
     },
 
     selectPlot(plotIdx) {
       return GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-        updateType: "selectPlot",
+        updateType: 'selectPlot',
         plotIdx: plotIdx,
       }).then((response) => {
         if (!response.ok) {
-          ToastError(response.message);
+          ToastError(response.message)
         }
-        return response;
-      });
+        return response
+      })
     },
 
     commence(params = {}) {
       if (this.currentAction === FARMING_ACTIONS.HARVEST) {
-        this.harvestingProcessing = true;
+        this.harvestingProcessing = true
       }
-      return GameService.request(REQUEST_CODES.COMMENCE_OPERATION, params).then(
-        (response) => {
-          if (response && response.statusChanges) {
-            ToastNotify(response.statusChanges);
-          }
-          if (this.currentAction === FARMING_ACTIONS.USE_LIQUID && !response) {
-            SoundService.playSound(farmingWater);
-          }
-          if (this.currentAction === FARMING_ACTIONS.HARVEST) {
-            if (response.modifiers) {
-              this.harvestResult = response;
-              this.harvestResultAmount = 0;
-              this.harvestResultAmountFinal = false;
-              this.updateHarvestResultAmount();
-            } else {
-              this.finishHarvest();
-            }
-          }
-          this.weedingOut = false;
-          return response;
+      return GameService.request(REQUEST_CODES.COMMENCE_OPERATION, params).then((response) => {
+        if (response && response.statusChanges) {
+          ToastNotify(response.statusChanges)
         }
-      );
+        if (this.currentAction === FARMING_ACTIONS.USE_LIQUID && !response) {
+          SoundService.playSound(farmingWater)
+        }
+        if (this.currentAction === FARMING_ACTIONS.HARVEST) {
+          if (response.modifiers) {
+            this.harvestResult = response
+            this.harvestResultAmount = 0
+            this.harvestResultAmountFinal = false
+            this.updateHarvestResultAmount()
+          } else {
+            this.finishHarvest()
+          }
+        }
+        this.weedingOut = false
+        return response
+      })
     },
 
     updateHarvestResultAmount() {
       if (this.harvestResult) {
-        const delta = this.harvestResult.amount - this.harvestResultAmount;
+        const delta = this.harvestResult.amount - this.harvestResultAmount
         if (delta > 0) {
-          this.harvestResultAmount += Math.floor(Math.max(1, 0.02 * delta));
-          const delay = 5 + Math.max(0, 40 - delta) * 2.25;
+          this.harvestResultAmount += Math.floor(Math.max(1, 0.02 * delta))
+          const delay = 5 + Math.max(0, 40 - delta) * 2.25
           ControlsService.setAnimationTimeout(() => {
-            this.updateHarvestResultAmount();
-          }, delay);
+            this.updateHarvestResultAmount()
+          }, delay)
         } else if (this.harvestResultAmount > 0) {
-          this.harvestResultAmountFinal = true;
+          this.harvestResultAmountFinal = true
         }
       }
     },
@@ -648,64 +601,66 @@ export default window.OperationFarming = {
     // harvestResult.amount
 
     finishHarvest() {
-      this.harvesting = false;
-      this.harvestingProcessing = false;
-      this.harvestResult = null;
+      this.harvesting = false
+      this.harvestingProcessing = false
+      this.harvestResult = null
     },
 
     confirmRemove() {
       this.commence().then(() => {
-        this.removingPlant = false;
-      });
+        this.removingPlant = false
+      })
     },
 
     selectAction(action) {
       GameService.request(REQUEST_CODES.UPDATE_OPERATION, {
-        updateType: "action",
+        updateType: 'action',
         action: action,
       }).then((response) => {
         if (response.ok) {
-          this.currentAction = action;
+          this.currentAction = action
         } else {
-          ToastError(response.message);
+          ToastError(response.message)
         }
-      });
+      })
     },
 
     plotStyle(plot, idx) {
       return {
         zIndex: idx,
-      };
+      }
     },
 
     weedStyle(plot) {
-      const randomSeed = plot.id;
-      const base = random.number(1, 1000, randomSeed);
-      const xShift = random.number(15, 25, randomSeed);
-      const yShift = random.number(15, 25, randomSeed);
-      const x = 50 + xShift * Math.sin(base) + 10 * Math.sign(Math.sin(base));
-      const y = 50 + yShift * Math.abs(Math.cos(base));
+      const randomSeed = plot.id
+      const base = random.number(1, 1000, randomSeed)
+      const xShift = random.number(15, 25, randomSeed)
+      const yShift = random.number(15, 25, randomSeed)
+      const x = 50 + xShift * Math.sin(base) + 10 * Math.sign(Math.sin(base))
+      const y = 50 + yShift * Math.abs(Math.cos(base))
       return {
-        top: y + "%",
-        left: x + "%",
+        top: y + '%',
+        left: x + '%',
         zIndex: y > 50 ? 4 : 2,
-        backgroundImage: "url(" + plot.weed.image + ")",
-      };
+        backgroundImage: 'url(' + plot.weed.image + ')',
+      }
     },
 
     cancel() {
-      GameService.request(REQUEST_CODES.CANCEL_OPERATION);
+      GameService.request(REQUEST_CODES.CANCEL_OPERATION)
     },
 
     updateConsideredAP() {
-      ControlsService.updateConsideredAP(this.unitCost);
+      ControlsService.updateConsideredAP(this.unitCost)
     },
   },
-};
+})
+window.OperationFarming = OperationFarming
+export default OperationFarming
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 
 .close-button {
   z-index: 10;
@@ -810,12 +765,12 @@ export default window.OperationFarming = {
 
 .action {
   padding: 0.3rem;
-  @include filter(saturate(1.8) brightness(1.2));
+  @include utils.filter(saturate(1.8) brightness(1.2));
 
   &:not(.selected) {
     opacity: 0.66;
-    @include interactive();
-    @include filter(brightness(0.7));
+    @include utils.interactive();
+    @include utils.filter(brightness(0.7));
   }
 }
 
@@ -830,7 +785,7 @@ export default window.OperationFarming = {
 
   .quick-action-label {
     font-size: 200%;
-    @include text-outline();
+    @include utils.text-outline();
   }
 }
 

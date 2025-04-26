@@ -16,9 +16,7 @@
               <div>Please refresh the page to update your client.</div>
               <div>
                 If that doesn't work please let us know on the
-                <a href="https://discord.gg/XExbewT5GQ" target="_blank"
-                  >Discord</a
-                >.
+                <a href="https://discord.gg/XExbewT5GQ" target="_blank">Discord</a>.
               </div>
               <hr />
               <div>Debug info: {{ startupId }} vs {{ currentRev }}</div>
@@ -33,28 +31,26 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   subscriptions() {
-    const clientStartupId = GameService.getClientStartupId();
-    const startupIdStream = GameService.getStartupIdStream();
-    const skipIntegrity = this?.$route?.query?.skipIntegrityCheck !== undefined;
+    const clientStartupId = GameService.getClientStartupId()
+    const startupIdStream = GameService.getStartupIdStream()
+    const skipIntegrity = this?.$route?.query?.skipIntegrityCheck !== undefined
     return {
       startupId: startupIdStream.tap((startupId) => {
-        console.log("Startup ID:", startupId, skipIntegrity);
-        console.log("Client ver:", clientStartupId);
+        console.log('Startup ID:', startupId, skipIntegrity)
+        console.log('Client ver:', clientStartupId)
       }),
       currentRev: Rx.Observable.of(clientStartupId),
       invalidClientVersion: startupIdStream.map(
         (startupId) =>
-          !skipIntegrity &&
-          `${startupId}` !== "dev" &&
-          `${startupId}` !== `${clientStartupId}`
+          !skipIntegrity && `${startupId}` !== 'dev' && `${startupId}` !== `${clientStartupId}`,
       ),
-    };
+    }
   },
 
   created() {},
-};
+})
 </script>
 
 <style scoped lang="scss">

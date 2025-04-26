@@ -1,39 +1,39 @@
-import pebbleIcon from "../../../../.storybook/mocks/assets/pebble.png";
-import sharpenedStoneIcon from "../../../../.storybook/mocks/assets/sharp-stone.png";
-import stoneKnifeIcon from "../../../../.storybook/mocks/assets/stone-knife.png";
-import appleIcon from "../../../../.storybook/mocks/assets/apple.png";
-import barkRopeIcon from "../../../../.storybook/mocks/assets/bark-rope.png";
-import dragonFruitIcon from "../../../../.storybook/mocks/assets/dragonfruit.png";
-import tentIcon from "../../../../.storybook/mocks/assets/tent.jpg";
+import pebbleIcon from '../../../../.storybook/mocks/assets/pebble.png'
+import sharpenedStoneIcon from '../../../../.storybook/mocks/assets/sharp-stone.png'
+import stoneKnifeIcon from '../../../../.storybook/mocks/assets/stone-knife.png'
+import appleIcon from '../../../../.storybook/mocks/assets/apple.png'
+import barkRopeIcon from '../../../../.storybook/mocks/assets/bark-rope.png'
+import dragonFruitIcon from '../../../../.storybook/mocks/assets/dragonfruit.png'
+import tentIcon from '../../../../.storybook/mocks/assets/tent.jpg'
 
 export default {
-  title: "Game UI/Researches Panel",
-};
+  title: 'Game UI/Researches Panel',
+}
 
-let id = 0;
+let id = 0
 const entity = (def) => {
-  id++;
+  id++
   return {
     ...def,
     id: id,
-  };
-};
+  }
+}
 
 const items = [
   entity({
     amount: 2,
-    publicId: "apple",
-    name: "Apple",
+    publicId: 'apple',
+    name: 'Apple',
     unitWeight: 1,
     actions: [
       {
-        actionId: "drop",
-        label: "Drop",
+        actionId: 'drop',
+        label: 'Drop',
         actionPoints: 0,
         parameters: [
           {
-            paramId: "amount",
-            type: "integer",
+            paramId: 'amount',
+            type: 'integer',
             required: true,
             min: 1,
             max: 1,
@@ -45,17 +45,17 @@ const items = [
   }),
   entity({
     amount: 9,
-    publicId: "barkRope",
-    name: "Bark Rope",
+    publicId: 'barkRope',
+    name: 'Bark Rope',
     actions: [
       {
-        actionId: "drop",
-        label: "Drop",
+        actionId: 'drop',
+        label: 'Drop',
         actionPoints: 0,
         parameters: [
           {
-            paramId: "amount",
-            type: "integer",
+            paramId: 'amount',
+            type: 'integer',
             required: true,
             min: 1,
             max: 9,
@@ -67,18 +67,18 @@ const items = [
   }),
   entity({
     amount: 55,
-    publicId: "dragonfruit",
-    name: "Dragonfruit",
+    publicId: 'dragonfruit',
+    name: 'Dragonfruit',
     unitWeight: 1,
     actions: [
       {
-        actionId: "drop",
-        label: "Drop",
+        actionId: 'drop',
+        label: 'Drop',
         actionPoints: 0,
         parameters: [
           {
-            paramId: "amount",
-            type: "integer",
+            paramId: 'amount',
+            type: 'integer',
             required: true,
             min: 1,
             max: 55,
@@ -88,19 +88,19 @@ const items = [
     ],
     icon: dragonFruitIcon,
   }),
-];
+]
 
-const completedResearch = (researchId = "Craft_163d2c") => ({
+const completedResearch = (researchId = 'Craft_163d2c') => ({
   researchId,
-  title: "Cutting",
-  description: "I need to find some way to cut things.",
+  title: 'Cutting',
+  description: 'I need to find some way to cut things.',
   completed: true,
   itemsNeededCount: 1,
   difficulty: 1,
   seen: true,
   passedItems: [
     {
-      publicId: "pebble",
+      publicId: 'pebble',
       icon: pebbleIcon,
       unitWeight: 1,
       toolEfficiency: {
@@ -112,15 +112,11 @@ const completedResearch = (researchId = "Craft_163d2c") => ({
   failedItems: [],
   rewardCraftIds: [storyMocks.crafts[1].craftId, storyMocks.crafts[0].craftId],
   rewardPlanIds: [storyMocks.plans[0].planId],
-});
-const ongoingResearch = (
-  researchId = "Craft_163d2c",
-  fav = false,
-  seen = true
-) => ({
+})
+const ongoingResearch = (researchId = 'Craft_163d2c', fav = false, seen = true) => ({
   researchId,
-  title: "Cutting",
-  description: "I need to find some way to cut things.",
+  title: 'Cutting',
+  description: 'I need to find some way to cut things.',
   seen,
   fav,
   completed: false,
@@ -128,36 +124,36 @@ const ongoingResearch = (
   difficulty: 2,
   passedItems: [
     {
-      publicId: "pebble",
+      publicId: 'pebble',
       icon: pebbleIcon,
     },
   ],
   failedItems: [
-    { publicId: "stoneKnife", icon: stoneKnifeIcon },
-    { publicId: "sharpenedStone", icon: sharpenedStoneIcon },
-    { publicId: "1c686b", icon: barkRopeIcon },
+    { publicId: 'stoneKnife', icon: stoneKnifeIcon },
+    { publicId: 'sharpenedStone', icon: sharpenedStoneIcon },
+    { publicId: '1c686b', icon: barkRopeIcon },
   ],
-});
+})
 
-const factory = (onMounted = () => {}, onInit = () => {}) => () => {
-  GameService.mock({
-    getCraftsStream: () => Rx.Observable.of(storyMocks.crafts),
-    getPlansStream: () => Rx.Observable.of(storyMocks.plans),
-  });
+const factory =
+  (onMounted = () => {}, onInit = () => {}) =>
+  () => {
+    GameService.mock({
+      getCraftsStream: () => Rx.Observable.of(storyMocks.crafts),
+      getPlansStream: () => Rx.Observable.of(storyMocks.plans),
+    })
 
-  onInit();
-  mockComponent()();
+    onInit()
+    mockComponent()()
 
-  return {
-    components: {},
+    return {
+      data: () => ({}),
 
-    data: () => ({}),
+      mounted() {
+        onMounted(this)
+      },
 
-    mounted() {
-      onMounted(this);
-    },
-
-    template: `
+      template: `
 <div>
   <div class="half-screen">
     <Container>
@@ -166,77 +162,72 @@ const factory = (onMounted = () => {}, onInit = () => {}) => () => {
   </div>
 </div>
 `,
-  };
-};
+    }
+  }
 
 export const loading = factory(() => {
   GameService.mock({
     getResearchesStream: () => new Rx.Observable.empty(),
-  });
-});
+  })
+})
 export const empty = factory(
   () => {},
   () => {
     GameService.mock({
       getResearchesStream: () => Rx.Observable.of([]),
-    });
-  }
-);
+    })
+  },
+)
 const singleOnInit = () => {
   GameService.mock({
     getResearchesStream: () => Rx.Observable.of([ongoingResearch()]),
-  });
-};
-export const single = factory(() => {}, singleOnInit);
+  })
+}
+export const single = factory(() => {}, singleOnInit)
 export const singleNew = factory(
   () => {},
   () => {
     GameService.mock({
-      getResearchesStream: () =>
-        Rx.Observable.of([{ ...ongoingResearch(), seen: false }]),
-    });
-  }
-);
+      getResearchesStream: () => Rx.Observable.of([{ ...ongoingResearch(), seen: false }]),
+    })
+  },
+)
 export const complex = factory(
   () => {},
   () => {
     GameService.mock({
       getResearchesStream: () =>
-        Rx.Observable.of([
-          { ...ongoingResearch(), itemsNeededCount: 25, difficulty: 25 },
-        ]),
-    });
-  }
-);
+        Rx.Observable.of([{ ...ongoingResearch(), itemsNeededCount: 25, difficulty: 25 }]),
+    })
+  },
+)
 export const selectItem = factory((vm) => {
   setTimeout(() => {
-    vm.$el.querySelector(".interactive").click();
-  });
-}, singleOnInit);
+    vm.$el.querySelector('.interactive').click()
+  })
+}, singleOnInit)
 selectItem.parameters = {
-  storyshotsScope: "extended",
-};
+  storyshotsScope: 'extended',
+}
 
 export const selectingItem = factory((vm) => {
   setTimeout(() => {
-    vm.$el.querySelector(".interactive").click();
+    vm.$el.querySelector('.interactive').click()
     setTimeout(() => {
-      document
-        .querySelector(".item-selection-wrapper .item .item-icon")
-        .click();
-    });
-  });
-}, singleOnInit);
+      document.querySelector('.item-selection-wrapper .item .item-icon').click()
+    })
+  })
+}, singleOnInit)
 selectingItem.parameters = {
-  storyshotsScope: "extended",
-};
+  storyshotsScope: 'extended',
+}
 
-export const listInvalid = factory((vm) => {}, singleOnInit);
+export const listInvalid = factory((vm) => {}, singleOnInit)
 export const listInvalidEmpty = factory(
   (vm) => {
     setTimeout(() => {
-      vm.$el.querySelector(".view-missed").click();
-    });
+      vm.$el.querySelector('.view-missed').click()
+    })
   },
   () => {
     GameService.mock({
@@ -247,19 +238,19 @@ export const listInvalidEmpty = factory(
             failedItems: [],
           },
         ]),
-    });
-  }
-);
+    })
+  },
+)
 export const completed = factory(
   (vm) => {
-    vm.$refs.researchesPanel.displayMode = "completed";
+    vm.$refs.researchesPanel.displayMode = 'completed'
   },
   () => {
     GameService.mock({
       getResearchesStream: () => Rx.Observable.of([completedResearch()]),
-    });
-  }
-);
+    })
+  },
+)
 export const multiple = factory(
   () => {},
   () => {
@@ -276,148 +267,148 @@ export const multiple = factory(
           completedResearch(6),
           completedResearch(7),
         ]),
-    });
-  }
-);
+    })
+  },
+)
 
 export const justCompleted = factory(
   (vm) => {
-    vm.$refs.researchesPanel.showCompleted = false;
-    vm.$refs.researchesPanel.discoveryId = completedResearch().researchId;
+    vm.$refs.researchesPanel.showCompleted = false
+    vm.$refs.researchesPanel.discoveryId = completedResearch().researchId
   },
   () => {
     GameService.mock({
       getResearchesStream: () => Rx.Observable.of([completedResearch()]),
-    });
-  }
-);
+    })
+  },
+)
 
 const selectItemAndRespond = (vm, response) => {
-  window.GameService.request = () => Promise.resolve(response);
+  window.GameService.request = () => Promise.resolve(response)
   setTimeout(() => {
-    document.querySelector(".item-selection-wrapper .item .item-icon").click();
+    document.querySelector('.item-selection-wrapper .item .item-icon').click()
     setTimeout(() => {
-      document.querySelector(".modal button").click();
-    });
-  });
-};
+      document.querySelector('.modal button').click()
+    })
+  })
+}
 
-let researchesStream;
+let researchesStream
 export const actionMatchingItem = factory(
   (vm) => {
     setTimeout(() => {
-      vm.$el.querySelector(".interactive").click();
+      vm.$el.querySelector('.interactive').click()
       setInterval(() => {
-        researchesStream.next([ongoingResearch()]);
-        storyMocks.modifyEntity("mainEntity", {
+        researchesStream.next([ongoingResearch()])
+        storyMocks.modifyEntity('mainEntity', {
           inventory: entitiesMocks.mainEntity.inventory,
-        });
+        })
         setTimeout(() => {
           selectItemAndRespond(vm, {
             match: true,
-          });
-          storyMocks.modifyEntity("mainEntity", {
+          })
+          storyMocks.modifyEntity('mainEntity', {
             inventory: [
               entitiesMocks.mainEntity.inventory[0],
               ...entitiesMocks.mainEntity.inventory.slice(2),
             ],
-          });
+          })
           researchesStream.next([
             {
               ...ongoingResearch(),
               passedItems: [
-                { publicId: "pebble", icon: pebbleIcon },
-                { publicId: "apple", icon: appleIcon },
+                { publicId: 'pebble', icon: pebbleIcon },
+                { publicId: 'apple', icon: appleIcon },
               ],
             },
-          ]);
-        }, 3000);
-      }, 5000);
-    });
+          ])
+        }, 3000)
+      }, 5000)
+    })
   },
   () => {
-    researchesStream = new Rx.ReplaySubject(1);
-    researchesStream.next([ongoingResearch()]);
+    researchesStream = new Rx.ReplaySubject(1)
+    researchesStream.next([ongoingResearch()])
     GameService.mock({
       getResearchesStream: () => researchesStream,
-    });
-  }
-);
+    })
+  },
+)
 actionMatchingItem.parameters = {
   storyshots: { disable: true },
-};
+}
 
 export const actionNonMatchingItem = factory(
   (vm) => {
     setTimeout(() => {
-      vm.$el.querySelector(".interactive").click();
+      vm.$el.querySelector('.interactive').click()
       setInterval(() => {
-        researchesStream.next([ongoingResearch()]);
-        storyMocks.modifyEntity("mainEntity", {
+        researchesStream.next([ongoingResearch()])
+        storyMocks.modifyEntity('mainEntity', {
           inventory: entitiesMocks.mainEntity.inventory,
-        });
+        })
         setTimeout(() => {
           selectItemAndRespond(vm, {
             match: true,
-          });
-          storyMocks.modifyEntity("mainEntity", {
+          })
+          storyMocks.modifyEntity('mainEntity', {
             inventory: [
               entitiesMocks.mainEntity.inventory[0],
               ...entitiesMocks.mainEntity.inventory.slice(2),
             ],
-          });
+          })
           researchesStream.next([
             {
               ...ongoingResearch(),
               failedItems: [
                 ...ongoingResearch().failedItems,
-                { publicId: "apple", icon: appleIcon },
+                { publicId: 'apple', icon: appleIcon },
               ],
             },
-          ]);
-        }, 3000);
-      }, 5000);
-    });
+          ])
+        }, 3000)
+      }, 5000)
+    })
   },
   () => {
-    researchesStream = new Rx.ReplaySubject(1);
-    researchesStream.next([ongoingResearch()]);
+    researchesStream = new Rx.ReplaySubject(1)
+    researchesStream.next([ongoingResearch()])
     GameService.mock({
       getResearchesStream: () => researchesStream,
-    });
-  }
-);
+    })
+  },
+)
 actionNonMatchingItem.parameters = {
   storyshots: { disable: true },
-};
+}
 
 export const actionMatchingComplete = factory(
   (vm) => {
     setTimeout(() => {
-      vm.$el.querySelector(".interactive").click();
+      vm.$el.querySelector('.interactive').click()
       setInterval(() => {
         researchesStream.next([
           {
             ...ongoingResearch(),
             itemsNeededCount: 2,
           },
-        ]);
-        storyMocks.modifyEntity("mainEntity", {
+        ])
+        storyMocks.modifyEntity('mainEntity', {
           inventory: entitiesMocks.mainEntity.inventory,
-        });
-        vm.$refs.researchesPanel.selectedResearchId = "Craft_163d2c";
-        vm.$refs.researchesPanel.discoveryId = null;
+        })
+        vm.$refs.researchesPanel.selectedResearchId = 'Craft_163d2c'
+        vm.$refs.researchesPanel.discoveryId = null
         setTimeout(() => {
           selectItemAndRespond(vm, {
             match: true,
             completed: true,
-          });
-          storyMocks.modifyEntity("mainEntity", {
+          })
+          storyMocks.modifyEntity('mainEntity', {
             inventory: [
               entitiesMocks.mainEntity.inventory[0],
               ...entitiesMocks.mainEntity.inventory.slice(2),
             ],
-          });
+          })
           researchesStream.next([
             {
               ...ongoingResearch(),
@@ -426,23 +417,23 @@ export const actionMatchingComplete = factory(
               passedItems: [{ icon: pebbleIcon }, { icon: appleIcon }],
               rewardCraftIds: [storyMocks.crafts[1].craftId],
             },
-          ]);
-        }, 3000);
-      }, 5000);
-    });
+          ])
+        }, 3000)
+      }, 5000)
+    })
   },
   () => {
-    researchesStream = new Rx.ReplaySubject(1);
+    researchesStream = new Rx.ReplaySubject(1)
     researchesStream.next([
       {
         ...ongoingResearch(),
         itemsNeededCount: 2,
       },
-    ]);
+    ])
     GameService.mock({
       getResearchesStream: () => researchesStream,
-    });
-  }
+    })
+  },
   // (vm) => {
   //   setInterval(() => {
   //     knowledgeBaseStream.next({
@@ -506,7 +497,7 @@ export const actionMatchingComplete = factory(
   //     getEntityStream: (id) => entitiesStreams[id],
   //   });
   // }
-);
+)
 actionMatchingComplete.parameters = {
   storyshots: { disable: true },
-};
+}

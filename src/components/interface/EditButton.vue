@@ -3,11 +3,11 @@
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .edit-button {
   min-width: 1em;
@@ -15,12 +15,12 @@ export default {};
   height: 1em;
   display: inline-block;
   vertical-align: bottom;
-  background-image: url(ui-asset("/icons/edit.png"));
+  background-image: utils.ui-asset('/icons/edit.png');
   background-size: 100% 100%;
   cursor: pointer;
 
   &:hover {
-    @include filter(brightness(1.2));
+    @include utils.filter(brightness(1.2));
   }
 }
 </style>

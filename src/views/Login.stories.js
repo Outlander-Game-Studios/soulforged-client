@@ -1,17 +1,16 @@
-import Login from "./Login.vue";
-import { Rx } from "@/rx.js";
+import Login from './Login.vue'
 
 export default {
-  title: "Game UI/Login",
-};
+  title: 'Game UI/Login',
+}
 
 export const base = () => ({
   components: {
     Login,
   },
 
-  template: "<Login />",
-});
+  template: '<Login />',
+})
 
 export const accepted = () => ({
   components: {
@@ -19,8 +18,8 @@ export const accepted = () => ({
   },
 
   mounted() {
-    this.$el.querySelector("input[type=checkbox]").click();
+    this.$el.querySelector('input[type=checkbox]').click()
   },
 
-  template: "<Login />",
-});
+  template: '<Login />',
+})

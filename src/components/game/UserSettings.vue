@@ -7,7 +7,7 @@
       :max="100"
       :value="audioVolume.master"
       noInputElement
-      @input="setMasterVolume($event)"
+      @update:value="setMasterVolume($event)"
     />
     <Header alt2>Sound volume</Header>
     <Input
@@ -16,7 +16,7 @@
       :max="100"
       :value="audioVolume.sound"
       noInputElement
-      @input="setSoundVolume($event)"
+      @update:value="setSoundVolume($event)"
     />
     <Header alt2>Ambience volume</Header>
     <Input
@@ -25,7 +25,7 @@
       :max="100"
       :value="audioVolume.music"
       noInputElement
-      @input="setMusicVolume($event)"
+      @update:value="setMusicVolume($event)"
     />
     <Header alt2>Notification volume</Header>
     <Input
@@ -34,12 +34,12 @@
       :max="100"
       :value="audioVolume.notif"
       noInputElement
-      @input="setNotifVolume($event)"
+      @update:value="setNotifVolume($event)"
     />
     <Header alt2>Other settings</Header>
     <Checkbox
-      v-model="enableSoundsInBackground"
-      @input="setEnableSoundInBackground($event)"
+      v-model:value="enableSoundsInBackground"
+      @update:value="setEnableSoundInBackground($event)"
     >
       Play ambience in background
     </Checkbox>
@@ -59,46 +59,46 @@ export default {
     audioVolume: {},
     enableSoundsInBackground: null,
     startupId: GameService.getClientStartupId(),
-    touch: ControlsService.isTouchDevice() ? "Yes" : "No",
+    touch: ControlsService.isTouchDevice() ? 'Yes' : 'No',
     resolution: `${getScreenWidth()} x ${getScreenHeight()}`,
     scaling: window.fontSizeOverride?.toFixed(2),
     pixelRatio: window.devicePixelRatio,
   }),
 
   created() {
-    const currentVolume = SoundService.getVolume();
-    this.enableSoundsInBackground = SoundService.getSoundInBackgroundEnabled();
+    const currentVolume = SoundService.getVolume()
+    this.enableSoundsInBackground = SoundService.getSoundInBackgroundEnabled()
     this.audioVolume = {
       sound: currentVolume.sound * 100,
       music: currentVolume.music * 100,
       master: currentVolume.master * 100,
       notif: currentVolume.notif * 100,
-    };
+    }
   },
 
   methods: {
     setEnableSoundInBackground(value) {
-      SoundService.enableSoundInBackground(value);
+      SoundService.enableSoundInBackground(value)
     },
     setMasterVolume(value) {
-      SoundService.adjustMasterVolume(value / 100);
+      SoundService.adjustMasterVolume(value / 100)
     },
     setSoundVolume(value) {
-      SoundService.adjustSoundVolume(value / 100);
+      SoundService.adjustSoundVolume(value / 100)
     },
     setMusicVolume(value) {
-      SoundService.adjustMusicVolume(value / 100);
+      SoundService.adjustMusicVolume(value / 100)
     },
     setNotifVolume(value) {
       if (SoundService.adjustNotifVolume(value / 100)) {
-        clearTimeout(this.notifTimeout);
+        clearTimeout(this.notifTimeout)
         this.notifTimeout = setTimeout(() => {
-          SoundService.playNotificationSound("setting", 1);
-        }, 300);
+          SoundService.playNotificationSound('setting', 1)
+        }, 300)
       }
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">

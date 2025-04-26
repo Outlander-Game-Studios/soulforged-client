@@ -11,17 +11,13 @@
               <Vertical>
                 <HorizontalFill>
                   <label>Name</label>
-                  <Input
-                    v-model="characterName"
-                    @enter="$refs.submit.click()"
-                    autoFocus
-                  />
+                  <Input v-model:value="characterName" @enter="$refs.submit.click()" autoFocus />
                 </HorizontalFill>
                 <div class="error-text">{{ error }}</div>
                 <OptionSelector
                   v-if="races && races.length > 1"
                   :label="'Race: ' + race"
-                  v-model="race"
+                  v-model:value="race"
                   :options="races"
                   random
                   cycle
@@ -30,18 +26,13 @@
                   v-for="(def, feature) in featureSelections"
                   :key="def.label"
                   :label="def.label + ': ' + (+looks[feature] + 1)"
-                  v-model="looks[feature]"
+                  v-model:value="looks[feature]"
                   :options="def.options"
-                  @input="updateAvatar()"
+                  @update:value="updateAvatar()"
                   random
                   cycle
                 />
-                <Button
-                  @click="clickCreate()"
-                  :processing="processing"
-                  class="submit"
-                  ref="submit"
-                >
+                <Button @click="clickCreate()" :processing="processing" class="submit" ref="submit">
                   Create
                 </Button>
               </Vertical>
@@ -54,13 +45,11 @@
         <template v-slot:contents>
           <Vertical>
             <div class="intro-text">
-              Please note that this game rewards planning, exploration,
-              understanding and cooperation.<br />
-              It doesn't really hold your hand and can be quite unforgiving at
-              times.<br />
+              Please note that this game rewards planning, exploration, understanding and
+              cooperation.<br />
+              It doesn't really hold your hand and can be quite unforgiving at times.<br />
               <br />
-              With that said, thank you for joining and I hope you'll have a fun
-              experience!
+              With that said, thank you for joining and I hope you'll have a fun experience!
             </div>
             <HorizontalCenter>
               <Button @click="showIntro = false">Continue</Button>
@@ -76,56 +65,46 @@
 </template>
 
 <script>
-import { Rx } from "@/rx.js";
-
-export default {
+export default rxComponent({
   data: () => ({
-    race: "Human",
+    race: 'Human',
     looks: {},
-    characterName: "",
-    error: "",
+    characterName: '',
+    error: '',
     processing: false,
     showIntro: false,
   }),
 
   subscriptions() {
-    const racesDefinitionStream = Rx.fromPromise(
-      GameService.request(REQUEST_CODES.RACES)
-    );
+    const racesDefinitionStream = Rx.fromPromise(GameService.request(REQUEST_CODES.RACES))
     return {
-      characterCount: Rx.fromPromise(
-        GameService.request(REQUEST_CODES.CHARACTER_COUNT)
-      ).tap((count) => {
-        if (count === 0) {
-          this.showIntro = true;
-        }
-      }),
-      racesDefinition: racesDefinitionStream,
-      featureSelections: Rx.combineLatest([
-        racesDefinitionStream,
-        this.$stream("race"),
-      ]).map(([definitions, race]) => {
-        return definitions?.[race];
-      }),
-      races: racesDefinitionStream.map((definitions) =>
-        Object.keys(definitions)
+      characterCount: Rx.fromPromise(GameService.request(REQUEST_CODES.CHARACTER_COUNT)).tap(
+        (count) => {
+          if (count === 0) {
+            this.showIntro = true
+          }
+        },
       ),
-      avatarAssets: Rx.combineLatest([
-        this.$stream("race"),
-        this.$stream("looks"),
-      ])
+      racesDefinition: racesDefinitionStream,
+      featureSelections: Rx.combineLatest([racesDefinitionStream, this.$stream('race')]).map(
+        ([definitions, race]) => {
+          return definitions?.[race]
+        },
+      ),
+      races: racesDefinitionStream.map((definitions) => Object.keys(definitions)),
+      avatarAssets: Rx.combineLatest([this.$stream('race'), this.$stream('looks')])
         .filter(([race, looks]) => race && Object.keys(looks || {}).length)
         .switchMap(([race, looks]) =>
           GameService.request(REQUEST_CODES.AVATAR_DATA, {
             race,
             looks,
-          })
+          }),
         ),
-    };
+    }
   },
 
   created() {
-    this.checkCreatureCreated();
+    this.checkCreatureCreated()
   },
 
   methods: {
@@ -134,20 +113,20 @@ export default {
         .filter((entity) => !!entity)
         .first()
         .subscribe((entity) => {
-          this.redirectToGame();
-        });
+          this.redirectToGame()
+        })
     },
 
     updateAvatar() {
-      this.looks = { ...this.looks };
+      this.looks = { ...this.looks }
     },
 
     redirectToGame() {
-      window.location.hash = "/main";
+      window.location.hash = '/main'
     },
 
     clickCreate() {
-      this.processing = true;
+      this.processing = true
       GameService.request(REQUEST_CODES.CREATE_CHARACTER, {
         characterName: this.characterName,
         race: this.race,
@@ -155,22 +134,22 @@ export default {
       })
         .then((response) => {
           if (!response.ok) {
-            this.error = response.message;
-            this.processing = false;
+            this.error = response.message
+            this.processing = false
           } else {
-            this.checkCreatureCreated();
+            this.checkCreatureCreated()
           }
         })
         .catch(() => {
-          this.processing = false;
-        });
+          this.processing = false
+        })
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../utils.scss";
+@use '../utils.scss';
 
 .character-creator {
   padding: 5vw;
@@ -178,7 +157,7 @@ export default {
   height: 100%;
   max-height: 100%;
   overflow: auto;
-  background-image: url(ui-asset("/backdrops/main.jpg", "src/"));
+  background-image: utils.ui-asset('/backdrops/main.jpg', 'src/');
   background-size: cover;
   background-position: center center;
   display: flex;

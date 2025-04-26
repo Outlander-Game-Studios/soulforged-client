@@ -1,15 +1,7 @@
 <template>
   <div class="environment-overlay" v-if="levels">
-    <div
-      class="darkness"
-      v-if="levels.darkness"
-      :class="'level-' + levels.darkness"
-    />
-    <div
-      class="sunshine"
-      v-if="levels.sunshine"
-      :class="'level-' + levels.sunshine"
-    >
+    <div class="darkness" v-if="levels.darkness" :class="'level-' + levels.darkness" />
+    <div class="sunshine" v-if="levels.sunshine" :class="'level-' + levels.sunshine">
       <div class="overlay"></div>
       <div class="lens-center">
         <div class="shine-1"></div>
@@ -23,33 +15,33 @@
 </template>
 
 <script>
-export default {
+export default rxComponent({
   subscriptions() {
     return {
-      environment: GameService.getRootEntityStream().pluck("environment"),
-    };
+      environment: GameService.getRootEntityStream().pluck('environment'),
+    }
   },
 
   computed: {
     levels() {
       return this.environment?.toObject(
-        (e) => e.name.replace(/\s\(.*\)/, "").toLowerCase(),
-        (e) => (e.level === undefined ? true : e.level)
-      );
+        (e) => e.name.replace(/\s\(.*\)/, '').toLowerCase(),
+        (e) => (e.level === undefined ? true : e.level),
+      )
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .environment-overlay {
   position: absolute;
   pointer-events: none;
 }
 .darkness {
-  @include fill();
+  @include utils.fill();
   position: fixed;
   z-index: 1;
   width: 100%;
@@ -63,7 +55,7 @@ export default {
 }
 .sunshine {
   .overlay {
-    @include fill();
+    @include utils.fill();
     position: fixed;
     z-index: 1;
     width: 100%;
@@ -82,7 +74,7 @@ export default {
   }
 
   .lens-center {
-    @include fill();
+    @include utils.fill();
     z-index: 1;
     position: fixed;
     $positionRatio: 1.3;
@@ -99,17 +91,11 @@ export default {
     }
 
     .shine-1 {
+      background: radial-gradient(closest-side circle at center, #fff9da 0%, transparent 100%);
       @include lens(80vmin, -30);
-      background: radial-gradient(
-        closest-side circle at center,
-        #fff9da 0%,
-        transparent 100%
-      );
     }
 
     .shine-2 {
-      @include lens(40vmin, -30);
-      @include filter(blur(0.4rem));
       background: radial-gradient(
         closest-side circle at center,
         rgb(225, 220, 150) 0%,
@@ -119,32 +105,34 @@ export default {
         rgba(255, 220, 150, 0.1) 75%,
         transparent 99%
       );
+      @include lens(40vmin, -30);
+      @include utils.filter(blur(0.4rem));
     }
 
     .circle-1 {
-      @include lens(28vmin, 30);
-      @include filter(blur(0.5rem));
       background: radial-gradient(
         closest-side circle at center,
         transparent 50%,
         rgba(255, 249, 218, 0.7) 90%,
         transparent 100%
       );
+      @include lens(28vmin, 30);
+      @include utils.filter(blur(0.5rem));
     }
 
     .circle-2 {
-      @include lens(16vmin, 20);
-      @include filter(blur(0.2rem));
       background: rgba(255, 249, 218, 0.4);
+      @include lens(16vmin, 20);
+      @include utils.filter(blur(0.2rem));
     }
 
     .circle-3 {
-      @include lens(10vmin, -18);
       background: radial-gradient(
         closest-side circle at center,
         rgba(255, 249, 218, 0.8) 0%,
         transparent 75%
       );
+      @include lens(10vmin, -18);
     }
   }
 }

@@ -14,13 +14,12 @@
 </template>
 
 <style scoped lang="scss">
-@import "../../utils.scss";
+@use '../../utils.scss';
 
 .game-title {
   display: flex;
   width: 7.5em;
-  background: url(ui-asset("/game-title/background.png")) center center
-    no-repeat;
+  background: utils.ui-asset('/game-title/background.png') center center no-repeat;
   background-size: 100% auto;
   position: relative;
 }
@@ -35,7 +34,7 @@
 .logo {
   height: 2.6em;
   width: 2.5em;
-  background: url(ui-asset("/game-title/logo.png")) center center no-repeat;
+  background: utils.ui-asset('/game-title/logo.png') center center no-repeat;
   background-size: auto 100%;
   z-index: 2;
   position: relative;
@@ -45,6 +44,6 @@
   height: 2.6em;
   line-height: 2.6em;
   padding-right: 2rem;
-  @include text-outline();
+  @include utils.text-outline();
 }
 </style>

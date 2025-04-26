@@ -27,9 +27,7 @@
       </ItemIcon>
     </div>
     <Modal dialog large v-if="showDetails" @close="showDetails = false">
-      <template v-slot:title>
-        <RichText :value="data.name" /> ({{ data.amount }})
-      </template>
+      <template v-slot:title> <RichText :value="data.name" /> ({{ data.amount }}) </template>
       <template v-slot:contents>
         <LoadingPlaceholder v-if="!dataWithDetails" />
         <div v-else>
@@ -37,39 +35,25 @@
             <Vertical class="flex-grow">
               <div>
                 <LabeledValue label="Weight">
-                  {{
-                    roundWeight(
-                      dataWithDetails.unitWeight * dataWithDetails.amount
-                    )
-                  }}kg ({{ dataWithDetails.unitWeight }}kg)
+                  {{ roundWeight(dataWithDetails.unitWeight * dataWithDetails.amount) }}kg ({{
+                    dataWithDetails.unitWeight
+                  }}kg)
                 </LabeledValue>
-                <LabeledValue
-                  v-if="dataWithDetails.durabilityStageName"
-                  label="Condition"
-                >
+                <LabeledValue v-if="dataWithDetails.durabilityStageName" label="Condition">
                   {{ dataWithDetails.durabilityStageName }}
                 </LabeledValue>
-                <LabeledValue
-                  v-if="dataWithDetails.qualityName"
-                  label="Quality"
-                >
+                <LabeledValue v-if="dataWithDetails.qualityName" label="Quality">
                   <span :class="'quality quality-' + dataWithDetails.quality">
                     {{ dataWithDetails.qualityName }}
                   </span>
                 </LabeledValue>
-                <LabeledValue
-                  v-if="dataWithDetails.maxDurability"
-                  label="Maximum Durability"
-                >
+                <LabeledValue v-if="dataWithDetails.maxDurability" label="Maximum Durability">
                   x{{ dataWithDetails.maxDurability }}
                 </LabeledValue>
               </div>
               <div v-if="dataWithDetails.nutritionPercentage !== undefined">
                 <Header alt2>Food</Header>
-                <LabeledValue
-                  label="Nutrition"
-                  v-if="dataWithDetails.nutritionPercentage"
-                >
+                <LabeledValue label="Nutrition" v-if="dataWithDetails.nutritionPercentage">
                   {{ dataWithDetails.nutritionPercentage }}%
                 </LabeledValue>
                 <DisplayImpacts :impacts="dataWithDetails.foodImpacts" />
@@ -81,7 +65,7 @@
               <div v-if="dataWithDetails.decorImpacts">
                 <Header alt2>Decoration</Header>
                 <LabeledValue label="Slots">
-                  {{ dataWithDetails.decorSlots.join(", ") }}
+                  {{ dataWithDetails.decorSlots.join(', ') }}
                 </LabeledValue>
                 <DisplayImpacts :impacts="dataWithDetails.decorImpacts" />
               </div>
@@ -95,12 +79,7 @@
                   {{ efficiency }}%
                 </LabeledValue>
               </div>
-              <Vertical
-                v-if="
-                  dataWithDetails.combatMoves &&
-                  dataWithDetails.combatMoves.length
-                "
-              >
+              <Vertical v-if="dataWithDetails.combatMoves && dataWithDetails.combatMoves.length">
                 <Header alt2>Combat abilities</Header>
                 <CombatMoves
                   wrap
@@ -122,10 +101,7 @@
           </Horizontal>
           <Vertical class="clear-both">
             <Spaced v-if="includeActions">
-              <Actions
-                :target="dataWithDetails"
-                @action="showDetails = false"
-              />
+              <Actions :target="dataWithDetails" @action="showDetails = false" />
             </Spaced>
             <div v-if="includeCrafts && crafts && crafts.length">
               <Header alt2>Crafts</Header>
@@ -159,12 +135,7 @@
 </template>
 
 <script>
-import CombatMoves from "../CombatMoves";
-import Vertical from "../../layouts/Vertical";
-import LoadingPlaceholder from "../../interface/LoadingPlaceholder";
-import HorizontalCenter from "../../layouts/HorizontalCenter";
-export default {
-  components: { HorizontalCenter, LoadingPlaceholder, Vertical, CombatMoves },
+export default rxComponent({
   props: {
     data: {},
     includeActions: {
@@ -195,172 +166,160 @@ export default {
 
   computed: {
     bubbleEvents() {
-      return bubbleEvents(this.$listeners, [
-        "dragstart",
-        "dragend",
-        "touchstart",
-        "touchend",
-      ]);
+      return bubbleEvents(this.$attrs, ['onDragstart', 'onDragend', 'onTouchstart', 'onTouchend'])
     },
     hasClick() {
-      return !!this.$listeners.click;
+      return !!this.$attrs.onClick
     },
   },
 
   subscriptions() {
-    const mainEntity = GameService.getRootEntityStream();
+    const mainEntity = GameService.getRootEntityStream()
     return {
-      crafts: this.$stream("includeCrafts").switchMap((includeCrafts) =>
+      crafts: this.$stream('includeCrafts').switchMap((includeCrafts) =>
         includeCrafts
-          ? Rx.combineLatest([
-              GameService.getCraftsStream(),
-              this.$stream("data"),
-            ]).map(([crafts, data]) =>
-              crafts?.filter(
-                (craft) =>
-                  data &&
-                  craft.materials.some(
-                    (material) => material.publicId === data.publicId
-                  )
-              )
+          ? Rx.combineLatest([GameService.getCraftsStream(), this.$stream('data')]).map(
+              ([crafts, data]) =>
+                crafts?.filter(
+                  (craft) =>
+                    data && craft.materials.some((material) => material.publicId === data.publicId),
+                ),
             )
-          : []
+          : [],
       ),
-      dataWithDetails: this.$stream("showDetails")
+      dataWithDetails: this.$stream('showDetails')
         .filter((showDetails) => showDetails)
         .switchMap(() =>
-          this.$stream("data")
-            .pluck("id")
+          this.$stream('data')
+            .pluck('id')
             .distinctUntilChanged()
-            .switchMap((id) =>
-              GameService.getEntityStream(id, ENTITY_VARIANTS.DETAILS, true)
-            )
+            .switchMap((id) => GameService.getEntityStream(id, ENTITY_VARIANTS.DETAILS, true)),
         ),
       canAddQuickAction: Rx.combineLatest(
-        this.$stream("showDetails"),
+        this.$stream('showDetails'),
         GameService.getInventoryStream(mainEntity),
-        this.$stream("data")
+        this.$stream('data'),
       ).map(([showDetails, inventory, item]) => {
         if (!showDetails) {
-          return false;
+          return false
         }
         if (!item.actions?.length) {
-          return false;
+          return false
         }
-        return inventory.some((i) => i.id === item.id);
+        return inventory.some((i) => i.id === item.id)
       }),
-    };
+    }
   },
 
   methods: {
     startDragging($event) {
       if ($event.dataTransfer) {
-        $event.dataTransfer.dropEffect = "move";
-        $event.dataTransfer.effectAllowed = "move";
+        $event.dataTransfer.dropEffect = 'move'
+        $event.dataTransfer.effectAllowed = 'move'
       }
-      ControlsService.triggerControlEvent("draggingInventory", this.dragSource);
-      ControlsService.triggerControlEvent("draggingItem", this.data);
+      ControlsService.triggerControlEvent('draggingInventory', this.dragSource)
+      ControlsService.triggerControlEvent('draggingItem', this.data)
     },
 
     startTouchDragging($event) {
-      ControlsService.triggerControlEvent("draggingInventory", this.dragSource);
-      ControlsService.triggerControlEvent("draggingItem", this.data);
+      ControlsService.triggerControlEvent('draggingInventory', this.dragSource)
+      ControlsService.triggerControlEvent('draggingItem', this.data)
 
-      document.body.addEventListener("touchcancel", this.touchUp);
-      document.body.addEventListener("touchend", this.touchUp);
+      document.body.addEventListener('touchcancel', this.touchUp)
+      document.body.addEventListener('touchend', this.touchUp)
       this.pressAndHoldTimeout = setTimeout(() => {
-        this.longClicked = true;
-        this.$emit("longClick");
-        this.touchUp();
-      }, 500);
+        this.longClicked = true
+        this.$emit('longClick')
+        this.touchUp()
+      }, 500)
     },
 
     touchUp() {
-      document.body.removeEventListener("touchcancel", this.touchUp);
-      document.body.removeEventListener("touchend", this.touchUp);
-      clearTimeout(this.pressAndHoldTimeout);
+      document.body.removeEventListener('touchcancel', this.touchUp)
+      document.body.removeEventListener('touchend', this.touchUp)
+      clearTimeout(this.pressAndHoldTimeout)
     },
 
     stopDragging($event) {
-      ControlsService.triggerControlEvent("draggingInventory", null);
+      ControlsService.triggerControlEvent('draggingInventory', null)
     },
 
     mouseDown() {
-      this.longClicked = false;
-      document.body.addEventListener("mouseup", this.mouseUp);
+      this.longClicked = false
+      document.body.addEventListener('mouseup', this.mouseUp)
       this.pressAndHoldTimeout = setTimeout(() => {
-        this.longClicked = true;
-        this.$emit("longClick");
-        this.mouseUp();
-      }, 500);
+        this.longClicked = true
+        this.$emit('longClick')
+        this.mouseUp()
+      }, 500)
     },
 
     mouseUp() {
-      document.body.removeEventListener("mouseup", this.mouseUp);
-      clearTimeout(this.pressAndHoldTimeout);
+      document.body.removeEventListener('mouseup', this.mouseUp)
+      clearTimeout(this.pressAndHoldTimeout)
     },
 
     created() {
       this.touchCancelHandler = () => {
-        this.stopDragging();
-      };
-      document.addEventListener("touchcancel", this.touchCancelHandler);
+        this.stopDragging()
+      }
+      document.addEventListener('touchcancel', this.touchCancelHandler)
     },
 
-    beforeDestroy() {
-      document.removeEventListener("touchcancel", this.touchCancelHandler);
+    beforeUnmount() {
+      document.removeEventListener('touchcancel', this.touchCancelHandler)
     },
 
     stopTouchDragging($event) {
-      let target;
+      let target
       if ($event.clientX) {
-        target = document.elementFromPoint($event.clientX, $event.clientY);
+        target = document.elementFromPoint($event.clientX, $event.clientY)
       } else {
         target = document.elementFromPoint(
           $event.changedTouches[0].clientX,
-          $event.changedTouches[0].clientY
-        );
+          $event.changedTouches[0].clientY,
+        )
       }
       if (target) {
         if (target === $event.target) {
-          target.click();
+          target.click()
         } else {
-          target.dispatchEvent(new Event("drop"));
+          target.dispatchEvent(new Event('drop'))
         }
       }
-      ControlsService.triggerControlEvent("draggingInventory", null);
+      ControlsService.triggerControlEvent('draggingInventory', null)
     },
 
     roundWeight(value) {
-      return Math.round(value * 100) / 100;
+      return Math.round(value * 100) / 100
     },
 
     openDetails() {
-      this.showDetails = true;
+      this.showDetails = true
     },
 
     emitClick() {
       if (!this.longClicked) {
-        this.$emit("click");
+        this.$emit('click')
       }
     },
 
     selectCraft(craft) {
-      this.showDetails = false;
+      this.showDetails = false
       GameService.request(REQUEST_CODES.ACTION_START_CRAFT, {
         craftId: craft.craftId,
-      });
+      })
     },
   },
-};
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../../utils.scss";
+@use '../../../utils.scss';
 
 .item {
   .main-icon {
-    @include interactive();
+    @include utils.interactive();
   }
 }
 
@@ -371,16 +330,16 @@ export default {
 
   .quality {
     &.quality-0 {
-      @include text-outline(#3a3a3a, #565656);
+      @include utils.text-outline(#3a3a3a, #565656);
     }
     &.quality-1 {
-      @include text-outline(#562e00, #bdb76b);
+      @include utils.text-outline(#562e00, #bdb76b);
     }
     &.quality-2 {
-      @include text-outline(#4f4f4f, #e3e3e3);
+      @include utils.text-outline(#4f4f4f, #e3e3e3);
     }
     &.quality-3 {
-      @include text-outline(#705d00, #ffd700);
+      @include utils.text-outline(#705d00, #ffd700);
     }
   }
 
