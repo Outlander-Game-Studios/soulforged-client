@@ -376,10 +376,12 @@ $transition-time: 120ms;
     }
 
     @media (orientation: portrait) {
-      margin-top: -27rem;
       @include visible-map-style(
         min(var(--app-width) - 5rem, 1 * var(--app-height) - 40rem - 16rem)
       );
+      & {
+        margin-top: -27rem;
+      }
     }
   }
 
