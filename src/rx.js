@@ -65,8 +65,8 @@ global.rxComponent = (definition) => {
     ...definition,
     data() {
       this.$stream = $stream.bind(this)
-      const subscriptions = definition.subscriptions.call(this)
-      const data = definition.data ? definition.data.call(this) : {}
+      const subscriptions = definition.subscriptions?.call(this) || {}
+      const data = definition.data?.call(this) || {}
       return {
         ...data,
         ...Object.keys(subscriptions).toObject(
@@ -76,7 +76,7 @@ global.rxComponent = (definition) => {
       }
     },
     created() {
-      const subscriptions = definition.subscriptions.call(this)
+      const subscriptions = definition.subscriptions?.call(this) || {}
       this._subscriptions = Object.keys(subscriptions).map((key) => {
         return subscriptions[key].subscribe((value) => {
           this[key] = value
@@ -89,6 +89,12 @@ global.rxComponent = (definition) => {
         sub.unsubscribe()
       })
       return definition.beforeUnmount?.call(this)
+    },
+    methods: {
+      click() {
+        this.$emit('click')
+      },
+      ...definition.methods,
     },
   }
 }

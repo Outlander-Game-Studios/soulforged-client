@@ -101,7 +101,7 @@ export default {
 
   methods: {
     onKeypress($event) {
-      this.$emit('keypress', $event)
+      // this.$emit('keypress', $event)
       if (($event.key || $event.code) === 'Enter') {
         this.$emit('enter', $event)
       }

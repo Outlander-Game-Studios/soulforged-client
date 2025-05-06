@@ -1,5 +1,5 @@
 <template>
-  <div class="item" v-if="data" v-on="bubbleEvents">
+  <div class="item" v-if="data">
     <div
       class="main-icon"
       :draggable="isDraggable"
@@ -165,9 +165,6 @@ export default rxComponent({
   }),
 
   computed: {
-    bubbleEvents() {
-      return bubbleEvents(this.$attrs, ['onDragstart', 'onDragend', 'onTouchstart', 'onTouchend'])
-    },
     hasClick() {
       return !!this.$attrs.onClick
     },
@@ -298,9 +295,10 @@ export default rxComponent({
       this.showDetails = true
     },
 
-    emitClick() {
-      if (!this.longClicked) {
-        this.$emit('click')
+    emitClick($event) {
+      if (this.longClicked) {
+        $event.preventDefault()
+        $event.stopPropagation()
       }
     },
 

@@ -1,12 +1,6 @@
 <template>
   <label class="radio-label" :class="{ disabled: disabled }">
-    <input
-      type="radio"
-      v-model="internalValue"
-      :value="option"
-      ref="radio"
-      @update:value="select()"
-    />
+    <input type="radio" v-model="internalValue" :value="option" ref="radio" @change="select()" />
     <span class="text"><slot></slot></span>
   </label>
 </template>

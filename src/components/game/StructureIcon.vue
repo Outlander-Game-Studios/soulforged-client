@@ -1,26 +1,17 @@
 <template>
-  <ItemIcon
-    v-if="structure"
-    v-on="$attrs.onClick ? { click: ($event) => $emit('click', $event) } : {}"
-    :icon="structure.icon"
-    :size="size"
-    :condition="structure.condition"
-    :isEquipped="structure.own"
-    :amount="structure.number"
-    class="structure-icon"
-    :class="{ ruin: structure.ruin }"
-  >
+  <ItemIcon v-if="structure" :icon="structure.icon" :size="size" :condition="structure.condition"
+    :isEquipped="structure.own" :amount="structure.number" class="structure-icon" :class="{ ruin: structure.ruin }">
     <template v-slot:textTopRight>
       <slot name="textTopRight"></slot>
     </template>
     <IndicatorPresence class="presence" v-if="!!structure.presence" />
-    <IndicatorConstruction class="under-construction" v-if="!structure.operational && structure.structureClass === 'Building'" />
+    <IndicatorConstruction class="under-construction"
+      v-if="!structure.operational && structure.structureClass === 'Building'" />
     <IndicatorIsLootable class="is-lootable" v-if="structure.operational && structure.structureClass === 'Container'" />
   </ItemIcon>
 </template>
 
 <script>
-
 export default {
   props: {
     structure: {},
